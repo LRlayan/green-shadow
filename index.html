@@ -12,6 +12,7 @@
     <link href="css/signIn.css" rel="stylesheet">
     <link href="css/sideBra.css" rel="stylesheet">
     <link href="css/dashboard.css" rel="stylesheet">
+    <link href="css/field.css" rel="stylesheet">
     <style>
         .image-side {
             background-image: url('assets/image/farmImg.jpg');
@@ -122,9 +123,47 @@
                 </div>
             </div>
         </section>
-        <section class="section-container">
+        <section class="section-container m-3 p-3">
             <section id="dashboard-sec"><p>welcome dashboard</p></section>
-            <section id="field-sec"><p>welcome field management</p></section>
+
+            <section id="field-sec">
+                <div class="container mt-4">
+                    <!-- Search bar -->
+                    <div class="mb-3">
+                        <div class="input-group mb-5" style="height: 45px">
+                            <input type="text" class="form-control rounded-searchbar" placeholder="Search fields..." aria-label="Search">
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h3>Field Details</h3>
+                        </div>
+                            <!-- Buttons aligned to the right -->
+                        <div class="d-flex ms-auto gap-2 mb-3" style="width: 40%; justify-content: end;">
+                            <button class="btn btn-success flex-grow-1">New</button>
+                            <button class="btn btn-primary flex-grow-1">Update</button>
+                            <button class="btn btn-danger flex-grow-1">Delete</button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-dark table-bordered text-center mb-0">
+                                <thead>
+                                <tr>
+                                    <th>Field Name</th>
+                                    <th>Field Location</th>
+                                    <th>Extent Size of the Field</th>
+                                    <th>Crops</th>
+                                    <th>Staff</th>
+                                </tr>
+                                </thead>
+                                <tbody id="fieldDetailsTable">
+                                <!-- Table rows will be inserted here dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
             <section id="crops-sec"><p>welcome crop management</p></section>
             <section id="staff-sec"><p>welcome staff management</p></section>
             <section id="monitoring-log-sec"><p>welcome monitoring log</p></section>
