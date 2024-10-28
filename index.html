@@ -11,6 +11,7 @@
     <link href="css/normalize.css" rel="stylesheet">
     <link href="css/signIn.css" rel="stylesheet">
     <link href="css/sideBra.css" rel="stylesheet">
+    <link href="css/dashboard.css" rel="stylesheet">
     <style>
         .image-side {
             background-image: url('assets/image/farmImg.jpg');
@@ -27,13 +28,13 @@
             <!-- Sidebar -->
             <div class="sidebar">
                 <h2 class="text-center py-3">Dashboard</h2>
-                <a href="#dashboard-sec">Dashboard</a>
-                <a href="#field-sec">Field Management</a>
-                <a href="#crops-sec">Crops Management</a>
-                <a href="#staff-sec">Staff Management</a>
-                <a href="#monitoring-log-sec">Monitoring Log Service</a>
-                <a href="#vehicle-sec">Vehicle Management</a>
-                <a href="#equipment-sec">Equipment Service</a>
+                <a href="#dashboard-sec" id="dashboard">Dashboard</a>
+                <a href="#field-sec" id="field">Field Management</a>
+                <a href="#crops-sec" id="crops">Crops Management</a>
+                <a href="#staff-sec" id="staff">Staff Management</a>
+                <a href="#monitoring-log-sec" id="log">Monitoring Log Service</a>
+                <a href="#vehicle-sec" id="vehicle">Vehicle Management</a>
+                <a href="#equipment-sec" id="equipment">Equipment Service</a>
 
                 <!-- Logout Button -->
                 <button type="button" id="btn-logout" class="btn btn-success logout">Logout</button>
@@ -121,13 +122,15 @@
                 </div>
             </div>
         </section>
-        <section id="dashboard-sec"></section>
-        <section id="field-sec"></section>
-        <section id="crops-sec"></section>
-        <section id="staff-sec"></section>
-        <section id="monitoring-log-sec"></section>
-        <section id="vehicle-sec"></section>
-        <section id="equipment-sec"></section>
+        <section class="section-container">
+            <section id="dashboard-sec"><p>welcome dashboard</p></section>
+            <section id="field-sec"><p>welcome field management</p></section>
+            <section id="crops-sec"><p>welcome crop management</p></section>
+            <section id="staff-sec"><p>welcome staff management</p></section>
+            <section id="monitoring-log-sec"><p>welcome monitoring log</p></section>
+            <section id="vehicle-sec"><p>welcome vehicle management</p></section>
+            <section id="equipment-sec"><p>welcome equipment management</p></section>
+        </section>
     </main>
     <footer>
     </footer>
