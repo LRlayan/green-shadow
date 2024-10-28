@@ -20,7 +20,7 @@
     background-color: #0A6847; /* Optional hover color */
 }
 .sidebar .logout {
-    /*margin-bottom: 10px; !* Small bottom margin *!*/
+    margin-bottom: 10px;
     position: absolute;
     bottom: 20px;
     width: 90%;
