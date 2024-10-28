@@ -1,0 +1,67 @@
+
+
+.overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0));
+    z-index: 1;
+}
+.text-content {
+    position: relative;
+    z-index: 2;
+}
+
+.login-form {
+    padding: 40px;
+    border: 1px solid gray;
+    border-radius: 15px;
+    background-color: #1e1e1e;
+}
+/* Custom styles for active/inactive tab background */
+.nav-tabs {
+    height: 50px; /* Adjust the height as needed */
+    border-bottom: 1px solid gray; /* Change the color here */
+}
+.nav-tabs .nav-link {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    border: none;
+    border-radius: 0;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: black;
+    color: white;
+}
+.forgot-password {
+    float: right;
+    text-decoration: none;
+}
+.rounded-top-left {
+    border-top-left-radius: 17px !important;
+}
+
+.rounded-top-right {
+    border-top-right-radius: 17px !important;
+}
+.font-size-md{
+    font-size: 0.85rem !important;
+}
+
+.font-size-lg{
+    font-size: 2rem !important;
+}
+
+.btn-success:hover {
+    background-color: #0A6847;
+}
+
+.text-success:hover{
+    color: #0A6847 !important;
+}
