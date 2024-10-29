@@ -355,11 +355,11 @@
                                 <div class="card-body">
                                     <h5 class="card-title">Crop Details</h5>
                                     <p class="card-name"><strong>Name:</strong>Crop Name</p>
-                                    <p class="card-Scientific"><strong>Scientific Name:</strong>Scientific Crop Name</p>
-                                    <p class="card-Category"><strong>Category:</strong>Crop Category</p>
-                                    <p class="card-Season"><strong>Crop Season:</strong>Crop Season Info</p>
+                                    <p class="card-scientific"><strong>Scientific Name:</strong>Scientific Crop Name</p>
+                                    <p class="card-category"><strong>Category:</strong>Crop Category</p>
+                                    <p class="card-season"><strong>Crop Season:</strong>Crop Season Info</p>
                                     <p class="card-FieldId"><strong>Field ID:</strong>F01,F02,F03</p>
-                                    <p class="card-LogId"><strong>Log ID:</strong>L01,L02</p>
+                                    <p class="card-LogId"><strong>Log ID:</strong>L01,L02,L03</p>
                                     <div class="d-flex justify-content-between">
                                         <button class="btn btn-success flex-grow-1 me-2">Update</button>
                                         <button class="btn btn-danger flex-grow-1">Delete</button>
@@ -425,6 +425,63 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                         <button type="submit" class="btn btn-success" form="cropForm">Add Crop</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Update Crop Modal -->
+                        <div class="modal fade" id="updateCropModal" tabindex="-1" aria-labelledby="updateFieldModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content" style="background-color: #2b2b2b; color: white;">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="updateCropModalLabel">Update Crop Details</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="updateCropForm">
+                                            <!-- Crop Name -->
+                                            <div class="mb-3">
+                                                <label for="updateCropName" class="form-label">Crop Name</label>
+                                                <input type="text" class="form-control" id="updateCropName" required>
+                                            </div>
+                                            <!-- Crop Scientific Name -->
+                                            <div class="mb-3">
+                                                <label for="updateScientificName" class="form-label">Scientific Name</label>
+                                                <input type="text" class="form-control" id="updateScientificName" required>
+                                            </div>
+                                            <!-- Category -->
+                                            <div class="mb-3">
+                                                <label for="updateCategory" class="form-label">Category</label>
+                                                <input type="text" class="form-control" id="updateCategory" required>
+                                            </div>
+                                            <!-- Crop Season -->
+                                            <div class="mb-3">
+                                                <label for="updateCropSeason" class="form-label">Crop Season</label>
+                                                <input type="text" class="form-control" id="updateCropSeason" required>
+                                            </div>
+                                            <!-- Field IDs -->
+                                            <div class="mb-3" id="updateFieldContainer">
+                                                <label class="form-label">Fields</label>
+                                                <div id="updateFieldId"></div> <!-- fields container for dynamic inputs -->
+                                            </div>
+                                            <!-- Log IDs -->
+                                            <div class="mb-3" id="updateLogContainer">
+                                                <label class="form-label">Logs</label>
+                                                <div id="updateLogId"></div> <!-- fields container for dynamic inputs -->
+                                            </div>
+                                            <!-- Crop Images -->
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label for="updateFieldImage1" class="form-label">Crop Image</label>
+                                                    <input type="file" class="form-control" id="updateCropImage" onchange="previewImage('updateFieldImage1', 'updatePreview1')" accept="image/*">
+                                                    <img id="updatePreview" src="#" alt="Preview Image 1" class="img-fluid mt-2 d-none" style="max-height: 150px;">
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-success" form="updateFieldForm">Update Crop</button>
                                     </div>
                                 </div>
                             </div>
