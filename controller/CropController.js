@@ -1,3 +1,4 @@
+$(document).ready(function() {
 // Function to add field Ids
 $('#addCropFieldButton').on('click', function() {
     const cropInput = $('#crop-FieldId');
@@ -46,34 +47,35 @@ $('.card .btn-success').on('click', function() {
     // Show the update modal
     const updateModal = new bootstrap.Modal($('#updateCropModal')[0]);
     updateModal.show();
-});
+    });
 
-// Submit update form
-$('#updateCropForm').on('submit', function(event) {
-    event.preventDefault();
-    // Perform update logic, close modal, etc.
+    // Submit update form
+    $('#updateCropForm').on('submit', function(event) {
+        event.preventDefault();
+        // Perform update logic, close modal, etc.
 
-    // Close the modal after processing
-    const updateModal = bootstrap.Modal.getInstance($('#updateCropModal')[0]);
-    updateModal.hide();
-});
+        // Close the modal after processing
+        const updateModal = bootstrap.Modal.getInstance($('#updateCropModal')[0]);
+        updateModal.hide();
+    });
 
-//delete crop card
-let cardToDelete; // Variable to store the card to be deleted
+    //delete crop card
+    let cardToDelete; // Variable to store the card to be deleted
 
-// Show confirmation modal when the delete button is clicked
-$('.card .btn-danger').on('click', function() {
-    cardToDelete = $(this).closest('.card'); // Store the card element to be deleted
-    const confirmModal = new bootstrap.Modal($('#confirmCropDeleteModal')[0]);
-    confirmModal.show();
-});
+    // Show confirmation modal when the delete button is clicked
+    $('.card .btn-danger').on('click', function() {
+        cardToDelete = $(this).closest('.card'); // Store the card element to be deleted
+        const confirmModal = new bootstrap.Modal($('#confirmCropDeleteModal')[0]);
+        confirmModal.show();
+    });
 
-// Delete the card if "Yes" is clicked in the confirmation modal
-$('#confirmCropDeleteButton').on('click', function() {
-    if (cardToDelete) {
-        cardToDelete.remove(); // Remove the card element from the DOM
-        cardToDelete = null; // Reset the variable
-    }
-    $('#confirmCropDeleteModal').modal('hide'); // Hide the confirmation modal
+    // Delete the card if "Yes" is clicked in the confirmation modal
+    $('#confirmCropDeleteButton').on('click', function() {
+        if (cardToDelete) {
+            cardToDelete.remove(); // Remove the card element from the DOM
+            cardToDelete = null; // Reset the variable
+        }
+        $('#confirmCropDeleteModal').modal('hide'); // Hide the confirmation modal
+    });
 });
 
