@@ -21,6 +21,10 @@
             min-height: 100vh;
             position: relative;
         }
+        .fixed-image {
+            height: 200px; /* Set a fixed height */
+            object-fit: cover; /* Ensures the image covers the area without distortion */
+        }
     </style>
 </head>
 <body>
@@ -134,32 +138,42 @@
                             <input type="text" class="form-control rounded-searchbar" placeholder="Search fields..." aria-label="Search">
                         </div>
                     </div>
-                    <div class="table-container">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h3>Field Details</h3>
-                        </div>
-                            <!-- Buttons aligned to the right -->
-                        <div class="d-flex ms-auto gap-2 mb-3" style="width: 40%; justify-content: end;">
-                            <button class="btn btn-success flex-grow-1">New</button>
-                            <button class="btn btn-primary flex-grow-1">Update</button>
-                            <button class="btn btn-danger flex-grow-1">Delete</button>
-                        </div>
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
+                            <!-- Image Carousel with Fixed Height -->
+                            <div id="fieldImageCarousel" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active">
+                                        <img src="assets/image/crop01.webp" class="d-block w-100 fixed-image" alt="Field Image 1">
+                                    </div>
+                                    <div class="carousel-item">
+                                        <img src="assets/image/farmImg.jpg" class="d-block w-100 fixed-image" alt="Field Image 2">
+                                    </div>
+                                </div>
+                                <!-- Carousel Controls -->
+                                <button class="carousel-control-prev" type="button" data-bs-target="#fieldImageCarousel" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#fieldImageCarousel" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
 
-                        <div class="table-responsive">
-                            <table class="table table-dark table-bordered text-center mb-0">
-                                <thead>
-                                <tr>
-                                    <th>Field Name</th>
-                                    <th>Field Location</th>
-                                    <th>Extent Size of the Field</th>
-                                    <th>Crops</th>
-                                    <th>Staff</th>
-                                </tr>
-                                </thead>
-                                <tbody id="fieldDetailsTable">
-                                <!-- Table rows will be inserted here dynamically -->
-                                </tbody>
-                            </table>
+                            <div class="card-body">
+                                <h5 class="card-title">Field Details</h5>
+                                <p class="card-text"><strong>Name:</strong> Field Name</p>
+                                <p class="card-text"><strong>Location:</strong> Field Location</p>
+                                <p class="card-text"><strong>Extent Size:</strong> Extent Size Of Field</p>
+                                <p class="card-text"><strong>Crop:</strong> Crop Info</p>
+                                <p class="card-text"><strong>Staff:</strong> Staff Info</p>
+                                <p class="card-text"><strong>Log:</strong> Log Info</p>
+                                <div class="d-flex justify-content-between">
+                                    <button class="btn btn-success flex-grow-1 me-2">Update</button>
+                                    <button class="btn btn-danger flex-grow-1">Delete</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
