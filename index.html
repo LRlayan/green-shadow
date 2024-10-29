@@ -285,7 +285,46 @@
                     </div>
                 </div>
             </section>
-            <section id="vehicle-sec"><p>welcome vehicle management</p></section>
+            <section id="vehicle-sec">
+                <div class="container mt-4">
+                    <!-- Search bar -->
+                    <div class="mb-3">
+                        <div class="input-group mb-5" style="height: 45px">
+                            <input type="text" class="form-control rounded-searchbar" placeholder="Search logs..." aria-label="Search">
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h3>Vehicle Details</h3>
+                        </div>
+                        <!-- Buttons aligned to the right -->
+                        <div class="d-flex ms-auto gap-2 mb-3" style="width: 40%; justify-content: end;">
+                            <button class="btn btn-success flex-grow-1">New</button>
+                            <button class="btn btn-primary flex-grow-1">Update</button>
+                            <button class="btn btn-danger flex-grow-1">Delete</button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-dark table-bordered text-center mb-0">
+                                <thead>
+                                <tr>
+                                    <th>License Plate Number</th>
+                                    <th>Name</th>
+                                    <th>Count</th>
+                                    <th>Category</th>
+                                    <th>Fuel Type</th>
+                                    <th>Status</th>
+                                    <th>Remark</th>
+                                </tr>
+                                </thead>
+                                <tbody id="vehicleDetailsTable">
+                                <!-- Table rows will be inserted here dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
             <section id="equipment-sec"><p>welcome equipment management</p></section>
         </section>
     </main>
