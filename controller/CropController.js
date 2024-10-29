@@ -15,6 +15,7 @@ $('#addCropFieldButton').on('click', function() {
 $('.card .btn-success').on('click', function() {
     // Get the card's current data
     const card = $(this).closest('.card');
+    const cropCode = card.find('.card-cropCode').text().replace('Code:', '').trim();
     const cropName = card.find('.card-name').text().replace('Name:', '').trim();
     const scientificName = card.find('.card-scientific').text().replace('Scientific Name:', '').trim();
     const category = card.find('.card-category').text().replace('Category:', '').trim();
@@ -23,6 +24,7 @@ $('.card .btn-success').on('click', function() {
     const log = card.find('.card-LogId').text().replace('Log ID:', '').trim();
 
     // Set data in modal fields
+    $('#updateCropCode').val(cropCode);
     $('#updateCropName').val(cropName);
     $('#updateScientificName').val(scientificName);
     $('#updateCategory').val(category);

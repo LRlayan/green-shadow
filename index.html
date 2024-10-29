@@ -485,35 +485,48 @@
                                     </div>
                                     <div class="modal-body">
                                         <form id="updateCropForm">
-                                            <!-- Crop Name -->
-                                            <div class="mb-3">
-                                                <label for="updateCropName" class="form-label">Crop Name</label>
-                                                <input type="text" class="form-control" id="updateCropName" required>
+                                            <div class="row mb-3">
+                                                <!-- Crop Code -->
+                                                <div class="col-md-6">
+                                                    <label for="updateCropCode" class="form-label">Crop Code</label>
+                                                    <input type="text" class="form-control" id="updateCropCode" required>
+                                                </div>
+                                                <!-- Crop Name -->
+                                                <div class="col-md-6">
+                                                    <label for="updateCropName" class="form-label">Crop Name</label>
+                                                    <input type="text" class="form-control" id="updateCropName" required>
+                                                </div>
                                             </div>
-                                            <!-- Crop Scientific Name -->
-                                            <div class="mb-3">
-                                                <label for="updateScientificName" class="form-label">Scientific Name</label>
-                                                <input type="text" class="form-control" id="updateScientificName" required>
+                                            <div class="row mb-3">
+                                                <!-- Crop Scientific Name -->
+                                                <div class="col-md-6">
+                                                    <label for="updateScientificName" class="form-label">Scientific Name</label>
+                                                    <input type="text" class="form-control" id="updateScientificName" required>
+                                                </div>
+                                                <!-- Category -->
+                                                <div class="col-md-6">
+                                                    <label for="updateCategory" class="form-label">Category</label>
+                                                    <input type="text" class="form-control" id="updateCategory" required>
+                                                </div>
                                             </div>
-                                            <!-- Category -->
-                                            <div class="mb-3">
-                                                <label for="updateCategory" class="form-label">Category</label>
-                                                <input type="text" class="form-control" id="updateCategory" required>
-                                            </div>
-                                            <!-- Crop Season -->
-                                            <div class="mb-3">
-                                                <label for="updateCropSeason" class="form-label">Crop Season</label>
-                                                <input type="text" class="form-control" id="updateCropSeason" required>
+                                            <div class="row mb-3">
+                                                <!-- Crop Season -->
+                                                <div class="col-md-6">
+                                                    <label for="updateCropSeason" class="form-label">Crop Season</label>
+                                                    <input type="text" class="form-control" id="updateCropSeason" required>
+                                                </div>
                                             </div>
                                             <!-- Field IDs -->
-                                            <div class="mb-3" id="updateFieldContainer">
-                                                <label class="form-label">Fields</label>
-                                                <div id="updateFieldId"></div> <!-- fields container for dynamic inputs -->
-                                            </div>
-                                            <!-- Log IDs -->
-                                            <div class="mb-3" id="updateLogContainer">
-                                                <label class="form-label">Logs</label>
-                                                <div id="updateLogId"></div> <!-- fields container for dynamic inputs -->
+                                            <div class="row mb-3" id="updateFieldContainer">
+                                                <div class="col-md-6">
+                                                    <label class="form-label">Fields</label>
+                                                    <div id="updateFieldId"></div> <!-- fields container for dynamic inputs -->
+                                                </div>
+                                                <!-- Log IDs -->
+                                                <div class="col-md-6" id="updateLogContainer">
+                                                    <label class="form-label">Logs</label>
+                                                    <div id="updateLogId"></div> <!-- fields container for dynamic inputs -->
+                                                </div>
                                             </div>
                                             <!-- Crop Images -->
                                             <div class="row">
