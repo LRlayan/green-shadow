@@ -59,6 +59,20 @@ $('.card .btn-success').on('click', function() {
         updateModal.hide();
     });
 
+    // Add a new log input field when the "Add Log" button is clicked
+    $('#addFieldButton').on('click', function() {
+        // Create a new input field for an additional log entry
+        const newLogInput = $('<div class="input-group mt-2"><input type="text" class="form-control" placeholder="Enter field details"><button type="button" class="btn btn-danger removeLogButton">Remove</button></div>');
+
+        // Append the new input field to the additionalLogs container
+        $('#additionalField').append(newLogInput);
+    });
+
+    // Remove a log input field when the "Remove" button is clicked
+    $('#additionalField').on('click', '.removeLogButton', function() {
+        $(this).closest('.input-group').remove(); // Remove the parent input group
+    });
+
     //delete crop card
     let cardToDelete; // Variable to store the card to be deleted
 

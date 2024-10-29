@@ -90,17 +90,31 @@ $(document).ready(function() {
         // Perform update logic, close modal, etc.
     });
 
-    // Add a new log input field when the "Add Log" button is clicked
-    $('#addFieldButton').on('click', function() {
-        // Create a new input field for an additional log entry
-        const newLogInput = $('<div class="input-group mt-2"><input type="text" class="form-control" placeholder="Enter field details"><button type="button" class="btn btn-danger removeLogButton">Remove</button></div>');
+    // Add a new staff input field when the "Add member" button is clicked
+    $('#addFieldStaffButton').on('click', function() {
+        // Create a new input field for an additional staff member entry
+        const newLogInput = $('<div class="input-group mt-2"><input type="text" class="form-control" placeholder="Enter staff member"><button type="button" class="btn btn-danger removeLogButton">Remove</button></div>');
 
         // Append the new input field to the additionalLogs container
-        $('#additionalField').append(newLogInput);
+        $('#additionalStaff').append(newLogInput);
     });
 
     // Remove a log input field when the "Remove" button is clicked
-    $('#additionalField').on('click', '.removeLogButton', function() {
+    $('#additionalStaff').on('click', '.removeLogButton', function() {
+        $(this).closest('.input-group').remove(); // Remove the parent input group
+    });
+
+    // Add a new crop input field when the "Add crop" button is clicked
+    $('#addFieldCropButton').on('click', function() {
+        // Create a new input field for an additional crop entry
+        const newLogInput = $('<div class="input-group mt-2"><input type="text" class="form-control" placeholder="Enter crop details"><button type="button" class="btn btn-danger removeLogButton">Remove</button></div>');
+
+        // Append the new input field to the additionalLogs container
+        $('#additionalCrop').append(newLogInput);
+    });
+
+    // Remove a log input field when the "Remove" button is clicked
+    $('#additionalCrop').on('click', '.removeLogButton', function() {
         $(this).closest('.input-group').remove(); // Remove the parent input group
     });
 
