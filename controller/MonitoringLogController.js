@@ -39,6 +39,7 @@ $(document).ready(function() {
     $('.card .btn-success').on('click', function () {
         // Get the card's current data
         const card = $(this).closest('.card');
+        const logCode = card.find('.card-log-code').text().replace('Log Code:', '').trim();
         const logDate = card.find('.card-log-date').text().replace('Log Date:', '').trim();
         const logDetails = card.find('.card-log-details').text().replace('Log Details:', '').trim();
         const field = card.find('.card-log-fields').text().replace('Field:', '').trim();
@@ -46,6 +47,7 @@ $(document).ready(function() {
         const staff = card.find('.card-log-staff').text().replace('Staff:', '').trim();
 
         // Set data in modal fields
+        $('#updateLogCode').val(logCode);
         $('#updateLogDate').val(logDate);
         $('#updateLog-details').val(logDetails);
 

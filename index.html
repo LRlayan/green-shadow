@@ -627,6 +627,7 @@
                             <img src="assets/image/crop01.webp" class="card-img-top" alt="Crop Image">
                             <div class="card-body">
                                 <h5 class="card-title">Log Details</h5>
+                                <p class="card-log-code"><strong>Log Code:</strong>L01</p>
                                 <p class="card-log-date"><strong>Log Date:</strong> Log Date</p>
                                 <p class="card-log-details"><strong>Log Details:</strong> desc</p>
                                 <p class="card-log-fields"><strong>Field:</strong>F01,F02,F03</p>
@@ -719,18 +720,24 @@
                                 <div class="modal-body">
                                     <form id="updateLogForm">
                                         <div class="row mb-3">
+                                            <!-- Log Code -->
+                                            <div class="col-md-6">
+                                                <label for="updateLogCode" class="form-label">Log Code</label>
+                                                <input type="text" class="form-control" id="updateLogCode" required>
+                                            </div>
                                             <!-- Log Date -->
-                                            <div class="mb-3">
+                                            <div class="col-md-6">
                                                 <label for="updateLogDate" class="form-label">Log Date</label>
                                                 <input type="text" class="form-control" id="updateLogDate" required>
                                             </div>
+                                        </div>
+                                        <div class="row mb-3">
                                             <!-- Log Details -->
                                             <div class="mb-3">
                                                 <label for="updateLog-details" class="form-label">Log Details</label>
                                                 <input type="text" class="form-control" id="updateLog-details" required>
                                             </div>
                                         </div>
-
                                         <div class="row mb-3">
                                             <!-- Field Ids -->
                                             <div class="col-md-6">
