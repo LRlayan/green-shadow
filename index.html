@@ -162,14 +162,14 @@
 
                             <div class="card-body">
                                 <h5 class="card-title">Field Details</h5>
-                                <p class="card-text"><strong>Name:</strong> Field Name</p>
-                                <p class="card-text"><strong>Location:</strong> Field Location</p>
-                                <p class="card-text"><strong>Extent Size:</strong>2500</p>
-                                <p class="card-text"><strong>Crop:</strong> Beans,Carrot</p>
-                                <p class="card-text"><strong>Staff:</strong> S01,S02,S03</p>
-                                <p class="card-text"><strong>Log:</strong> Log Info</p>
+                                <p class="card-name"><strong>Name:</strong>FieldName</p>
+                                <p class="card-location"><strong>Location:</strong>54564.321</p>
+                                <p class="card-extent-size"><strong>Extent Size:</strong>2500</p>
+                                <p class="card-crop"><strong>Crop:</strong>Beans,Carrot</p>
+                                <p class="card-staff"><strong>Staff:</strong>S01,S02,S03</p>
+                                <p class="card-log"><strong>Log:</strong>LogInfo</p>
                                 <div class="d-flex justify-content-between">
-                                    <button class="btn btn-success flex-grow-1 me-2">Update</button>
+                                    <button type="button" class="btn btn-success flex-grow-1 me-2" data-bs-toggle="modal" data-bs-target="#updateFieldModal">Update</button>
                                     <button class="btn btn-danger flex-grow-1">Delete</button>
                                 </div>
                             </div>
@@ -246,6 +246,68 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-success" form="fieldForm">Add Field</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Update Field Modal -->
+                    <div class="modal fade" id="updateFieldModal" tabindex="-1" aria-labelledby="updateFieldModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content" style="background-color: #2b2b2b; color: white;">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="updateFieldModalLabel">Update Field Details</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="updateFieldForm">
+                                        <!-- Field Name -->
+                                        <div class="mb-3">
+                                            <label for="updateFieldName" class="form-label">Field Name</label>
+                                            <input type="text" class="form-control" id="updateFieldName" required>
+                                        </div>
+                                        <!-- Location -->
+                                        <div class="mb-3">
+                                            <label for="updateFieldLocation" class="form-label">Location</label>
+                                            <input type="text" class="form-control" id="updateFieldLocation" required>
+                                        </div>
+                                        <!-- Extent Size -->
+                                        <div class="mb-3">
+                                            <label for="updateExtentSize" class="form-label">Extent Size</label>
+                                            <input type="text" class="form-control" id="updateExtentSize" required>
+                                        </div>
+                                        <!-- Crop List -->
+                                        <div class="mb-3" id="updateCropContainer">
+                                            <label class="form-label">Crops</label>
+                                            <div id="updateCrop"></div> <!-- Crop container for dynamic inputs -->
+                                        </div>
+                                        <!-- Staff List -->
+                                        <div class="mb-3" id="updateStaffContainer">
+                                            <label class="form-label">Staff Members</label>
+                                            <div id="updateStaff"></div> <!-- Staff container for dynamic inputs -->
+                                        </div>
+                                        <!-- Logs -->
+                                        <div class="mb-3">
+                                            <label for="updateLog" class="form-label">Logs</label>
+                                            <input type="text" class="form-control" id="updateLog">
+                                        </div>
+                                        <!-- Images -->
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label for="updateFieldImage1" class="form-label">Field Image 1</label>
+                                                <input type="file" class="form-control" id="updateFieldImage1" onchange="previewImage('updateFieldImage1', 'updatePreview1')" accept="image/*">
+                                                <img id="updatePreview1" src="#" alt="Preview Image 1" class="img-fluid mt-2 d-none" style="max-height: 150px;">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="updateFieldImage2" class="form-label">Field Image 2</label>
+                                                <input type="file" class="form-control" id="updateFieldImage2" onchange="previewImage('updateFieldImage2', 'updatePreview2')" accept="image/*">
+                                                <img id="updatePreview2" src="#" alt="Preview Image 2" class="img-fluid mt-2 d-none" style="max-height: 150px;">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-success" form="updateFieldForm">Update Field</button>
                                 </div>
                             </div>
                         </div>
