@@ -580,7 +580,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- New Crop Modal -->
+                    <!-- New Log Modal -->
                     <div class="modal fade" id="newMonitoringLogModal" tabindex="-1" aria-labelledby="newMonitoringLogModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content" style="background-color: #2b2b2b; color: white;">
@@ -638,6 +638,71 @@
                                                 <label for="logCropImage" class="form-label">Log Crop Image</label>
                                                 <input type="file" class="form-control" id="logCropImage" accept="image/*" onchange="previewImage('logCropImage', 'previewCropLog')">
                                                 <img id="previewCropLog" src="#" alt="crop log Image Preview" class="img-fluid mt-2 d-none" style="max-height: 150px;">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-success" form="cropForm">Add Crop</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Update Log Modal -->
+                    <div class="modal fade" id="updateMonitoringLogModal" tabindex="-1" aria-labelledby="updateMonitoringLogModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content" style="background-color: #2b2b2b; color: white;">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="updateMonitoringLogModalLabel">Add New Log Details</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="updateLogForm">
+                                        <div class="row mb-3">
+                                            <!-- Log Date -->
+                                            <div class="mb-3">
+                                                <label for="updateLogDate" class="form-label">Log Date</label>
+                                                <input type="text" class="form-control" id="updateLogDate" required>
+                                            </div>
+                                            <!-- Log Details -->
+                                            <div class="mb-3">
+                                                <label for="updateLog-details" class="form-label">Log Details</label>
+                                                <input type="text" class="form-control" id="updateLog-details" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <!-- Field Ids -->
+                                            <div class="col-md-6">
+                                                <div class="mb-3" id="updateLogFieldContainer">
+                                                    <label class="form-label">Fields</label>
+                                                    <div id="updateLogFieldId"></div> <!-- fields container for dynamic inputs -->
+                                                </div>
+                                            </div>
+                                            <!-- Crops Ids -->
+                                            <div class="col-md-6">
+                                                <div class="mb-3" id="updateLogCropContainer">
+                                                    <label class="form-label">Crops</label>
+                                                    <div id="updateLogCropId"></div> <!-- crops container for dynamic inputs -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <!-- Staff Ids -->
+                                            <div class="col-md-6">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3" id="updateLogStaffContainer">
+                                                        <label class="form-label">Staff</label>
+                                                        <div id="updateLogStaffId"></div> <!-- staff Id container for dynamic inputs -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--Monitoring Log Image -->
+                                            <div class="col-md-6">
+                                                <label for="updateLogCropImage" class="form-label">Log Crop Image</label>
+                                                <input type="file" class="form-control" id="updateLogCropImage" accept="image/*" onchange="previewImage('updateLogCropImage', 'updatePreviewCropLog')">
+                                                <img id="updatePreviewCropLog" src="#" alt="crop log Image Preview" class="img-fluid mt-2 d-none" style="max-height: 150px;">
                                             </div>
                                         </div>
                                     </form>
