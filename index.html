@@ -390,6 +390,7 @@
                                 <img src="assets/image/crop01.webp" class="card-img-top" alt="Crop Image">
                                 <div class="card-body">
                                     <h5 class="card-title">Crop Details</h5>
+                                    <p class="card-cropCode"><strong>Code:</strong>C01</p>
                                     <p class="card-name"><strong>Name:</strong>Crop Name</p>
                                     <p class="card-scientific"><strong>Scientific Name:</strong>Scientific Crop Name</p>
                                     <p class="card-category"><strong>Category:</strong>Crop Category</p>
@@ -414,41 +415,50 @@
                                     <div class="modal-body">
                                         <form id="cropForm">
                                             <div class="row mb-3">
+                                                <!-- Crop Code -->
+                                                <div class="col-md-6">
+                                                    <label for="cropCode" class="form-label">Crop Code</label>
+                                                    <input type="text" class="form-control" id="cropCode" required>
+                                                </div>
                                                 <!-- Crop Name -->
                                                 <div class="col-md-6">
                                                     <label for="cropName" class="form-label">Crop Name</label>
                                                     <input type="text" class="form-control" id="cropName" required>
                                                 </div>
+                                            </div>
+
+                                            <div class="row mb-3">
                                                 <!-- Crop Scientific Name -->
                                                 <div class="col-md-6">
                                                     <label for="crop-scientificName" class="form-label">Scientific Name</label>
                                                     <input type="text" class="form-control" id="crop-scientificName" required>
                                                 </div>
-                                            </div>
-
-                                            <div class="row mb-3">
                                                 <!-- Category -->
                                                 <div class="col-md-6">
                                                     <label for="crop-Category" class="form-label">Category</label>
                                                     <input type="text" class="form-control" id="crop-Category" required>
                                                 </div>
+                                            </div>
+
+                                            <div class="row mb-3">
                                                 <!-- Crop Season -->
                                                 <div class="col-md-6">
                                                     <label for="crop-season" class="form-label">Crop Season</label>
                                                     <input type="text" class="form-control" id="crop-season" required>
                                                 </div>
-                                            </div>
-
-                                            <div class="row mb-3">
                                                 <!-- Filed Ids -->
-                                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                                    <label for="crop-FieldId" class="form-label">Field IDs</label>
-                                                    <button type="button" class="btn btn-success" id="addFieldButton">Add Fields</button>
+                                                <div class="col-md-6">
+                                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                                        <label for="crop-FieldId" class="form-label">Field IDs</label>
+                                                        <button type="button" class="btn btn-success" id="addFieldButton">Add Fields</button>
+                                                    </div>
+                                                    <div id="initialFiled" class="input-group">
+                                                        <input type="text" class="form-control" id="crop-FieldId" placeholder="Enter field details">
+                                                    </div>
+                                                    <div id="additionalField" class="mt-2"></div> <!-- Container for dynamic log inputs -->
                                                 </div>
-                                                <div id="initialFiled" class="input-group">
-                                                    <input type="text" class="form-control" id="crop-FieldId" placeholder="Enter field details">
-                                                </div>
-                                                <div id="additionalField" class="mt-2"></div> <!-- Container for dynamic log inputs -->
+                                            </div>
+                                            <div class="row mb-3">
                                                 <!-- Crop Image -->
                                                 <div class="col-md-6">
                                                     <label for="cropImage" class="form-label">Crop Image</label>
