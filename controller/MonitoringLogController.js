@@ -21,3 +21,15 @@ $('#addLogCropButton').on('click', function() {
         cropInput.val(''); // Clear the input field
     }
 });
+
+// Function to add staff Ids
+$('#addLogStaffButton').on('click', function() {
+    const staffInput = $('#log-staffId');
+    const staffValue = staffInput.val().trim();
+    if (staffValue) {
+        const staffListDiv = $('#logStaffList');
+        const staffElement = $('<div></div>').text(staffValue);
+        staffListDiv.append(staffElement);
+        staffInput.val(''); // Clear the input field
+    }
+});
