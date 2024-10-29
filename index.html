@@ -123,9 +123,8 @@
                 </div>
             </div>
         </section>
-        <section class="section-container m-3 p-3">
+        <section id="sections-wrapper" class="section-container m-3 p-3">
             <section id="dashboard-sec"><p>welcome dashboard</p></section>
-
             <section id="field-sec">
                 <div class="container mt-4">
                     <!-- Search bar -->
@@ -136,7 +135,7 @@
                     </div>
                     <!-- Buttons aligned to the right -->
                     <div class="d-flex ms-auto gap-2 mb-3" style="width: 20%; justify-content: end;">
-                        <button class="btn btn-success flex-grow-1">New</button>
+                        <button type="button" class="btn btn-success flex-grow-1" data-bs-toggle="modal" data-bs-target="#newFieldModal">New</button>
                     </div>
                     <div class="col-md-6 col-lg-4 mb-4">
                         <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
@@ -165,13 +164,88 @@
                                 <h5 class="card-title">Field Details</h5>
                                 <p class="card-text"><strong>Name:</strong> Field Name</p>
                                 <p class="card-text"><strong>Location:</strong> Field Location</p>
-                                <p class="card-text"><strong>Extent Size:</strong> Extent Size Of Field</p>
-                                <p class="card-text"><strong>Crop:</strong> Crop Info</p>
-                                <p class="card-text"><strong>Staff:</strong> Staff Info</p>
+                                <p class="card-text"><strong>Extent Size:</strong>2500</p>
+                                <p class="card-text"><strong>Crop:</strong> Beans,Carrot</p>
+                                <p class="card-text"><strong>Staff:</strong> S01,S02,S03</p>
                                 <p class="card-text"><strong>Log:</strong> Log Info</p>
                                 <div class="d-flex justify-content-between">
                                     <button class="btn btn-success flex-grow-1 me-2">Update</button>
                                     <button class="btn btn-danger flex-grow-1">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- New Field Modal -->
+                    <div class="modal fade" id="newFieldModal" tabindex="-1" aria-labelledby="newFieldModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content" style="background-color: #2b2b2b; color: white;">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="newFieldModalLabel">Add New Field Details</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="fieldForm">
+                                        <div class="row mb-3">
+                                            <!-- Field Name -->
+                                            <div class="col-md-6">
+                                                <label for="fieldName" class="form-label">Field Name</label>
+                                                <input type="text" class="form-control" id="fieldName" required>
+                                            </div>
+                                            <!-- Field Location -->
+                                            <div class="col-md-6">
+                                                <label for="fieldLocation" class="form-label">Location</label>
+                                                <input type="text" class="form-control" id="fieldLocation" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <!-- Extent Size -->
+                                            <div class="col-md-6">
+                                                <label for="extentSize" class="form-label">Extent Size</label>
+                                                <input type="text" class="form-control" id="extentSize" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <!-- Staff Members -->
+                                            <div class="col-md-6">
+                                                <label for="staffInput" class="form-label">Staff Members</label>
+                                                <div class="input-group mb-3">
+                                                    <input type="text" class="form-control" id="staffInput" placeholder="Add Staff Member" aria-label="Staff Members">
+                                                    <button class="btn btn-outline-secondary btn-success text-white" type="button" id="addStaffButton">Add</button>
+                                                </div>
+                                                <div id="staffList" class="mt-2"></div>
+                                            </div>
+                                            <!-- Crops -->
+                                            <div class="col-md-6">
+                                                <label for="cropInput" class="form-label">Crops</label>
+                                                <div class="input-group mb-3">
+                                                    <input type="text" class="form-control" id="cropInput" placeholder="Add Crop" aria-label="Crops">
+                                                    <button class="btn btn-outline-secondary btn-success text-white" type="button" id="addCropButton">Add</button>
+                                                </div>
+                                                <div id="cropList" class="mt-2"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <!-- Field Image 1 -->
+                                            <div class="col-md-6">
+                                                <label for="fieldImage1" class="form-label">Field Image 1</label>
+                                                <input type="file" class="form-control" id="fieldImage1" accept="image/*" onchange="previewImage('fieldImage1', 'preview1')">
+                                                <img id="preview1" src="#" alt="Image Preview 1" class="img-fluid mt-2 d-none" style="max-height: 150px;">
+                                            </div>
+                                            <!-- Field Image 2 -->
+                                            <div class="col-md-6">
+                                                <label for="fieldImage2" class="form-label">Field Image 2</label>
+                                                <input type="file" class="form-control" id="fieldImage2" accept="image/*" onchange="previewImage('fieldImage2', 'preview2')">
+                                                <img id="preview2" src="#" alt="Image Preview 2" class="img-fluid mt-2 d-none" style="max-height: 150px;">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-success" form="fieldForm">Add Field</button>
                                 </div>
                             </div>
                         </div>
@@ -425,4 +499,5 @@
 <script src="assets/lib/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="controller/IndexController.js"></script>
+<script src="controller/FieldController.js"></script>
 </html>
