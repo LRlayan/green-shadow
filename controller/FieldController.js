@@ -53,18 +53,19 @@ $(document).ready(function() {
         const log = card.find('.card-log').text().replace('Log:', '').trim();
 
         // Set data in modal fields
-        $('#updateFieldName').val(fieldCode);
+        $('#updateFieldCode').val(fieldCode);
         $('#updateFieldName').val(fieldName);
         $('#updateFieldLocation').val(location);
         $('#updateExtentSize').val(extentSize);
-        $('#updateLog').val(log);
 
         // Set crop and staff values
         const cropArray = crop.split(',');
         const staffArray = staff.split(',');
+        const logArray = log.split(',');
 
         $('#updateCrop').empty(); // Clear existing values in crop input
         $('#updateStaff').empty(); // Clear existing values in staff input
+        $('#updateLogs').empty(); // Clear existing values in staff input
 
         cropArray.forEach(cropItem => {
             $('#updateCrop').append(`<input type="text" class="form-control mb-2" value="${cropItem.trim()}">`);
@@ -72,6 +73,10 @@ $(document).ready(function() {
 
         staffArray.forEach(staffItem => {
             $('#updateStaff').append(`<input type="text" class="form-control mb-2" value="${staffItem.trim()}">`);
+        });
+
+        logArray.forEach(logsItem => {
+            $('#updateLogs').append(`<input type="text" class="form-control mb-2" value="${logsItem.trim()}">`);
         });
 
         // Show the update modal

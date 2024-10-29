@@ -162,13 +162,13 @@
 
                             <div class="card-body">
                                 <h5 class="card-title">Field Details</h5>
-                                <p class="card-filedCode"><strong>Code:</strong>Field Code</p>
+                                <p class="card-filedCode"><strong>Code:</strong>F01</p>
                                 <p class="card-name"><strong>Name:</strong>Field Name</p>
                                 <p class="card-location"><strong>Location:</strong>54564.321</p>
                                 <p class="card-extent-size"><strong>Extent Size:</strong>2500</p>
                                 <p class="card-crop"><strong>Crop:</strong>Beans,Carrot</p>
                                 <p class="card-staff"><strong>Staff:</strong>S01,S02,S03</p>
-                                <p class="card-log"><strong>Log:</strong>LogInfo</p>
+                                <p class="card-log"><strong>Log:</strong>L01,L02</p>
                                 <div class="d-flex justify-content-between">
                                     <button type="button" class="btn btn-success flex-grow-1 me-2" data-bs-toggle="modal" data-bs-target="#updateFieldModal">Update</button>
                                     <button class="btn btn-danger flex-grow-1">Delete</button>
@@ -309,20 +309,17 @@
                                             <div class="col-md-6">
                                                 <!-- Staff List -->
                                                 <div class="mb-3" id="updateStaffContainer">
-                                            <label class="form-label">Staff Members</label>
-                                            <div id="updateStaff"></div> <!-- Staff container for dynamic inputs -->
-                                        </div>
+                                                    <label class="form-label">Staff Members</label>
+                                                    <div id="updateStaff"></div> <!-- Staff container for dynamic inputs -->
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="mb-3">
-<!--                                            <div class="d-flex justify-content-between align-items-center mb-2">-->
-<!--                                                <label for="updateLog" class="form-label">Logs</label>-->
-<!--                                                <button type="button" class="btn btn-success" id="addLogButton">Add Log</button>-->
-<!--                                            </div>-->
-<!--                                            <div id="initialLog" class="input-group">-->
-<!--                                                <input type="text" class="form-control" id="updateLog" placeholder="Enter log details">-->
-<!--                                            </div>-->
-<!--                                            <div id="additionalLogs" class="mt-2"></div> &lt;!&ndash; Container for dynamic log inputs &ndash;&gt;-->
+                                            <!-- Log List -->
+                                            <div class="mb-3" id="updateFieldLogContainer">
+                                                <label class="form-label">Logs Members</label>
+                                                <div id="updateLogs"></div> <!-- Staff container for dynamic inputs -->
+                                            </div>
                                         </div>
                                         <!-- Images -->
                                         <div class="row">
