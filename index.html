@@ -561,21 +561,90 @@
                     </div>
                     <!-- Buttons aligned to the right -->
                     <div class="d-flex ms-auto gap-2 mb-3" style="width: 20%; justify-content: end;">
-                        <button class="btn btn-success flex-grow-1">New</button>
+                        <button type="button" class="btn btn-success flex-grow-1" data-bs-toggle="modal" data-bs-target="#newMonitoringLogModal">New</button>
                     </div>
                     <div class="col-md-6 col-lg-4 mb-4">
                         <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
                             <img src="assets/image/crop01.webp" class="card-img-top" alt="Crop Image">
                             <div class="card-body">
                                 <h5 class="card-title">Log Details</h5>
-                                <p class="card-text"><strong>Log Date:</strong> Log Date</p>
-                                <p class="card-text"><strong>Lod Details:</strong> Scientific Crop Name</p>
-                                <p class="card-text"><strong>Field:</strong> Field info</p>
-                                <p class="card-text"><strong>Crop:</strong> Crop Info</p>
-                                <p class="card-text"><strong>Staff:</strong> Staff info</p>
+                                <p class="card-log-date"><strong>Log Date:</strong> Log Date</p>
+                                <p class="card-log-details"><strong>Log Details:</strong> desc</p>
+                                <p class="card-log-fields"><strong>Field:</strong>F01,F02,F03</p>
+                                <p class="card-log-crop"><strong>Crop:</strong>C01,C02</p>
+                                <p class="card-log-staff"><strong>Staff:</strong>S01,S02</p>
                                 <div class="d-flex justify-content-between">
                                     <button class="btn btn-success flex-grow-1 me-2">Update</button>
                                     <button class="btn btn-danger flex-grow-1">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- New Crop Modal -->
+                    <div class="modal fade" id="newMonitoringLogModal" tabindex="-1" aria-labelledby="newMonitoringLogModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content" style="background-color: #2b2b2b; color: white;">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="newMonitoringLogModalLabel">Add New Log Details</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="logForm">
+                                        <div class="row mb-3">
+                                            <!-- Log Date -->
+                                            <div class="mb-3">
+                                                <label for="logDate" class="form-label">Log Date</label>
+                                                <input type="text" class="form-control" id="logDate" required>
+                                            </div>
+                                            <!-- Log Details -->
+                                            <div class="mb-3">
+                                                <label for="log-details" class="form-label">Log Details</label>
+                                                <input type="text" class="form-control" id="log-details" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <!-- Field Ids -->
+                                            <div class="col-md-6">
+                                                <label for="log-FieldId" class="form-label">Field IDs</label>
+                                                <div class="input-group mb-3">
+                                                    <input type="text" class="form-control" id="log-FieldId" placeholder="Add Fields" aria-label="Add Fields">
+                                                    <button class="btn btn-outline-secondary btn-success text-white" type="button" id="addLogFieldButton">Add</button>
+                                                </div>
+                                                <div id="logFieldList" class="mt-2"></div>
+                                            </div>
+                                            <!-- Crops Ids -->
+                                            <div class="col-md-6">
+                                                <label for="log-cropId" class="form-label">Crop IDs</label>
+                                                <div class="input-group mb-3">
+                                                    <input type="text" class="form-control" id="log-cropId" placeholder="Add Crops" aria-label="Add Crops">
+                                                    <button class="btn btn-outline-secondary btn-success text-white" type="button" id="addLogCropButton">Add</button>
+                                                </div>
+                                                <div id="logCropList" class="mt-2"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <!-- Staff Ids -->
+                                            <div class="col-md-6">
+                                                <label for="log-staffId" class="form-label">Staff IDs</label>
+                                                <div class="input-group mb-3">
+                                                    <input type="text" class="form-control" id="log-staffId" placeholder="Add Staff" aria-label="Add Staff">
+                                                    <button class="btn btn-outline-secondary btn-success text-white" type="button" id="addLogStaffButton">Add</button>
+                                                </div>
+                                                <div id="logStaffList" class="mt-2"></div>
+                                            </div>
+                                            <!--Monitoring Log Image -->
+                                            <div class="col-md-6">
+                                                <label for="logCropImage" class="form-label">Log Crop Image</label>
+                                                <input type="file" class="form-control" id="logCropImage" accept="image/*" onchange="previewImage('logCropImage', 'previewCropLog')">
+                                                <img id="previewCropLog" src="#" alt="crop log Image Preview" class="img-fluid mt-2 d-none" style="max-height: 150px;">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-success" form="cropForm">Add Crop</button>
                                 </div>
                             </div>
                         </div>
@@ -671,4 +740,5 @@
 <script src="controller/IndexController.js"></script>
 <script src="controller/FieldController.js"></script>
 <script src="controller/CropController.js"></script>
+<script src="controller/MonitoringLogController.js"></script>
 </html>
