@@ -15,30 +15,33 @@ function previewImage(inputId, previewId) {
 }
 
 $(document).ready(function() {
-    // Function to add crops
-    $('#addCropButton').on('click', function() {
-        const cropInput = $('#cropInput');
-        const cropValue = cropInput.val().trim();
-        if (cropValue) {
-            const cropListDiv = $('#cropList');
-            const cropElement = $('<div></div>').text(cropValue);
-            cropListDiv.append(cropElement);
-            cropInput.val(''); // Clear the input field
-        }
+    // Add a new staff input field when the "Add member" button is clicked
+    $('#addFieldStaffButton').on('click', function() {
+        // Create a new input field for an additional staff member entry
+        const newLogInput = $('<div class="input-group mt-2"><input type="text" class="form-control" placeholder="Enter staff member"><button type="button" class="btn btn-danger removeLogButton">Remove</button></div>');
+
+        // Append the new input field to the additionalLogs container
+        $('#additionalStaff').append(newLogInput);
     });
 
-    // Function to add staff members
-    $('#addStaffButton').on('click', function() {
-        const staffInput = $('#staffInput');
-        const staffValue = staffInput.val().trim();
-        if (staffValue) {
-            const staffListDiv = $('#staffList');
-            const staffElement = $('<div></div>').text(staffValue);
-            staffListDiv.append(staffElement);
-            staffInput.val(''); // Clear the input field
-        }
+    // Remove a log input field when the "Remove" button is clicked
+    $('#additionalStaff').on('click', '.removeLogButton', function() {
+        $(this).closest('.input-group').remove(); // Remove the parent input group
     });
 
+    // Add a new crop input field when the "Add crop" button is clicked
+    $('#addFieldCropButton').on('click', function() {
+        // Create a new input field for an additional crop entry
+        const newLogInput = $('<div class="input-group mt-2"><input type="text" class="form-control" placeholder="Enter crop details"><button type="button" class="btn btn-danger removeLogButton">Remove</button></div>');
+
+        // Append the new input field to the additionalLogs container
+        $('#additionalCrop').append(newLogInput);
+    });
+
+    // Remove a log input field when the "Remove" button is clicked
+    $('#additionalCrop').on('click', '.removeLogButton', function() {
+        $(this).closest('.input-group').remove(); // Remove the parent input group
+    });
 
     //update modal ----------------------------------------------------------------------------------------
     $('.card .btn-success').on('click', function() {
@@ -89,35 +92,6 @@ $(document).ready(function() {
         event.preventDefault();
         // Perform update logic, close modal, etc.
     });
-
-    // Add a new staff input field when the "Add member" button is clicked
-    $('#addFieldStaffButton').on('click', function() {
-        // Create a new input field for an additional staff member entry
-        const newLogInput = $('<div class="input-group mt-2"><input type="text" class="form-control" placeholder="Enter staff member"><button type="button" class="btn btn-danger removeLogButton">Remove</button></div>');
-
-        // Append the new input field to the additionalLogs container
-        $('#additionalStaff').append(newLogInput);
-    });
-
-    // Remove a log input field when the "Remove" button is clicked
-    $('#additionalStaff').on('click', '.removeLogButton', function() {
-        $(this).closest('.input-group').remove(); // Remove the parent input group
-    });
-
-    // Add a new crop input field when the "Add crop" button is clicked
-    $('#addFieldCropButton').on('click', function() {
-        // Create a new input field for an additional crop entry
-        const newLogInput = $('<div class="input-group mt-2"><input type="text" class="form-control" placeholder="Enter crop details"><button type="button" class="btn btn-danger removeLogButton">Remove</button></div>');
-
-        // Append the new input field to the additionalLogs container
-        $('#additionalCrop').append(newLogInput);
-    });
-
-    // Remove a log input field when the "Remove" button is clicked
-    $('#additionalCrop').on('click', '.removeLogButton', function() {
-        $(this).closest('.input-group').remove(); // Remove the parent input group
-    });
-
 
     // delete modal ----------------------------------------------------------------------------------------
     let cardToDelete; // Variable to store the card to be deleted

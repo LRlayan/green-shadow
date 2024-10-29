@@ -1,41 +1,47 @@
 $(document).ready(function() {
-// Function to add field Ids
-    $('#addLogFieldButton').on('click', function () {
-        const filedInput = $('#log-FieldId');
-        const fieldValue = filedInput.val().trim();
-        if (fieldValue) {
-            const filedListDiv = $('#logFieldList');
-            const filedElement = $('<div></div>').text(fieldValue);
-            filedListDiv.append(filedElement);
-            filedInput.val(''); // Clear the input field
-        }
+    // Add a new fields input field when the "Add filed" button is clicked
+    $('#addLogFieldButton').on('click', function() {
+        // Create a new input field for an additional fields entry
+        const newLogInput = $('<div class="input-group mt-2"><input type="text" class="form-control" placeholder="Enter fields Id"><button type="button" class="btn btn-danger removeLogButton">Remove</button></div>');
+
+        // Append the new input field to the additionalLogs container
+        $('#additionalLogField').append(newLogInput);
     });
 
-// Function to add crops Ids
-    $('#addLogCropButton').on('click', function () {
-        const cropInput = $('#log-cropId');
-        const cropValue = cropInput.val().trim();
-        if (cropValue) {
-            const cropListDiv = $('#logCropList');
-            const cropElement = $('<div></div>').text(cropValue);
-            cropListDiv.append(cropElement);
-            cropInput.val(''); // Clear the input field
-        }
+    // Remove a log input field when the "Remove" button is clicked
+    $('#additionalLogField').on('click', '.removeLogButton', function() {
+        $(this).closest('.input-group').remove(); // Remove the parent input group
     });
 
-// Function to add staff Ids
-    $('#addLogStaffButton').on('click', function () {
-        const staffInput = $('#log-staffId');
-        const staffValue = staffInput.val().trim();
-        if (staffValue) {
-            const staffListDiv = $('#logStaffList');
-            const staffElement = $('<div></div>').text(staffValue);
-            staffListDiv.append(staffElement);
-            staffInput.val(''); // Clear the input field
-        }
+    // Add a new crops input field when the "Add crop" button is clicked
+    $('#addLogCropButton').on('click', function() {
+        // Create a new input field for an additional crops entry
+        const newLogInput = $('<div class="input-group mt-2"><input type="text" class="form-control" placeholder="Enter fields Id"><button type="button" class="btn btn-danger removeLogButton">Remove</button></div>');
+
+        // Append the new input field to the additionalLogs container
+        $('#additionalLogCrop').append(newLogInput);
     });
 
-// Update button click
+    // Remove a log input field when the "Remove" button is clicked
+    $('#additionalLogCrop').on('click', '.removeLogButton', function() {
+        $(this).closest('.input-group').remove(); // Remove the parent input group
+    });
+
+    // Add a new staff input field when the "Add crop" button is clicked
+    $('#addLogStaffButton').on('click', function() {
+        // Create a new input field for an additional staff member entry
+        const newLogInput = $('<div class="input-group mt-2"><input type="text" class="form-control" placeholder="Enter staff member"><button type="button" class="btn btn-danger removeLogButton">Remove</button></div>');
+
+        // Append the new input field to the additionalLogs container
+        $('#additionalLogStaff').append(newLogInput);
+    });
+
+    // Remove a log input field when the "Remove" button is clicked
+    $('#additionalLogStaff').on('click', '.removeLogButton', function() {
+        $(this).closest('.input-group').remove(); // Remove the parent input group
+    });
+
+// Update button click ----------------------------------------------------------------------------------------
     $('.card .btn-success').on('click', function () {
         // Get the card's current data
         const card = $(this).closest('.card');
@@ -88,6 +94,7 @@ $(document).ready(function() {
         updateModal.hide();
     });
 
+    //delete modal ----------------------------------------------------------------------------------------
     let cardToDelete; // Variable to store the card to be deleted
 
     // Show confirmation modal when the delete button is clicked

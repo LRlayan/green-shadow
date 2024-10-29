@@ -666,32 +666,38 @@
                                         <div class="row mb-3">
                                             <!-- Field Ids -->
                                             <div class="col-md-6">
-                                                <label for="log-FieldId" class="form-label">Field IDs</label>
-                                                <div class="input-group mb-3">
-                                                    <input type="text" class="form-control" id="log-FieldId" placeholder="Add Fields" aria-label="Add Fields">
-                                                    <button class="btn btn-outline-secondary btn-success text-white" type="button" id="addLogFieldButton">Add</button>
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <label for="lod-filedId" class="form-label">Crops</label>
+                                                    <button type="button" class="btn btn-success" id="addLogFieldButton">Add Crop</button>
                                                 </div>
-                                                <div id="logFieldList" class="mt-2"></div>
+                                                <div id="initialLogFiled" class="input-group">
+                                                    <input type="text" class="form-control" id="lod-filedId" placeholder="Enter field details">
+                                                </div>
+                                                <div id="additionalLogField" class="mt-2"></div> <!-- Container for dynamic log inputs -->
                                             </div>
                                             <!-- Crops Ids -->
                                             <div class="col-md-6">
-                                                <label for="log-cropId" class="form-label">Crop IDs</label>
-                                                <div class="input-group mb-3">
-                                                    <input type="text" class="form-control" id="log-cropId" placeholder="Add Crops" aria-label="Add Crops">
-                                                    <button class="btn btn-outline-secondary btn-success text-white" type="button" id="addLogCropButton">Add</button>
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <label for="log-cropId" class="form-label">Crop IDs</label>
+                                                    <button type="button" class="btn btn-success" id="addLogCropButton">Add Crop</button>
                                                 </div>
-                                                <div id="logCropList" class="mt-2"></div>
+                                                <div id="initialLogCrop" class="input-group">
+                                                    <input type="text" class="form-control" id="log-cropId" placeholder="Enter crops details">
+                                                </div>
+                                                <div id="additionalLogCrop" class="mt-2"></div> <!-- Container for dynamic log inputs -->
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <!-- Staff Ids -->
                                             <div class="col-md-6">
-                                                <label for="log-staffId" class="form-label">Staff IDs</label>
-                                                <div class="input-group mb-3">
-                                                    <input type="text" class="form-control" id="log-staffId" placeholder="Add Staff" aria-label="Add Staff">
-                                                    <button class="btn btn-outline-secondary btn-success text-white" type="button" id="addLogStaffButton">Add</button>
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <label for="log-staffId" class="form-label">Add Member</label>
+                                                    <button type="button" class="btn btn-success" id="addLogStaffButton">Add Staff</button>
                                                 </div>
-                                                <div id="logStaffList" class="mt-2"></div>
+                                                <div id="initialLogStaff" class="input-group">
+                                                    <input type="text" class="form-control" id="log-staffId" placeholder="Enter staff details">
+                                                </div>
+                                                <div id="additionalLogStaff" class="mt-2"></div> <!-- Container for dynamic log inputs -->
                                             </div>
                                             <!--Monitoring Log Image -->
                                             <div class="col-md-6">
