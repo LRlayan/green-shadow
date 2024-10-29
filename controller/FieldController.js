@@ -82,6 +82,24 @@ $(document).ready(function() {
         event.preventDefault();
         // Perform update logic, close modal, etc.
     });
+
+    let cardToDelete; // Variable to store the card to be deleted
+
+    // Show confirmation modal when the delete button is clicked
+    $('.card .btn-danger').on('click', function() {
+        cardToDelete = $(this).closest('.card'); // Store the card element to be deleted
+        const confirmModal = new bootstrap.Modal($('#confirmDeleteModal')[0]);
+        confirmModal.show();
+    });
+
+    // Delete the card if "Yes" is clicked in the confirmation modal
+    $('#confirmDeleteButton').on('click', function() {
+        if (cardToDelete) {
+            cardToDelete.remove(); // Remove the card element from the DOM
+            cardToDelete = null; // Reset the variable
+        }
+        $('#confirmDeleteModal').modal('hide'); // Hide the confirmation modal
+    });
 });
 
 
