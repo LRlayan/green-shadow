@@ -162,7 +162,8 @@
 
                             <div class="card-body">
                                 <h5 class="card-title">Field Details</h5>
-                                <p class="card-name"><strong>Name:</strong>FieldName</p>
+                                <p class="card-filedCode"><strong>Code:</strong>Field Code</p>
+                                <p class="card-name"><strong>Name:</strong>Field Name</p>
                                 <p class="card-location"><strong>Location:</strong>54564.321</p>
                                 <p class="card-extent-size"><strong>Extent Size:</strong>2500</p>
                                 <p class="card-crop"><strong>Crop:</strong>Beans,Carrot</p>
@@ -186,19 +187,24 @@
                                 <div class="modal-body">
                                     <form id="fieldForm">
                                         <div class="row mb-3">
+                                            <!-- Field Code -->
+                                            <div class="col-md-6">
+                                                <label for="fieldCode" class="form-label">Field Code</label>
+                                                <input type="text" class="form-control" id="fieldCode" required>
+                                            </div>
                                             <!-- Field Name -->
                                             <div class="col-md-6">
                                                 <label for="fieldName" class="form-label">Field Name</label>
                                                 <input type="text" class="form-control" id="fieldName" required>
                                             </div>
+                                        </div>
+
+                                        <div class="row mb-3">
                                             <!-- Field Location -->
                                             <div class="col-md-6">
                                                 <label for="fieldLocation" class="form-label">Location</label>
                                                 <input type="text" class="form-control" id="fieldLocation" required>
                                             </div>
-                                        </div>
-
-                                        <div class="row mb-3">
                                             <!-- Extent Size -->
                                             <div class="col-md-6">
                                                 <label for="extentSize" class="form-label">Extent Size</label>

@@ -44,6 +44,7 @@ $(document).ready(function() {
     $('.card .btn-success').on('click', function() {
         // Get the card's current data
         const card = $(this).closest('.card');
+        const fieldCode = card.find('.card-filedCode').text().replace('Code:', '').trim();
         const fieldName = card.find('.card-name').text().replace('Name:', '').trim();
         const location = card.find('.card-location').text().replace('Location:', '').trim();
         const extentSize = card.find('.card-extent-size').text().replace('Extent Size:', '').trim();
@@ -52,6 +53,7 @@ $(document).ready(function() {
         const log = card.find('.card-log').text().replace('Log:', '').trim();
 
         // Set data in modal fields
+        $('#updateFieldName').val(fieldCode);
         $('#updateFieldName').val(fieldName);
         $('#updateFieldLocation').val(location);
         $('#updateExtentSize').val(extentSize);
