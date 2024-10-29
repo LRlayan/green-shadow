@@ -345,7 +345,7 @@
                     </div>
                     <!-- Buttons aligned to the right -->
                     <div class="d-flex ms-auto gap-2 mb-3" style="width: 20%; justify-content: end;">
-                        <button class="btn btn-success flex-grow-1">New</button>
+                        <button type="button" class="btn btn-success flex-grow-1" data-bs-toggle="modal" data-bs-target="#newCropModal">New</button>
                     </div>
                     <!-- Crop Card -->
                     <div class="row">
@@ -353,11 +353,12 @@
                             <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
                                 <img src="assets/image/crop01.webp" class="card-img-top" alt="Crop Image">
                                 <div class="card-body">
-                                    <h5 class="card-title">Crop Name</h5>
-                                    <p class="card-text"><strong>Scientific Name:</strong> Scientific Crop Name</p>
-                                    <p class="card-text"><strong>Category:</strong> Crop Category</p>
-                                    <p class="card-text"><strong>Crop Season:</strong> Crop Season Info</p>
-                                    <p class="card-text"><strong>Field ID:</strong> Field ID</p>
+                                    <h5 class="card-title">Crop Details</h5>
+                                    <p class="card-name"><strong>Name:</strong>Crop Name</p>
+                                    <p class="card-Scientific"><strong>Scientific Name:</strong> Scientific Crop Name</p>
+                                    <p class="card-Category"><strong>Category:</strong> Crop Category</p>
+                                    <p class="card-Season"><strong>Crop Season:</strong> Crop Season Info</p>
+                                    <p class="card-FieldId"><strong>Field ID:</strong> Field ID</p>
                                     <div class="d-flex justify-content-between">
                                         <button class="btn btn-success flex-grow-1 me-2">Update</button>
                                         <button class="btn btn-danger flex-grow-1">Delete</button>
@@ -365,51 +366,64 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Repeat .col-md-6 .col-lg-4 for additional crop cards -->
-                        <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
-                                <img src="assets/image/crop01.webp" class="card-img-top" alt="Crop Image">
-                                <div class="card-body">
-                                    <h5 class="card-title">Crop Name</h5>
-                                    <p class="card-text"><strong>Scientific Name:</strong> Scientific Crop Name</p>
-                                    <p class="card-text"><strong>Category:</strong> Crop Category</p>
-                                    <p class="card-text"><strong>Crop Season:</strong> Crop Season Info</p>
-                                    <p class="card-text"><strong>Field ID:</strong> Field ID</p>
-                                    <div class="d-flex justify-content-between">
-                                        <button class="btn btn-success flex-grow-1 me-2">Update</button>
-                                        <button class="btn btn-danger flex-grow-1">Delete</button>
+                        <!-- New Crop Modal -->
+                        <div class="modal fade" id="newCropModal" tabindex="-1" aria-labelledby="newFieldCropLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content" style="background-color: #2b2b2b; color: white;">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="newCropModalLabel">Add New Field Details</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
-                                <img src="assets/image/crop01.webp" class="card-img-top" alt="Crop Image">
-                                <div class="card-body">
-                                    <h5 class="card-title">Crop Name</h5>
-                                    <p class="card-text"><strong>Scientific Name:</strong> Scientific Crop Name</p>
-                                    <p class="card-text"><strong>Category:</strong> Crop Category</p>
-                                    <p class="card-text"><strong>Crop Season:</strong> Crop Season Info</p>
-                                    <p class="card-text"><strong>Field ID:</strong> Field ID</p>
-                                    <div class="d-flex justify-content-between">
-                                        <button class="btn btn-success flex-grow-1 me-2">Update</button>
-                                        <button class="btn btn-danger flex-grow-1">Delete</button>
+                                    <div class="modal-body">
+                                        <form id="cropForm">
+                                            <div class="row mb-3">
+                                                <!-- Crop Name -->
+                                                <div class="col-md-6">
+                                                    <label for="cropName" class="form-label">Crop Name</label>
+                                                    <input type="text" class="form-control" id="cropName" required>
+                                                </div>
+                                                <!-- Crop Scientific Name -->
+                                                <div class="col-md-6">
+                                                    <label for="crop-scientificName" class="form-label">Scientific Name</label>
+                                                    <input type="text" class="form-control" id="crop-scientificName" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <!-- Category -->
+                                                <div class="col-md-6">
+                                                    <label for="crop-Category" class="form-label">Category</label>
+                                                    <input type="text" class="form-control" id="crop-Category" required>
+                                                </div>
+                                                <!-- Crop Season -->
+                                                <div class="col-md-6">
+                                                    <label for="crop-season" class="form-label">Crop Season</label>
+                                                    <input type="text" class="form-control" id="crop-season" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-3">
+                                                <!-- Field Ids -->
+                                                <div class="col-md-6">
+                                                    <label for="crop-FieldId" class="form-label">Field IDs</label>
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" class="form-control" id="crop-FieldId" placeholder="Add Staff Member" aria-label="Staff Members">
+                                                        <button class="btn btn-outline-secondary btn-success text-white" type="button" id="addCropFieldButton">Add</button>
+                                                    </div>
+                                                    <div id="fieldList" class="mt-2"></div>
+                                                </div>
+                                                <!-- Crop Image -->
+                                                <div class="col-md-6">
+                                                    <label for="cropImage" class="form-label">Crop Image</label>
+                                                    <input type="file" class="form-control" id="cropImage" accept="image/*" onchange="previewImage('cropImage', 'previewCrop')">
+                                                    <img id="previewCrop" src="#" alt="crop Image Preview" class="img-fluid mt-2 d-none" style="max-height: 150px;">
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 col-lg-4 mb-4">
-                            <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
-                                <img src="assets/image/crop01.webp" class="card-img-top" alt="Crop Image">
-                                <div class="card-body">
-                                    <h5 class="card-title">Crop Name</h5>
-                                    <p class="card-text"><strong>Scientific Name:</strong> Scientific Crop Name</p>
-                                    <p class="card-text"><strong>Category:</strong> Crop Category</p>
-                                    <p class="card-text"><strong>Crop Season:</strong> Crop Season Info</p>
-                                    <p class="card-text"><strong>Field ID:</strong> Field ID</p>
-                                    <div class="d-flex justify-content-between">
-                                        <button class="btn btn-success flex-grow-1 me-2">Update</button>
-                                        <button class="btn btn-danger flex-grow-1">Delete</button>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-success" form="cropForm">Add Crop</button>
                                     </div>
                                 </div>
                             </div>
@@ -580,4 +594,5 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="controller/IndexController.js"></script>
 <script src="controller/FieldController.js"></script>
+<script src="controller/CropController.js"></script>
 </html>
