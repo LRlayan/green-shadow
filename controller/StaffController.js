@@ -266,53 +266,100 @@ $(document).ready(function() {
     });
 
     //Add Equipment
-    $(document).ready(function() {
-        // Predefined counts for each equipment ID
-        const equipmentCounts = {
-            "L01": 5,
-            "L02": 3,
-            "L03": 7,
-            "L04": 2,
-            "L05": 4
-        };
+    // Predefined counts for each equipment ID
+    const equipmentCounts = {
+        "L01": 5,
+        "L02": 3,
+        "L03": 7,
+        "L04": 2,
+        "L05": 4
+    };
 
-        // jQuery to add a new equipment dropdown with a count input and remove button
-        $('#addStaffEquipmentButton').on('click', function() {
-            // Create a container for the equipment select, count input, and remove button
-            const $equipmentContainer = $('<div class="d-flex align-items-center mt-2"></div>');
+    // jQuery to add a new equipment dropdown with a count input and remove button
+    $('#addStaffEquipmentButton').on('click', function() {
+        // Create a container for the equipment select, count input, and remove button
+        const $equipmentContainer = $('<div class="d-flex align-items-center mt-2"></div>');
 
-            // Create the equipment select element
-            const $newSelect = $('<select class="form-control me-2"></select>');
-            $newSelect.append('<option value="">Select Equipment</option>'); // Default option
-            const optionLogs = ["L01", "L02", "L03", "L04", "L05"];
-            optionLogs.forEach(function(optionValue) {
-                $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
-            });
-
-            // Create a quantity input field
-            const $quantityInput = $('<input type="number" class="form-control me-2" placeholder="Count" min="1" value="1" readonly>');
-
-            // Update count input based on selected equipment
-            $newSelect.on('change', function() {
-                const selectedEquipment = $(this).val();
-                if (selectedEquipment && equipmentCounts[selectedEquipment]) {
-                    $quantityInput.val(equipmentCounts[selectedEquipment]);
-                } else {
-                    $quantityInput.val(1); // Default value if none selected
-                }
-            });
-
-            // Create a remove button
-            const $removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
-            $removeButton.on('click', function() {
-                $equipmentContainer.remove(); // Remove this container when clicked
-            });
-
-            // Append the select, quantity input, and remove button to the container
-            $equipmentContainer.append($newSelect).append($quantityInput).append($removeButton);
-
-            // Append the new equipment container to the additionalStaffEquipment section
-            $('#additionalStaffEquipment').append($equipmentContainer);
+        // Create the equipment select element
+        const $newSelect = $('<select class="form-control me-2"></select>');
+        $newSelect.append('<option value="">Select Equipment</option>'); // Default option
+        const optionLogs = ["L01", "L02", "L03", "L04", "L05"];
+        optionLogs.forEach(function(optionValue) {
+            $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
         });
+
+        // Create a quantity input field
+        const $quantityInput = $('<input type="number" class="form-control me-2" placeholder="Count" min="1" value="1" readonly>');
+
+        // Update count input based on selected equipment
+        $newSelect.on('change', function() {
+            const selectedEquipment = $(this).val();
+            if (selectedEquipment && equipmentCounts[selectedEquipment]) {
+                $quantityInput.val(equipmentCounts[selectedEquipment]);
+            } else {
+                $quantityInput.val(1); // Default value if none selected
+            }
+        });
+
+        // Create a remove button
+        const $removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
+        $removeButton.on('click', function() {
+            $equipmentContainer.remove(); // Remove this container when clicked
+        });
+
+        // Append the select, quantity input, and remove button to the container
+        $equipmentContainer.append($newSelect).append($quantityInput).append($removeButton);
+
+        // Append the new equipment container to the additionalStaffEquipment section
+        $('#additionalStaffEquipment').append($equipmentContainer);
+    });
+
+    //Add Equipment Update Modal
+    // Predefined counts for each equipment ID
+    const equipmentCountsUpdate = {
+        "L01": 5,
+        "L02": 3,
+        "L03": 7,
+        "L04": 2,
+        "L05": 4
+    };
+
+    // jQuery to add a new equipment dropdown with a count input and remove button
+    $('#addStaffEquipmentButtonUpdate').on('click', function() {
+        // Create a container for the equipment select, count input, and remove button
+        const $equipmentContainer = $('<div class="d-flex align-items-center mt-2"></div>');
+
+        // Create the equipment select element
+        const $newSelect = $('<select class="form-control me-2"></select>');
+        $newSelect.append('<option value="">Select Equipment</option>'); // Default option
+        const optionLogs = ["L01", "L02", "L03", "L04", "L05"];
+        optionLogs.forEach(function(optionValue) {
+            $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
+        });
+
+        // Create a quantity input field
+        const $quantityInput = $('<input type="number" class="form-control me-2" placeholder="Count" min="1" value="1" readonly>');
+
+        // Update count input based on selected equipment
+        $newSelect.on('change', function() {
+            const selectedEquipment = $(this).val();
+            if (selectedEquipment && equipmentCountsUpdate[selectedEquipment]) {
+                $quantityInput.val(equipmentCountsUpdate[selectedEquipment]);
+            } else {
+                $quantityInput.val(1); // Default value if none selected
+            }
+        });
+
+        // Create a remove button
+        const $removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
+        $removeButton.on('click', function() {
+            $equipmentContainer.remove(); // Remove this container when clicked
+        });
+
+        // Append the select, quantity input, and remove button to the container
+        $equipmentContainer.append($newSelect).append($quantityInput).append($removeButton);
+
+        // Append the new equipment container to the additionalStaffEquipment section
+        $('#additionalStaffEquipmentUpdate').append($equipmentContainer);
     });
 });
