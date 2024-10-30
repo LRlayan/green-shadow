@@ -183,7 +183,7 @@ $(document).ready(function() {
     });
 
     //Add Log Update
-    $('#addStaffLogDetailButton').on('click', function() {
+    $('#addStaffLogsButtonUpdate').on('click', function() {
         // Create a new div to hold the select and remove button
         const $logsContainer = $('<div class="d-flex align-items-center mt-2"></div>');
 
@@ -206,7 +206,7 @@ $(document).ready(function() {
         $logsContainer.append($newSelect).append($removeButton);
 
         // Append the new field container to the additionalStaffField
-        $('#additionalStaffLog').append($logsContainer);
+        $('#additionalStaffLogsUpdate').append($logsContainer);
     });
 
     //Add Vehicle
