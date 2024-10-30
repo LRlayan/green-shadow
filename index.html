@@ -586,7 +586,7 @@
                         </div>
 
                         <div class="table-responsive" style="overflow-x: auto;">
-                            <table class="table table-dark table-bordered text-center mb-0" style="min-width: 2000px;">
+                            <table class="table table-dark table-bordered text-center mb-0" style="min-width: 2700px;">
                                 <thead>
                                 <tr>
                                     <th style="width: 6.25%;">Code</th>
@@ -627,19 +627,6 @@
                                 <div class="modal-body">
                                     <form id="staffForm">
                                         <div class="row mb-3">
-                                            <!-- Staff Member Code -->
-                                            <div class="col-md-6">
-                                                <label for="staffMemberCode" class="form-label">Member Code</label>
-                                                <input type="text" class="form-control" placeholder="staff member code" id="staffMemberCode" required>
-                                            </div>
-                                            <!-- Joined Date-->
-                                            <div class="col-md-6">
-                                                <label for="joinedDate" class="form-label">Joined Date</label>
-                                                <input type="text" class="form-control" placeholder="member join date" id="joinedDate" required>
-                                            </div>
-                                        </div>
-
-                                        <div class="row mb-3">
                                             <!-- First Name -->
                                             <div class="col-md-6">
                                                 <label for="firstName" class="form-label">First Name</label>
@@ -651,7 +638,13 @@
                                                 <input type="text" class="form-control" placeholder="last name" id="lastName" required>
                                             </div>
                                         </div>
+
                                         <div class="row mb-3">
+                                            <!-- Joined Date-->
+                                            <div class="col-md-6">
+                                                <label for="joinedDate" class="form-label">Joined Date</label>
+                                                <input type="text" class="form-control" placeholder="member join date" id="joinedDate" required>
+                                            </div>
                                             <!-- Designation -->
                                             <div class="col-md-6">
                                                 <label for="designation" class="form-label">Designation</label>
@@ -672,6 +665,8 @@
                                                     <option value="female">Labors</option>
                                                 </select>
                                             </div>
+                                        </div>
+                                        <div class="row mb-3">
                                             <!-- Gender -->
                                             <div class="col-md-6">
                                                 <label for="gender" class="form-label">Gender</label>
@@ -681,56 +676,54 @@
                                                     <option value="female">Female</option>
                                                 </select>
                                             </div>
-                                        </div>
-                                        <div class="row mb-3">
                                             <!-- DOB -->
                                             <div class="col-md-6">
-                                                <lab0l for="dob" class="form-label">DOB</lab0l>
+                                                <label for="dob" class="form-label">DOB</label>
                                                 <input type="text" class="form-control" placeholder="date of birth" id="dob" required>
                                             </div>
+                                        </div>
+                                        <div class="row mb-3">
                                             <!-- Address Line01 -->
                                             <div class="col-md-6">
                                                 <label for="addressLine01" class="form-label">Address Line01</label>
                                                 <input type="text" class="form-control" placeholder="building no" id="addressLine01" required>
                                             </div>
-                                        </div>
-                                        <div class="row mb-3">
                                             <!-- Address Line02 -->
                                             <div class="col-md-6">
                                                 <label for="addressLine02" class="form-label">Address Line02</label>
                                                 <input type="text" class="form-control" placeholder="lane" id="addressLine02" required>
                                             </div>
+                                        </div>
+                                        <div class="row mb-3">
                                             <!-- Address Line03 -->
                                             <div class="col-md-6">
                                                 <label for="addressLine03" class="form-label">Address Line03</label>
                                                 <input type="text" class="form-control" placeholder="main city" id="addressLine03" required>
                                             </div>
-                                        </div>
-                                        <div class="row mb-3">
                                             <!-- Address Line04 -->
                                             <div class="col-md-6">
                                                 <label for="addressLine04" class="form-label">Address Line04</label>
                                                 <input type="text" class="form-control" placeholder="main state" id="addressLine04" required>
                                             </div>
+                                        </div>
+                                        <div class="row mb-3">
                                             <!-- Address Line05 -->
                                             <div class="col-md-6">
                                                 <label for="addressLine03" class="form-label">Address Line05</label>
                                                 <input type="text" class="form-control" placeholder="postal code" id="addressLine05" required>
                                             </div>
-                                        </div>
-                                        <div class="row mb-3">
                                             <!-- Contact NO -->
                                             <div class="col-md-6">
                                                 <label for="ContactNo" class="form-label">Contact No</label>
                                                 <input type="text" class="form-control" placeholder="mobile number" id="ContactNo" required>
                                             </div>
+                                        </div>
+                                        <div class="row mb-3">
                                             <!-- Email -->
                                             <div class="col-md-6">
                                                 <label for="email" class="form-label">Email</label>
                                                 <input type="text" class="form-control" placeholder="email address" id="emailStaff" required>
                                             </div>
-                                        </div>
-                                        <div class="row mb-3">
                                             <!-- Role -->
                                             <div class="col-md-6">
                                                 <label for="roleStaff" class="form-label">Role</label>
@@ -744,6 +737,7 @@
                                             </div>
                                         </div>
                                         <div class="row mb-3">
+                                            <!-- Add Filed -->
                                             <div class="col-md-6">
                                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                                     <label for="filed-staff" class="form-label">Fields</label>
@@ -767,7 +761,7 @@
                                                 <!-- Initial dropdown with predefined options -->
                                                 <div id="initialStaffVehicle" class="input-group">
                                                     <select id="vehicle-staff" class="form-control mt-2">
-                                                        <option value="">Select Field</option>
+                                                        <option value="">Select Vehicle</option>
                                                     </select>
                                                 </div>
                                                 <!-- Container for additional dynamic dropdowns -->
@@ -784,7 +778,7 @@
                                                 <!-- Initial dropdown with predefined options -->
                                                 <div id="initialStaffEquipment" class="input-group">
                                                     <select id="equipment-staff" class="form-control mt-2">
-                                                        <option value="">Select Field</option>
+                                                        <option value="">Select Equipment</option>
                                                     </select>
                                                 </div>
                                                 <!-- Container for additional dynamic dropdowns -->
