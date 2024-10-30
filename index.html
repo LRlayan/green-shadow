@@ -16,6 +16,7 @@
     <link href="css/sideBra.css" rel="stylesheet">
     <link href="css/dashboard.css" rel="stylesheet">
     <link href="css/field.css" rel="stylesheet">
+    <link href="css/vehicle.css" rel="stylesheet">
     <style>
         .image-side {
             background-image: url('assets/image/farmImg.jpg');
@@ -1228,9 +1229,9 @@
                         </div>
                     </div>
                     <!-- Vehicle modal -->
-                    <div id="vehicle-modal"  class="modal fade" tabindex="-1" aria-hidden="true">
+                    <div id="vehicle-modal" class="modal fade" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
-                            <div class="modal-content"  style="background-color: #2b2b2b; color: white;">
+                            <div class="modal-content" style="background-color: #2b2b2b;">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="modalTitle">Add Vehicle</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
@@ -1241,89 +1242,47 @@
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="licensePlateNumber" class="form-control" >
+                                                    <input type="text" id="licensePlateNumber" class="form-control">
                                                     <label for="licensePlateNumber" class="form-label" style="margin-left: 0;">License Plate Number</label>
-                                                    <div class="form-notch">
-                                                        <div class="form-notch-leading" style="width: 9px;"></div>
-                                                        <div class="form-notch-middle" style="width: 68.8px;"></div>
-                                                        <div class="form-notch-trailing"></div>
-                                                    </div>
                                                 </div>
                                             </div>
                                             <!-- Vehicle Name -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="vehicleName" class="form-control" >
+                                                    <input type="text" id="vehicleName" class="form-control">
                                                     <label for="vehicleName" class="form-label" style="margin-left: 0;">Vehicle Name</label>
-                                                    <div class="form-notch">
-                                                        <div class="form-notch-leading" style="width: 9px;"></div>
-                                                        <div class="form-notch-middle" style="width: 68px;"></div>
-                                                        <div class="form-notch-trailing"></div>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <!-- Category -->
-                                            <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="category" class="form-control" >
-                                                    <label for="category" class="form-label" style="margin-left: 0;">Fuel Type</label>
-                                                    <div class="form-notch">
-                                                        <div class="form-notch-leading" style="width: 9px;"></div>
-                                                        <div class="form-notch-middle" style="width: 68.8px;"></div>
-                                                        <div class="form-notch-trailing"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                             <!-- Fuel Type -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="fuelType" class="form-control" >
+                                                    <input type="text" id="fuelType" class="form-control">
                                                     <label for="fuelType" class="form-label" style="margin-left: 0;">Fuel Type</label>
-                                                    <div class="form-notch">
-                                                        <div class="form-notch-leading" style="width: 9px;"></div>
-                                                        <div class="form-notch-middle" style="width: 68.8px;"></div>
-                                                        <div class="form-notch-trailing"></div>
-                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Status -->
+                                            <div class="col-md-6">
+                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                    <input type="text" id="status" class="form-control">
+                                                    <label for="status" class="form-label" style="margin-left: 0;">Status</label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <!-- Status -->
-                                            <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="status" class="form-control" >
-                                                    <label for="status" class="form-label" style="margin-left: 0;">Status</label>
-                                                    <div class="form-notch">
-                                                        <div class="form-notch-leading" style="width: 9px;"></div>
-                                                        <div class="form-notch-middle" style="width: 68px;"></div>
-                                                        <div class="form-notch-trailing"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                             <!-- Staff Member -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="staffMember" class="form-control" >
+                                                    <input type="text" id="staffMember" class="form-control">
                                                     <label for="staffMember" class="form-label" style="margin-left: 0;">Staff Member</label>
-                                                    <div class="form-notch">
-                                                        <div class="form-notch-leading" style="width: 9px;"></div>
-                                                        <div class="form-notch-middle" style="width: 68.8px;"></div>
-                                                        <div class="form-notch-trailing"></div>
-                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="mb-3">
                                             <!-- Remark -->
-                                            <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                <input type="text" id="remark" class="form-control" >
-                                                <label for="remark" class="form-label" style="margin-left: 0;">Remark</label>
-                                                <div class="form-notch">
-                                                    <div class="form-notch-leading" style="width: 9px;"></div>
-                                                    <div class="form-notch-middle" style="width: 68px;"></div>
-                                                    <div class="form-notch-trailing"></div>
+                                            <div class="col-md-6">
+                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                    <input type="text" id="remark" class="form-control">
+                                                    <label for="remark" class="form-label" style="margin-left: 0;">Remark</label>
                                                 </div>
                                             </div>
                                         </div>
