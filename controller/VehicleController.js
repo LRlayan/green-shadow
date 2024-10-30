@@ -1,25 +1,6 @@
-import Vehicle from "../model/Vehicle";
-import {vehicleDetails} from "../db/DB.js"
+import Vehicle from "../model/Vehicle.js";
+import {vehicleDetails} from "../db/db.js"
 $(document).ready(function () {
-// const $vehicleModal = $('#vehicle-modal');
-// const $modalTitle = $('#modalTitle');
-// const $modalSubmitButton = $('#modalSubmitButton');
-
-// $vehicleModal.on('show.bs.modal', function (event) {
-//     const button = $(event.relatedTarget); // Button that triggered the modal
-//     const action = button.data('action'); // Get action from data attribute
-//
-//     if (action === 'update') {
-//         $modalTitle.text('Update Vehicle');
-//         $modalSubmitButton.text('Update Vehicle');
-//         $modalSubmitButton.removeClass('btn-primary').addClass('btn-success');
-//     } else {
-//         $modalTitle.text('Add Vehicle');
-//         $modalSubmitButton.text('Add Vehicle');
-//         $modalSubmitButton.removeClass('btn-primary').addClass('btn-success');
-//     }
-// });
-
     let clickTableRow = 0;
 
     $("#modalSubmitButton").on("click", ()=> {
@@ -80,13 +61,13 @@ $(document).ready(function () {
         clickTableRow = $(this).index();
 
         // Populate the modal fields
-        $('#licensePlateNumber').val(licensePlateNumber);
-        $('#vehicleName').val(vehicleName);
-        $('#category').val(category);
-        $('#fuelType').val(fuelType);
-        $('#status').val(status);
-        $('#staffMember').val(staffMember);
-        $('#remark').val(remark);
+        $('#updateLicensePlateNumber').val(licensePlateNumber);
+        $('#updateVehicleName').val(vehicleName);
+        $('#updateCategoryVehicle').val(category);
+        $('#updateFuelType').val(fuelType);
+        $('#updateStatus').val(status);
+        $('#updateStaffMember').val(staffMember);
+        $('#updateRemark').val(remark);
     });
 
     // Clear fields when the modal is closed
@@ -95,20 +76,24 @@ $(document).ready(function () {
     });
 
     // Handle the form submission for updating vehicle details
-    $('#vehicleForm').on('submit', function (e) {
-        e.preventDefault(); // Prevent default form submission
-
+    $('#modalSubmitButtonUpdate').on('click', ()=> {
         // Collect form data
-        const updateVehicleDetailsDTO = {
-            licensePlateNumber: $("#licensePlateNumber").val(),
-            vehicleName: $("#vehicleName").val(),
-            category: $("#category").val(),
-            fuelType: $("#fuelType").val(),
-            status: $("#status").val(),
-            staffMember: $("#staffMember").val(),
-            remark: $("#remark").val()
-        };
-        vehicleDetailsArray.push(updateVehicleDetailsDTO);
+            let licensePlateNumber = $("#updateLicensePlateNumber").val();
+            let vehicleName = $("#updateVehicleName").val();
+            let category = $("#updateCategoryVehicle").val();
+            let fuelType = $("#updateFuelType").val();
+            let status = $("#updateStatus").val();
+            let staffMember = $("#updateStaffMember").val();
+            let remark = $("#updateRemark").val();
+
+        let vehicle = vehicleDetails[clickTableRow];
+        vehicle.licensePlateNumber = licensePlateNumber;
+        vehicle.vehicleName = vehicleName;
+        vehicle.category = category;
+        vehicle.fuelType = fuelType;
+        vehicle.status = status;
+        vehicle.staffMember = staffMember;
+        vehicle.remark = remark;
         loadVehicleTable();
     });
 });
