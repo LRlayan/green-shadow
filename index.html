@@ -580,9 +580,9 @@
                         </div>
                         <!-- Buttons aligned to the right -->
                         <div class="d-flex ms-auto gap-2 mb-3" style="width: 40%; justify-content: end;">
-                            <button class="btn btn-success flex-grow-1">New</button>
-                            <button class="btn btn-primary flex-grow-1">Update</button>
-                            <button class="btn btn-danger flex-grow-1">Delete</button>
+                            <button class="btn btn-success flex-grow-1" data-bs-toggle="modal" data-bs-target="#newStaffModal">New</button>
+                            <button class="btn btn-primary flex-grow-1" data-bs-toggle="modal" data-bs-target="#">Update</button>
+                            <button class="btn btn-danger flex-grow-1" data-bs-toggle="modal" data-bs-target="#">Delete</button>
                         </div>
 
                         <div class="table-responsive" style="overflow-x: auto;">
@@ -614,6 +614,210 @@
                                 <!-- Table rows will be inserted here dynamically -->
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                    <!-- New Staff Modal -->
+                    <div class="modal fade" id="newStaffModal" tabindex="-1" aria-labelledby="newStaffModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content" style="background-color: #2b2b2b; color: white;">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="newStaffModalLabel">Add New Staff Details</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="staffForm">
+                                        <div class="row mb-3">
+                                            <!-- Staff Member Code -->
+                                            <div class="col-md-6">
+                                                <label for="staffMemberCode" class="form-label">Member Code</label>
+                                                <input type="text" class="form-control" placeholder="staff member code" id="staffMemberCode" required>
+                                            </div>
+                                            <!-- Joined Date-->
+                                            <div class="col-md-6">
+                                                <label for="joinedDate" class="form-label">Joined Date</label>
+                                                <input type="text" class="form-control" placeholder="member join date" id="joinedDate" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <!-- First Name -->
+                                            <div class="col-md-6">
+                                                <label for="firstName" class="form-label">First Name</label>
+                                                <input type="text" class="form-control" placeholder="first name" id="firstName" required>
+                                            </div>
+                                            <!-- Last Name -->
+                                            <div class="col-md-6">
+                                                <label for="lastName" class="form-label">Last Name</label>
+                                                <input type="text" class="form-control" placeholder="last name" id="lastName" required>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <!-- Designation -->
+                                            <div class="col-md-6">
+                                                <label for="designation" class="form-label">Designation</label>
+                                                <input type="text" class="form-control" placeholder="member designation" id="designation" required>
+                                            </div>
+                                            <!-- Gender -->
+                                            <div class="col-md-6">
+                                                <label for="gender" class="form-label">Gender</label>
+                                                <select class="form-control" id="gender" required>
+                                                    <option value="" disabled selected>Select gender</option>
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <!-- DOB -->
+                                            <div class="col-md-6">
+                                                <lab0l for="dob" class="form-label">Date Of Birth</lab0l>
+                                                <input type="text" class="form-control" id="dob" required>
+                                            </div>
+                                            <!-- Address Line01 -->
+                                            <div class="col-md-6">
+                                                <label for="addressLine01" class="form-label">Address Line01</label>
+                                                <input type="text" class="form-control" placeholder="building no" id="addressLine01" required>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <!-- Address Line02 -->
+                                            <div class="col-md-6">
+                                                <label for="addressLine02" class="form-label">Address Line02</label>
+                                                <input type="text" class="form-control" placeholder="lane" id="addressLine02" required>
+                                            </div>
+                                            <!-- Address Line03 -->
+                                            <div class="col-md-6">
+                                                <label for="addressLine03" class="form-label">Address Line03</label>
+                                                <input type="text" class="form-control" placeholder="main city" id="addressLine03" required>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <!-- Address Line04 -->
+                                            <div class="col-md-6">
+                                                <label for="addressLine04" class="form-label">Address Line04</label>
+                                                <input type="text" class="form-control" placeholder="main state" id="addressLine04" required>
+                                            </div>
+                                            <!-- Address Line05 -->
+                                            <div class="col-md-6">
+                                                <label for="addressLine03" class="form-label">Address Line05</label>
+                                                <input type="text" class="form-control" placeholder="postal code" id="addressLine05" required>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <!-- Contact NO -->
+                                            <div class="col-md-6">
+                                                <label for="ContactNo" class="form-label">Conact No</label>
+                                                <input type="text" class="form-control" placeholder="mobile number" id="ContactNo" required>
+                                            </div>
+                                            <!-- Email -->
+                                            <div class="col-md-6">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="text" class="form-control" placeholder="email address" id="emailStaff" required>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <!-- Role -->
+                                            <div class="col-md-6">
+                                                <label for="roleStaff" class="form-label">Role</label>
+                                                <select class="form-control" id="roleStaff" required>
+                                                    <option value="" disabled selected>Select Role</option>
+                                                    <option value="MANAGER">MANAGER</option>
+                                                    <option value="ADMINISTRATIVE">ADMINISTRATIVE</option>
+                                                    <option value="OTHER">OTHER</option>
+                                                    <option value="SCIENTIST">SCIENTIST</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <label for="filed-staff" class="form-label">Fields</label>
+                                                    <button type="button" class="btn btn-success" id="addStaffFieldButton">Add Field</button>
+                                                </div>
+                                                <!-- Initial dropdown with predefined options -->
+                                                <div id="initialFieldStaff" class="input-group">
+                                                    <select id="filed-staff" class="form-control mt-2">
+                                                        <option value="">Select Field</option>
+                                                        <option value="F01">F01</option>
+                                                        <option value="F02">F02</option>
+                                                        <option value="F03">F03</option>
+                                                        <option value="F04">F04</option>
+                                                        <option value="F05">F05</option>
+                                                    </select>
+                                                </div>
+                                                <!-- Container for additional dynamic dropdowns -->
+                                                <div id="additionalStaffField" class="mt-2"></div>
+                                            </div>
+                                            <!-- Logs -->
+                                            <div class="col-md-6">
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <label for="log-staff" class="form-label">Monitoring Logs</label>
+                                                    <button type="button" class="btn btn-success" id="addStaffLogDetailButton">Add Logs</button>
+                                                </div>
+                                                <!-- Initial dropdown with predefined options -->
+                                                <div id="initialStaffLogs" class="input-group">
+                                                    <select id="log-staff" class="form-control mt-2">
+                                                        <option value="">Select Field</option>
+                                                        <option value="L01">L01</option>
+                                                        <option value="L02">L02</option>
+                                                        <option value="L03">L03</option>
+                                                        <option value="L04">L04</option>
+                                                        <option value="L05">L05</option>
+                                                    </select>
+                                                </div>
+                                                <!-- Container for additional dynamic dropdowns -->
+                                                <div id="additionalStaffLog" class="mt-2"></div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <!-- Vehicle -->
+                                            <div class="col-md-6">
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <label for="vehicle-staff" class="form-label">Vehicle</label>
+                                                    <button type="button" class="btn btn-success" id="addStaffVehicleButton">Add Vehicle</button>
+                                                </div>
+                                                <!-- Initial dropdown with predefined options -->
+                                                <div id="initialStaffVehicle" class="input-group">
+                                                    <select id="vehicle-staff" class="form-control mt-2">
+                                                        <option value="">Select Field</option>
+                                                        <option value="V01">L01</option>
+                                                        <option value="V02">L02</option>
+                                                        <option value="V03">L03</option>
+                                                        <option value="V04">L04</option>
+                                                        <option value="V05">L05</option>
+                                                    </select>
+                                                </div>
+                                                <!-- Container for additional dynamic dropdowns -->
+                                                <div id="additionalStaffVehicle" class="mt-2"></div>
+                                            </div>
+                                            <!-- Equipment -->
+                                            <div class="col-md-6">
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <label for="equipment-staff" class="form-label">Equipment</label>
+                                                    <button type="button" class="btn btn-success" id="addStaffEquipmentButton">Add Equipment</button>
+                                                </div>
+                                                <!-- Initial dropdown with predefined options -->
+                                                <div id="initialStaffEquipment" class="input-group">
+                                                    <select id="equipment-staff" class="form-control mt-2">
+                                                        <option value="">Select Field</option>
+                                                        <option value="V01">L01</option>
+                                                        <option value="V02">L02</option>
+                                                        <option value="V03">L03</option>
+                                                        <option value="V04">L04</option>
+                                                        <option value="V05">L05</option>
+                                                    </select>
+                                                </div>
+                                                <!-- Container for additional dynamic dropdowns -->
+                                                <div id="additionalStaffEquipment" class="mt-2"></div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-success" form="fieldForm">Add Field</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -914,4 +1118,5 @@
 <script src="controller/FieldController.js"></script>
 <script src="controller/CropController.js"></script>
 <script src="controller/MonitoringLogController.js"></script>
+<script src="controller/StaffController.js"></script>
 </html>
