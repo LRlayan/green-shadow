@@ -1203,8 +1203,8 @@
                         </div>
                         <!-- Buttons aligned to the right -->
                         <div class="d-flex ms-auto gap-2 mb-3" style="width: 40%; justify-content: end;">
-                            <button class="btn btn-success flex-grow-1" data-bs-toggle="modal" data-bs-target="#add-staff-modal">New</button>
-                            <button class="btn btn-primary flex-grow-1">Update</button>
+                            <button class="btn btn-success flex-grow-1" data-bs-toggle="modal" data-bs-target="#vehicle-modal" data-action="add">New</button>
+                            <button class="btn btn-primary flex-grow-1" data-bs-toggle="modal" data-bs-target="#vehicle-modal" data-action="update">Update</button>
                             <button class="btn btn-danger flex-grow-1">Delete</button>
                         </div>
 
@@ -1227,12 +1227,12 @@
                             </table>
                         </div>
                     </div>
-                    <!-- Vehicle new modal -->
-                    <div id="add-staff-modal"  class="modal fade" tabindex="-1" aria-hidden="true">
+                    <!-- Vehicle modal -->
+                    <div id="vehicle-modal"  class="modal fade" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content"  style="background-color: #2b2b2b; color: white;">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Add Vehicle</h5>
+                                    <h5 class="modal-title" id="modalTitle">Add Vehicle</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
                                 </div>
                                 <div class="modal-body p-4">
@@ -1317,7 +1317,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-success" form="vehicleForm">Add Vehicle</button>
+                                            <button type="submit" class="btn btn-success" form="vehicleForm" id="modalSubmitButton">Add Vehicle</button>
                                         </div>
                                     </form>
                                 </div>
@@ -1378,4 +1378,5 @@
 <script src="controller/CropController.js"></script>
 <script src="controller/MonitoringLogController.js"></script>
 <script src="controller/StaffController.js"></script>
+<script src="controller/VehicleController.js"></script>
 </html>
