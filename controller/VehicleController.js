@@ -25,13 +25,12 @@ $(document).ready(function () {
         $("#vehicle-modal").modal("hide");
     });
 
-
     function loadVehicleTable() {
         $('#vehicleDetailsTable').empty();
         const tableBody = $("#vehicleDetailsTable");
         tableBody.empty();
 
-        vehicleDetails.map(vehicle => {
+        vehicleDetails.map((vehicle,index) => {
             const row = `
                 <tr>
                     <td class="licensePlateNumber">${vehicle.licensePlateNumber}</td>
@@ -41,6 +40,7 @@ $(document).ready(function () {
                     <td class="status">${vehicle.status}</td>
                     <td class="staffMember">${vehicle.staffMember}</td>
                     <td class="remark">${vehicle.remark}</td>
+                    <td><button class="btn btn-danger delete-button" data-index="${index}">Delete</button></td>
                 </tr>
             `;
             tableBody.append(row);
@@ -70,6 +70,26 @@ $(document).ready(function () {
         $('#updateRemark').val(remark);
     });
 
+    // Show delete confirmation modal
+    $('#vehicleDetailsTable').on('click', '.delete-button', function () {
+        const index = $(this).data('index'); // Get the index of the vehicle to delete
+        $('#confirmVehicleDeleteYes').data('index', index); // Store index in the button for later use
+        $('#confirmVehicleDeleteModal').modal('show'); // Show the confirmation modal
+    });
+
+    // Handle the confirmation of deletion - yes button
+    $('#confirmVehicleDeleteYes').on('click', function () {
+        const index = $(this).data('index'); // Get the stored index
+        vehicleDetails.splice(index, 1); // Remove the vehicle from the array
+        loadVehicleTable(); // Refresh the table
+        $('#confirmVehicleDeleteModal').modal('hide'); // Hide the modal
+    });
+
+    //No button
+    $('#confirmVehicleDeleteNo').on('click',()=>{
+        $('#confirmVehicleDeleteModal').modal('hide'); // Hide the modal
+    });
+
     // Clear fields when the modal is closed
     $('#vehicle-modal').on('hidden.bs.modal', function () {
         $('#vehicleForm')[0].reset(); // Reset the form fields
@@ -97,3 +117,5 @@ $(document).ready(function () {
         loadVehicleTable();
     });
 });
+
+
