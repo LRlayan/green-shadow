@@ -16,9 +16,32 @@ $(document).ready(function() {
             populateUpdateModal($(this).data("staffData"));
         });
 
+        // Append delete button
+        const $deleteBtn = $('<button class="btn btn-danger btn-sm">Delete</button>').on("click", function() {
+            // Store the row for deletion reference in modal
+            $('#confirmStaffDeleteModal').data('rowToDelete', $newRow);
+            // Show confirmation modal
+            $('#confirmStaffDeleteModal').modal('show');
+        });
+        $newRow.append($('<td></td>').append($deleteBtn));
+
         // Append the new row to the table body
         $('#staffDetailsTable').append($newRow);
     }
+
+    // Event to handle confirmation of deletion
+    $('#confirmDeleteYes').on("click", function() {
+        // Get the stored row and remove it
+        $('#confirmStaffDeleteModal').data('rowToDelete').remove();
+        // Hide the confirmation modal
+        $('#confirmStaffDeleteModal').modal('hide');
+    });
+
+    // Event to handle the "No" button click, hiding the modal explicitly
+    $('#confirmStaffDeleteModal .btn-secondary').on("click", function() {
+        $('#confirmStaffDeleteModal').modal('hide'); // Explicitly hide the modal
+    });
+
     // Function to populate the update modal with data from the selected row
     function populateUpdateModal(staffData) {
         $('#firstNameUpdate').val(staffData.firstName);

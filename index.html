@@ -582,7 +582,6 @@
                         <div class="d-flex ms-auto gap-2 mb-3" style="width: 40%; justify-content: end;">
                             <button class="btn btn-success flex-grow-1" data-bs-toggle="modal" data-bs-target="#newStaffModal">New</button>
                             <button class="btn btn-primary flex-grow-1" data-bs-toggle="modal" data-bs-target="#updateStaffModal">Update</button>
-                            <button class="btn btn-danger flex-grow-1" data-bs-toggle="modal" data-bs-target="#">Delete</button>
                         </div>
 
                         <div class="table-responsive" style="overflow-x: auto;">
@@ -608,6 +607,7 @@
                                     <th style="width: 8.25%;">Logs</th>
                                     <th style="width: 8.25%;">Vehicle</th>
                                     <th style="width: 8.25%;">Equipment</th>
+                                    <th style="width: 8.25%;">Delete</th>
                                 </tr>
                                 </thead>
                                 <tbody id="staffDetailsTable">
@@ -915,8 +915,8 @@
                                             </div>
                                         </div>
                                         <div class="row mb-3">
+                                            <!-- Filed List -->
                                             <div class="col-md-6">
-                                                <!-- Filed List -->
                                                 <div class="mb-3" id="updateStaffFieldContainer">
                                                     <label class="form-label">Fields</label>
                                                     <div id="updateField"></div> <!-- Field container for dynamic inputs -->
@@ -933,8 +933,8 @@
                                                 <!-- Container for additional dynamic dropdowns -->
                                                 <div id="additionalStaffFieldUpdate" class="mt-2"></div>
                                             </div>
+                                            <!-- Vehicle List -->
                                             <div class="col-md-6">
-                                                <!-- Vehicle List -->
                                                 <div class="mb-3" id="updateStaffVehicleContainer">
                                                     <label class="form-label">Vehicle</label>
                                                     <div id="updateVehicle"></div> <!-- Vehicle container for dynamic inputs -->
@@ -999,6 +999,25 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Delete Confirmation Modal -->
+                    <div class="modal fade" id="confirmStaffDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content bg-dark text-white"> <!-- Apply dark theme classes -->
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="confirmStaffDeleteModalLabel">Confirm Deletion</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to delete this record?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button> <!-- 'No' button will dismiss the modal -->
+                                    <button type="button" id="confirmDeleteYes" class="btn btn-danger">Yes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </section>
             <section id="monitoring-log-sec">
