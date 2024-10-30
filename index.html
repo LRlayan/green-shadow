@@ -581,7 +581,7 @@
                         <!-- Buttons aligned to the right -->
                         <div class="d-flex ms-auto gap-2 mb-3" style="width: 40%; justify-content: end;">
                             <button class="btn btn-success flex-grow-1" data-bs-toggle="modal" data-bs-target="#newStaffModal">New</button>
-                            <button class="btn btn-primary flex-grow-1" data-bs-toggle="modal" data-bs-target="#">Update</button>
+                            <button class="btn btn-primary flex-grow-1" data-bs-toggle="modal" data-bs-target="#updateStaffModal">Update</button>
                             <button class="btn btn-danger flex-grow-1" data-bs-toggle="modal" data-bs-target="#">Delete</button>
                         </div>
 
@@ -783,6 +783,167 @@
                                                 </div>
                                                 <!-- Container for additional dynamic dropdowns -->
                                                 <div id="additionalStaffEquipment" class="mt-2"></div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-success" form="fieldForm">Add Field</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Update Staff Modal -->
+                    <div class="modal fade" id="updateStaffModal" tabindex="-1" aria-labelledby="updateStaffModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content" style="background-color: #2b2b2b; color: white;">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="updateStaffModalLabel">Add New Staff Details</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="updateStaffForm">
+                                        <div class="row mb-3">
+                                            <!-- First Name -->
+                                            <div class="col-md-6">
+                                                <label for="firstNameUpdate" class="form-label">First Name</label>
+                                                <input type="text" class="form-control" placeholder="first name" id="firstNameUpdate" required>
+                                            </div>
+                                            <!-- Last Name -->
+                                            <div class="col-md-6">
+                                                <label for="lastNameUpdate" class="form-label">Last Name</label>
+                                                <input type="text" class="form-control" placeholder="last name" id="lastNameUpdate" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-3">
+                                            <!-- Joined Date-->
+                                            <div class="col-md-6">
+                                                <label for="joinedDateUpdate" class="form-label">Joined Date</label>
+                                                <input type="text" class="form-control" placeholder="member join date" id="joinedDateUpdate" required>
+                                            </div>
+                                            <!-- Designation -->
+                                            <div class="col-md-6">
+                                                <label for="designationUpdate" class="form-label">Designation</label>
+                                                <select class="form-control" id="designationUpdate" required>
+                                                    <option value="" disabled selected>Select designation</option>
+                                                    <option value="manager">Manager</option>
+                                                    <option value="seniorAssistantManager">Senior Assistant Manager</option>
+                                                    <option value="assistantManager">Assistant Manager</option>
+                                                    <option value="admin">Admin</option>
+                                                    <option value="adminHRStaff">HR Staff</option>
+                                                    <option value="officeAssistant">Office Assistant</option>
+                                                    <option value="seniorAgronomist">Senior Agronomist</option>
+                                                    <option value="Agronomist">Agronomist</option>
+                                                    <option value="soilScientist">Soil scientist</option>
+                                                    <option value="seniorTechnician">Senior Technician</option>
+                                                    <option value="technician">Technician</option>
+                                                    <option value="supervisors">Supervisors</option>
+                                                    <option value="labors">Labors</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <!-- Gender -->
+                                            <div class="col-md-6">
+                                                <label for="genderUpdate" class="form-label">Gender</label>
+                                                <select class="form-control" id="genderUpdate" required>
+                                                    <option value="" disabled selected>Select gender</option>
+                                                    <option value="male">Male</option>
+                                                    <option value="female">Female</option>
+                                                </select>
+                                            </div>
+                                            <!-- DOB -->
+                                            <div class="col-md-6">
+                                                <label for="dobUpdate" class="form-label">DOB</label>
+                                                <input type="text" class="form-control" placeholder="date of birth" id="dobUpdate" required>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <!-- Address Line01 -->
+                                            <div class="col-md-6">
+                                                <label for="addressLine01Update" class="form-label">Address Line01</label>
+                                                <input type="text" class="form-control" placeholder="building no" id="addressLine01Update" required>
+                                            </div>
+                                            <!-- Address Line02 -->
+                                            <div class="col-md-6">
+                                                <label for="addressLine02Update" class="form-label">Address Line02</label>
+                                                <input type="text" class="form-control" placeholder="lane" id="addressLine02Update" required>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <!-- Address Line03 -->
+                                            <div class="col-md-6">
+                                                <label for="addressLine03Update" class="form-label">Address Line03</label>
+                                                <input type="text" class="form-control" placeholder="main city" id="addressLine03Update" required>
+                                            </div>
+                                            <!-- Address Line04 -->
+                                            <div class="col-md-6">
+                                                <label for="addressLine04Update" class="form-label">Address Line04</label>
+                                                <input type="text" class="form-control" placeholder="main state" id="addressLine04Update" required>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <!-- Address Line05 -->
+                                            <div class="col-md-6">
+                                                <label for="addressLine05Update" class="form-label">Address Line05</label>
+                                                <input type="text" class="form-control" placeholder="postal code" id="addressLine05Update" required>
+                                            </div>
+                                            <!-- Contact NO -->
+                                            <div class="col-md-6">
+                                                <label for="ContactNoUpdate" class="form-label">Contact No</label>
+                                                <input type="text" class="form-control" placeholder="mobile number" id="ContactNoUpdate" required>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <!-- Email -->
+                                            <div class="col-md-6">
+                                                <label for="emailStaffUpdate" class="form-label">Email</label>
+                                                <input type="text" class="form-control" placeholder="email address" id="emailStaffUpdate" required>
+                                            </div>
+                                            <!-- Role -->
+                                            <div class="col-md-6">
+                                                <label for="roleStaffUpdate" class="form-label">Role</label>
+                                                <select class="form-control" id="roleStaffUpdate" required>
+                                                    <option value="" disabled selected>Select Role</option>
+                                                    <option value="MANAGER">MANAGER</option>
+                                                    <option value="ADMINISTRATIVE">ADMINISTRATIVE</option>
+                                                    <option value="OTHER">OTHER</option>
+                                                    <option value="SCIENTIST">SCIENTIST</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <!-- Filed List -->
+                                                <div class="mb-3" id="updateStaffFieldContainer">
+                                                    <label class="form-label">Fields</label>
+                                                    <div id="updateField"></div> <!-- Field container for dynamic inputs -->
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <!-- Vehicle List -->
+                                                <div class="mb-3" id="updateStaffVehicleContainer">
+                                                    <label class="form-label">Vehicle</label>
+                                                    <div id="updateVehicle"></div> <!-- Vehicle container for dynamic inputs -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <!-- Equipment -->
+                                            <div class="col-md-6">
+                                                <div class="mb-3" id="updateStaffEquipmentContainer">
+                                                    <label class="form-label">Equipment</label>
+                                                    <div id="updateEquipment"></div> <!-- Equipment container for dynamic inputs -->
+                                                </div>
+                                            </div>
+                                            <!-- Logs -->
+                                            <div class="col-md-6">
+                                                <div class="mb-3" id="updateStaffLogsContainer">
+                                                    <label class="form-label">Logs</label>
+                                                    <div id="updateStaffLogs"></div> <!-- Logs container for dynamic inputs -->
+                                                </div>
                                             </div>
                                         </div>
                                     </form>

@@ -1,5 +1,78 @@
 $(document).ready(function() {
-    // Sample data to insert (you could replace this with real data from an API or form)
+    // Function to add a row with sample data
+    function addRowToTable(staffData) {
+        const $newRow = $('<tr></tr>');
+
+        // Append data fields as cells in the row
+        Object.keys(staffData).forEach(key => {
+            $newRow.append(`<td>${staffData[key]}</td>`);
+        });
+
+        // Set data attributes for easy access during row click
+        $newRow.data("staffData", staffData);
+
+        // Add click event to populate update modal when row is clicked
+        $newRow.on("click", function () {
+            populateUpdateModal($(this).data("staffData"));
+        });
+
+        // Append the new row to the table body
+        $('#staffDetailsTable').append($newRow);
+    }
+    // Function to populate the update modal with data from the selected row
+    function populateUpdateModal(staffData) {
+        $('#firstNameUpdate').val(staffData.firstName);
+        $('#lastNameUpdate').val(staffData.lastName);
+        $('#joinedDateUpdate').val(staffData.joinedDate);
+        $('#dobUpdate').val(staffData.dob);
+        $('#addressLine01Update').val(staffData.buildingNo);
+        $('#addressLine02Update').val(staffData.lane);
+        $('#addressLine03Update').val(staffData.city);
+        $('#addressLine04Update').val(staffData.state);
+        $('#addressLine05Update').val(staffData.postalCode);
+        $('#ContactNoUpdate').val(staffData.contactNo);
+        $('#emailStaffUpdate').val(staffData.email);
+
+        // Function to set combo box values, adding options if missing
+        function setComboBoxValue(comboBoxId, value) {
+            const $comboBox = $(`#${comboBoxId}`);
+            if ($comboBox.find(`option[value="${value}"]`).length === 0) {
+                // If the value is missing, add it as an option
+                $comboBox.append(new Option(value, value));
+            }
+            $comboBox.val(value); // Set the selected value
+        }
+
+        // Set combo box selections and add missing options if needed
+        setComboBoxValue('designationUpdate', staffData.designation);
+        setComboBoxValue('genderUpdate', staffData.gender);
+        setComboBoxValue('roleStaffUpdate', staffData.role);
+
+        // Populate fields with multiple values
+        addDynamicFields('updateField', staffData.field.split(','));
+        addDynamicFields('updateStaffLogs', staffData.logs.split(','));
+        addDynamicFields('updateVehicle', staffData.vehicle.split(','));
+        addDynamicFields('updateEquipment', staffData.equipment.split(','));
+    }
+
+// Function to dynamically generate input fields and set values
+    function addDynamicFields(containerId, values) {
+        const $container = $('#' + containerId);
+        $container.empty(); // Clear any existing inputs
+
+        values.forEach((value, index) => {
+            // Create a new input for each value
+            const $input = $('<input>')
+                .addClass('form-control mb-2')
+                .attr('type', 'text')
+                .attr('placeholder', `Enter value ${index + 1}`)
+                .val(value); // Set the existing value
+
+            $container.append($input);
+        });
+    }
+
+    // Sample data for demonstration
     const sampleStaffData = {
         code: "S001",
         firstName: "John",
@@ -22,38 +95,8 @@ $(document).ready(function() {
         equipment: "Shovel,Plough"
     };
 
-    // Call the function to add a row with sample data
+    // Add the sample row
     addRowToTable(sampleStaffData);
-
-        function addRowToTable(staffData) {
-        // Create a new row
-        const $newRow = $('<tr></tr>');
-
-        // Append each data field as a cell in the row
-        $newRow.append(`<td>${staffData.code}</td>`);
-        $newRow.append(`<td>${staffData.firstName}</td>`);
-        $newRow.append(`<td>${staffData.lastName}</td>`);
-        $newRow.append(`<td>${staffData.designation}</td>`);
-        $newRow.append(`<td>${staffData.gender}</td>`);
-        $newRow.append(`<td>${staffData.joinedDate}</td>`);
-        $newRow.append(`<td>${staffData.dob}</td>`);
-        $newRow.append(`<td>${staffData.buildingNo}</td>`);
-        $newRow.append(`<td>${staffData.lane}</td>`);
-        $newRow.append(`<td>${staffData.city}</td>`);
-        $newRow.append(`<td>${staffData.state}</td>`);
-        $newRow.append(`<td>${staffData.postalCode}</td>`);
-        $newRow.append(`<td>${staffData.contactNo}</td>`);
-        $newRow.append(`<td>${staffData.email}</td>`);
-        $newRow.append(`<td>${staffData.role}</td>`);
-        $newRow.append(`<td>${staffData.field}</td>`);
-        $newRow.append(`<td>${staffData.logs}</td>`);
-        $newRow.append(`<td>${staffData.vehicle}</td>`);
-        $newRow.append(`<td>${staffData.equipment}</td>`);
-
-        // Append the new row to the table body
-        $('#staffDetailsTable').append($newRow);
-    }
-
 
     //Add Field
     // jQuery to add a new dropdown with predefined options and a remove button
