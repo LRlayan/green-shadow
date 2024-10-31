@@ -1,3 +1,6 @@
+import Equipment from "../model/Equipment.js";
+import {equipmentDetails, vehicleDetails} from "../db/db.js"
+
 //Add Field
 // jQuery to add a new dropdown with predefined options and a remove button
 $('#addFieldButtonEquipment').on('click', function() {
@@ -53,3 +56,55 @@ $('#addStaffButton').on('click', function() {
     // Append the new field container to the additionalStaffField
     $('#additionalEquipmentStaff').append($fieldContainer);
 });
+
+//save equipment
+$('#addEquipmentButton').on('click',()=>{
+    event.preventDefault();
+
+    // Collect form data
+    let equipmentName = $("#equipmentName").val();
+    let equipmentType = $("#equipmentType").val();
+    let equipmentStatus = $("#equipmentStatus").val();
+    let count = $("#count").val();
+
+    // Collect multiple staff values
+    let staffEquipment = [];
+    $("#additionalEquipmentStaff select").each(function() {
+        let staffValue = $(this).val();
+        if (staffValue) {
+            staffEquipment.push(staffValue);
+        }
+    });
+
+    // Collect multiple field values
+    let fieldEquipment = [];
+    $("#additionalEquipmentField select").each(function() {
+        let fieldValue = $(this).val();
+        if (fieldValue) {
+            fieldEquipment.push(fieldValue);
+        }
+    });
+
+    let equipmentDetail = new Equipment(equipmentName,equipmentType,equipmentStatus,count,staffEquipment,fieldEquipment);
+    equipmentDetails.push(equipmentDetail);
+    loadEquipmentTable();
+});
+
+function loadEquipmentTable(){
+    $('#equipmentDetailsTable').empty();
+    equipmentDetails.map((equipment,index) => {
+        const row = `
+                <tr>
+                <td class="code">${equipment.code}</td>
+                <td class="name">${equipment.name}</td>
+                <td class="vehicleType">${equipment.type}</td>
+                <td class="status">${equipment.status}</td>
+                <td class="count">${equipment.count}</td>
+                <td class="staffMember">${equipment.assignStaff.join(', ')}</td>
+                <td class="fields">${equipment.assignField.join(', ')}</td>
+                <td><button class="btn btn-danger delete-button" data-index="${index}">Delete</button></td>
+            </tr>
+            `;
+        $('#equipmentDetailsTable').append(row);
+    });
+}
