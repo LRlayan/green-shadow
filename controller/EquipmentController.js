@@ -188,6 +188,18 @@ $('#EquipmentButtonUpdate').on('click', () => {
         }
     });
 
+    // Collect values from all Field dropdowns
+    $('#additionalFieldEquipmentUpdate select').each(function () {
+        const selectedValue = $(this).val();
+        if (selectedValue) updatedFieldEquipment.push(selectedValue);
+    });
+
+    // Collect values from all Staff Member dropdowns
+    $('#additionalStaffEquUpdate select').each(function () {
+        const selectedValue = $(this).val();
+        if (selectedValue) updatedStaffEquipment.push(selectedValue);
+    });
+
     // Update the selected equipment object with the new values
     let equipment = equipmentDetails[clickTableRow];
     equipment.name = equipmentName;
