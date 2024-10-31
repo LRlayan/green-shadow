@@ -1,7 +1,9 @@
 import Staff from "../model/Staff.js";
-import {equipmentDetails, staffDetails} from "../db/db.js"
+import {staffDetails} from "../db/db.js"
 
+let clickTableRow = 0;
 $(document).ready(function() {
+
     // Function to add a row with sample data
     function addRowToTable(staffData) {
         const $newRow = $('<tr></tr>');
@@ -32,40 +34,40 @@ $(document).ready(function() {
         $('#staffDetailsTable').append($newRow);
     }
     // Function to populate the update modal with data from the selected row
-    function populateUpdateModal(staffData) {
-        $('#firstNameUpdate').val(staffData.firstName);
-        $('#lastNameUpdate').val(staffData.lastName);
-        $('#joinedDateUpdate').val(staffData.joinedDate);
-        $('#dobUpdate').val(staffData.dob);
-        $('#addressLine01Update').val(staffData.buildingNo);
-        $('#addressLine02Update').val(staffData.lane);
-        $('#addressLine03Update').val(staffData.city);
-        $('#addressLine04Update').val(staffData.state);
-        $('#addressLine05Update').val(staffData.postalCode);
-        $('#ContactNoUpdate').val(staffData.contactNo);
-        $('#emailStaffUpdate').val(staffData.email);
-
-        // Function to set combo box values, adding options if missing
-        function setComboBoxValue(comboBoxId, value) {
-            const $comboBox = $(`#${comboBoxId}`);
-            if ($comboBox.find(`option[value="${value}"]`).length === 0) {
-                // If the value is missing, add it as an option
-                $comboBox.append(new Option(value, value));
-            }
-            $comboBox.val(value); // Set the selected value
-        }
-
-        // Set combo box selections and add missing options if needed
-        setComboBoxValue('designationUpdate', staffData.designation);
-        setComboBoxValue('genderUpdate', staffData.gender);
-        setComboBoxValue('roleStaffUpdate', staffData.role);
-
-        // Populate fields with multiple values
-        addDynamicFields('updateField', staffData.field.split(','));
-        addDynamicFields('updateStaffLogs', staffData.logs.split(','));
-        addDynamicFields('updateVehicle', staffData.vehicle.split(','));
-        addDynamicFields('updateEquipment', staffData.equipment.split(','));
-    }
+    // function populateUpdateModal(staffData) {
+    //     $('#firstNameUpdate').val(staffData.firstName);
+    //     $('#lastNameUpdate').val(staffData.lastName);
+    //     $('#joinedDateUpdate').val(staffData.joinedDate);
+    //     $('#dobUpdate').val(staffData.dob);
+    //     $('#addressLine01Update').val(staffData.buildingNo);
+    //     $('#addressLine02Update').val(staffData.lane);
+    //     $('#addressLine03Update').val(staffData.city);
+    //     $('#addressLine04Update').val(staffData.state);
+    //     $('#addressLine05Update').val(staffData.postalCode);
+    //     $('#ContactNoUpdate').val(staffData.contactNo);
+    //     $('#emailStaffUpdate').val(staffData.email);
+    //
+    //     // Function to set combo box values, adding options if missing
+    //     function setComboBoxValue(comboBoxId, value) {
+    //         const $comboBox = $(`#${comboBoxId}`);
+    //         if ($comboBox.find(`option[value="${value}"]`).length === 0) {
+    //             // If the value is missing, add it as an option
+    //             $comboBox.append(new Option(value, value));
+    //         }
+    //         $comboBox.val(value); // Set the selected value
+    //     }
+    //
+    //     // Set combo box selections and add missing options if needed
+    //     setComboBoxValue('designationUpdate', staffData.designation);
+    //     setComboBoxValue('genderUpdate', staffData.gender);
+    //     setComboBoxValue('roleStaffUpdate', staffData.role);
+    //
+    //     // Populate fields with multiple values
+    //     addDynamicFields('updateField', staffData.field.split(','));
+    //     addDynamicFields('updateStaffLogs', staffData.logs.split(','));
+    //     addDynamicFields('updateVehicle', staffData.vehicle.split(','));
+    //     addDynamicFields('updateEquipment', staffData.equipment.split(','));
+    // }
 
     // Event to handle confirmation of deletion
     $('#confirmDeleteYes').on("click", function() {
@@ -145,10 +147,10 @@ $(document).ready(function() {
         let staffLogs = [];
         let staffDetail = new Staff("01",firstName,lastName,joinedDate,designation,gender,dob,addressLine01,addressLine02,addressLine03,addressLine04,addressLine05,contactNo,emailStaff,roleStaff,fieldStaff,staffVehicle,staffLogs,staffEquipment);
         staffDetails.push(staffDetail);
-        loadEquipmentTable();
+        loadStaffTable();
     });
 
-    function loadEquipmentTable(){
+    function loadStaffTable(){
         $('#staffDetailsTable').empty();
         staffDetails.map((staff, index) => {
             const row = `
@@ -181,11 +183,13 @@ $(document).ready(function() {
 
     //update Staff member
     $('#staffDetailsTable').on('click','tr', ()=>{
+
         let fName = $(this).find(".fName").text();
         let lName = $(this).find(".lName").text();
         let designation = $(this).find(".designation").text().trim();
         let gender = $(this).find(".gender").text().trim();
         let joinedDate = $(this).find(".joinedDate").text();
+        let dob = $(this).find(".dob").text();
         let addressLine01 = $(this).find(".buildingNo").text();
         let addressLine02 = $(this).find(".city").text();
         let addressLine03 = $(this).find(".lane").text();
@@ -199,11 +203,12 @@ $(document).ready(function() {
         let vehicleArray = $(this).find(".vehicle").text().split(",");
         let equipmentArray = $(this).find(".equipment").text().split(",");
 
+        clickTableRow = $(this).index();
 
         $('#firstNameUpdate').val(fName);
         $('#lastNameUpdate').val(lName);
         $('#joinedDateUpdate').val(joinedDate);
-        $('#dobUpdate').val(joinedDate);
+        $('#dobUpdate').val(dob);
         $('#addressLine01Update').val(addressLine01);
         $('#addressLine02Update').val(addressLine02);
         $('#addressLine03Update').val(addressLine03);
@@ -280,6 +285,92 @@ $(document).ready(function() {
             equipmentContainer.append(equipmentInput, removeButton);
             $('#updateEquipment').append(equipmentContainer);
         });
+    });
+
+    $('#updateMemberButton').on('click',function (){
+        // Get updated values from modal inputs
+        let firstName = $('#firstNameUpdate').val();
+        let lName = $('#lastNameUpdate').val();
+        let joinedDate = $('#joinedDateUpdate').val();
+        let dob = $('#dobUpdate').val();
+        let addressLine01 = $('#addressLine01Update').val();
+        let addressLine02 = $('#addressLine02Update').val();
+        let addressLine03 = $('#addressLine03Update').val();
+        let addressLine04 = $('#addressLine04Update').val();
+        let addressLine05 = $('#addressLine05Update').val();
+        let contactNo = $('#ContactNoUpdate').val();
+        let email = $('#emailStaffUpdate').val();
+        let role = $('#roleStaffUpdate').val();
+        let designation = $('#designationUpdate').val();
+        let gender = $('#genderUpdate').val();
+
+        // Collect updated field values
+        let updatedFieldStaff = [];
+        $("#filed-staffUpdate input").each(function() {
+            let fieldValue = $(this).val();
+            if (fieldValue) {
+                updatedFieldStaff.push(fieldValue);
+            }
+        });
+
+        // Collect updated vehicle values
+        let updatedVehicleStaff = [];
+        $("#vehicle-staffUpdate input").each(function() {
+            let vehicleValue = $(this).val();
+            if (vehicleValue) {
+                updatedVehicleStaff.push(vehicleValue);
+            }
+        });
+
+        // Collect updated equipment values
+        let updatedEquipmentStaff = [];
+        $("#equipment-staffUpdate input").each(function() {
+            let equipmentValue = $(this).val();
+            if (equipmentValue) {
+                updatedEquipmentStaff.push(equipmentValue);
+            }
+        });
+
+        // Collect values from all Field dropdowns
+        $('#additionalStaffFieldUpdate select').each(function () {
+            const selectedValue = $(this).val();
+            if (selectedValue) updatedFieldStaff.push(selectedValue);
+        });
+
+        // Collect values from all vehicle dropdowns
+        $('#additionalStaffVehicleUpdate select').each(function () {
+            const selectedValue = $(this).val();
+            if (selectedValue) updatedVehicleStaff.push(selectedValue);
+        });
+
+        // Collect values from all equipment dropdowns
+        $('#additionalStaffEquipmentUpdate select').each(function () {
+            const selectedValue = $(this).val();
+            if (selectedValue) updatedEquipmentStaff.push(selectedValue);
+        });
+
+        // Update the selected staff object with the new values
+        let staff = staffDetails[clickTableRow];
+        staff.firstName = firstName;
+        staff.lastName = lName;
+        staff.designation = joinedDate;
+        staff.gender = dob;
+        staff.joinedDate = addressLine01;
+        staff.dob = addressLine02;
+        staff.addressLine01 = addressLine03;
+        staff.addressLine02 = addressLine04;
+        staff.addressLine03 = addressLine05;
+        staff.addressLine04 = contactNo;
+        staff.addressLine05 = email;
+        staff.contactNo = role;
+        staff.email = designation;
+        staff.role = gender;
+        staff.fieldList = updatedFieldStaff;
+        staff.vehicle = updatedVehicleStaff;
+        staff.equipmentList = updatedEquipmentStaff;
+
+        // Reload the equipment table to reflect updated data
+        loadStaffTable();
     });
 
     //Add Field
