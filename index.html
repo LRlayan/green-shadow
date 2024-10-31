@@ -1427,95 +1427,95 @@
                             </table>
                         </div>
                     </div>
-                    <!--new equipment modal -->
-                    <div id="equipment-modal" class="modal fade" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content" style="background-color: #2b2b2b;">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="modalTitleEquipment">Update Equipment</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
-                                </div>
-                                <div class="modal-body p-4">
-                                    <form id="equipmentForm">
-                                        <!-- Equipment Name -->
-                                        <div class="row mb-3">
-                                            <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="equipmentName" class="form-control">
-                                                    <label for="equipmentName" class="form-label" style="margin-left: 0;">Equipment Name</label>
+                        <!--new equipment modal -->
+                        <div id="equipment-modal" class="modal fade" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content" style="background-color: #2b2b2b;">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modalTitleEquipment">Update Equipment</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
+                                    </div>
+                                    <div class="modal-body p-4">
+                                        <form id="equipmentForm">
+                                            <!-- Equipment Name -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                        <input type="text" id="equipmentName" class="form-control">
+                                                        <label for="equipmentName" class="form-label" style="margin-left: 0;">Equipment Name</label>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <!--  Equipment Type  -->
-                                            <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="equipmentType" class="form-control">
-                                                    <label for="equipmentType" class="form-label" style="margin-left: 0;">Equipment Type</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <!-- Status -->
-                                            <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="equipmentStatus" class="form-control" >
-                                                    <label for="equipmentStatus" class="form-label" style="margin-left: 0;">Status</label>
-                                                    <div class="form-notch">
-                                                        <div class="form-notch-leading" style="width: 9px;"></div>
-                                                        <div class="form-notch-middle" style="width: 68.8px;"></div>
-                                                        <div class="form-notch-trailing"></div>
+                                                <!--  Equipment Type  -->
+                                                <div class="col-md-6">
+                                                    <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                        <input type="text" id="equipmentType" class="form-control">
+                                                        <label for="equipmentType" class="form-label" style="margin-left: 0;">Equipment Type</label>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- Count -->
-                                            <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="count" class="form-control">
-                                                    <label for="count" class="form-label" style="margin-left: 0;">Count</label>
+                                            <div class="row mb-3">
+                                                <!-- Status -->
+                                                <div class="col-md-6">
+                                                    <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                        <input type="text" id="equipmentStatus" class="form-control" >
+                                                        <label for="equipmentStatus" class="form-label" style="margin-left: 0;">Status</label>
+                                                        <div class="form-notch">
+                                                            <div class="form-notch-leading" style="width: 9px;"></div>
+                                                            <div class="form-notch-middle" style="width: 68.8px;"></div>
+                                                            <div class="form-notch-trailing"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Count -->
+                                                <div class="col-md-6">
+                                                    <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                        <input type="text" id="count" class="form-control">
+                                                        <label for="count" class="form-label" style="margin-left: 0;">Count</label>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <!-- add staff -->
-                                            <div class="col-md-6">
-                                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                                    <label for="staff-equipment" class="form-label">Staff Member</label>
-                                                    <button type="button" class="btn btn-success" id="addStaffButton">Add Member</button>
+                                            <div class="row mb-3">
+                                                <!-- add staff -->
+                                                <div class="col-md-6">
+                                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                                        <label for="staff-equipment" class="form-label">Staff Member</label>
+                                                        <button type="button" class="btn btn-success" id="addStaffButton">Add Member</button>
+                                                    </div>
+                                                    <!-- Initial dropdown with predefined options -->
+                                                    <div id="initialStaff" class="input-group">
+                                                        <select id="staff-equipment" class="form-control mt-2">
+                                                            <option value="">Select Staff Member</option>
+                                                        </select>
+                                                    </div>
+                                                    <!-- Container for additional dynamic dropdowns -->
+                                                    <div id="additionalEquipmentStaff" class="mt-2"></div>
                                                 </div>
-                                                <!-- Initial dropdown with predefined options -->
-                                                <div id="initialStaff" class="input-group">
-                                                    <select id="staff-equipment" class="form-control mt-2">
-                                                        <option value="">Select Staff Member</option>
-                                                    </select>
+                                                <!-- add field -->
+                                                <div class="col-md-6">
+                                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                                        <label for="field-equipment" class="form-label">Add Field</label>
+                                                        <button type="button" class="btn btn-success" id="addFieldButtonEquipment">Add Field</button>
+                                                    </div>
+                                                    <!-- Initial dropdown with predefined options -->
+                                                    <div id="initialEquipment" class="input-group">
+                                                        <select id="field-equipment" class="form-control mt-2">
+                                                            <option value="">Select Field</option>
+                                                        </select>
+                                                    </div>
+                                                    <!-- Container for additional dynamic dropdowns -->
+                                                    <div id="additionalEquipmentField" class="mt-2"></div>
                                                 </div>
-                                                <!-- Container for additional dynamic dropdowns -->
-                                                <div id="additionalEquipmentStaff" class="mt-2"></div>
                                             </div>
-                                            <!-- add field -->
-                                            <div class="col-md-6">
-                                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                                    <label for="field-equipment" class="form-label">Add Field</label>
-                                                    <button type="button" class="btn btn-success" id="addFieldButtonEquipment">Add Field</button>
-                                                </div>
-                                                <!-- Initial dropdown with predefined options -->
-                                                <div id="initialEquipment" class="input-group">
-                                                    <select id="field-equipment" class="form-control mt-2">
-                                                        <option value="">Select Field</option>
-                                                    </select>
-                                                </div>
-                                                <!-- Container for additional dynamic dropdowns -->
-                                                <div id="additionalEquipmentField" class="mt-2"></div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" id="addEquipmentButton" class="btn btn-success" form="equipmentForm">Add Equipment</button>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <button type="submit" id="addEquipmentButton" class="btn btn-success" form="equipmentForm">Add Equipment</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!--update equipment modal -->
+                        <!--update equipment modal -->
                     <div id="updateEquipment-modal" class="modal fade" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content" style="background-color: #2b2b2b;">
@@ -1566,7 +1566,7 @@
                                             <!-- Field IDs -->
                                             <div class="col-md-6">
                                                 <div class="d-flex justify-content-between align-items-center mb-2">
-                                                    <label class="form-label">Fields</label>
+                                                    <label for="equipment-fieldUpdate" class="form-label">Fields</label>
                                                     <button type="button" class="btn btn-success" id="addFieldButtonUpdate">Assign New Field</button>
                                                 </div>
                                                 <!-- Initial dropdown with predefined options -->
@@ -1584,7 +1584,7 @@
                                             <!-- Staff IDs -->
                                             <div class="col-md-6">
                                                 <div class="d-flex justify-content-between align-items-center mb-2">
-                                                    <label class="form-label">Staff Members</label>
+                                                    <label for="equ-staffUpdate" class="form-label">Staff Members</label>
                                                     <button type="button" class="btn btn-success" id="addStaffButtonUpdate">Assign New Member</button>
                                                 </div>
                                                 <!-- Initial dropdown with predefined options -->
