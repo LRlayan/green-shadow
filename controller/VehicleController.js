@@ -3,6 +3,7 @@ import {vehicleDetails} from "../db/db.js"
 $(document).ready(function () {
     let clickTableRow = 0;
 
+    //save vehicle
     $("#modalSubmitButton").on("click", ()=> {
         event.preventDefault(); // Prevent form submission
 
@@ -24,6 +25,7 @@ $(document).ready(function () {
         $("#vehicle-modal").modal("hide");
     });
 
+    //load data to vehicle table
     function loadVehicleTable() {
         $('#vehicleDetailsTable').empty();
         const tableBody = $("#vehicleDetailsTable");
