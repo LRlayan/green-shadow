@@ -17,7 +17,6 @@ $(document).ready(function () {
 
         let vehicleDetail = new Vehicle(licensePlateNumber,vehicleName,category,fuelType,status,staffMember,remark);
         vehicleDetails.push(vehicleDetail);
-        console.log(vehicleDetails.length)
         loadVehicleTable(); // Refresh the table with updated data
 
         // Reset form and close modal
