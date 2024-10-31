@@ -31,20 +31,6 @@ $(document).ready(function() {
         // Append the new row to the table body
         $('#staffDetailsTable').append($newRow);
     }
-
-    // Event to handle confirmation of deletion
-    $('#confirmDeleteYes').on("click", function() {
-        // Get the stored row and remove it
-        $('#confirmStaffDeleteModal').data('rowToDelete').remove();
-        // Hide the confirmation modal
-        $('#confirmStaffDeleteModal').modal('hide');
-    });
-
-    // Event to handle the "No" button click, hiding the modal explicitly
-    $('#confirmStaffDeleteModal .btn-secondary').on("click", function() {
-        $('#confirmStaffDeleteModal').modal('hide'); // Explicitly hide the modal
-    });
-
     // Function to populate the update modal with data from the selected row
     function populateUpdateModal(staffData) {
         $('#firstNameUpdate').val(staffData.firstName);
@@ -81,6 +67,19 @@ $(document).ready(function() {
         addDynamicFields('updateEquipment', staffData.equipment.split(','));
     }
 
+    // Event to handle confirmation of deletion
+    $('#confirmDeleteYes').on("click", function() {
+        // Get the stored row and remove it
+        $('#confirmStaffDeleteModal').data('rowToDelete').remove();
+        // Hide the confirmation modal
+        $('#confirmStaffDeleteModal').modal('hide');
+    });
+
+    // Event to handle the "No" button click, hiding the modal explicitly
+    $('#confirmStaffDeleteModal .btn-secondary').on("click", function() {
+        $('#confirmStaffDeleteModal').modal('hide'); // Explicitly hide the modal
+    });
+
 // Function to dynamically generate input fields and set values
     function addDynamicFields(containerId, values) {
         const $container = $('#' + containerId);
@@ -98,6 +97,7 @@ $(document).ready(function() {
         });
     }
 
+    //save staff member
     $('#addFieldButtonInStaff').on('click',()=>{
         event.preventDefault();
         // Collect form data
@@ -143,7 +143,7 @@ $(document).ready(function() {
             }
         });
         let staffLogs = [];
-        let staffDetail = new Staff("",firstName,lastName,joinedDate,designation,gender,dob,addressLine01,addressLine02,addressLine03,addressLine04,addressLine05,contactNo,emailStaff,roleStaff,fieldStaff,staffVehicle,staffLogs,staffEquipment);
+        let staffDetail = new Staff("01",firstName,lastName,joinedDate,designation,gender,dob,addressLine01,addressLine02,addressLine03,addressLine04,addressLine05,contactNo,emailStaff,roleStaff,fieldStaff,staffVehicle,staffLogs,staffEquipment);
         staffDetails.push(staffDetail);
         loadEquipmentTable();
     });
@@ -178,6 +178,109 @@ $(document).ready(function() {
             $('#staffDetailsTable').append(row);
         });
     }
+
+    //update Staff member
+    $('#staffDetailsTable').on('click','tr', ()=>{
+        let fName = $(this).find(".fName").text();
+        let lName = $(this).find(".lName").text();
+        let designation = $(this).find(".designation").text().trim();
+        let gender = $(this).find(".gender").text().trim();
+        let joinedDate = $(this).find(".joinedDate").text();
+        let addressLine01 = $(this).find(".buildingNo").text();
+        let addressLine02 = $(this).find(".city").text();
+        let addressLine03 = $(this).find(".lane").text();
+        let addressLine04 = $(this).find(".state").text();
+        let addressLine05 = $(this).find(".postalCode").text();
+        let contactNo = $(this).find(".contactNo").text();
+        let email = $(this).find(".email").text();
+        let role = $(this).find(".role").text().trim();
+        let fieldsArray = $(this).find(".fields").text().split(",");
+        let logs = $(this).find(".logs").text().split(",");
+        let vehicleArray = $(this).find(".vehicle").text().split(",");
+        let equipmentArray = $(this).find(".equipment").text().split(",");
+
+
+        $('#firstNameUpdate').val(fName);
+        $('#lastNameUpdate').val(lName);
+        $('#joinedDateUpdate').val(joinedDate);
+        $('#dobUpdate').val(joinedDate);
+        $('#addressLine01Update').val(addressLine01);
+        $('#addressLine02Update').val(addressLine02);
+        $('#addressLine03Update').val(addressLine03);
+        $('#addressLine04Update').val(addressLine04);
+        $('#addressLine05Update').val(addressLine05);
+        $('#ContactNoUpdate').val(contactNo);
+        $('#emailStaffUpdate').val(email);
+
+        // Check if the combo box has an option matching the input value
+        $('#roleStaffUpdate option').each(function() {
+            if ($(this).val() === role) {
+                $('#roleStaffUpdate').val(role);
+                return false; // Stop loop once a match is found
+            }
+        });
+
+        $('#designationUpdate option').each(function() {
+            if ($(this).val() === designation) {
+                $('#designationUpdate').val(designation);
+                return false; // Stop loop once a match is found
+            }
+        });
+
+        $('#genderUpdate option').each(function() {
+            if ($(this).val() === gender) {
+                $('#genderUpdate').val(gender);
+                return false; // Stop loop once a match is found
+            }
+        });
+
+        // Clear any existing inputs in the modal's dynamic dropdowns
+        $('#updateField').empty();
+        $('#updateVehicle').empty();
+        $('#updateEquipment').empty();
+
+        // Create input fields for each field ID in fieldsArray
+        fieldsArray.forEach(field => {
+            const fieldContainer = $('<div class="d-flex align-items-center mb-2"></div>');
+            const fieldInput = $(`<input type="text" class="form-control me-2" value="${field.trim()}">`);
+            const removeButton = $('<button class="btn btn-danger">Remove</button>');
+
+            removeButton.on('click', function () {
+                fieldContainer.remove(); // Remove field input and button when "Remove" is clicked
+            });
+
+            fieldContainer.append(fieldInput, removeButton);
+            $('#updateField').append(fieldContainer);
+        });
+
+        // Create input fields for each vehicle ID in vehicleArray
+        vehicleArray.forEach(field => {
+            const vehicleContainer = $('<div class="d-flex align-items-center mb-2"></div>');
+            const vehicleInput = $(`<input type="text" class="form-control me-2" value="${field.trim()}">`);
+            const removeButton = $('<button class="btn btn-danger">Remove</button>');
+
+            removeButton.on('click', function () {
+                vehicleContainer.remove(); // Remove field input and button when "Remove" is clicked
+            });
+
+            vehicleContainer.append(vehicleInput, removeButton);
+            $('#updateVehicle').append(vehicleContainer);
+        });
+
+        // Create input fields for each equipment ID in equipmentArray
+        equipmentArray.forEach(field => {
+            const equipmentContainer = $('<div class="d-flex align-items-center mb-2"></div>');
+            const equipmentInput = $(`<input type="text" class="form-control me-2" value="${field.trim()}">`);
+            const removeButton = $('<button class="btn btn-danger">Remove</button>');
+
+            removeButton.on('click', function () {
+                equipmentContainer.remove(); // Remove field input and button when "Remove" is clicked
+            });
+
+            equipmentContainer.append(equipmentInput, removeButton);
+            $('#updateEquipment').append(equipmentContainer);
+        });
+    });
 
     //Add Field
     // jQuery to add a new dropdown with predefined options and a remove button
