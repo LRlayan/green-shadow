@@ -94,9 +94,9 @@ $('#addEquipmentButton').on('click',()=>{
 
 function loadEquipmentTable(){
     $('#equipmentDetailsTable').empty();
-    equipmentDetails.map((equipment,index) => {
+    equipmentDetails.map((equipment, index) => {
         const row = `
-                <tr>
+            <tr>
                 <td class="code">${equipment.code}</td>
                 <td class="name">${equipment.name}</td>
                 <td class="vehicleType">${equipment.type}</td>
@@ -105,8 +105,8 @@ function loadEquipmentTable(){
                 <td class="staffMember">${equipment.assignStaff.join(', ')}</td>
                 <td class="fields">${equipment.assignField.join(', ')}</td>
                 <td><button class="btn btn-danger delete-button" data-index="${index}">Delete</button></td>
-                </tr>
-            `;
+            </tr>
+        `;
         $('#equipmentDetailsTable').append(row);
     });
 }
@@ -163,31 +163,32 @@ $('#equipmentDetailsTable').on('click', 'tr', function () {
 });
 
 // Update equipment
-$('#updateEquipmentButton').on('click', () => {
-    let equipmentName = $("#equipmentName").val();
-    let equipmentType = $("#equipmentType").val();
-    let equipmentStatus = $("#equipmentStatus").val();
-    let count = $("#count").val();
+$('#EquipmentButtonUpdate').on('click', () => {
+    // Get updated values from modal inputs
+    let equipmentName = $("#equipmentNameUpdate").val();
+    let equipmentType = $("#equipmentTypeUpdate").val();
+    let equipmentStatus = $("#equipmentStatusUpdate").val();
+    let count = $("#countUpdate").val();
 
-    // Collect multiple updated staff values
+    // Collect updated staff values
     let updatedStaffEquipment = [];
-    $("#additionalEquipmentStaff select").each(function () {
+    $("#updateStaffEquipment input").each(function() {
         let staffValue = $(this).val();
         if (staffValue) {
             updatedStaffEquipment.push(staffValue);
         }
     });
 
-    // Collect multiple updated field values
+    // Collect updated field values
     let updatedFieldEquipment = [];
-    $("#additionalEquipmentField select").each(function () {
+    $("#updateEquipmentFieldId input").each(function() {
         let fieldValue = $(this).val();
         if (fieldValue) {
             updatedFieldEquipment.push(fieldValue);
         }
     });
 
-    // Update the equipment object with new values
+    // Update the selected equipment object with the new values
     let equipment = equipmentDetails[clickTableRow];
     equipment.name = equipmentName;
     equipment.type = equipmentType;
@@ -196,8 +197,11 @@ $('#updateEquipmentButton').on('click', () => {
     equipment.assignStaff = updatedStaffEquipment;
     equipment.assignField = updatedFieldEquipment;
 
-    // Reload the table to reflect updated data
+    // Reload the equipment table to reflect updated data
     loadEquipmentTable();
+
+    // Close the modal after updating
+    $('#updateEquipment-modal').modal('hide');
 });
 
 //Add Field Update Modal
