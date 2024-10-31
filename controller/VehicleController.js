@@ -34,6 +34,7 @@ $(document).ready(function () {
         vehicleDetails.map((vehicle,index) => {
             const row = `
                 <tr>
+                    <td class="code"></td>
                     <td class="licensePlateNumber">${vehicle.licensePlateNumber}</td>
                     <td class="vehicleName">${vehicle.vehicleName}</td>
                     <td class="category">${vehicle.category}</td>
