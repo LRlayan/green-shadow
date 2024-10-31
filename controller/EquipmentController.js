@@ -90,6 +90,7 @@ $('#addEquipmentButton').on('click',()=>{
     let equipmentDetail = new Equipment(equipmentName,equipmentType,equipmentStatus,count,staffEquipment,fieldEquipment);
     equipmentDetails.push(equipmentDetail);
     loadEquipmentTable();
+    clearEquipmentModalFields("#equipmentName","#equipmentType","#equipmentStatus","#count","#initialStaff select","#initialEquipment select","#additionalEquipmentStaff","#additionalEquipmentField");
 });
 
 function loadEquipmentTable(){
@@ -111,7 +112,7 @@ function loadEquipmentTable(){
     });
 }
 
-// Assuming your table rows are in tbody with id "vehicleDetailsTable"
+// Assuming your table rows are in tbody with id "EquipmentDetailsTable"
 $('#equipmentDetailsTable').on('click', 'tr', function () {
     // Get values from the selected row
     let name = $(this).find(".name").text();
@@ -211,6 +212,7 @@ $('#EquipmentButtonUpdate').on('click', () => {
 
     // Reload the equipment table to reflect updated data
     loadEquipmentTable();
+    clearEquipmentModalFields("#equipmentNameUpdate","#equipmentTypeUpdate","#equipmentStatusUpdate","#countUpdate","#initialFieldEquipmentUpdate select","#initialStaffEquUpdate select","#additionalStaffEquUpdate","#additionalFieldEquipmentUpdate");
 
     // Close the modal after updating
     $('#updateEquipment-modal').modal('hide');
@@ -292,10 +294,14 @@ $('#confirmEquDeleteNo').on('click',()=>{
     $('#confirmEquipmentDeleteModal').modal('hide'); // Hide the modal
 });
 
-// Clear fields when the modal is closed
-$('#equipment-modal').on('hidden.bs.modal', function () {
-    $('#equipmentForm')[0].reset(); // Reset the form fields
-});
-$('#updateEquipment-modal').on('hidden.bs.modal', function () {
-    $('#updateEquipmentForm')[0].reset(); // Reset the form fields
-});
+// Function to clear the equipment modal input fields
+function clearEquipmentModalFields(equipmentName,equipmentType,equipmentStatus,count,initialStaff,initialEquipment,additionalEquipmentStaff,additionalEquipmentField) {
+    $(`${equipmentName}`).val('');
+    $(`${equipmentType}`).val('');
+    $(`${equipmentStatus}`).val('');
+    $(`${count}`).val('');
+    $(`${initialStaff} select`).val(''); // Clear initial dropdowns
+    $(`${initialEquipment} select`).val('');
+    $(`${additionalEquipmentStaff}`).empty(); // Remove dynamic staff dropdowns
+    $(`${additionalEquipmentField}`).empty(); // Remove dynamic field dropdowns
+}
