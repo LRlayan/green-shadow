@@ -69,19 +69,6 @@ $(document).ready(function() {
     //     addDynamicFields('updateEquipment', staffData.equipment.split(','));
     // }
 
-    // Event to handle confirmation of deletion
-    $('#confirmDeleteYes').on("click", function() {
-        // Get the stored row and remove it
-        $('#confirmStaffDeleteModal').data('rowToDelete').remove();
-        // Hide the confirmation modal
-        $('#confirmStaffDeleteModal').modal('hide');
-    });
-
-    // Event to handle the "No" button click, hiding the modal explicitly
-    $('#confirmStaffDeleteModal .btn-secondary').on("click", function() {
-        $('#confirmStaffDeleteModal').modal('hide'); // Explicitly hide the modal
-    });
-
 // Function to dynamically generate input fields and set values
     function addDynamicFields(containerId, values) {
         const $container = $('#' + containerId);
@@ -371,6 +358,27 @@ $(document).ready(function() {
 
         // Reload the equipment table to reflect updated data
         loadStaffTable();
+    });
+
+    //delete Staff Member Details
+    // Show delete confirmation modal
+    $('#staffDetailsTable').on('click', '.delete-button', function () {
+        const index = $(this).data('index');
+        $('#confirmDeleteYes').data('index', index);
+        $('#confirmStaffDeleteModal').modal('show');
+    });
+
+    // Handle the confirmation of deletion - yes button
+    $('#confirmDeleteYes').on('click', function () {
+        const index = $(this).data('index'); // Get the stored index
+        staffDetails.splice(index, 1); // Remove the vehicle from the array
+        loadStaffTable(); // Refresh the table
+        $('#confirmStaffDeleteModal').modal('hide'); // Hide the modal
+    });
+
+//No button
+    $('#confirmDeleteNo').on('click',()=>{
+        $('#confirmStaffDeleteModal').modal('hide'); // Hide the modal
     });
 
     //Add Field
