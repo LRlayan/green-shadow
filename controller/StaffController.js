@@ -1,5 +1,5 @@
 import Staff from "../model/Staff.js";
-import {staffDetails} from "../db/db.js"
+import {equipmentDetails, staffDetails} from "../db/db.js"
 
 $(document).ready(function() {
     // Function to add a row with sample data
@@ -142,40 +142,42 @@ $(document).ready(function() {
                 staffEquipment.push(staffValue);
             }
         });
-
-        let staffDetail = new Staff(firstName,lastName,joinedDate,designation,gender,dob,addressLine01,addressLine02,addressLine03,addressLine04,addressLine05,contactNo,emailStaff,roleStaff,fieldStaff,staffVehicle,staffEquipment);
+        let staffLogs = [];
+        let staffDetail = new Staff("",firstName,lastName,joinedDate,designation,gender,dob,addressLine01,addressLine02,addressLine03,addressLine04,addressLine05,contactNo,emailStaff,roleStaff,fieldStaff,staffVehicle,staffLogs,staffEquipment);
         staffDetails.push(staffDetail);
         loadEquipmentTable();
     });
 
     function loadEquipmentTable(){
-
+        $('#staffDetailsTable').empty();
+        staffDetails.map((staff, index) => {
+            const row = `
+            <tr>
+                <td class="code">${staff.code}</td>
+                <td class="fName">${staff.firstName}</td>
+                <td class="lName">${staff.lastName}</td>
+                <td class="designation">${staff.designation}</td>
+                <td class="gender">${staff.gender}</td>
+                <td class="joinedDate">${staff.joinedDate}</td>
+                <td class="dob">${staff.dob}</td>
+                <td class="buildingNo">${staff.addressLine01}</td>
+                <td class="lane">${staff.addressLine02}</td>
+                <td class="city">${staff.addressLine03}</td>
+                <td class="state">${staff.addressLine04}</td>
+                <td class="postalCode">${staff.addressLine05}</td>
+                <td class="contactNo">${staff.contactNo}</td>
+                <td class="email">${staff.email}</td>
+                <td class="role">${staff.role}</td>
+                <td class="fields">${staff.fieldList.join(', ')}</td>
+                <td class="logs">${staff.logList.join(', ')}</td>
+                <td class="vehicle">${staff.vehicle}</td>
+                <td class="equipment">${staff.equipmentList.join(', ')}</td>
+                <td><button class="btn btn-danger delete-button" data-index="${index}">Delete</button></td>
+            </tr>
+        `;
+            $('#staffDetailsTable').append(row);
+        });
     }
-    // Sample data for demonstration
-    const sampleStaffData = {
-        code: "S001",
-        firstName: "John",
-        lastName: "Doe",
-        designation: "Manager",
-        gender: "Male",
-        joinedDate: "2023-01-10",
-        dob: "1990-05-15",
-        buildingNo: "123",
-        lane: "Greenway",
-        city: "Springfield",
-        state: "IL",
-        postalCode: "62704",
-        contactNo: "123-456-7890",
-        email: "john.doe@example.com",
-        role: "Admin",
-        field: "F02,F01",
-        logs: "L01,L02,L03",
-        vehicle: "Truck,Car",
-        equipment: "Shovel,Plough"
-    };
-
-    // Add the sample row
-    addRowToTable(sampleStaffData);
 
     //Add Field
     // jQuery to add a new dropdown with predefined options and a remove button
