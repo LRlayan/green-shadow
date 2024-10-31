@@ -1,5 +1,6 @@
 export default class Staff{
-    constructor(firstName,lastName,joinedDate,designation,gender,dob,addressLine01,addressLine02,addressLine03,addressLine04,addressLine05,contactNo,emailStaff,roleStaff,fieldList,vehicleList,equipmentList) {
+    constructor(code,firstName,lastName,joinedDate,designation,gender,dob,addressLine01,addressLine02,addressLine03,addressLine04,addressLine05,contactNo,email,role,fieldList,vehicle,logList,equipmentList) {
+        this._code = code;
         this._firstName = firstName;
         this._lastName = lastName;
         this._joinedDate = joinedDate;
@@ -12,13 +13,21 @@ export default class Staff{
         this._addressLine04 = addressLine04;
         this._addressLine05 = addressLine05;
         this._contactNo = contactNo;
-        this._emailStaff = emailStaff;
-        this._roleStaff = roleStaff;
+        this._emailStaff = email;
+        this._roleStaff = role;
         this._fieldList = fieldList;
-        this._vehicleList = vehicleList;
+        this._vehicleList = vehicle;
+        this._logList = logList;
         this._equipmentList = equipmentList;
     }
 
+    get code() {
+        return this._code;
+    }
+
+    set code(value) {
+        this._code = value;
+    }
 
     get firstName() {
         return this._firstName;
@@ -116,19 +125,19 @@ export default class Staff{
         this._contactNo = value;
     }
 
-    get emailStaff() {
+    get email() {
         return this._emailStaff;
     }
 
-    set emailStaff(value) {
+    set email(value) {
         this._emailStaff = value;
     }
 
-    get roleStaff() {
+    get role() {
         return this._roleStaff;
     }
 
-    set roleStaff(value) {
+    set role(value) {
         this._roleStaff = value;
     }
 
@@ -140,12 +149,20 @@ export default class Staff{
         this._fieldList = value;
     }
 
-    get vehicleList() {
+    get vehicle() {
         return this._vehicleList;
     }
 
-    set vehicleList(value) {
+    set vehicle(value) {
         this._vehicleList = value;
+    }
+
+    get logList() {
+        return this._logList;
+    }
+
+    set logList(value) {
+        this._logList = value;
     }
 
     get equipmentList() {
