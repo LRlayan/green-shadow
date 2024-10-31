@@ -270,3 +270,32 @@ $('#addStaffButtonUpdate').on('click', function() {
     // Append the new field container to the additionalStaffField
     $('#additionalStaffEquUpdate').append($staffContainer);
 });
+
+//delete Equipment
+// Show delete confirmation modal
+$('#equipmentDetailsTable').on('click', '.delete-button', function () {
+    const index = $(this).data('index');
+    $('#confirmEquDeleteYes').data('index', index);
+    $('#confirmEquipmentDeleteModal').modal('show');
+});
+
+// Handle the confirmation of deletion - yes button
+$('#confirmEquDeleteYes').on('click', function () {
+    const index = $(this).data('index'); // Get the stored index
+    equipmentDetails.splice(index, 1); // Remove the vehicle from the array
+    loadEquipmentTable(); // Refresh the table
+    $('#confirmEquipmentDeleteModal').modal('hide'); // Hide the modal
+});
+
+//No button
+$('#confirmEquDeleteNo').on('click',()=>{
+    $('#confirmEquipmentDeleteModal').modal('hide'); // Hide the modal
+});
+
+// Clear fields when the modal is closed
+$('#equipment-modal').on('hidden.bs.modal', function () {
+    $('#equipmentForm')[0].reset(); // Reset the form fields
+});
+$('#updateEquipment-modal').on('hidden.bs.modal', function () {
+    $('#updateEquipmentForm')[0].reset(); // Reset the form fields
+});
