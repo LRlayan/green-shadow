@@ -1,3 +1,6 @@
+import Staff from "../model/Staff.js";
+import {staffDetails} from "../db/db.js"
+
 $(document).ready(function() {
     // Function to add a row with sample data
     function addRowToTable(staffData) {
@@ -95,6 +98,59 @@ $(document).ready(function() {
         });
     }
 
+    $('#addFieldButtonInStaff').on('click',()=>{
+        event.preventDefault();
+        // Collect form data
+        let firstName = $("#firstName").val();
+        let lastName = $("#lastName").val();
+        let joinedDate = $("#joinedDate").val();
+        let designation = $("#designation").val();
+        let gender = $("#gender").val();
+        let dob = $("#dob").val();
+        let addressLine01 = $("#addressLine01").val();
+        let addressLine02 = $("#addressLine02").val();
+        let addressLine03 = $("#addressLine03").val();
+        let addressLine04 = $("#addressLine04").val();
+        let addressLine05 = $("#addressLine05").val();
+        let contactNo = $("#ContactNo").val();
+        let emailStaff = $("#emailStaff").val();
+        let roleStaff = $("#roleStaff").val();
+
+        // Collect multiple field values
+        let fieldStaff = [];
+        $("#additionalStaffField select").each(function() {
+            let fieldValue = $(this).val();
+            if (fieldValue) {
+                fieldStaff.push(fieldValue);
+            }
+        });
+
+        // Collect multiple staff values
+        let staffVehicle = [];
+        $("#additionalStaffVehicle select").each(function() {
+            let staffValue = $(this).val();
+            if (staffValue) {
+                staffVehicle.push(staffValue);
+            }
+        });
+
+        // Collect multiple staff values
+        let staffEquipment = [];
+        $("#additionalStaffEquipment select").each(function() {
+            let staffValue = $(this).val();
+            if (staffValue) {
+                staffEquipment.push(staffValue);
+            }
+        });
+
+        let staffDetail = new Staff(firstName,lastName,joinedDate,designation,gender,dob,addressLine01,addressLine02,addressLine03,addressLine04,addressLine05,contactNo,emailStaff,roleStaff,fieldStaff,staffVehicle,staffEquipment);
+        staffDetails.push(staffDetail);
+        loadEquipmentTable();
+    });
+
+    function loadEquipmentTable(){
+
+    }
     // Sample data for demonstration
     const sampleStaffData = {
         code: "S001",
