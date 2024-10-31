@@ -120,6 +120,8 @@ $('#equipmentDetailsTable').on('click', 'tr', function () {
     let status = $(this).find(".status").text();
     let count = $(this).find(".count").text();
 
+    clickTableRow = $(this).index();
+
     // Split multiple values in "staffMember" and "fields" columns
     let staffMemberArray = $(this).find(".staffMember").text().split(","); // Assuming comma-separated
     let fieldsArray = $(this).find(".fields").text().split(","); // Assuming comma-separated
