@@ -91,60 +91,14 @@ $(document).ready(function() {
         }
     });
 
-    //Add Crop Combo Box
-    // jQuery to add a new dropdown with predefined options and a remove button
+    // Add Additional Crop Combo box
     $('#addFieldCropButton').on('click', function() {
-    // Create a new div to hold the select and remove button
-    const $cropContainer = $('<div class="d-flex align-items-center mt-2"></div>');
-
-    // Create a new select element with options
-    const $newSelect = $('<select class="form-control me-2"></select>');
-    const options = ["C01", "C02", "C03", "C04", "C05"];
-    options.forEach(function(optionValue) {
-        $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
+        addDropdown('#additionalCrop', 'filed-cropId', ["C01", "C02", "C03", "C04", "C05"]);
     });
 
-    // Create a remove button
-    const $removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
-
-    // Add click event to remove the field
-    $removeButton.on('click', function() {
-        $cropContainer.remove(); // Remove this container when clicked
-    });
-
-    // Append select and remove button to the field container
-    $cropContainer.append($newSelect).append($removeButton);
-
-    // Append the new field container to the additionalStaffField
-    $('#additionalCrop').append($cropContainer);
-});
-
-    //Add Staff Combo Box
-    // jQuery to add a new dropdown with predefined options and a remove button
+    // Add Additional Staff Combo box
     $('#addFieldStaffButton').on('click', function() {
-        // Create a new div to hold the select and remove button
-        const $staffContainer = $('<div class="d-flex align-items-center mt-2"></div>');
-
-        // Create a new select element with options
-        const $newSelect = $('<select class="form-control me-2"></select>');
-        const options = ["S01", "S02", "S03", "S04", "S05"];
-        options.forEach(function(optionValue) {
-            $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
-        });
-
-        // Create a remove button
-        const $removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
-
-        // Add click event to remove the field
-        $removeButton.on('click', function() {
-            $staffContainer.remove(); // Remove this container when clicked
-        });
-
-        // Append select and remove button to the field container
-        $staffContainer.append($newSelect).append($removeButton);
-
-        // Append the new field container to the additionalStaffField
-        $('#additionalStaff').append($staffContainer);
+        addDropdown('#additionalStaff', 'filed-staffId', ["S01", "S02", "S03", "S04", "S05"]);
     });
 
     // delete modal ----------------------------------------------------------------------------------------
@@ -168,7 +122,6 @@ $(document).ready(function() {
 });
 
 // Update Field Card Modal setup
-// Update Field Card Modal setup
 $(document).on('click', '#cardUpdateButton', function () {
     const card = $(this).closest('.card');
     const fieldCode = card.find('.card-filedCode').text().replace('Code:', '').trim();
@@ -188,6 +141,21 @@ $(document).on('click', '#cardUpdateButton', function () {
     populateDropdown('#updateFieldCropId', crop, ["C01", "C02", "C03", "C04", "C05"]);
     populateDropdown('#updateStaffCrop', staff, ["S01", "S02", "S03", "S04", "S05"]);
     populateDropdown('#updateLogCrop', logs, ["L01", "L02", "L03", "L04", "L05"]);
+
+    // Function to add dynamic Crop dropdown in the update modal
+    $('#addFieldCropButtonUpdate').on('click', function() {
+        addDropdown('#additionalFieldCropUpdate', 'fieldCropUpdate', ["C01", "C02", "C03", "C04", "C05"]);
+    });
+
+    // Function to add dynamic Staff dropdown in the update modal
+    $('#addFieldStaffButtonUpdate').on('click', function() {
+        addDropdown('#additionalStaffCropUpdate', 'staffCropUpdate', ["S01", "S02", "S03", "S04", "S05"]);
+    });
+
+    // Function to add dynamic Log dropdown in the update modal
+    $('#addFieldLogButtonUpdate').on('click', function() {
+        addDropdown('#additionalLogCropUpdate', 'logCropUpdate', ["L01", "L02", "L03", "L04", "L05"]);
+    });
 });
 
 function populateDropdown(container, selectedValues, options) {
@@ -201,6 +169,92 @@ function populateDropdown(container, selectedValues, options) {
     });
 }
 
+// Handle form submission for updating field card
+// $('#updateFieldForm').on('submit', function (e) {
+//     e.preventDefault(); // Prevent form submission
+//
+//     // Get values from the form fields
+//     const fieldCode = $('.card-filedCode').text();
+//     const fieldName = $('#updateFieldName').val();
+//     const location = $('#updateFieldLocation').val();
+//     const extentSize = $('#updateExtentSize').val();
+//
+//     // Collect all selected values from the dynamically added dropdowns
+//     const crops = [];
+//     $('#updateFieldCropContainer select').each(function () {
+//         if ($(this).val()) crops.push($(this).val());
+//     });
+//
+//     const staffMembers = [];
+//     $('#updateStaffMemberCropContainer select').each(function () {
+//         if ($(this).val()) staffMembers.push($(this).val());
+//     });
+//
+//     const logs = [];
+//     $('#updateLogsCropContainer select').each(function () {
+//         if ($(this).val()) logs.push($(this).val());
+//     });
+//
+//     // Update the field card with the new values
+//     const card = $('.card[data-id="' + fieldCode + '"]'); // Assuming each card has a unique data-id attribute with fieldCode
+//
+//     // Update the card content with the new values
+//     card.find('.card-name').text('Name: ' + fieldName);
+//     card.find('.card-location').text('Location: ' + location);
+//     card.find('.card-extent-size').text('Extent Size: ' + extentSize);
+//     card.find('.card-crop').text('Crop: ' + crops.join(', '));
+//     card.find('.card-staff').text('Staff: ' + staffMembers.join(', '));
+//     card.find('.card-log').text('Log: ' + logs.join(', '));
+//
+//     // Hide the modal
+//     // $('#updateFieldModal').modal('hide');
+// });
+
+// Assuming each field card has a unique ID to identify it
+$("#updateFieldButton").on("click", function() {
+    // Get updated values from the modal inputs
+    let updatedFieldName = $("#fieldNameInput").val();
+    let updatedLocation = $("#locationInput").val();
+    let updatedExtentSize = $("#extentSizeInput").val();
+    let updatedCrop = $("#cropDropdown").val();
+    let updatedStaff = $("#staffDropdown").val();
+    let updatedLog = $("#logInput").val();
+
+    // Get the ID of the field card being updated (this ID should be set when opening the modal)
+    let fieldCardId = $("#fieldCardIdInput").val(); // This should be set when opening the modal
+
+    // Find the specific field card element using its ID and update its content
+    let $fieldCard = $("#" + fieldCardId);
+
+    // Update the elements within the field card with the new values
+    $fieldCard.find(".field-name").text(updatedFieldName);
+    $fieldCard.find(".field-location").text(updatedLocation);
+    $fieldCard.find(".field-extent-size").text(updatedExtentSize);
+    $fieldCard.find(".field-crop").text(updatedCrop);
+    $fieldCard.find(".field-staff").text(updatedStaff);
+    $fieldCard.find(".field-log").text(updatedLog);
+
+    // Close the modal after updating
+    $("#updateModal").modal("hide");
+});
+
+//add a dropdown with predefined options and a remove button
+function addDropdown(containerId, selectClass, options) {
+    const $container = $('<div class="d-flex align-items-center mt-2"></div>');
+    const $select = $('<select class="form-control me-2"></select>').addClass(selectClass);
+
+    // Populate select options
+    options.forEach(option => $select.append(`<option value="${option}">${option}</option>`));
+
+    // Remove button
+    const $removeBtn = $('<button class="btn btn-danger">Remove</button>');
+    $removeBtn.on('click', function() {
+        $container.remove();
+    });
+
+    $container.append($select).append($removeBtn);
+    $(containerId).append($container);
+}
 
 
 
