@@ -1,21 +1,6 @@
-// export function previewImage(inputId, previewId) {
-//     const input = $(`#${inputId}`)[0];
-//     const preview = $(`#${previewId}`);
-//
-//     if (input.files && input.files[0]) {
-//         const reader = new FileReader();
-//
-//         reader.onload = function(e) {
-//             preview.attr('src', e.target.result);
-//             preview.removeClass('d-none'); // Show the image preview
-//         };
-//
-//         reader.readAsDataURL(input.files[0]); // Convert the image file to base64
-//     }
-// }
-
 $(document).ready(function() {
-    // Handle form submission
+
+    // add field card(save)
     $('#fieldForm').on('submit', function (e) {
         e.preventDefault(); // Prevent form from actually submitting
 
@@ -80,7 +65,7 @@ $(document).ready(function() {
                 <p class="card-staff"><strong>Staff:</strong>${staffIds.join(', ')}</p>
                 <p class="card-log"><strong>Log:</strong>${logIds.join(', ')}</p>
                 <div class="d-flex justify-content-between">
-                    <button type="button" class="btn btn-success flex-grow-1 me-2" data-bs-toggle="modal" data-bs-target="#updateFieldModal">Update</button>
+                    <button type="button" id="cardUpdateButton" class="btn btn-success flex-grow-1 me-2" data-bs-toggle="modal" data-bs-target="#updateFieldModal">Update</button>
                     <button class="btn btn-danger flex-grow-1" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">Delete</button>
                 </div>
             </div>                            
@@ -134,7 +119,7 @@ $(document).ready(function() {
     $('#additionalCrop').append($cropContainer);
 });
 
-    //Add Crop Combo Box
+    //Add Staff Combo Box
     // jQuery to add a new dropdown with predefined options and a remove button
     $('#addFieldStaffButton').on('click', function() {
         // Create a new div to hold the select and remove button
@@ -162,56 +147,6 @@ $(document).ready(function() {
         $('#additionalStaff').append($staffContainer);
     });
 
-    //update modal ----------------------------------------------------------------------------------------
-    // $('.card .btn-success').on('click', function() {
-    //     // Get the card's current data
-    //     const card = $(this).closest('.card');
-    //     const fieldCode = card.find('.card-filedCode').text().replace('Code:', '').trim();
-    //     const fieldName = card.find('.card-name').text().replace('Name:', '').trim();
-    //     const location = card.find('.card-location').text().replace('Location:', '').trim();
-    //     const extentSize = card.find('.card-extent-size').text().replace('Extent Size:', '').trim();
-    //     const crop = card.find('.card-crop').text().replace('Crop:', '').trim();
-    //     const staff = card.find('.card-staff').text().replace('Staff:', '').trim();
-    //     const log = card.find('.card-log').text().replace('Log:', '').trim();
-    //
-    //     // Set data in modal fields
-    //     $('#updateFieldCode').val(fieldCode);
-    //     $('#updateFieldName').val(fieldName);
-    //     $('#updateFieldLocation').val(location);
-    //     $('#updateExtentSize').val(extentSize);
-    //
-    //     // Set crop and staff values
-    //     const cropArray = crop.split(',');
-    //     const staffArray = staff.split(',');
-    //     const logArray = log.split(',');
-    //
-    //     $('#updateCrop').empty(); // Clear existing values in crop input
-    //     $('#updateStaff').empty(); // Clear existing values in staff input
-    //     $('#updateLogs').empty(); // Clear existing values in staff input
-    //
-    //     cropArray.forEach(cropItem => {
-    //         $('#updateCrop').append(`<input type="text" class="form-control mb-2" value="${cropItem.trim()}">`);
-    //     });
-    //
-    //     staffArray.forEach(staffItem => {
-    //         $('#updateStaff').append(`<input type="text" class="form-control mb-2" value="${staffItem.trim()}">`);
-    //     });
-    //
-    //     logArray.forEach(logsItem => {
-    //         $('#updateLogs').append(`<input type="text" class="form-control mb-2" value="${logsItem.trim()}">`);
-    //     });
-    //
-    //     // Show the update modal
-    //     const updateModal = new bootstrap.Modal($('#updateFieldModal')[0]);
-    //     updateModal.show();
-    // });
-
-    // Submit update form
-    // $('#updateFieldForm').on('submit', function(event) {
-    //     event.preventDefault();
-    //     // Perform update logic, close modal, etc.
-    // });
-
     // delete modal ----------------------------------------------------------------------------------------
     let cardToDelete; // Variable to store the card to be deleted
 
@@ -231,6 +166,42 @@ $(document).ready(function() {
         $('#confirmDeleteModal').modal('hide'); // Hide the confirmation modal
     });
 });
+
+// Update Field Card Modal setup
+// Update Field Card Modal setup
+$(document).on('click', '#cardUpdateButton', function () {
+    const card = $(this).closest('.card');
+    const fieldCode = card.find('.card-filedCode').text().replace('Code:', '').trim();
+    const fieldName = card.find('.card-name').text().replace('Name:', '').trim();
+    const location = card.find('.card-location').text().replace('Location:', '').trim();
+    const extentSize = card.find('.card-extent-size').text().replace('Extent Size:', '').trim();
+    const crop = card.find('.card-crop').text().replace('Crop:', '').trim().split(', ').map(item => item.trim());
+    const staff = card.find('.card-staff').text().replace('Staff:', '').trim().split(', ').map(item => item.trim());
+    const logs = card.find('.card-log').text().replace('Log:', '').trim().split(', ').map(item => item.trim());
+
+    $('#updateFieldCode').val(fieldCode);
+    $('#updateFieldName').val(fieldName);
+    $('#updateFieldLocation').val(location);
+    $('#updateExtentSize').val(extentSize);
+
+    // Populate dropdowns with multiple selections
+    populateDropdown('#updateFieldCropId', crop, ["C01", "C02", "C03", "C04", "C05"]);
+    populateDropdown('#updateStaffCrop', staff, ["S01", "S02", "S03", "S04", "S05"]);
+    populateDropdown('#updateLogCrop', logs, ["L01", "L02", "L03", "L04", "L05"]);
+});
+
+function populateDropdown(container, selectedValues, options) {
+    $(container).empty();
+    selectedValues.forEach(value => {
+        const dropdown = $('<select class="form-control mb-3"></select>');
+        options.forEach(option => {
+            dropdown.append(`<option value="${option}" ${option.trim() === value ? 'selected' : ''}>${option}</option>`);
+        });
+        $(container).append(dropdown);
+    });
+}
+
+
 
 
 
