@@ -1,18 +1,18 @@
-function previewImage(inputId, previewId) {
-    const input = $(`#${inputId}`)[0];
-    const preview = $(`#${previewId}`);
-
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-
-        reader.onload = function(e) {
-            preview.attr('src', e.target.result);
-            preview.removeClass('d-none'); // Show the image preview
-        };
-
-        reader.readAsDataURL(input.files[0]); // Convert the image file to base64
-    }
-}
+// export function previewImage(inputId, previewId) {
+//     const input = $(`#${inputId}`)[0];
+//     const preview = $(`#${previewId}`);
+//
+//     if (input.files && input.files[0]) {
+//         const reader = new FileReader();
+//
+//         reader.onload = function(e) {
+//             preview.attr('src', e.target.result);
+//             preview.removeClass('d-none'); // Show the image preview
+//         };
+//
+//         reader.readAsDataURL(input.files[0]); // Convert the image file to base64
+//     }
+// }
 
 $(document).ready(function() {
     // Handle form submission
@@ -23,33 +23,36 @@ $(document).ready(function() {
         let fieldName = $('#fieldName').val();
         let location = $('#fieldLocation').val();
         let extentSize = $('#extentSize').val();
-        let cropIds = []; // Array to store crop IDs
-        let staffIds = []; // Array to store staff IDs
-        let logIds = ["L01", "L02"]; // Sample log IDs
+        let cropIds = []; // Initialize an array to store crop IDs
+        let staffIds = []; // Initialize an array to store staff IDs
+        let logIds = ["L01","L02"]; // Initialize an array to store log IDs
 
-        // Collect all crop IDs from main and additional selects
-        $('#filed-cropId').val() && cropIds.push($('#filed-cropId').val());
-        $('#additionalCrop select').each(function () {
-            $(this).val() && cropIds.push($(this).val()); // Add each non-empty additional select value
-        });
-
-        // Collect all staff IDs from main and additional selects
-        $('#filed-staffId').val() && staffIds.push($('#filed-staffId').val());
+        // Collect all crop IDs from the main select and additional fields
+        $('#filed-cropId').val() && cropIds.push($('#filed-cropId').val()); // Add main select value if not empty
         $('#additionalStaff select').each(function () {
-            $(this).val() && staffIds.push($(this).val());
+            cropIds.push($(this).val()); // Collect each additional select value
         });
 
-        // Clean up arrays to remove any empty values
+        // Collect all staff IDs from the main select and additional fields
+        $('#filed-staffId').val() && staffIds.push($('#filed-staffId').val()); // Add main select value if not empty
+        $('#additionalCrop select').each(function () {
+            staffIds.push($(this).val()); // Collect each additional select value
+        });
+
+        // Remove empty values (if any)
         cropIds = cropIds.filter(id => id);
         staffIds = staffIds.filter(id => id);
 
-        let fieldImage1 = $('#preview1').attr('src'); // Preview image 1
-        let fieldImage2 = $('#preview2').attr('src'); // Preview image 2
+        let fieldImage1 = $('#preview1').attr('src'); // Use the image preview if available
+        let fieldImage2 = $('#preview2').attr('src'); // Use the image preview if available
+
+        // Generate a unique ID for each carousel
+        let uniqueCarouselId = `carousel${Math.floor(Math.random() * 100000)}`;
 
         let newFieldCard = `
     <div class="col-md-6 col-lg-4 mb-4">
         <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
-            <div class="carousel slide" data-bs-ride="carousel">
+            <div id="${uniqueCarouselId}" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
                         <img src="${fieldImage1}" class="d-block w-100 fixed-image" alt="Field Image 1">
@@ -58,11 +61,11 @@ $(document).ready(function() {
                         <img src="${fieldImage2}" class="d-block w-100 fixed-image" alt="Field Image 2">
                     </div>            
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-slide="prev">
+                <button class="carousel-control-prev" type="button" data-bs-target="#${uniqueCarouselId}" data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Previous</span>
                 </button>
-                <button class="carousel-control-next" type="button" data-bs-slide="next">
+                <button class="carousel-control-next" type="button" data-bs-target="#${uniqueCarouselId}" data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
                 </button>
@@ -88,19 +91,11 @@ $(document).ready(function() {
         // Append the new card to the row container
         $('#fieldCard').append(newFieldCard);
 
-        // Reset the form and previews
+        // Reset the form
         $('#fieldForm')[0].reset();
-        $('#preview1').addClass('d-none');
-        $('#preview2').addClass('d-none');
-        $('#newFieldModal').modal('hide');
-    });
-
-    // Preview image functionality
-    $('#fieldImage1').on('change', function () {
-        const [file] = this.files;
-        if (file) {
-            $('#preview1').removeClass('d-none').attr('src', URL.createObjectURL(file));
-        }
+        $('#preview1').addClass('d-none'); // Hide image preview
+        $('#preview2').addClass('d-none'); // Hide image preview
+        $('#newFieldModal').modal('hide'); // Hide the modal
     });
 
     // Preview image functionality
