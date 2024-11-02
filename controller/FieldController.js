@@ -1,3 +1,5 @@
+let fieldCode = 0;
+
 $(document).ready(function() {
 
     // add field card(save)
@@ -28,8 +30,9 @@ $(document).ready(function() {
         cropIds = cropIds.filter(id => id);
         staffIds = staffIds.filter(id => id);
 
-        let fieldImage1 = $('#preview1').attr('src'); // Use the image preview if available
-        let fieldImage2 = $('#preview2').attr('src'); // Use the image preview if available
+        // Use the image preview if available
+        let fieldImage1 = $('#preview1').attr('src');
+        let fieldImage2 = $('#preview2').attr('src');
 
         // Generate a unique ID for each carousel
         let uniqueCarouselId = `carousel${Math.floor(Math.random() * 100000)}`;
@@ -40,10 +43,10 @@ $(document).ready(function() {
             <div id="${uniqueCarouselId}" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="${fieldImage1}" class="d-block w-100 fixed-image" alt="Field Image 1">
+                        <img src="${fieldImage1}" id="image1" class="d-block w-100 fixed-image" alt="Field Image 1">
                     </div>
                     <div class="carousel-item">
-                        <img src="${fieldImage2}" class="d-block w-100 fixed-image" alt="Field Image 2">
+                        <img src="${fieldImage2}" id="image2" class="d-block w-100 fixed-image" alt="Field Image 2">
                     </div>            
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#${uniqueCarouselId}" data-bs-slide="prev">
@@ -105,7 +108,7 @@ $(document).ready(function() {
 // Update Field Card Modal setup
 $(document).on('click', '#cardUpdateButton', function () {
     const card = $(this).closest('.card');
-    const fieldCode = card.find('.card-filedCode').text().replace('Code:', '').trim();
+    fieldCode = card.find('.card-filedCode').text().replace('Code:', '').trim();
     const fieldName = card.find('.card-name').text().replace('Name:', '').trim();
     const location = card.find('.card-location').text().replace('Location:', '').trim();
     const extentSize = card.find('.card-extent-size').text().replace('Extent Size:', '').trim();
@@ -169,73 +172,74 @@ function populateDropdown(container, selectedValues, options) {
     });
 }
 
-// Handle form submission for updating field card
-// $('#updateFieldForm').on('submit', function (e) {
-//     e.preventDefault(); // Prevent form submission
-//
-//     // Get values from the form fields
-//     const fieldCode = $('.card-filedCode').text();
-//     const fieldName = $('#updateFieldName').val();
-//     const location = $('#updateFieldLocation').val();
-//     const extentSize = $('#updateExtentSize').val();
-//
-//     // Collect all selected values from the dynamically added dropdowns
-//     const crops = [];
-//     $('#updateFieldCropContainer select').each(function () {
-//         if ($(this).val()) crops.push($(this).val());
-//     });
-//
-//     const staffMembers = [];
-//     $('#updateStaffMemberCropContainer select').each(function () {
-//         if ($(this).val()) staffMembers.push($(this).val());
-//     });
-//
-//     const logs = [];
-//     $('#updateLogsCropContainer select').each(function () {
-//         if ($(this).val()) logs.push($(this).val());
-//     });
-//
-//     // Update the field card with the new values
-//     const card = $('.card[data-id="' + fieldCode + '"]'); // Assuming each card has a unique data-id attribute with fieldCode
-//
-//     // Update the card content with the new values
-//     card.find('.card-name').text('Name: ' + fieldName);
-//     card.find('.card-location').text('Location: ' + location);
-//     card.find('.card-extent-size').text('Extent Size: ' + extentSize);
-//     card.find('.card-crop').text('Crop: ' + crops.join(', '));
-//     card.find('.card-staff').text('Staff: ' + staffMembers.join(', '));
-//     card.find('.card-log').text('Log: ' + logs.join(', '));
-//
-//     // Hide the modal
-//     // $('#updateFieldModal').modal('hide');
-// });
-
 // Assuming each field card has a unique ID to identify it
 $("#updateFieldButton").on("click", function() {
     // Get updated values from the modal inputs
-    let updatedFieldName = $("#fieldNameInput").val();
-    let updatedLocation = $("#locationInput").val();
-    let updatedExtentSize = $("#extentSizeInput").val();
-    let updatedCrop = $("#cropDropdown").val();
-    let updatedStaff = $("#staffDropdown").val();
-    let updatedLog = $("#logInput").val();
+    let updatedFieldName = $("#updateFieldName").val();
+    let updatedLocation = $("#updateFieldLocation").val();
+    let updatedExtentSize = $("#updateExtentSize").val();
 
-    // Get the ID of the field card being updated (this ID should be set when opening the modal)
-    let fieldCardId = $("#fieldCardIdInput").val(); // This should be set when opening the modal
+    let updatedFieldCrop = [];
+    $("#updateFieldCropId select").each(function() {
+        let cropValue = $(this).val();
+        if (cropValue) {
+            updatedFieldCrop.push(cropValue);
+        }
+    });
 
-    // Find the specific field card element using its ID and update its content
-    let $fieldCard = $("#" + fieldCardId);
+    // Collect values from all Field dropdowns
+    $('#additionalFieldCropUpdate select').each(function () {
+        const selectedValue = $(this).val();
+        if (selectedValue) updatedFieldCrop.push(selectedValue);
+    });
 
-    // Update the elements within the field card with the new values
-    $fieldCard.find(".field-name").text(updatedFieldName);
-    $fieldCard.find(".field-location").text(updatedLocation);
-    $fieldCard.find(".field-extent-size").text(updatedExtentSize);
-    $fieldCard.find(".field-crop").text(updatedCrop);
-    $fieldCard.find(".field-staff").text(updatedStaff);
-    $fieldCard.find(".field-log").text(updatedLog);
+    let updatedFieldStaff = [];
+    $("#updateStaffCrop select").each(function() {
+        let staffValue = $(this).val();
+        if (staffValue) {
+            updatedFieldStaff.push(staffValue);
+        }
+    });
+
+    // Collect values from all Field dropdowns
+    $('#additionalStaffCropUpdate select').each(function () {
+        const selectedValue = $(this).val();
+        if (selectedValue) updatedFieldStaff.push(selectedValue);
+    });
+
+    let updatedFieldLogs = [];
+    $("#updateLogCrop select").each(function() {
+        let staffValue = $(this).val();
+        if (staffValue) {
+            updatedFieldLogs.push(staffValue);
+        }
+    });
+
+    // Collect values from all Field dropdowns
+    $('#additionalLogCropUpdate select').each(function () {
+        const selectedValue = $(this).val();
+        if (selectedValue) updatedFieldLogs.push(selectedValue);
+    });
+
+    let updatedCrops = updatedFieldCrop.join(', ');
+    let updatedStaff = updatedFieldStaff.join(', ');
+    let updatedLogs = updatedFieldLogs.join(', ');
+
+    let fieldImage1 = $('#updatePreview1').attr('src');
+    let fieldImage2 = $('#updatePreview2').attr('src');
+
+    $('.card-name').html(`<strong>Name:</strong> ${updatedFieldName}`);
+    $('.card-location').html(`<strong>Location:</strong> ${updatedLocation}`);
+    $('.card-extent-size').html(`<strong>Extent Size:</strong> ${updatedExtentSize}`);
+    $('.card-crop').html(`<strong>Crop:</strong> ${updatedCrops}`);
+    $('.card-staff').html(`<strong>Staff:</strong> ${updatedStaff}`);
+    $('.card-log').html(`<strong>Log:</strong> ${updatedLogs}`);
+
+    $('#image1').attr('src',fieldImage1);
+    $('#image2').attr('src',fieldImage2);
 
     // Close the modal after updating
-    $("#updateModal").modal("hide");
+    $("#updateFieldModal").modal("hide");
 });
 
 //add a dropdown with predefined options and a remove button
