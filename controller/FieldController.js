@@ -66,7 +66,7 @@ $(document).ready(function() {
                 <p class="card-log"><strong>Log:</strong>${logIds.join(', ')}</p>
                 <div class="d-flex justify-content-between">
                     <button type="button" id="cardUpdateButton" class="btn btn-success flex-grow-1 me-2" data-bs-toggle="modal" data-bs-target="#updateFieldModal">Update</button>
-                    <button class="btn btn-danger flex-grow-1" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">Delete</button>
+                    <button type="button" class="btn btn-danger flex-grow-1 delete-button" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-id="1">Delete</button>
                 </div>
             </div>                            
         </div> 
@@ -100,25 +100,6 @@ $(document).ready(function() {
     $('#addFieldStaffButton').on('click', function() {
         addDropdown('#additionalStaff', 'filed-staffId', ["S01", "S02", "S03", "S04", "S05"]);
     });
-
-    // delete modal ----------------------------------------------------------------------------------------
-    let cardToDelete; // Variable to store the card to be deleted
-
-    // Show confirmation modal when the delete button is clicked
-    $('.card .btn-danger').on('click', function() {
-        cardToDelete = $(this).closest('.card'); // Store the card element to be deleted
-        const confirmModal = new bootstrap.Modal($('#confirmDeleteModal')[0]);
-        confirmModal.show();
-    });
-
-    // Delete the card if "Yes" is clicked in the confirmation modal
-    $('#confirmDeleteButton').on('click', function() {
-        if (cardToDelete) {
-            cardToDelete.remove(); // Remove the card element from the DOM
-            cardToDelete = null; // Reset the variable
-        }
-        $('#confirmDeleteModal').modal('hide'); // Hide the confirmation modal
-    });
 });
 
 // Update Field Card Modal setup
@@ -128,14 +109,15 @@ $(document).on('click', '#cardUpdateButton', function () {
     const fieldName = card.find('.card-name').text().replace('Name:', '').trim();
     const location = card.find('.card-location').text().replace('Location:', '').trim();
     const extentSize = card.find('.card-extent-size').text().replace('Extent Size:', '').trim();
-    const crop = card.find('.card-crop').text().replace('Crop:', '').trim().split(', ').map(item => item.trim());
-    const staff = card.find('.card-staff').text().replace('Staff:', '').trim().split(', ').map(item => item.trim());
+    const staff = card.find('.card-crop').text().replace('Crop:', '').trim().split(', ').map(item => item.trim());
+    const crop = card.find('.card-staff').text().replace('Staff:', '').trim().split(', ').map(item => item.trim());
     const logs = card.find('.card-log').text().replace('Log:', '').trim().split(', ').map(item => item.trim());
 
     $('#updateFieldCode').val(fieldCode);
     $('#updateFieldName').val(fieldName);
     $('#updateFieldLocation').val(location);
     $('#updateExtentSize').val(extentSize);
+
 
     // Populate dropdowns with multiple selections
     populateDropdown('#updateFieldCropId', crop, ["C01", "C02", "C03", "C04", "C05"]);
@@ -241,7 +223,7 @@ $("#updateFieldButton").on("click", function() {
 //add a dropdown with predefined options and a remove button
 function addDropdown(containerId, selectClass, options) {
     const $container = $('<div class="d-flex align-items-center mt-2"></div>');
-    const $select = $('<select class="form-control me-2"></select>').addClass(selectClass);
+    const $select = $('<select id="optionSelect" class="form-control me-2"></select>').addClass(selectClass);
 
     // Populate select options
     options.forEach(option => $select.append(`<option value="${option}">${option}</option>`));
@@ -256,6 +238,29 @@ function addDropdown(containerId, selectClass, options) {
     $(containerId).append($container);
 }
 
+//delete Field card
+$(document).ready(function() {
+    let fieldCardId; // Variable to hold the ID of the field card to be deleted
 
+    // Show the confirmation modal and set the field card ID
+    $('.delete-button').on('click', function() {
+        fieldCardId = $(this).data('id'); // Assuming the delete button has a data-id attribute
+        $('#confirmDeleteModal').modal('show');
+    });
 
+    // Handle the confirmation of the delete action
+    $('#confirmDeleteButton').on('click', function() {
+        // Remove the field card (you can use AJAX here if you need to communicate with a server)
+        // For example, let's say you have a function to remove the card from the UI:
+        removeFieldCard(fieldCardId);
+
+        // Close the modal
+        $('#confirmDeleteModal').modal('hide');
+    });
+
+    // Function to remove the field card from the UI (you may need to adjust this according to your HTML structure)
+    function removeFieldCard(id) {
+        $(`#fieldCard_${id}`).remove(); // Assuming each field card has an ID like 'fieldCard_1', 'fieldCard_2', etc.
+    }
+});
 
