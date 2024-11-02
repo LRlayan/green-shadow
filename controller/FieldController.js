@@ -14,13 +14,13 @@ $(document).ready(function() {
 
         // Collect all crop IDs from the main select and additional fields
         $('#filed-cropId').val() && cropIds.push($('#filed-cropId').val()); // Add main select value if not empty
-        $('#additionalStaff select').each(function () {
+        $('#additionalCrop select').each(function () {
             cropIds.push($(this).val()); // Collect each additional select value
         });
 
         // Collect all staff IDs from the main select and additional fields
         $('#filed-staffId').val() && staffIds.push($('#filed-staffId').val()); // Add main select value if not empty
-        $('#additionalCrop select').each(function () {
+        $('#additionalStaff select').each(function () {
             staffIds.push($(this).val()); // Collect each additional select value
         });
 
@@ -109,8 +109,8 @@ $(document).on('click', '#cardUpdateButton', function () {
     const fieldName = card.find('.card-name').text().replace('Name:', '').trim();
     const location = card.find('.card-location').text().replace('Location:', '').trim();
     const extentSize = card.find('.card-extent-size').text().replace('Extent Size:', '').trim();
-    const staff = card.find('.card-crop').text().replace('Crop:', '').trim().split(', ').map(item => item.trim());
-    const crop = card.find('.card-staff').text().replace('Staff:', '').trim().split(', ').map(item => item.trim());
+    const crop = card.find('.card-crop').text().replace('Crop:', '').trim().split(', ').map(item => item.trim());
+    const staff = card.find('.card-staff').text().replace('Staff:', '').trim().split(', ').map(item => item.trim());
     const logs = card.find('.card-log').text().replace('Log:', '').trim().split(', ').map(item => item.trim());
 
     $('#updateFieldCode').val(fieldCode);
@@ -143,11 +143,29 @@ $(document).on('click', '#cardUpdateButton', function () {
 function populateDropdown(container, selectedValues, options) {
     $(container).empty();
     selectedValues.forEach(value => {
-        const dropdown = $('<select class="form-control mb-3"></select>');
+        // Create a wrapper div for each dropdown and the remove button
+        const dropdownWrapper = $('<div class="dropdown-wrapper mb-3" style="display: flex; align-items: center;"></div>');
+
+        // Create the dropdown
+        const dropdown = $('<select class="form-control me-2"></select>');
         options.forEach(option => {
             dropdown.append(`<option value="${option}" ${option.trim() === value ? 'selected' : ''}>${option}</option>`);
         });
-        $(container).append(dropdown);
+
+        // Create the remove button
+        const removeButton = $('<button type="button" class="btn btn-danger ml-2">Remove</button>');
+
+        // Add click event to remove the dropdown when the button is clicked
+        removeButton.click(function() {
+            dropdownWrapper.remove();
+        });
+
+        // Append dropdown and remove button to the wrapper
+        dropdownWrapper.append(dropdown);
+        dropdownWrapper.append(removeButton);
+
+        // Append the wrapper to the container
+        $(container).append(dropdownWrapper);
     });
 }
 
