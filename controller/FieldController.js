@@ -34,47 +34,50 @@ $(document).ready(function() {
         let fieldImage1 = $('#preview1').attr('src');
         let fieldImage2 = $('#preview2').attr('src');
 
-        // Generate a unique ID for each carousel
+        // Generate a unique ID for each carousel and card
         let uniqueCarouselId = `carousel${Math.floor(Math.random() * 100000)}`;
+        let uniqueId = Math.floor(Math.random() * 100);
+        let uniqueCardId = `card${uniqueId}`;
+        console.log("unique id:", uniqueCardId);
 
         let newFieldCard = `
-    <div class="col-md-6 col-lg-4 mb-4">
-        <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
-            <div id="${uniqueCarouselId}" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img src="${fieldImage1}" id="image1" class="d-block w-100 fixed-image" alt="Field Image 1">
+        <div id="${uniqueCardId}" class="col-md-6 col-lg-4 mb-4"> <!-- Added uniqueCardId here -->
+            <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
+                <div id="${uniqueCarouselId}" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="${fieldImage1}" id="image1" class="d-block w-100 fixed-image" alt="Field Image 1">
+                        </div>
+                        <div class="carousel-item">
+                            <img src="${fieldImage2}" id="image2" class="d-block w-100 fixed-image" alt="Field Image 2">
+                        </div>            
                     </div>
-                    <div class="carousel-item">
-                        <img src="${fieldImage2}" id="image2" class="d-block w-100 fixed-image" alt="Field Image 2">
-                    </div>            
+                    <button class="carousel-control-prev" type="button" data-bs-target="#${uniqueCarouselId}" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#${uniqueCarouselId}" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#${uniqueCarouselId}" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#${uniqueCarouselId}" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">Field Details</h5>
-                <p class="card-filedCode"><strong>Code:</strong> C${Math.floor(Math.random() * 100)}</p>
-                <p class="card-name"><strong>Name:</strong>${fieldName}</p>
-                <p class="card-location"><strong>Location:</strong>${location}</p>
-                <p class="card-extent-size"><strong>Extent Size:</strong>${extentSize}</p>
-                <p class="card-crop"><strong>Crop:</strong>${cropIds.join(', ')}</p>
-                <p class="card-staff"><strong>Staff:</strong>${staffIds.join(', ')}</p>
-                <p class="card-log"><strong>Log:</strong>${logIds.join(', ')}</p>
-                <div class="d-flex justify-content-between">
-                    <button type="button" id="cardUpdateButton" class="btn btn-success flex-grow-1 me-2" data-bs-toggle="modal" data-bs-target="#updateFieldModal">Update</button>
-                    <button type="button" class="btn btn-danger flex-grow-1 delete-button" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-id="1">Delete</button>
-                </div>
-            </div>                            
-        </div> 
-    </div>       
-    `;
+                <div class="card-body">
+                    <h5 class="card-title">Field Details</h5>
+                    <p class="card-filedCode"><strong>Code:</strong> C${uniqueId}</p>
+                    <p class="card-name"><strong>Name:</strong> ${fieldName}</p>
+                    <p class="card-location"><strong>Location:</strong> ${location}</p>
+                    <p class="card-extent-size"><strong>Extent Size:</strong> ${extentSize}</p>
+                    <p class="card-crop"><strong>Crop:</strong> ${cropIds.join(', ')}</p>
+                    <p class="card-staff"><strong>Staff:</strong> ${staffIds.join(', ')}</p>
+                    <p class="card-log"><strong>Log:</strong> ${logIds.join(', ')}</p>
+                    <div class="d-flex justify-content-between">
+                        <button type="button" id="cardUpdateButton" class="btn btn-success flex-grow-1 me-2" data-bs-toggle="modal" data-bs-target="#updateFieldModal">Update</button>
+                        <button type="button" class="btn btn-danger flex-grow-1 delete-button" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-id="${uniqueCardId}">Delete</button>
+                    </div>
+                </div>                            
+            </div> 
+        </div>       
+        `;
 
         // Append the new card to the row container
         $('#fieldCard').append(newFieldCard);
@@ -172,7 +175,7 @@ function populateDropdown(container, selectedValues, options) {
     });
 }
 
-// Assuming each field card has a unique ID to identify it
+//update field card
 $("#updateFieldButton").on("click", function() {
     // Get updated values from the modal inputs
     let updatedFieldName = $("#updateFieldName").val();
@@ -262,27 +265,24 @@ function addDropdown(containerId, selectClass, options) {
 
 //delete Field card
 $(document).ready(function() {
-    let fieldCardId; // Variable to hold the ID of the field card to be deleted
-
-    // Show the confirmation modal and set the field card ID
-    $('.delete-button').on('click', function() {
-        fieldCardId = $(this).data('id'); // Assuming the delete button has a data-id attribute
+    // Show the confirmation modal and set the card ID to delete
+    $(document).on('click', '.delete-button', function() {
+        const cardId = $(this).data('id'); // Get the ID of the card to delete
+        $('#confirmDeleteButton').data('id', cardId); // Set this ID on the confirm delete button
         $('#confirmDeleteModal').modal('show');
     });
 
     // Handle the confirmation of the delete action
     $('#confirmDeleteButton').on('click', function() {
-        // Remove the field card (you can use AJAX here if you need to communicate with a server)
-        // For example, let's say you have a function to remove the card from the UI:
-        removeFieldCard(fieldCardId);
+        const cardId = $(this).data('id'); // Get the card ID from the button's data attribute
+        console.log("Deleting card with ID:", cardId);
+        removeFieldCard(cardId);
 
         // Close the modal
         $('#confirmDeleteModal').modal('hide');
     });
 
-    // Function to remove the field card from the UI (you may need to adjust this according to your HTML structure)
     function removeFieldCard(id) {
-        $(`#fieldCard_${id}`).remove(); // Assuming each field card has an ID like 'fieldCard_1', 'fieldCard_2', etc.
+        $('#' + id).remove(); // Remove the specific card container
     }
 });
-
