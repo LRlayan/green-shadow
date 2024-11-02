@@ -38,7 +38,6 @@ $(document).ready(function() {
         let uniqueCarouselId = `carousel${Math.floor(Math.random() * 100000)}`;
         let uniqueId = Math.floor(Math.random() * 100);
         let uniqueCardId = `card${uniqueId}`;
-        console.log("unique id:", uniqueCardId);
 
         let newFieldCard = `
         <div id="${uniqueCardId}" class="col-md-6 col-lg-4 mb-4"> <!-- Added uniqueCardId here -->
@@ -267,22 +266,19 @@ function addDropdown(containerId, selectClass, options) {
 $(document).ready(function() {
     // Show the confirmation modal and set the card ID to delete
     $(document).on('click', '.delete-button', function() {
-        const cardId = $(this).data('id'); // Get the ID of the card to delete
-        $('#confirmDeleteButton').data('id', cardId); // Set this ID on the confirm delete button
+        const cardId = $(this).data('id');
+        $('#confirmDeleteButton').data('id', cardId);
         $('#confirmDeleteModal').modal('show');
     });
 
     // Handle the confirmation of the delete action
     $('#confirmDeleteButton').on('click', function() {
-        const cardId = $(this).data('id'); // Get the card ID from the button's data attribute
-        console.log("Deleting card with ID:", cardId);
+        const cardId = $(this).data('id');
         removeFieldCard(cardId);
-
-        // Close the modal
         $('#confirmDeleteModal').modal('hide');
     });
 
     function removeFieldCard(id) {
-        $('#' + id).remove(); // Remove the specific card container
+        $('#' + id).remove();
     }
 });
