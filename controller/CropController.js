@@ -1,46 +1,35 @@
 let cardCount = 0;
-// Function to add field Ids
-    $('#addCropFieldButton').on('click', function() {
-        const cropInput = $('#crop-FieldId');
-        const cropValue = cropInput.val().trim();
-        if (cropValue) {
-            const cropListDiv = $('#fieldList');
-            const cropElement = $('<div></div>').text(cropValue);
-            cropListDiv.append(cropElement);
-            cropInput.val(''); // Clear the input field
-        }
+
+$('#newCropButton').on('click',function (){
+    clearAddModal();
+});
+
+// Handle form submission
+$('#cropForm').on('submit', function (e) {
+    cardCount++;
+    e.preventDefault(); // Prevent form from actually submitting
+
+    // Retrieve form values
+    let cropName = $('#cropName').val();
+    let scientificName = $('#crop-scientificName').val();
+    let category = $('#crop-Category').val();
+    let season = $('#crop-season').val();
+    let fieldIds = []; // Initialize an array to store field IDs
+    let logIds=["L01","L02"];
+
+    // Collect all field IDs from the main select and additional fields
+    $('#crop-FieldId').val() && fieldIds.push($('#crop-FieldId').val()); // Add main select value if not empty
+    $('#additionalField select').each(function () {
+        fieldIds.push($(this).val()); // Collect each additional select value
     });
 
-    $('#newCropButton').on('click',function (){
-        clearAddModal();
-    });
+    // Remove empty values (if any)
+    fieldIds = fieldIds.filter(id => id);
 
-    // Handle form submission
-    $('#cropForm').on('submit', function (e) {
-        cardCount++;
-        e.preventDefault(); // Prevent form from actually submitting
+    let cropImage = $('#previewCropImg').attr('src'); // Use the image preview if available
 
-        // Retrieve form values
-        let cropName = $('#cropName').val();
-        let scientificName = $('#crop-scientificName').val();
-        let category = $('#crop-Category').val();
-        let season = $('#crop-season').val();
-        let fieldIds = []; // Initialize an array to store field IDs
-        let logIds=["L01","L02"];
-
-        // Collect all field IDs from the main select and additional fields
-        $('#crop-FieldId').val() && fieldIds.push($('#crop-FieldId').val()); // Add main select value if not empty
-        $('#additionalField select').each(function () {
-            fieldIds.push($(this).val()); // Collect each additional select value
-        });
-
-        // Remove empty values (if any)
-        fieldIds = fieldIds.filter(id => id);
-
-        let cropImage = $('#previewCropImg').attr('src'); // Use the image preview if available
-
-        // Create new card HTML
-        let newCard = `
+    // Create new card HTML
+    let newCard = `
             <div class="col-md-6 col-lg-4 mb-4" id="card${cardCount}">
                 <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
                     <div class="card-image-container">
@@ -64,22 +53,27 @@ let cardCount = 0;
             </div>
         `;
 
-        // Append the new card to the row container
-        $('#cropCard').append(newCard);
+    // Append the new card to the row container
+    $('#cropCard').append(newCard);
 
-        // Reset the form
-        $('#cropForm')[0].reset();
-        $('#previewCrop').addClass('d-none'); // Hide image preview
-        $('#newCropModal').modal('hide'); // Hide the modal
-    });
+    // Reset the form
+    $('#cropForm')[0].reset();
+    $('#previewCrop').addClass('d-none'); // Hide image preview
+    $('#newCropModal').modal('hide'); // Hide the modal
+});
 
-    $('#cropImageInput').on('click',function (){
-        previewCropImage("#cropImageInput","#previewCropImg");
-    });
+// Function to add dynamic field dropdown in the add modal
+$('#addFieldButton').on('click', function() {
+    addDropdownUpdate('#additionalField', '#crop-FieldId', ["F01", "F02", "F03", "F04", "F05"]);
+});
 
-    $('#updateCropImage').on('click',function (){
-        previewCropImage("#updateCropImage","#updatePreview");
-    });
+$('#cropImageInput').on('click',function (){
+    previewCropImage("#cropImageInput","#previewCropImg");
+});
+
+$('#updateCropImage').on('click',function (){
+    previewCropImage("#updateCropImage","#updatePreview");
+});
 
 // Preview image in modal when file input changes
 function previewCropImage(imageInputId,imgPreviewId){
@@ -96,43 +90,6 @@ function previewCropImage(imageInputId,imgPreviewId){
         }
     });
 }
-
-    // Preview image functionality
-    $('#cropImage').on('change', function () {
-        const [file] = this.files;
-        if (file) {
-            $('#previewCrop').removeClass('d-none').attr('src', URL.createObjectURL(file));
-        }
-    });
-
-    //Add Field
-    // jQuery to add a new dropdown with predefined options and a remove button
-    $('#addFieldButton').on('click', function() {
-        // Create a new div to hold the select and remove button
-        const $fieldContainer = $('<div class="d-flex align-items-center mt-2"></div>');
-
-        // Create a new select element with options
-        const $newSelect = $('<select class="form-control me-2"></select>');
-        const options = ["F01", "F02", "F03", "F04", "F05"];
-        options.forEach(function(optionValue) {
-            $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
-        });
-
-        // Create a remove button
-        const $removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
-
-        // Add click event to remove the field
-        $removeButton.on('click', function() {
-            $fieldContainer.remove(); // Remove this container when clicked
-        });
-
-        // Append select and remove button to the field container
-        $fieldContainer.append($newSelect).append($removeButton);
-
-        // Append the new field container to the additionalStaffField
-        $('#additionalField').append($fieldContainer);
-    });
-
 
 // Handle update button click
 $('#cropCard').on('click', '.update-button', function() {
@@ -154,6 +111,34 @@ $('#cropCard').on('click', '.update-button', function() {
     populateDropdownCrop('#updateFieldId', field, ["F01", "F02", "F03", "F04", "F05"]);
     populateDropdownCrop('#updateLogId', log, ["L01", "L02", "L03", "L04", "L05"]);
 });
+
+// Function to add dynamic field dropdown in the update modal
+$('#addFieldBtnInCropUpdate').on('click', function() {
+    addDropdownUpdate('#additionalFieldInCropUpdate', '#fieldInCropUpdate', ["F01", "F02", "F03", "F04", "F05"]);
+});
+
+// Function to add dynamic Log dropdown in the update modal
+$('#addLogsBtnInCropUpdate').on('click', function() {
+    addDropdownUpdate('#additionalLogInCropUpdate', '#logInCropUpdate', ["L01", "L02", "L03", "L04", "L05"]);
+});
+
+//add additional combo box in update modal
+function addDropdownUpdate(containerId, selectClass, options) {
+    const $container = $('<div class="d-flex align-items-center mt-2"></div>');
+    const $select = $('<select id="optionSelect" class="form-control me-2"></select>').addClass(selectClass);
+
+    // Populate select options
+    options.forEach(option => $select.append(`<option value="${option}">${option}</option>`));
+
+    // Remove button
+    const $removeBtn = $('<button class="btn btn-danger">Remove</button>');
+    $removeBtn.on('click', function() {
+        $container.remove();
+    });
+
+    $container.append($select).append($removeBtn);
+    $(containerId).append($container);
+}
 
 //crop card update
 $('#updateCropModalButton').on('click',function (){
@@ -204,7 +189,12 @@ $('#updateCropModalButton').on('click',function (){
     cropCard.find('.card-FieldId').text(`Field ID: ${updatedCropField.join(', ')}`);
     cropCard.find('.card-logs').text(`Logs: ${updatedCropLogs.join(', ')}`);
     cropCard.find('.image-preview').attr('src', cropImage);
-    $('#updateCropModal').modal('hide'); // Close modal
+
+    $('#updateCropForm')[0].reset();
+    $('#previewCrop').addClass('d-none');
+    $('#additionalLogInCropUpdate').empty();
+    $('#additionalFieldInCropUpdate').empty();
+    $('#updateCropModal').modal('hide');
 });
 
 function populateDropdownCrop(container, selectedValues, options) {
@@ -235,7 +225,6 @@ function populateDropdownCrop(container, selectedValues, options) {
         $(container).append(dropdownWrapper);
     });
 }
-
 
     //delete crop card
     let cardToDelete; // Variable to store the card to be deleted
