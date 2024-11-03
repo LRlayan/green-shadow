@@ -1,19 +1,3 @@
-export function previewLogImage(inputId, previewId) {
-    const input = $(`#${inputId}`)[0];
-    const preview = $(`#${previewId}`);
-
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-
-        reader.onload = function(e) {
-            preview.attr('src', e.target.result);
-            preview.removeClass('d-none'); // Show the image preview
-        };
-
-        reader.readAsDataURL(input.files[0]); // Convert the image file to base64
-    }
-}
-
 $(document).ready(function() {
     // Handle form submission
     $('#addLogButton').on('click', function (e) {
@@ -49,7 +33,7 @@ $(document).ready(function() {
         cropIds = cropIds.filter(id => id);
         staffIds = staffIds.filter(id => id);
 
-        let logImage = $('#previewCropLog').attr('src'); // Preview image 1
+        let logImage = $('#previewCropLogImg').attr('src'); // Preview image 1
 
         let newLogCard = `
                     <div class="col-md-6 col-lg-4 mb-4">
@@ -79,15 +63,15 @@ $(document).ready(function() {
 
         // Reset the form and previews
         $('#logForm')[0].reset();
-        $('#previewCropLog').addClass('d-none');
+        $('#previewCropLogImg').addClass('d-none');
         $('#newMonitoringLogModal').modal('hide');
     });
 
     // Preview image functionality
-    $('#logCropImage').on('change', function () {
+    $('#logCropImageInput').on('change', function () {
         const [file] = this.files;
         if (file) {
-            $('#previewCropLog').removeClass('d-none').attr('src', URL.createObjectURL(file));
+            $('#previewCropLogImg').removeClass('d-none').attr('src', URL.createObjectURL(file));
         }
     });
 
@@ -175,75 +159,27 @@ $(document).ready(function() {
         $('#additionalLogStaff').append($staffContainer);
     });
 
-// Update button click ----------------------------------------------------------------------------------------
-//     $('.card .btn-success').on('click', function () {
-//         // Get the card's current data
-//         const card = $(this).closest('.card');
-//         const logCode = card.find('.card-log-code').text().replace('Log Code:', '').trim();
-//         const logDate = card.find('.card-log-date').text().replace('Log Date:', '').trim();
-//         const logDetails = card.find('.card-log-details').text().replace('Log Details:', '').trim();
-//         const field = card.find('.card-log-fields').text().replace('Field:', '').trim();
-//         const crop = card.find('.card-log-crop').text().replace('Crop:', '').trim();
-//         const staff = card.find('.card-log-staff').text().replace('Staff:', '').trim();
-//
-//         // Set data in modal fields
-//         $('#updateLogCode').val(logCode);
-//         $('#updateLogDate').val(logDate);
-//         $('#updateLog-details').val(logDetails);
-//
-//         // Set field, crop and staff values
-//         const fieldArray = field.split(',');
-//         const cropArray = crop.split(',');
-//         const staffArray = staff.split(',');
-//
-//         $('#updateLogFieldId').empty(); // Clear existing values in field input
-//         $('#updateLogCropId').empty(); // Clear existing values in crop input
-//         $('#updateLogStaffId').empty(); // Clear existing values in staff input
-//
-//         fieldArray.forEach(filedItem => {
-//             $('#updateLogFieldId').append(`<input type="text" class="form-control mb-2" value="${filedItem.trim()}">`);
-//         });
-//
-//         cropArray.forEach(cropItem => {
-//             $('#updateLogCropId').append(`<input type="text" class="form-control mb-2" value="${cropItem.trim()}">`);
-//         });
-//
-//         staffArray.forEach(staffItem => {
-//             $('#updateLogStaffId').append(`<input type="text" class="form-control mb-2" value="${staffItem.trim()}">`);
-//         });
-//
-//
-//         // Show the update modal
-//         const updateModal = new bootstrap.Modal($('#updateMonitoringLogModal')[0]);
-//         updateModal.show();
-//     });
-
-// // Submit update form
-//     $('#updateLogForm').on('submit', function (event) {
-//         event.preventDefault();
-//         // Perform update logic, close modal, etc.
-//
-//         // Close the modal after processing
-//         const updateModal = bootstrap.Modal.getInstance($('#updateMonitoringLogModal')[0]);
-//         updateModal.hide();
-//     });
-
-    //delete modal ----------------------------------------------------------------------------------------
-    let cardToDelete; // Variable to store the card to be deleted
-
-    // Show confirmation modal when the delete button is clicked
-    $('.card .btn-danger').on('click', function() {
-        cardToDelete = $(this).closest('.card'); // Store the card element to be deleted
-        const confirmModal = new bootstrap.Modal($('#confirmLogDeleteModal')[0]);
-        confirmModal.show();
+    $('#cropImageInput').on('click',function (){
+        previewLogImage("#logCropImageInput","#previewCropLogImg");
     });
 
-    // Delete the card if "Yes" is clicked in the confirmation modal
-    $('#confirmLogDeleteButton').on('click', function() {
-        if (cardToDelete) {
-            cardToDelete.remove(); // Remove the card element from the DOM
-            cardToDelete = null; // Reset the variable
-        }
-        $('#confirmLogDeleteModal').modal('hide'); // Hide the confirmation modal
+    $('#updateCropImage').on('click',function (){
+        previewLogImage("#updateLogCropImageInput","#updatePreviewCropLogImg");
     });
+
+    // Preview image in modal when file input changes
+    function previewLogImage(imageInputId,imgPreviewId){
+        $(`${imageInputId}`).on('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $(`${imgPreviewId}`).attr('src', e.target.result).removeClass('d-none').show(); // Remove d-none and display the image
+                };
+                reader.readAsDataURL(file);
+            } else {
+                $(`${imgPreviewId}`).addClass('d-none'); // Hide if no file is selected
+            }
+        });
+    }
 });
