@@ -26,6 +26,7 @@ let cardCount = 0;
         let category = $('#crop-Category').val();
         let season = $('#crop-season').val();
         let fieldIds = []; // Initialize an array to store field IDs
+        let logIds=["L01","L02"];
 
         // Collect all field IDs from the main select and additional fields
         $('#crop-FieldId').val() && fieldIds.push($('#crop-FieldId').val()); // Add main select value if not empty
@@ -40,10 +41,10 @@ let cardCount = 0;
 
         // Create new card HTML
         let newCard = `
-            <div class="col-md-6 col-lg-4 mb-4">
+            <div class="col-md-6 col-lg-4 mb-4" id="card${cardCount}">
                 <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
                     <div class="card-image-container">
-                        <img src="${cropImage}" class="card-img-top" alt="Crop Image">
+                        <img src="${cropImage}" class="card-img-top image-preview" alt="Crop Image">
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">Crop Details</h5>
@@ -53,8 +54,9 @@ let cardCount = 0;
                         <p class="card-category"><strong>Category:</strong> ${category}</p>
                         <p class="card-season"><strong>Crop Season:</strong> ${season}</p>
                         <p class="card-FieldId"><strong>Field ID:</strong> ${fieldIds.join(', ')}</p>
+                        <p class="card-logs"><strong>Logs:</strong> ${logIds.join(', ')}</p>
                         <div class="d-flex justify-content-between">
-                            <button class="btn btn-success flex-grow-1 me-2" data-card-id="card${cardCount}">Update</button>
+                            <button class="btn btn-success flex-grow-1 me-2 update-button" data-card-id="card${cardCount}">Update</button>
                             <button class="btn btn-danger flex-grow-1">Delete</button>
                         </div>
                     </div>
@@ -120,6 +122,57 @@ $('#cropImageInput').on('change', function(event) {
         // Append the new field container to the additionalStaffField
         $('#additionalField').append($fieldContainer);
     });
+
+
+// Handle update button click
+$('#cropCard').on('click', '.update-button', function() {
+    const cardId = $(this).data('card-id');
+    const cropCard = $(`#${cardId}`);
+
+    // Populate modal with card details for updating
+    $('#updateCropName').val(cropCard.find('.card-name').text().replace('Name:', '').trim());
+    $('#updateScientificName').val(cropCard.find('.card-scientific').text().replace('Scientific Name: ', '').trim());
+    $('#updateCategory').val(cropCard.find('.card-category').text().replace('Category: ', ''));
+    $('#updateCropSeason').val(cropCard.find('.card-season').text().replace('Crop Season: ', ''));
+    let field = cropCard.find('.card-FieldId').text().replace('Field ID:', '').trim().split(', ').map(item => item.trim());
+    let log = cropCard.find('.card-logs').text().replace('Logs:', '').trim().split(', ').map(item => item.trim());
+    $('#updatePreview').attr('src', cropCard.find('.image-preview').attr('src')).removeClass('d-none');
+    $('#cropImageInput').val(''); // Clear file input for new upload
+    $('#updateCropModalButton').data('card-id', cardId); // Set action and card ID
+    $('#updateCropModal').modal('show');
+
+    populateDropdownCrop('#updateFieldId', field, ["F01", "F02", "F03", "F04", "F05"]);
+    populateDropdownCrop('#updateLogId', log, ["L01", "L02", "L03", "L04", "L05"]);
+});
+
+function populateDropdownCrop(container, selectedValues, options) {
+    $(container).empty();
+    selectedValues.forEach(value => {
+        // Create a wrapper div for each dropdown and the remove button
+        const dropdownWrapper = $('<div class="dropdown-wrapper mb-3" style="display: flex; align-items: center;"></div>');
+
+        // Create the dropdown
+        const dropdown = $('<select class="form-control me-2"></select>');
+        options.forEach(option => {
+            dropdown.append(`<option value="${option}" ${option.trim() === value ? 'selected' : ''}>${option}</option>`);
+        });
+
+        // Create the remove button
+        const removeButton = $('<button type="button" class="btn btn-danger ml-2">Remove</button>');
+
+        // Add click event to remove the dropdown when the button is clicked
+        removeButton.click(function() {
+            dropdownWrapper.remove();
+        });
+
+        // Append dropdown and remove button to the wrapper
+        dropdownWrapper.append(dropdown);
+        dropdownWrapper.append(removeButton);
+
+        // Append the wrapper to the container
+        $(container).append(dropdownWrapper);
+    });
+}
 
 
     //delete crop card
