@@ -73,19 +73,29 @@ let cardCount = 0;
         $('#newCropModal').modal('hide'); // Hide the modal
     });
 
+    $('#cropImageInput').on('click',function (){
+        previewCropImage("#cropImageInput","#previewCropImg");
+    });
+
+    $('#updateCropImage').on('click',function (){
+        previewCropImage("#updateCropImage","#updatePreview");
+    });
+
 // Preview image in modal when file input changes
-$('#cropImageInput').on('change', function(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            $('#previewCropImg').attr('src', e.target.result).removeClass('d-none').show(); // Remove d-none and display the image
-        };
-        reader.readAsDataURL(file);
-    } else {
-        $('#previewCropImg').addClass('d-none'); // Hide if no file is selected
-    }
-});
+function previewCropImage(imageInputId,imgPreviewId){
+    $(`${imageInputId}`).on('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                $(`${imgPreviewId}`).attr('src', e.target.result).removeClass('d-none').show(); // Remove d-none and display the image
+            };
+            reader.readAsDataURL(file);
+        } else {
+            $(`${imgPreviewId}`).addClass('d-none'); // Hide if no file is selected
+        }
+    });
+}
 
     // Preview image functionality
     $('#cropImage').on('change', function () {
@@ -143,6 +153,58 @@ $('#cropCard').on('click', '.update-button', function() {
 
     populateDropdownCrop('#updateFieldId', field, ["F01", "F02", "F03", "F04", "F05"]);
     populateDropdownCrop('#updateLogId', log, ["L01", "L02", "L03", "L04", "L05"]);
+});
+
+//crop card update
+$('#updateCropModalButton').on('click',function (){
+
+    let cropName = $('#updateCropName').val();
+    let scientificName = $('#updateScientificName').val();
+    let category = $('#updateCategory').val();
+    let season = $('#updateCropSeason').val();
+
+    let updatedCropField = [];
+    $("#updateFieldId select").each(function() {
+        let fieldValue = $(this).val();
+        if (fieldValue) {
+            updatedCropField.push(fieldValue);
+        }
+    });
+
+    // Collect values from all Field dropdowns
+    $('#additionalFieldInCropUpdate select').each(function () {
+        const selectedValue = $(this).val();
+        if (selectedValue) updatedCropField.push(selectedValue);
+    });
+
+    let updatedCropLogs = [];
+    $("#updateLogId select").each(function() {
+        let logValue = $(this).val();
+        if (logValue) {
+            updatedCropLogs.push(logValue);
+        }
+    });
+
+    // Collect values from all Field dropdowns
+    $('#additionalLogInCropUpdate select').each(function () {
+        const selectedValue = $(this).val();
+        if (selectedValue) updatedCropLogs.push(selectedValue);
+    });
+
+    let cropImage = $('#updatePreview').attr('src'); // Use the image preview if available
+
+    // Update existing card details
+    const cardId = $(this).data('card-id'); //update button in card
+    const cropCard = $(`#${cardId}`);
+
+    cropCard.find('.card-name').text(`Name: ${cropName}`);
+    cropCard.find('.card-scientific').text(`Scientific Name: ${scientificName}`);
+    cropCard.find('.card-category').text(`Category: ${category}`);
+    cropCard.find('.card-season').text(`Crop Season: ${season}`);
+    cropCard.find('.card-FieldId').text(`Field ID: ${updatedCropField.join(', ')}`);
+    cropCard.find('.card-logs').text(`Logs: ${updatedCropLogs.join(', ')}`);
+    cropCard.find('.image-preview').attr('src', cropImage);
+    $('#updateCropModal').modal('hide'); // Close modal
 });
 
 function populateDropdownCrop(container, selectedValues, options) {
