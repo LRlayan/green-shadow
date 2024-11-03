@@ -226,26 +226,6 @@ function populateDropdownCrop(container, selectedValues, options) {
     });
 }
 
-// // crop card delete
-// // Show the confirmation modal and set the card ID to delete
-// $(document).ready(function() {
-//     $(document).on('click', '.delete-button', function () {
-//         $('#confirmDeleteButton').data('card-id');
-//         $('#confirmCropDeleteModal').modal('show');
-//     });
-//
-// // Handle the confirmation of the delete action
-//     $('#confirmCropDeleteButton').on('click', function () {
-//         const cardId = $(this).data('card-id');
-//         removeFieldCard(cardId);
-//         $('#confirmCropDeleteModal').modal('hide');
-//     });
-//
-//     function removeFieldCard(id) {
-//         $('#' + id).remove();
-//     }
-// });
-
 // Show the confirmation modal and set the card ID to delete
 $(document).ready(function() {
     $(document).on('click', '.delete-button', function () {
