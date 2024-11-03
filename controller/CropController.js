@@ -46,7 +46,7 @@ $('#cropForm').on('submit', function (e) {
                         <p class="card-logs"><strong>Logs:</strong> ${logIds.join(', ')}</p>
                         <div class="d-flex justify-content-between">
                             <button class="btn btn-success flex-grow-1 me-2 update-button" data-card-id="card${cardCount}">Update</button>
-                            <button class="btn btn-danger flex-grow-1">Delete</button>
+                            <button class="btn btn-danger flex-grow-1 delete-button" data-bs-toggle="modal" data-card-id="card${cardCount}" data-bs-target="#confirmCropDeleteModal">Delete</button>
                         </div>
                     </div>
                 </div>
@@ -226,24 +226,54 @@ function populateDropdownCrop(container, selectedValues, options) {
     });
 }
 
-    //delete crop card
-    let cardToDelete; // Variable to store the card to be deleted
+// // crop card delete
+// // Show the confirmation modal and set the card ID to delete
+// $(document).ready(function() {
+//     $(document).on('click', '.delete-button', function () {
+//         $('#confirmDeleteButton').data('card-id');
+//         $('#confirmCropDeleteModal').modal('show');
+//     });
+//
+// // Handle the confirmation of the delete action
+//     $('#confirmCropDeleteButton').on('click', function () {
+//         const cardId = $(this).data('card-id');
+//         removeFieldCard(cardId);
+//         $('#confirmCropDeleteModal').modal('hide');
+//     });
+//
+//     function removeFieldCard(id) {
+//         $('#' + id).remove();
+//     }
+// });
 
-    // Show confirmation modal when the delete button is clicked
-    $('.card .btn-danger').on('click', function() {
-        cardToDelete = $(this).closest('.card'); // Store the card element to be deleted
-        const confirmModal = new bootstrap.Modal($('#confirmCropDeleteModal')[0]);
-        confirmModal.show();
+// Show the confirmation modal and set the card ID to delete
+$(document).ready(function() {
+    $(document).on('click', '.delete-button', function () {
+        // Get the card ID from the delete button and set it on the confirm delete button
+        const cardId = $(this).data('card-id');
+        $('#confirmCropDeleteButton').data('card-id', cardId);
+        $('#confirmCropDeleteModal').modal('show');
     });
 
-    // Delete the card if "Yes" is clicked in the confirmation modal
-    $('#confirmCropDeleteButton').on('click', function() {
-        if (cardToDelete) {
-            cardToDelete.remove(); // Remove the card element from the DOM
-            cardToDelete = null; // Reset the variable
-        }
-        $('#confirmCropDeleteModal').modal('hide'); // Hide the confirmation modal
+    // Handle the confirmation of the delete action
+    $('#confirmCropDeleteButton').on('click', function () {
+        const cardId = $(this).data('card-id');
+        removeFieldCard(cardId);
+
+        // Hide the modal after deleting
+        $('#confirmCropDeleteModal').modal('hide');
     });
+
+    // Ensure the modal and backdrop are fully removed when hidden (overlay)
+    $('#confirmCropDeleteModal').on('hidden.bs.modal', function () {
+        $('body').removeClass('modal-open'); // Removes the modal-open class from body
+        $('.modal-backdrop').remove();       // Removes the leftover backdrop element
+    });
+
+    function removeFieldCard(id) {
+        $('#' + id).remove();
+    }
+});
 
 function clearAddModal(){
     $('#cropName, #crop-scientificName, #crop-Category,#crop-season').val(''); // Clear input fields
