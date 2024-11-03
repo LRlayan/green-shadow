@@ -75,90 +75,6 @@ $(document).ready(function() {
         }
     });
 
-    //Add Crop Combo Box
-    // jQuery to add a new dropdown with predefined options and a remove button
-    $('#addLogCropButton').on('click', function() {
-        // Create a new div to hold the select and remove button
-        const $cropContainer = $('<div class="d-flex align-items-center mt-2"></div>');
-
-        // Create a new select element with options
-        const $newSelect = $('<select class="form-control me-2"></select>');
-        const options = ["C01", "C02", "C03", "C04", "C05"];
-        options.forEach(function(optionValue) {
-            $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
-        });
-
-        // Create a remove button
-        const $removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
-
-        // Add click event to remove the field
-        $removeButton.on('click', function() {
-            $cropContainer.remove(); // Remove this container when clicked
-        });
-
-        // Append select and remove button to the field container
-        $cropContainer.append($newSelect).append($removeButton);
-
-        // Append the new field container to the additionalStaffField
-        $('#additionalLogCrop').append($cropContainer);
-    });
-
-    //Add Field Combo Box
-    // jQuery to add a new dropdown with predefined options and a remove button
-    $('#addLogFieldButton').on('click', function() {
-        // Create a new div to hold the select and remove button
-        const $fieldContainer = $('<div class="d-flex align-items-center mt-2"></div>');
-
-        // Create a new select element with options
-        const $newSelect = $('<select class="form-control me-2"></select>');
-        const options = ["F01", "F02", "F03", "F04", "F05"];
-        options.forEach(function(optionValue) {
-            $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
-        });
-
-        // Create a remove button
-        const $removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
-
-        // Add click event to remove the field
-        $removeButton.on('click', function() {
-            $fieldContainer.remove(); // Remove this container when clicked
-        });
-
-        // Append select and remove button to the field container
-        $fieldContainer.append($newSelect).append($removeButton);
-
-        // Append the new field container to the additionalLogField
-        $('#additionalLogField').append($fieldContainer);
-    });
-
-    //Add staff Combo Box
-    // jQuery to add a new dropdown with predefined options and a remove button
-    $('#addLogStaffButton').on('click', function() {
-        // Create a new div to hold the select and remove button
-        const $staffContainer = $('<div class="d-flex align-items-center mt-2"></div>');
-
-        // Create a new select element with options
-        const $newSelect = $('<select class="form-control me-2"></select>');
-        const options = ["S01", "S02", "S03", "S04", "S05"];
-        options.forEach(function(optionValue) {
-            $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
-        });
-
-        // Create a remove button
-        const $removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
-
-        // Add click event to remove the field
-        $removeButton.on('click', function() {
-            $staffContainer.remove(); // Remove this container when clicked
-        });
-
-        // Append select and remove button to the field container
-        $staffContainer.append($newSelect).append($removeButton);
-
-        // Append the new field container to the additionalLogField
-        $('#additionalLogStaff').append($staffContainer);
-    });
-
     $('#cropImageInput').on('click',function (){
         previewLogImage("#logCropImageInput","#previewCropLogImg");
     });
@@ -181,5 +97,38 @@ $(document).ready(function() {
                 $(`${imgPreviewId}`).addClass('d-none'); // Hide if no file is selected
             }
         });
+    }
+
+    // Function to add dynamic staff field dropdown in the add modal
+    $('#addLogStaffButton').on('click', function() {
+        addDropdownLogs('#additionalLogStaff', '#log-staffId', ["S01", "S02", "S03", "S04", "S05"]);
+    });
+
+    // Function to add dynamic field dropdown in the add modal
+    $('#addLogFieldButton').on('click', function() {
+        addDropdownLogs('#additionalLogField', '#log-filedId', ["F01", "F02", "F03", "F04", "F05"]);
+    });
+
+    // Function to add dynamic field dropdown in the add modal
+    $('#addLogCropButton').on('click', function() {
+        addDropdownLogs('#additionalLogCrop', '#log-cropId', ["C01", "C02", "C03", "C04", "C05"]);
+    });
+
+    //add additional combo box in add modal
+    function addDropdownLogs(containerId, selectClass, options) {
+        const $container = $('<div class="d-flex align-items-center mt-2"></div>');
+        const $select = $('<select id="optionSelect" class="form-control me-2"></select>').addClass(selectClass);
+
+        // Populate select options
+        options.forEach(option => $select.append(`<option value="${option}">${option}</option>`));
+
+        // Remove button
+        const $removeBtn = $('<button class="btn btn-danger">Remove</button>');
+        $removeBtn.on('click', function() {
+            $container.remove();
+        });
+
+        $container.append($select).append($removeBtn);
+        $(containerId).append($container);
     }
 });
