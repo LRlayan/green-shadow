@@ -1,4 +1,4 @@
-$(document).ready(function() {
+let cardCount = 0;
 // Function to add field Ids
     $('#addCropFieldButton').on('click', function() {
         const cropInput = $('#crop-FieldId');
@@ -11,9 +11,13 @@ $(document).ready(function() {
         }
     });
 
+    $('#newCropButton').on('click',function (){
+        clearAddModal();
+    });
 
     // Handle form submission
     $('#cropForm').on('submit', function (e) {
+        cardCount++;
         e.preventDefault(); // Prevent form from actually submitting
 
         // Retrieve form values
@@ -32,31 +36,31 @@ $(document).ready(function() {
         // Remove empty values (if any)
         fieldIds = fieldIds.filter(id => id);
 
-        let cropImage = $('#previewCrop').attr('src'); // Use the image preview if available
+        let cropImage = $('#previewCropImg').attr('src'); // Use the image preview if available
 
         // Create new card HTML
         let newCard = `
-        <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
-                <div class="card-image-container">
-                    <img src="${cropImage}" class="card-img-top" alt="Crop Image">
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">Crop Details</h5>
-                    <p class="card-cropCode"><strong>Code:</strong> C${Math.floor(Math.random() * 100)}</p>
-                    <p class="card-name"><strong>Name:</strong> ${cropName}</p>
-                    <p class="card-scientific"><strong>Scientific Name:</strong> ${scientificName}</p>
-                    <p class="card-category"><strong>Category:</strong> ${category}</p>
-                    <p class="card-season"><strong>Crop Season:</strong> ${season}</p>
-                    <p class="card-FieldId"><strong>Field ID:</strong> ${fieldIds.join(', ')}</p>
-                    <div class="d-flex justify-content-between">
-                        <button class="btn btn-success flex-grow-1 me-2">Update</button>
-                        <button class="btn btn-danger flex-grow-1">Delete</button>
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
+                    <div class="card-image-container">
+                        <img src="${cropImage}" class="card-img-top" alt="Crop Image">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Crop Details</h5>
+                        <p class="card-cropCode"><strong>Code:</strong> C${Math.floor(Math.random() * 100)}</p>
+                        <p class="card-name"><strong>Name:</strong> ${cropName}</p>
+                        <p class="card-scientific"><strong>Scientific Name:</strong> ${scientificName}</p>
+                        <p class="card-category"><strong>Category:</strong> ${category}</p>
+                        <p class="card-season"><strong>Crop Season:</strong> ${season}</p>
+                        <p class="card-FieldId"><strong>Field ID:</strong> ${fieldIds.join(', ')}</p>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-success flex-grow-1 me-2" data-card-id="card${cardCount}">Update</button>
+                            <button class="btn btn-danger flex-grow-1">Delete</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    `;
+        `;
 
         // Append the new card to the row container
         $('#cropCard').append(newCard);
@@ -66,6 +70,20 @@ $(document).ready(function() {
         $('#previewCrop').addClass('d-none'); // Hide image preview
         $('#newCropModal').modal('hide'); // Hide the modal
     });
+
+// Preview image in modal when file input changes
+$('#cropImageInput').on('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            $('#previewCropImg').attr('src', e.target.result).removeClass('d-none').show(); // Remove d-none and display the image
+        };
+        reader.readAsDataURL(file);
+    } else {
+        $('#previewCropImg').addClass('d-none'); // Hide if no file is selected
+    }
+});
 
     // Preview image functionality
     $('#cropImage').on('change', function () {
@@ -122,5 +140,11 @@ $(document).ready(function() {
         }
         $('#confirmCropDeleteModal').modal('hide'); // Hide the confirmation modal
     });
-});
+
+function clearAddModal(){
+    $('#cropName, #crop-scientificName, #crop-Category,#crop-season').val(''); // Clear input fields
+    $('#previewCropImg').hide().attr('src', ''); // Reset image preview
+    $('#cropImageInput').val(''); // Clear file input
+    $('#additionalField').empty(); // Clear file input
+}
 
