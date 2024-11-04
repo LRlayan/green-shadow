@@ -1,4 +1,9 @@
 $(document).ready(function() {
+
+    $('#newButton').on('click',function (){
+        clearModel('#logDate','#log-details','previewCropLogImg','#logCropImageInput','#additionalLogStaff','#additionalLogCrop','#additionalLogField')
+    });
+
     // Handle form submission
     $('#addLogButton').on('click', function (e) {
         e.preventDefault(); // Prevent form from actually submitting
@@ -130,5 +135,12 @@ $(document).ready(function() {
 
         $container.append($select).append($removeBtn);
         $(containerId).append($container);
+    }
+
+    function clearModel(logDate,logDetail,previewImage,imageInput,additionalStaffField,additionalCropField,additionalLogField){
+        $(`${logDate},${logDetail}`).val('');
+        $(`${previewImage}`).hide().attr('src', '');
+        $(`${imageInput}`).val('');
+        $(`${additionalStaffField},${additionalCropField},${additionalLogField}`).empty();
     }
 });
