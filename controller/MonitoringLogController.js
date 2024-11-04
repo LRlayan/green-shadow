@@ -1,7 +1,15 @@
 $(document).ready(function() {
 
     $('#newButton').on('click',function (){
-        clearModel('#logDate','#log-details','previewCropLogImg','#logCropImageInput','#additionalLogStaff','#additionalLogCrop','#additionalLogField')
+        clearModel('#logDate','#log-details','previewCropLogImg','#logCropImageInput','#additionalLogStaff','#additionalLogCrop','#additionalLogField');
+    });
+
+    $('#logCard').on('click','.update-button',function (){
+
+    });
+
+    $('#updateLogModalButton').on('click',function (){
+        clearModel('#updateLogDate','#updateLog-details','#updatePreviewCropLogImg','#updateLogCropImageInput','#additionalLogStaffUpdate','#additionalLogsCropUpdate','#additionalLogFieldUpdate');
     });
 
     // Handle form submission
@@ -55,7 +63,7 @@ $(document).ready(function() {
                                 <p class="card-log-crop"><strong>Crop:</strong>${cropIds.join(', ')}</p>
                                 <p class="card-log-staff"><strong>Staff:</strong>${staffIds.join(', ')}</p>
                                 <div class="d-flex justify-content-between">
-                                    <button class="btn btn-success flex-grow-1 me-2">Update</button>
+                                    <button class="btn btn-success flex-grow-1 me-2 update-button">Update</button>
                                     <button class="btn btn-danger flex-grow-1">Delete</button>
                                 </div>
                             </div>
