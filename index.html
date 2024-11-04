@@ -1111,18 +1111,23 @@
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <!-- Field Ids -->
+                                            <!-- Field IDs -->
                                             <div class="col-md-6">
                                                 <div class="d-flex justify-content-between align-items-center mb-2">
-                                                    <label for="log-filedIdUpdate" class="form-label">Fields</label>
-                                                    <button type="button" class="btn btn-success" id="addLogFieldButtonUpdate">Add Fields</button>
+                                                    <label for="fieldInLogUpdate" class="form-label">Crops</label>
+                                                    <button type="button" class="btn btn-success" id="addFieldBtnInLogUpdate">Assign New Fields</button>
                                                 </div>
-                                                <div id="initialLogFiledUpdate" class="input-group">
-                                                    <select id="log-filedIdUpdate" class="form-control mt-2">
+                                                <!-- Initial dropdown with predefined options -->
+                                                <div id="initialFieldInLogUpdate" class="input-group">
+                                                    <select id="fieldInLogUpdate" class="form-control mt-2">
                                                         <option value="">Select Field</option>
                                                     </select>
                                                 </div>
-                                                <div id="additionalLogFieldUpdate" class="mt-2"></div> <!-- Container for dynamic log inputs -->
+                                                <!-- Container for additional dynamic dropdowns -->
+                                                <div id="additionalFieldInLogUpdate" class="mt-2"></div>
+                                                <div class="mb-3 mt-3" id="updateFieldInLogContainer">
+                                                    <div id="updateLogFieldId"></div> <!-- fields container for dynamic inputs -->
+                                                </div>
                                             </div>
                                             <!-- Crops Ids -->
                                             <div class="col-md-6">
@@ -1130,12 +1135,16 @@
                                                     <label for="log-cropIdUpdate" class="form-label">Crops</label>
                                                     <button type="button" class="btn btn-success" id="addLogCropButtonUpdate">Assign New Crop</button>
                                                 </div>
+                                                <!-- Initial dropdown with predefined options -->
                                                 <div id="initialLogCropsUpdate" class="input-group">
                                                     <select id="log-cropIdUpdate" class="form-control mt-2">
                                                         <option value="">Select Crop</option>
                                                     </select>
                                                 </div>
                                                 <div id="additionalLogsCropUpdate" class="mt-2"></div> <!-- Container for dynamic log inputs -->
+                                                <div class="mb-3 mt-3" id="updatedLogInCropContainer">
+                                                    <div id="updateLogInCropId"></div> <!-- fields container for dynamic inputs -->
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -1151,6 +1160,9 @@
                                                     </select>
                                                 </div>
                                                 <div id="additionalLogStaffUpdate" class="mt-2"></div> <!-- Container for dynamic log inputs -->
+                                                <div class="mb-3 mt-3" id="updatedLogInStaffContainer">
+                                                    <div id="updateLogInStaffId"></div> <!-- fields container for dynamic inputs -->
+                                                </div>
                                             </div>
                                             <!--Monitoring Log Image -->
                                             <div class="col-md-6">
