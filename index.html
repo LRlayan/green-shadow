@@ -1113,28 +1113,44 @@
                                         <div class="row mb-3">
                                             <!-- Field Ids -->
                                             <div class="col-md-6">
-                                                <div class="mb-3" id="updateLogFieldContainer">
-                                                    <label class="form-label">Fields</label>
-                                                    <div id="updateLogFieldId"></div> <!-- fields container for dynamic inputs -->
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <label for="log-filedIdUpdate" class="form-label">Fields</label>
+                                                    <button type="button" class="btn btn-success" id="addLogFieldButtonUpdate">Add Fields</button>
                                                 </div>
+                                                <div id="initialLogFiledUpdate" class="input-group">
+                                                    <select id="log-filedIdUpdate" class="form-control mt-2">
+                                                        <option value="">Select Field</option>
+                                                    </select>
+                                                </div>
+                                                <div id="additionalLogFieldUpdate" class="mt-2"></div> <!-- Container for dynamic log inputs -->
                                             </div>
                                             <!-- Crops Ids -->
                                             <div class="col-md-6">
-                                                <div class="mb-3" id="updateLogCropContainer">
-                                                    <label class="form-label">Crops</label>
-                                                    <div id="updateLogCropId"></div> <!-- crops container for dynamic inputs -->
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <label for="log-cropIdUpdate" class="form-label">Crops</label>
+                                                    <button type="button" class="btn btn-success" id="addLogCropButtonUpdate">Assign New Crop</button>
                                                 </div>
+                                                <div id="initialLogCropsUpdate" class="input-group">
+                                                    <select id="log-cropIdUpdate" class="form-control mt-2">
+                                                        <option value="">Select Crop</option>
+                                                    </select>
+                                                </div>
+                                                <div id="additionalLogsCropUpdate" class="mt-2"></div> <!-- Container for dynamic log inputs -->
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <!-- Staff Ids -->
                                             <div class="col-md-6">
-                                                <div class="col-md-6">
-                                                    <div class="mb-3" id="updateLogStaffContainer">
-                                                        <label class="form-label">Staff</label>
-                                                        <div id="updateLogStaffId"></div> <!-- staff Id container for dynamic inputs -->
-                                                    </div>
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <label for="log-staffIdUpdate" class="form-label">Add Member</label>
+                                                    <button type="button" class="btn btn-success" id="addLogStaffButtonUpdate">Assign New Member</button>
                                                 </div>
+                                                <div id="initialLogStaffUpdate" class="input-group">
+                                                    <select id="log-staffIdUpdate" class="form-control mt-2">
+                                                        <option value="">Select Crop</option>
+                                                    </select>
+                                                </div>
+                                                <div id="additionalLogStaffUpdate" class="mt-2"></div> <!-- Container for dynamic log inputs -->
                                             </div>
                                             <!--Monitoring Log Image -->
                                             <div class="col-md-6">
@@ -1147,7 +1163,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-success" form="cropForm">Update Logs</button>
+                                    <button type="submit" id="updateLogModalButton" class="btn btn-success" form="cropForm">Update Logs</button>
                                 </div>
                             </div>
                         </div>
