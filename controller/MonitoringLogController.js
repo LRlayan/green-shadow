@@ -58,7 +58,7 @@ $(document).ready(function() {
                                 <p class="card-log-staff"><strong>Staff:</strong>${staffIds.join(', ')}</p>
                                 <div class="d-flex justify-content-between">
                                     <button class="btn btn-success flex-grow-1 me-2 update-button" data-card-id="card${cardCount}">Update</button>
-                                    <button class="btn btn-danger flex-grow-1">Delete</button>
+                                    <button class="btn btn-danger flex-grow-1 delete-button" data-card-id="card${cardCount}">Delete</button>
                                 </div>
                             </div>
                         </div>
@@ -164,9 +164,37 @@ $(document).ready(function() {
         $('#additionalLogsCropUpdate').empty();
         $('#additionalLogStaffUpdate').empty();
 
-        // clearModel('#updateLogDate','#updateLog-details','#updatePreviewCropLogImg','#updateLogCropImageInput','#additionalLogStaffUpdate','#additionalLogsCropUpdate','#additionalFieldInLogUpdate');
         $('#updateMonitoringLogModal').modal('hide');
     });
+
+    // DELETE LOG CARD
+    $(document).on('click', '.delete-button', function () {
+        // Get the card ID from the delete button and set it on the confirm delete button
+        const cardId = $(this).data('card-id');
+        $('#confirmLogDeleteButton').data('card-id', cardId);
+        $('#confirmLogDeleteModal').modal('show');
+    });
+
+    // Handle the confirmation of the delete action
+    $('#confirmLogDeleteButton').on('click', function () {
+        const cardId = $(this).data('card-id');
+        removeFieldCard(cardId);
+
+        // Hide the modal after deleting
+        $('#confirmLogDeleteModal').modal('hide');
+    });
+
+    // Ensure the modal and backdrop are fully removed when hidden (overlay)
+    $('#confirmLogDeleteModal').on('hidden.bs.modal', function () {
+        $('body').removeClass('modal-open'); // Removes the modal-open class from body
+        $('.modal-backdrop').remove();       // Removes the leftover backdrop element
+    });
+
+    function removeFieldCard(id) {
+        $('#' + id).remove();
+    }
+
+
     function populateDropdownLog(container, selectedValues, options) {
         $(container).empty();
         selectedValues.forEach(value => {
