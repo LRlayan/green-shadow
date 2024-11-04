@@ -92,13 +92,80 @@ $(document).ready(function() {
         $('#updateMonitoringLogModal').modal('show');
 
         populateDropdownLog('#updateLogFieldId', field, ["F01", "F02", "F03", "F04", "F05"]);
-        populateDropdownLog('#updateLogInCropId', staff, ["S01", "S02", "S03", "S04", "S05"]);
-        populateDropdownLog('#updateLogInStaffId', crop, ["C01", "C02", "C03", "C04", "C05"]);
+        populateDropdownLog('#updateLogInCropId', crop, ["C01", "C02", "C03", "C04", "C05"]);
+        populateDropdownLog('#updateLogInStaffId', staff, ["S01", "S02", "S03", "S04", "S05"]);
     });
 
     //UPDATE LOG CARD
     $('#updateLogModalButton').on('click',function (){
-        clearModel('#updateLogDate','#updateLog-details','#updatePreviewCropLogImg','#updateLogCropImageInput','#additionalLogStaffUpdate','#additionalLogsCropUpdate','#additionalFieldInLogUpdate');
+        let logDate = $('#updateLogDate').val();
+        let logDetails = $('#updateLog-details').val();
+
+        //field
+        let updatedLogField = [];
+        $('#updateLogFieldId select').each(function() {
+            let fieldValue = $(this).val();
+            if (fieldValue) {
+                updatedLogField.push(fieldValue);
+            }
+        });
+
+        // Collect values from all Field dropdowns
+        $('#additionalFieldInLogUpdate select').each(function () {
+            const selectedValue = $(this).val();
+            if (selectedValue) updatedLogField.push(selectedValue);
+        });
+
+        //crop
+        let updatedCropLogs = [];
+        $('#updateLogInCropId select').each(function() {
+            let fieldValue = $(this).val();
+            if (fieldValue) {
+                updatedCropLogs.push(fieldValue);
+            }
+        });
+
+        // Collect values from all Field dropdowns
+        $('#additionalLogsCropUpdate select').each(function () {
+            const selectedValue = $(this).val();
+            if (selectedValue) updatedCropLogs.push(selectedValue);
+        });
+
+        //staff
+        let updatedStaffLogs = [];
+        $('#updateLogInStaffId select').each(function() {
+            let fieldValue = $(this).val();
+            if (fieldValue) {
+                updatedStaffLogs.push(fieldValue);
+            }
+        });
+
+        // Collect values from all Field dropdowns
+        $('#additionalLogStaffUpdate select').each(function () {
+            const selectedValue = $(this).val();
+            if (selectedValue) updatedStaffLogs.push(selectedValue);
+        });
+
+        let logImage = $('#updatePreviewCropLogImg').attr('src');
+        // Update existing card details
+        const cardId = $(this).data('card-id'); //update button in card
+        const cropCard = $(`#${cardId}`);
+
+        cropCard.find('.card-log-date').text(`Log Date: ${logDate}`);
+        cropCard.find('.card-log-details').text(`Log Details: ${logDetails}`);
+        cropCard.find('.card-log-fields').text(`Field: ${updatedLogField.join(', ')}`);
+        cropCard.find('.card-log-staff').text(`Staff: ${updatedStaffLogs.join(', ')}`);
+        cropCard.find('.card-log-crop').text(`Crop: ${updatedCropLogs.join(', ')}`);
+        cropCard.find('.image-preview').attr('src', logImage);
+
+        $('#updateLogForm')[0].reset();
+        $('#updatePreviewCropLogImg').addClass('d-none');
+        $('#additionalFieldInLogUpdate').empty();
+        $('#additionalLogsCropUpdate').empty();
+        $('#additionalLogStaffUpdate').empty();
+
+        // clearModel('#updateLogDate','#updateLog-details','#updatePreviewCropLogImg','#updateLogCropImageInput','#additionalLogStaffUpdate','#additionalLogsCropUpdate','#additionalFieldInLogUpdate');
+        $('#updateMonitoringLogModal').modal('hide');
     });
     function populateDropdownLog(container, selectedValues, options) {
         $(container).empty();
