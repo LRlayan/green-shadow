@@ -1,19 +1,13 @@
+let cardCount = 0;
 $(document).ready(function() {
 
     $('#newButton').on('click',function (){
         clearModel('#logDate','#log-details','previewCropLogImg','#logCropImageInput','#additionalLogStaff','#additionalLogCrop','#additionalLogField');
     });
 
-    $('#logCard').on('click','.update-button',function (){
-
-    });
-
-    $('#updateLogModalButton').on('click',function (){
-        clearModel('#updateLogDate','#updateLog-details','#updatePreviewCropLogImg','#updateLogCropImageInput','#additionalLogStaffUpdate','#additionalLogsCropUpdate','#additionalLogFieldUpdate');
-    });
-
     // Handle form submission
     $('#addLogButton').on('click', function (e) {
+        cardCount++;
         e.preventDefault(); // Prevent form from actually submitting
 
         // Retrieve form values
@@ -46,13 +40,13 @@ $(document).ready(function() {
         cropIds = cropIds.filter(id => id);
         staffIds = staffIds.filter(id => id);
 
-        let logImage = $('#previewCropLogImg').attr('src'); // Preview image 1
+        let logImage = $('#previewCropLogImg').attr('src');
 
         let newLogCard = `
-                    <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="col-md-6 col-lg-4 mb-4" id="card${cardCount}">
                         <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
                             <div class="card-image-container">
-                                <img src="${logImage}" class="card-img-top" alt="log Image">
+                                <img src="${logImage}" class="card-img-top image-preview" alt="log Image">
                             </div>
                             <div class="card-body">
                                 <h5 class="card-title">Log Details</h5>
@@ -63,7 +57,7 @@ $(document).ready(function() {
                                 <p class="card-log-crop"><strong>Crop:</strong>${cropIds.join(', ')}</p>
                                 <p class="card-log-staff"><strong>Staff:</strong>${staffIds.join(', ')}</p>
                                 <div class="d-flex justify-content-between">
-                                    <button class="btn btn-success flex-grow-1 me-2 update-button">Update</button>
+                                    <button class="btn btn-success flex-grow-1 me-2 update-button" data-card-id="card${cardCount}">Update</button>
                                     <button class="btn btn-danger flex-grow-1">Delete</button>
                                 </div>
                             </div>
@@ -80,19 +74,78 @@ $(document).ready(function() {
         $('#newMonitoringLogModal').modal('hide');
     });
 
-    // Preview image functionality
-    $('#logCropImageInput').on('change', function () {
-        const [file] = this.files;
-        if (file) {
-            $('#previewCropLogImg').removeClass('d-none').attr('src', URL.createObjectURL(file));
-        }
+    //SET DATA FOR UPDATE MODAL AFTER CLICK CARD UPDATE BUTTON
+    $('#logCard').on('click','.update-button',function (){
+        const cardId = $(this).data('card-id');
+        const cropCard = $(`#${cardId}`);
+
+        // Populate modal with card details for updating
+        $('#updateLogDate').val(cropCard.find('.card-log-date').text().replace('Log Date:', '').trim());
+        $('#updateLog-details').val(cropCard.find('.card-log-details').text().replace('Log Details:', ''));
+        let field = cropCard.find('.card-log-fields').text().replace('Field:', '').trim().split(', ').map(item => item.trim());
+        let staff = cropCard.find('.card-log-staff').text().replace('Staff:', '').trim().split(', ').map(item => item.trim());
+        let crop = cropCard.find('.card-log-crop').text().replace('Crop:', '').trim().split(', ').map(item => item.trim());
+        $('#updatePreviewCropLogImg').attr('src', cropCard.find('.image-preview').attr('src')).removeClass('d-none');
+
+        $('#updateLogCropImageInput').val(''); // Clear file input for new upload
+        $('#updateLogModalButton').data('card-id', cardId); // Set card ID
+        $('#updateMonitoringLogModal').modal('show');
+
+        populateDropdownLog('#updateLogFieldId', field, ["F01", "F02", "F03", "F04", "F05"]);
+        populateDropdownLog('#updateLogInCropId', staff, ["S01", "S02", "S03", "S04", "S05"]);
+        populateDropdownLog('#updateLogInStaffId', crop, ["C01", "C02", "C03", "C04", "C05"]);
     });
 
-    $('#cropImageInput').on('click',function (){
+    //UPDATE LOG CARD
+    $('#updateLogModalButton').on('click',function (){
+        clearModel('#updateLogDate','#updateLog-details','#updatePreviewCropLogImg','#updateLogCropImageInput','#additionalLogStaffUpdate','#additionalLogsCropUpdate','#additionalFieldInLogUpdate');
+    });
+    function populateDropdownLog(container, selectedValues, options) {
+        $(container).empty();
+        selectedValues.forEach(value => {
+            // Create a wrapper div for each dropdown and the remove button
+            const dropdownWrapper = $('<div class="dropdown-wrapper mb-3" style="display: flex; align-items: center;"></div>');
+
+            // Create the dropdown
+            const dropdown = $('<select class="form-control me-2"></select>');
+            options.forEach(option => {
+                dropdown.append(`<option value="${option}" ${option.trim() === value ? 'selected' : ''}>${option}</option>`);
+            });
+
+            // Create the remove button
+            const removeButton = $('<button type="button" class="btn btn-danger ml-2">Remove</button>');
+
+            // Add click event to remove the dropdown when the button is clicked
+            removeButton.click(function() {
+                dropdownWrapper.remove();
+            });
+
+            // Append dropdown and remove button to the wrapper
+            dropdownWrapper.append(dropdown);
+            dropdownWrapper.append(removeButton);
+
+            // Append the wrapper to the container
+            $(container).append(dropdownWrapper);
+        });
+    }
+
+    $('#addFieldBtnInLogUpdate').on('click',function (){
+        addDropdownLogs("#additionalFieldInLogUpdate","#fieldInLogUpdate",["F01", "F02", "F03", "F04","F05"]);
+    });
+
+    $('#addLogCropButtonUpdate').on('click',function (){
+        addDropdownLogs("#additionalLogsCropUpdate","#log-cropIdUpdate",["C01", "C02", "C03", "C04","C05"]);
+    });
+
+    $('#addLogStaffButtonUpdate').on('click',function (){
+        addDropdownLogs("#additionalLogStaffUpdate","#log-staffIdUpdate",["S01", "S02", "S03", "S04","S05"]);
+    });
+
+    $('#logCropImageInput').on('click',function (){
         previewLogImage("#logCropImageInput","#previewCropLogImg");
     });
 
-    $('#updateCropImage').on('click',function (){
+    $('#updateLogCropImageInput').on('click',function (){
         previewLogImage("#updateLogCropImageInput","#updatePreviewCropLogImg");
     });
 
