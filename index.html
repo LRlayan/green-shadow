@@ -209,14 +209,14 @@
                                         <div class="row mb-3">
                                             <!-- Field Image 1 -->
                                             <div class="col-md-6">
-                                                <label for="fieldImage1" class="form-label">Field Image 1</label>
-                                                <input type="file" class="form-control" id="fieldImage1" accept="image/*" onchange="previewImage('fieldImage1', 'preview1')">
+                                                <label for="fieldImage1Input" class="form-label">Field Image 1</label>
+                                                <input type="file" class="form-control" id="fieldImage1Input" accept="image/*">
                                                 <img id="preview1" src="#" alt="Image Preview 1" class="img-fluid mt-2 d-none" style="max-height: 150px;">
                                             </div>
                                             <!-- Field Image 2 -->
                                             <div class="col-md-6">
-                                                <label for="fieldImage2" class="form-label">Field Image 2</label>
-                                                <input type="file" class="form-control" id="fieldImage2" accept="image/*" onchange="previewImage('fieldImage2', 'preview2')">
+                                                <label for="fieldImage2Input" class="form-label">Field Image 2</label>
+                                                <input type="file" class="form-control" id="fieldImage2Input" accept="image/*">
                                                 <img id="preview2" src="#" alt="Image Preview 2" class="img-fluid mt-2 d-none" style="max-height: 150px;">
                                             </div>
                                         </div>
@@ -324,12 +324,12 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label for="updateFieldImage1" class="form-label">Field Image 1</label>
-                                                <input type="file" class="form-control" id="updateFieldImage1" onchange="previewImage('updateFieldImage1', 'updatePreview1')" accept="image/*">
+                                                <input type="file" class="form-control" id="updateFieldImage1" accept="image/*">
                                                 <img id="updatePreview1" src="#" alt="Preview Image 1" class="img-fluid mt-2 d-none" style="max-height: 150px;">
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="updateFieldImage2" class="form-label">Field Image 2</label>
-                                                <input type="file" class="form-control" id="updateFieldImage2" onchange="previewImage('updateFieldImage2', 'updatePreview2')" accept="image/*">
+                                                <input type="file" class="form-control" id="updateFieldImage2" accept="image/*">
                                                 <img id="updatePreview2" src="#" alt="Preview Image 2" class="img-fluid mt-2 d-none" style="max-height: 150px;">
                                             </div>
                                         </div>
@@ -1670,21 +1670,4 @@
 <script type="module" src="controller/StaffController.js"></script>
 <script type="module" src="controller/VehicleController.js"></script>
 <script type="module" src="controller/EquipmentController.js"></script>
-<script>
-    function previewImage(inputId, previewId) {
-        const input = $(`#${inputId}`)[0];
-        const preview = $(`#${previewId}`);
-
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-                preview.attr('src', e.target.result);
-                preview.removeClass('d-none'); // Show the image preview
-            };
-
-            reader.readAsDataURL(input.files[0]); // Convert the image file to base64
-        }
-    }
-</script>
 </html>
