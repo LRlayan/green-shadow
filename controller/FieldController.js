@@ -1,9 +1,11 @@
 let fieldCode = 0;
+let cardCount = 0;
 
 $(document).ready(function() {
 
     // add field card(save)
     $('#fieldForm').on('submit', function (e) {
+        cardCount++;
         e.preventDefault(); // Prevent form from actually submitting
 
         // Retrieve form values
@@ -40,15 +42,15 @@ $(document).ready(function() {
         let uniqueCardId = `card${uniqueId}`;
 
         let newFieldCard = `
-        <div id="${uniqueCardId}" class="col-md-6 col-lg-4 mb-4"> <!-- Added uniqueCardId here -->
+        <div id="${cardCount}" class="col-md-6 col-lg-4 mb-4">
             <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
                 <div id="${uniqueCarouselId}" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img src="${fieldImage1}" id="image1" class="d-block w-100 fixed-image" alt="Field Image 1">
+                        <div id="img1" class="carousel-item active">
+                            <img src="${fieldImage1}" id="image1" class="d-block w-100 fixed-image image-preview" alt="Field Image 1">
                         </div>
-                        <div class="carousel-item">
-                            <img src="${fieldImage2}" id="image2" class="d-block w-100 fixed-image" alt="Field Image 2">
+                        <div id="img2" class="carousel-item">
+                            <img src="${fieldImage2}" id="image2" class="d-block w-100 fixed-image image-preview" alt="Field Image 2">
                         </div>            
                     </div>
                     <button class="carousel-control-prev" type="button" data-bs-target="#${uniqueCarouselId}" data-bs-slide="prev">
@@ -70,8 +72,8 @@ $(document).ready(function() {
                     <p class="card-staff"><strong>Staff:</strong> ${staffIds.join(', ')}</p>
                     <p class="card-log"><strong>Log:</strong> ${logIds.join(', ')}</p>
                     <div class="d-flex justify-content-between">
-                        <button type="button" id="cardUpdateButton" class="btn btn-success flex-grow-1 me-2" data-bs-toggle="modal" data-bs-target="#updateFieldModal">Update</button>
-                        <button type="button" class="btn btn-danger flex-grow-1 delete-button" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-id="${uniqueCardId}">Delete</button>
+                        <button type="button" id="cardUpdateButton" class="btn btn-success flex-grow-1 me-2 update-button"  data-card-id="card${cardCount}">Update</button>
+                        <button type="button" class="btn btn-danger flex-grow-1 delete-button delete-button" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-card-id="card${cardCount}">Delete</button>
                     </div>
                 </div>                            
             </div> 
@@ -105,6 +107,7 @@ $(document).ready(function() {
     $('#addFieldStaffButton').on('click', function() {
         addDropdown('#additionalStaff', 'filed-staffId', ["S01", "S02", "S03", "S04", "S05"]);
     });
+    clearFieldForm();
 });
 
 // Update Field Card Modal setup
@@ -122,7 +125,6 @@ $(document).on('click', '#cardUpdateButton', function () {
     $('#updateFieldName').val(fieldName);
     $('#updateFieldLocation').val(location);
     $('#updateExtentSize').val(extentSize);
-
 
     // Populate dropdowns with multiple selections
     populateDropdown('#updateFieldCropId', crop, ["C01", "C02", "C03", "C04", "C05"]);
@@ -237,9 +239,13 @@ $("#updateFieldButton").on("click", function() {
     $('.card-staff').html(`<strong>Staff:</strong> ${updatedStaff}`);
     $('.card-log').html(`<strong>Log:</strong> ${updatedLogs}`);
 
-    $('#image1').attr('src',fieldImage1);
-    $('#image2').attr('src',fieldImage2);
+    let img1 = $('#img1 img').attr('id');
+    let img2 = $('#img2 img').attr('id');
 
+    $("#" + img1).attr('src', fieldImage1);
+    $("#" + img2).attr('src', fieldImage2);
+
+    clearUpdateFieldForm();
     // Close the modal after updating
     $("#updateFieldModal").modal("hide");
 });
@@ -282,3 +288,35 @@ $(document).ready(function() {
         $('#' + id).remove();
     }
 });
+
+// Function to clear the update field form
+function clearUpdateFieldForm() {
+    // Clear text inputs
+    $('#updateFieldName').val('');
+    $('#updateFieldLocation').val('');
+    $('#updateExtentSize').val('');
+
+    // Reset dropdowns to the first option
+    $('#fieldCropUpdate').prop('selectedIndex', 0);
+    $('#staffCropUpdate').prop('selectedIndex', 0);
+    $('#logCropUpdate').prop('selectedIndex', 0);
+
+    // Clear additional dynamic dropdowns if they exist
+    $('#additionalFieldCropUpdate').empty();
+    $('#additionalStaffCropUpdate').empty();
+    $('#additionalLogCropUpdate').empty();
+}
+
+function clearFieldForm() {
+    $('#fieldName').val('');
+    $('#fieldLocation').val('');
+    $('#extentSize').val('');
+    $('#filed-staffId').prop('selectedIndex', 0);
+    $('#filed-cropId').prop('selectedIndex', 0);
+    $('#additionalStaff').empty();
+    $('#additionalCrop').empty();
+    $('#fieldImage1').val('');
+    $('#fieldImage2').val('');
+    $('#preview1').addClass('d-none').attr('src', '');
+    $('#preview2').addClass('d-none').attr('src', '');
+}
