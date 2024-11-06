@@ -90,14 +90,6 @@ $(document).ready(function() {
         $('#newFieldModal').modal('hide'); // Hide the modal
     });
 
-    // Preview image functionality
-    $('#fieldImage2').on('change', function () {
-        const [file] = this.files;
-        if (file) {
-            $('#preview2').removeClass('d-none').attr('src', URL.createObjectURL(file));
-        }
-    });
-
     // Add Additional Crop Combo box
     $('#addFieldCropButton').on('click', function() {
         addDropdown('#additionalCrop', 'filed-cropId', ["C01", "C02", "C03", "C04", "C05"]);
@@ -289,6 +281,30 @@ $(document).ready(function() {
     }
 });
 
+$('#fieldImage1Input').on('click',function (){
+    previewFieldImage('#fieldImage1Input','#preview1')
+});
+
+$('#fieldImage2Input').on('click',function (){
+    previewFieldImage('#fieldImage2Input','#preview2')
+});
+
+// Preview image in modal when file input changes
+function previewFieldImage(imageInputId,imgPreviewId){
+    $(`${imageInputId}`).on('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                $(`${imgPreviewId}`).attr('src', e.target.result).removeClass('d-none').show(); // Remove d-none and display the image
+            };
+            reader.readAsDataURL(file);
+        } else {
+            $(`${imgPreviewId}`).addClass('d-none'); // Hide if no file is selected
+        }
+    });
+}
+
 // Function to clear the update field form
 function clearUpdateFieldForm() {
     // Clear text inputs
@@ -315,8 +331,8 @@ function clearFieldForm() {
     $('#filed-cropId').prop('selectedIndex', 0);
     $('#additionalStaff').empty();
     $('#additionalCrop').empty();
-    $('#fieldImage1').val('');
-    $('#fieldImage2').val('');
+    $('#fieldImage1Input').val('');
+    $('#fieldImage2Input').val('');
     $('#preview1').addClass('d-none').attr('src', '');
     $('#preview2').addClass('d-none').attr('src', '');
 }
