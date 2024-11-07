@@ -14,8 +14,8 @@ $('#addStaffButton').on('click', function() {
 });
 
 //save equipment
-$('#addEquipmentButton').on('click',()=>{
-    event.preventDefault();
+$('#addEquipmentButton').on('click',(e)=>{
+    e.preventDefault();
 
     // Collect form data
     let equipmentName = $("#equipmentName").val();
@@ -45,7 +45,6 @@ $('#addEquipmentButton').on('click',()=>{
     equipmentDetails.push(equipmentDetail);
     loadEquipmentTable();
     clearEquipmentModalFields("#equipmentName","#equipmentType","#equipmentStatus","#count","#initialStaff select","#initialEquipment select","#additionalEquipmentStaff","#additionalEquipmentField");
-    $()
 });
 
 function loadEquipmentTable(){
