@@ -186,6 +186,25 @@ $('#confirmEquDeleteNo').on('click',()=>{
     $('#confirmEquipmentDeleteModal').modal('hide'); // Hide the modal
 });
 
+// Listen for the modal to be shown
+$('#equipment-modal').on('show.bs.modal', function (event) {
+    // Get the button that triggered the modal
+    var button = $(event.relatedTarget);
+
+    // Check if the data-action is 'add'
+    if (button.data('action') === 'add') {
+        // Clear the form inputs
+        $('#equipmentForm')[0].reset();
+        resetForm("#additionalEquipmentStaff", "#additionalEquipmentField");
+    }
+});
+
+function resetForm(additionalInput1,additionalInput2){
+    $('#equipmentForm')[0].reset();
+    $(`${additionalInput1}`).empty();
+    $(`${additionalInput2}`).empty();
+}
+
 function addDropdownEquipment(containerId, selectClass, options) {
     const $container = $('<div class="d-flex align-items-center mt-2"></div>');
     const $select = $('<select id="optionSelect" class="form-control me-2"></select>').addClass(selectClass);
