@@ -93,7 +93,12 @@ $(document).ready(function () {
         const index = $(this).data('index'); // Get the stored index
         vehicleDetails.splice(index, 1); // Remove the vehicle from the array
         loadVehicleTable(); // Refresh the table
-        $('#confirmVehicleDeleteModal').modal('hide'); // Hide the modal
+        $('#confirmVehicleDeleteModal').modal('hide');
+        // Ensure the modal and backdrop are fully removed when hidden (overlay)
+        $('#confirmVehicleDeleteModal').on('hidden.bs.modal', function () {
+            $('body').removeClass('modal-open'); // Removes the modal-open class from body
+            $('.modal-backdrop').remove();       // Removes the leftover backdrop element
+        });
     });
 
     //No button
