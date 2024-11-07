@@ -108,13 +108,28 @@ $(document).ready(function () {
     // Handle the form submission for updating vehicle details
     $('#modalSubmitButtonUpdate').on('click', ()=> {
         // Collect form data
-            let licensePlateNumber = $("#updateLicensePlateNumber").val();
-            let vehicleName = $("#updateVehicleName").val();
-            let category = $("#updateCategoryVehicle").val();
-            let fuelType = $("#updateFuelType").val();
-            let status = $("#updateStatus").val();
-            let staffMember = $("#updateStaffMember").val();
-            let remark = $("#updateRemark").val();
+        let licensePlateNumber = $("#updateLicensePlateNumber").val();
+        let vehicleName = $("#updateVehicleName").val();
+        let category = $("#updateCategoryVehicle").val();
+        let fuelType = $("#updateFuelType").val();
+        let status = $("#updateStatus").val();
+        let staffMember = $("#updateStaffMember").val();
+        let remark = $("#updateRemark").val();
+
+        // Collect updated staff values
+        let updatedStaffVehicle = [];
+        $("#updateStaffVehicle select").each(function() {
+            let staffValue = $(this).val();
+            if (staffValue) {
+                updatedStaffVehicle.push(staffValue);
+            }
+        });
+
+        // Collect values from all Staff Member dropdowns
+        $('#additionalVehicleStaffUpdate select').each(function () {
+            const selectedValue = $(this).val();
+            if (selectedValue) updatedStaffVehicle.push(selectedValue);
+        });
 
         let vehicle = vehicleDetails[clickTableRow];
         vehicle.licensePlateNumber = licensePlateNumber;
@@ -122,7 +137,7 @@ $(document).ready(function () {
         vehicle.category = category;
         vehicle.fuelType = fuelType;
         vehicle.status = status;
-        vehicle.staffMember = staffMember;
+        vehicle.staffMember = updatedStaffVehicle;
         vehicle.remark = remark;
         loadVehicleTable();
     });
