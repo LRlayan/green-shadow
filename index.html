@@ -1314,12 +1314,22 @@
                                                     <label for="status" class="form-label" style="margin-left: 0;">Status</label>
                                                 </div>
                                             </div>
-                                            <!-- Staff Member -->
+                                        </div>
+                                        <div class="row mb-3">
+                                            <!-- add staff -->
                                             <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="staffMember" class="form-control">
-                                                    <label for="staffMember" class="form-label" style="margin-left: 0;">Staff Member</label>
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <label for="staff-vehicle" class="form-label">Staff Member</label>
+                                                    <button type="button" class="btn btn-success" id="addVehicleStaffButton">Assign New Member</button>
                                                 </div>
+                                                <!-- Initial dropdown with predefined options -->
+                                                <div id="initialVehicleStaff" class="input-group">
+                                                    <select id="staff-vehicle" class="form-control mt-2">
+                                                        <option value="">Select Staff Member</option>
+                                                    </select>
+                                                </div>
+                                                <!-- Container for additional dynamic dropdowns -->
+                                                <div id="additionalVehicleStaff" class="mt-2"></div>
                                             </div>
                                         </div>
                                         <div class="mb-3">
