@@ -81,8 +81,8 @@ $('#equipmentDetailsTable').on('click', 'tr', function () {
     clickTableRow = $(this).index();
 
     // Split multiple values in "staffMember" and "fields" columns
-    let staffMemberArray = $(this).find(".staffMember").text().split(","); // Assuming comma-separated
-    let fieldsArray = $(this).find(".fields").text().split(","); // Assuming comma-separated
+    let staffMemberArray = $(this).find(".staffMember").text().split(", "); // Assuming comma-separated
+    let fieldsArray = $(this).find(".fields").text().split(", "); // Assuming comma-separated
 
     // Populate the modal fields with values from the row
     $('#equipmentNameUpdate').val(name);
@@ -104,7 +104,7 @@ $('#EquipmentButtonUpdate').on('click', () => {
 
     // Collect updated staff values
     let updatedStaffEquipment = [];
-    $("#updateStaffEquipment input").each(function() {
+    $("#updateStaffEquipment select").each(function() {
         let staffValue = $(this).val();
         if (staffValue) {
             updatedStaffEquipment.push(staffValue);
@@ -113,7 +113,7 @@ $('#EquipmentButtonUpdate').on('click', () => {
 
     // Collect updated field values
     let updatedFieldEquipment = [];
-    $("#updateEquipmentFieldId input").each(function() {
+    $("#updateEquipmentFieldId select").each(function() {
         let fieldValue = $(this).val();
         if (fieldValue) {
             updatedFieldEquipment.push(fieldValue);
