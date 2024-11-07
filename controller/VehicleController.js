@@ -4,8 +4,8 @@ $(document).ready(function () {
     let clickTableRow = 0;
 
     //save vehicle
-    $("#modalSubmitButton").on("click", ()=> {
-        event.preventDefault(); // Prevent form submission
+    $("#modalSubmitButton").on("click", (e)=> {
+        e.preventDefault(); // Prevent form submission
 
         // Collect form data
         let licensePlateNumber = $("#licensePlateNumber").val();
@@ -13,7 +13,6 @@ $(document).ready(function () {
         let category = $("#category").val();
         let fuelType = $("#fuelType").val();
         let status = $("#status").val();
-        let staffMember = $("#staffMember").val();
         let remark = $("#remark").val();
 
         // Collect multiple staff values
@@ -29,9 +28,7 @@ $(document).ready(function () {
         vehicleDetails.push(vehicleDetail);
         loadVehicleTable(); // Refresh the table with updated data
 
-        // Reset form and close modal
-        this.reset();
-        $("#vehicle-modal").modal("hide");
+        $('#vehicle-modal').modal("hide");
     });
 
     //load data to vehicle table

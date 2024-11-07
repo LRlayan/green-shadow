@@ -45,6 +45,7 @@ $('#addEquipmentButton').on('click',()=>{
     equipmentDetails.push(equipmentDetail);
     loadEquipmentTable();
     clearEquipmentModalFields("#equipmentName","#equipmentType","#equipmentStatus","#count","#initialStaff select","#initialEquipment select","#additionalEquipmentStaff","#additionalEquipmentField");
+    $()
 });
 
 function loadEquipmentTable(){
@@ -143,9 +144,9 @@ $('#EquipmentButtonUpdate').on('click', () => {
 
     // Reload the equipment table to reflect updated data
     loadEquipmentTable();
-    clearEquipmentModalFields("#equipmentNameUpdate","#equipmentTypeUpdate","#equipmentStatusUpdate","#countUpdate","#initialFieldEquipmentUpdate select","#initialStaffEquUpdate select","#additionalStaffEquUpdate","#additionalFieldEquipmentUpdate");
-
     // Close the modal after updating
+
+    clearEquipmentModalFields("#equipmentNameUpdate","#equipmentTypeUpdate","#equipmentStatusUpdate","#countUpdate","#initialFieldEquipmentUpdate select","#initialStaffEquUpdate select","#additionalStaffEquUpdate","#additionalFieldEquipmentUpdate");
     $('#updateEquipment-modal').modal('hide');
 });
 
