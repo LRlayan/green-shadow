@@ -68,6 +68,10 @@ function loadEquipmentTable(){
 
 // Assuming your table rows are in tbody with id "EquipmentDetailsTable"
 $('#equipmentDetailsTable').on('click', 'tr', function () {
+    // Clear any existing inputs in the modal's dynamic dropdowns
+    $('#additionalStaffEquUpdate').empty();
+    $('#additionalFieldEquipmentUpdate').empty();
+
     // Get values from the selected row
     let name = $(this).find(".name").text();
     let type = $(this).find(".vehicleType").text();
@@ -86,37 +90,8 @@ $('#equipmentDetailsTable').on('click', 'tr', function () {
     $('#equipmentStatusUpdate').val(status);
     $('#countUpdate').val(count);
 
-    // Clear any existing inputs in the modal's dynamic dropdowns
-    $('#updateEquipmentFieldId').empty();
-    $('#updateStaffEquipment').empty();
-
-    // Create input fields for each field ID in fieldsArray
-    fieldsArray.forEach(field => {
-        const fieldContainer = $('<div class="d-flex align-items-center mb-2"></div>');
-        const fieldInput = $(`<input type="text" class="form-control me-2" value="${field.trim()}">`);
-        const removeButton = $('<button class="btn btn-danger">Remove</button>');
-
-        removeButton.on('click', function () {
-            fieldContainer.remove(); // Remove field input and button when "Remove" is clicked
-        });
-
-        fieldContainer.append(fieldInput, removeButton);
-        $('#updateEquipmentFieldId').append(fieldContainer);
-    });
-
-    // Create input fields for each staff member in staffMemberArray
-    staffMemberArray.forEach(staff => {
-        const staffContainer = $('<div class="d-flex align-items-center mb-2"></div>');
-        const staffInput = $(`<input type="text" class="form-control me-2" value="${staff.trim()}">`);
-        const removeButton = $('<button class="btn btn-danger">Remove</button>');
-
-        removeButton.on('click', function () {
-            staffContainer.remove(); // Remove staff input and button when "Remove" is clicked
-        });
-
-        staffContainer.append(staffInput, removeButton);
-        $('#updateStaffEquipment').append(staffContainer);
-    });
+    populateDropdownEquipment("#updateEquipmentFieldId",fieldsArray,["F01", "F02", "F03", "F04", "F05"]);
+    populateDropdownEquipment("#updateStaffEquipment",staffMemberArray,["S01", "S02", "S03", "S04", "S05"]);
 });
 
 // Update equipment
@@ -222,6 +197,34 @@ function addDropdownEquipment(containerId, selectClass, options) {
     $(containerId).append($container);
 }
 
+function populateDropdownEquipment(container, selectedValues, options) {
+    $(container).empty();
+    selectedValues.forEach(value => {
+        // Create a wrapper div for each dropdown and the remove button
+        const dropdownWrapper = $('<div class="dropdown-wrapper mb-3" style="display: flex; align-items: center;"></div>');
+
+        // Create the dropdown
+        const dropdown = $('<select class="form-control me-2"></select>');
+        options.forEach(option => {
+            dropdown.append(`<option value="${option}" ${option.trim() === value ? 'selected' : ''}>${option}</option>`);
+        });
+
+        // Create the remove button
+        const removeButton = $('<button type="button" class="btn btn-danger ml-2">Remove</button>');
+
+        // Add click event to remove the dropdown when the button is clicked
+        removeButton.click(function() {
+            dropdownWrapper.remove();
+        });
+
+        // Append dropdown and remove button to the wrapper
+        dropdownWrapper.append(dropdown);
+        dropdownWrapper.append(removeButton);
+
+        // Append the wrapper to the container
+        $(container).append(dropdownWrapper);
+    });
+}
 
 // Function to clear the equipment modal input fields
 function clearEquipmentModalFields(equipmentName,equipmentType,equipmentStatus,count,initialStaff,initialEquipment,additionalEquipmentStaff,additionalEquipmentField) {
