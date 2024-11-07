@@ -272,7 +272,7 @@
                                                 <!-- Initial dropdown with predefined options -->
                                                 <div id="initialFieldCropUpdate" class="input-group">
                                                     <select id="fieldCropUpdate" class="form-control mt-2">
-                                                        <option value="">Select Field</option>
+                                                        <option value="">Select Crop</option>
                                                     </select>
                                                 </div>
                                                 <!-- Container for additional dynamic dropdowns -->
@@ -323,13 +323,13 @@
                                         <!-- Images -->
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <label for="updateFieldImage1" class="form-label">Field Image 1</label>
-                                                <input type="file" class="form-control" id="updateFieldImage1" accept="image/*">
+                                                <label for="updateFieldImage1Input" class="form-label">Field Image 1</label>
+                                                <input type="file" class="form-control" id="updateFieldImage1Input" accept="image/*">
                                                 <img id="updatePreview1" src="#" alt="Preview Image 1" class="img-fluid mt-2 d-none" style="max-height: 150px;">
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="updateFieldImage2" class="form-label">Field Image 2</label>
-                                                <input type="file" class="form-control" id="updateFieldImage2" accept="image/*">
+                                                <label for="updateFieldImage2Input" class="form-label">Field Image 2</label>
+                                                <input type="file" class="form-control" id="updateFieldImage2Input" accept="image/*">
                                                 <img id="updatePreview2" src="#" alt="Preview Image 2" class="img-fluid mt-2 d-none" style="max-height: 150px;">
                                             </div>
                                         </div>
@@ -519,10 +519,30 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <!-- Staff IDs -->
+                                            <div class="col-md-6">
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <label for="logInStaffUpdate" class="form-label">Logs</label>
+                                                    <button type="button" class="btn btn-success" id="addStaffBtnInCropUpdate">Assign New Logs</button>
+                                                </div>
+                                                <!-- Initial dropdown with predefined options -->
+                                                <div id="initialFieldInStaffUpdate" class="input-group">
+                                                    <select id="logInStaffUpdate" class="form-control mt-2">
+                                                        <option value="">Select Field</option>
+                                                    </select>
+                                                </div>
+                                                <!-- Container for additional dynamic dropdowns -->
+                                                <div id="additionalLogInStaffUpdate" class="mt-2"></div>
+                                                <div class="mb-3 mt-3" id="updateLogInStaffContainer">
+                                                    <div id="updateStaffId"></div> <!-- fields container for dynamic inputs -->
+                                                </div>
+                                            </div>
+                                        </div>
                                         <!-- Crop Images -->
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <label for="updateFieldImage1" class="form-label">Crop Image</label>
+                                                <label for="updateCropImage" class="form-label">Crop Image</label>
                                                 <input type="file" class="form-control" id="updateCropImage" accept="image/*">
                                                 <img id="updatePreview" alt="Preview Image 1" class="img-fluid mt-2 d-none" style="max-height: 150px;">
                                             </div>
@@ -531,7 +551,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" id="updateCropModalButton" class="btn btn-success" form="updateFieldForm">Update Crop</button>
+                                    <button type="submit" id="updateFieldModalButton" class="btn btn-success" form="updateFieldForm">Update Field</button>
                                 </div>
                             </div>
                         </div>
