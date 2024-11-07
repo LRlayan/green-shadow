@@ -16,7 +16,16 @@ $(document).ready(function () {
         let staffMember = $("#staffMember").val();
         let remark = $("#remark").val();
 
-        let vehicleDetail = new Vehicle(licensePlateNumber,vehicleName,category,fuelType,status,staffMember,remark);
+        // Collect multiple staff values
+        let staffEquipment = [];
+        $("#additionalVehicleStaff select").each(function() {
+            let staffValue = $(this).val();
+            if (staffValue) {
+                staffEquipment.push(staffValue);
+            }
+        });
+
+        let vehicleDetail = new Vehicle(licensePlateNumber,vehicleName,category,fuelType,status,staffEquipment,remark);
         vehicleDetails.push(vehicleDetail);
         loadVehicleTable(); // Refresh the table with updated data
 
@@ -40,7 +49,7 @@ $(document).ready(function () {
                     <td class="category">${vehicle.category}</td>
                     <td class="fuelType">${vehicle.fuelType}</td>
                     <td class="status">${vehicle.status}</td>
-                    <td class="staffMember">${vehicle.staffMember}</td>
+                    <td class="staffMember">${vehicle.staffMember.join(', ')}</td>
                     <td class="remark">${vehicle.remark}</td>
                     <td><button class="btn btn-danger delete-button" data-index="${index}">Delete</button></td>
                 </tr>
@@ -118,6 +127,57 @@ $(document).ready(function () {
         vehicle.remark = remark;
         loadVehicleTable();
     });
+
+    //Add Staff Modal
+    $('#addVehicleStaffButton').on('click', function() {
+        addDropdownVehicle("#additionalVehicleStaff","#staff-vehicle",["S01", "S02", "S03", "S04", "S05"])
+    });
+
+    function addDropdownVehicle(containerId, selectClass, options) {
+        const $container = $('<div class="d-flex align-items-center mt-2"></div>');
+        const $select = $('<select id="optionSelect" class="form-control me-2"></select>').addClass(selectClass);
+
+        // Populate select options
+        options.forEach(option => $select.append(`<option value="${option}">${option}</option>`));
+
+        // Remove button
+        const $removeBtn = $('<button class="btn btn-danger">Remove</button>');
+        $removeBtn.on('click', function() {
+            $container.remove();
+        });
+
+        $container.append($select).append($removeBtn);
+        $(containerId).append($container);
+    }
+
+    function populateDropdownEquipment(container, selectedValues, options) {
+        $(container).empty();
+        selectedValues.forEach(value => {
+            // Create a wrapper div for each dropdown and the remove button
+            const dropdownWrapper = $('<div class="dropdown-wrapper mb-3" style="display: flex; align-items: center;"></div>');
+
+            // Create the dropdown
+            const dropdown = $('<select class="form-control me-2"></select>');
+            options.forEach(option => {
+                dropdown.append(`<option value="${option}" ${option.trim() === value ? 'selected' : ''}>${option}</option>`);
+            });
+
+            // Create the remove button
+            const removeButton = $('<button type="button" class="btn btn-danger ml-2">Remove</button>');
+
+            // Add click event to remove the dropdown when the button is clicked
+            removeButton.click(function() {
+                dropdownWrapper.remove();
+            });
+
+            // Append dropdown and remove button to the wrapper
+            dropdownWrapper.append(dropdown);
+            dropdownWrapper.append(removeButton);
+
+            // Append the wrapper to the container
+            $(container).append(dropdownWrapper);
+        });
+    }
 });
 
 
