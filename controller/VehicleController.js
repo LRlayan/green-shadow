@@ -27,7 +27,7 @@ $(document).ready(function () {
         let vehicleDetail = new Vehicle(licensePlateNumber,vehicleName,category,fuelType,status,staffEquipment,remark);
         vehicleDetails.push(vehicleDetail);
         loadVehicleTable(); // Refresh the table with updated data
-
+        $('#additionalVehicleStaff').empty();
         $('#vehicle-modal').modal("hide");
     });
 
@@ -57,6 +57,7 @@ $(document).ready(function () {
 
     // Assuming your table rows are in tbody with id "vehicleDetailsTable"
     $('#vehicleDetailsTable').on('click', 'tr', function () {
+        $('#additionalVehicleStaffUpdate').empty();
         // Get values from the row
         let licensePlateNumber = $(this).find(".licensePlateNumber").text()
         let vehicleName = $(this).find(".vehicleName").text()
@@ -140,7 +141,14 @@ $(document).ready(function () {
         vehicle.staffMember = updatedStaffVehicle;
         vehicle.remark = remark;
         loadVehicleTable();
+        resetForm('#additionalVehicleStaffUpdate');
+        $('#updateVehicle-modal').modal("hide");
     });
+
+    function resetForm(additionalField) {
+        $('#updateVehicleForm')[0].reset();
+        $(`${additionalField}`).empty();
+    }
 
     //Add additional Staff Modal
     $('#addVehicleStaffButton').on('click', function() {
@@ -197,6 +205,18 @@ $(document).ready(function () {
             $(container).append(dropdownWrapper);
         });
     }
+
+    $('#vehicle-modal').on('show.bs.modal', function (event) {
+        // Get the button that triggered the modal
+        var button = $(event.relatedTarget);
+
+        // Check if the data-action is 'add'
+        if (button.data('action') === 'add') {
+            // Clear the form inputs
+            $('#equipmentForm')[0].reset();
+            resetForm("#additionalVehicleStaff");
+        }
+    });
 });
 
 
