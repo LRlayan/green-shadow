@@ -1353,7 +1353,7 @@
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content" style="background-color: #2b2b2b;">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="updateModalTitle">Update Vehicle</h5>
+                                    <h5 class="modal-title text-white" id="updateModalTitle">Update Vehicle</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
                                 </div>
                                 <div class="modal-body p-4">
@@ -1362,14 +1362,14 @@
                                         <div class="row mb-3">
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="updateLicensePlateNumber" class="form-control">
+                                                    <input type="text" id="updateLicensePlateNumber" class="form-control text-white">
                                                     <label for="updateLicensePlateNumber" class="form-label" style="margin-left: 0;">License Plate Number</label>
                                                 </div>
                                             </div>
                                             <!-- Vehicle Name -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="updateVehicleName" class="form-control">
+                                                    <input type="text" id="updateVehicleName" class="form-control text-white">
                                                     <label for="updateVehicleName" class="form-label" style="margin-left: 0;">Vehicle Name</label>
                                                 </div>
                                             </div>
@@ -1378,7 +1378,7 @@
                                             <!-- Category -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="updateCategoryVehicle" class="form-control" >
+                                                    <input type="text" id="updateCategoryVehicle" class="form-control text-white" >
                                                     <label for="updateCategoryVehicle" class="form-label" style="margin-left: 0;">Category</label>
                                                     <div class="form-notch">
                                                         <div class="form-notch-leading" style="width: 9px;"></div>
@@ -1390,7 +1390,7 @@
                                             <!-- Fuel Type -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="updateFuelType" class="form-control">
+                                                    <input type="text" id="updateFuelType" class="form-control text-white">
                                                     <label for="updateFuelType" class="form-label" style="margin-left: 0;">Fuel Type</label>
                                                 </div>
                                             </div>
@@ -1399,22 +1399,35 @@
                                             <!-- Status -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="updateStatus" class="form-control">
+                                                    <input type="text" id="updateStatus" class="form-control text-white">
                                                     <label for="updateStatus" class="form-label" style="margin-left: 0;">Status</label>
                                                 </div>
                                             </div>
-                                            <!-- Staff Member -->
+                                        </div>
+                                        <div class="mb-3">
+                                            <!-- add staff -->
                                             <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="updateStaffMember" class="form-control">
-                                                    <label for="updateStaffMember" class="form-label" style="margin-left: 0;">Staff Member</label>
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <label for="staff-vehicleUpdate" class="form-label">Staff Member</label>
+                                                    <button type="button" class="btn btn-success" id="addVehicleStaffButtonUpdate">Assign New Member</button>
+                                                </div>
+                                                <!-- Initial dropdown with predefined options -->
+                                                <div id="initialVehicleStaffUpdate" class="input-group">
+                                                    <select id="staff-vehicleUpdate" class="form-control mt-2">
+                                                        <option value="">Select Staff Member</option>
+                                                    </select>
+                                                </div>
+                                                <!-- Container for additional dynamic dropdowns -->
+                                                <div id="additionalVehicleStaffUpdate" class="mt-2"></div>
+                                                <div class="mb-3 mt-3" id="updateStaffMemberVehicleContainer">
+                                                    <div id="updateStaffVehicle"></div> <!-- fields container for dynamic inputs -->
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="mb-3">
                                             <!-- Remark -->
                                             <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                <input type="text" id="updateRemark" class="form-control">
+                                                <input type="text" id="updateRemark" class="form-control text-white">
                                                 <label for="updateRemark" class="form-label" style="margin-left: 0;">Remark</label>
                                             </div>
                                         </div>
