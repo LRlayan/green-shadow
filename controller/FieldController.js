@@ -89,8 +89,16 @@ $(document).ready(function() {
         $('#newFieldModal').modal('hide'); // Hide the modal
         clearFieldForm();
     });
-    // Add Additional Crop Combo box
 
+    $('#fieldImage1Input').on('click',function (){
+        previewFieldImage('#fieldImage1Input','#preview1')
+    });
+
+    $('#fieldImage2Input').on('click',function (){
+        previewFieldImage('#fieldImage2Input','#preview2')
+    });
+
+    // Add Additional Crop Combo box
     $('#addFieldCropButton').on('click', function() {
         addDropdown('#additionalCrop', 'filed-cropId', ["C01", "C02", "C03", "C04", "C05"]);
     });
@@ -271,33 +279,33 @@ function addDropdown(containerId, selectClass, options) {
 }
 
 //delete Field card
-$(document).ready(function() {
-    // Show the confirmation modal and set the card ID to delete
-    $(document).on('click', '.delete-button', function() {
-        const cardId = $(this).data('id');
-        $('#confirmDeleteButton').data('id', cardId);
-        $('#confirmDeleteModal').modal('show');
+    $(document).ready(function() {
+        $(document).on('click', '.delete-button', function () {
+            // Get the card ID from the delete button and set it on the confirm delete button
+            const cardId = $(this).data('card-id');
+            $('#confirmDeleteButton').data('card-id', cardId);
+            $('#confirmDeleteModal').modal('show');
+        });
+
+        // Handle the confirmation of the delete action
+        $('#confirmDeleteButton').on('click', function () {
+            const cardId = $(this).data('card-id');
+            removeFieldCard(cardId);
+
+            // Hide the modal after deleting
+            $('#confirmDeleteModal').modal('hide');
+        });
+
+        // Ensure the modal and backdrop are fully removed when hidden (overlay)
+        $('#confirmDeleteModal').on('hidden.bs.modal', function () {
+            $('body').removeClass('modal-open'); // Removes the modal-open class from body
+            $('.modal-backdrop').remove();       // Removes the leftover backdrop element
+        });
+
+        function removeFieldCard(id) {
+            $('#' + id).remove();
+        }
     });
-
-    // Handle the confirmation of the delete action
-    $('#confirmDeleteButton').on('click', function() {
-        const cardId = $(this).data('id');
-        removeFieldCard(cardId);
-        $('#confirmDeleteModal').modal('hide');
-    });
-
-    function removeFieldCard(id) {
-        $('#' + id).remove();
-    }
-});
-
-$('#fieldImage1Input').on('click',function (){
-    previewFieldImage('#fieldImage1Input','#preview1')
-});
-
-$('#fieldImage2Input').on('click',function (){
-    previewFieldImage('#fieldImage2Input','#preview2')
-});
 
 // Preview image in modal when file input changes
 function previewFieldImage(imageInputId,imgPreviewId){
