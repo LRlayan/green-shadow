@@ -3,60 +3,14 @@ import {equipmentDetails} from "../db/db.js"
 
 let clickTableRow = 0;
 
-//Add Field
-// jQuery to add a new dropdown with predefined options and a remove button
+//Add Field Modal
 $('#addFieldButtonEquipment').on('click', function() {
-    // Create a new div to hold the select and remove button
-    const $fieldContainer = $('<div class="d-flex align-items-center mt-2"></div>');
-
-    // Create a new select element with options
-    const $newSelect = $('<select class="form-control me-2"></select>');
-    const options = ["F01", "F02", "F03", "F04", "F05"];
-    options.forEach(function(optionValue) {
-        $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
-    });
-
-    // Create a remove button
-    const $removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
-
-    // Add click event to remove the field
-    $removeButton.on('click', function() {
-        $fieldContainer.remove(); // Remove this container when clicked
-    });
-
-    // Append select and remove button to the field container
-    $fieldContainer.append($newSelect).append($removeButton);
-
-    // Append the new field container to the additionalStaffField
-    $('#additionalEquipmentField').append($fieldContainer);
+    addDropdownEquipment("#additionalEquipmentField","#field-equipment",["F01", "F02", "F03", "F04", "F05"])
 });
 
-//Add Staff
-// jQuery to add a new dropdown with predefined options and a remove button
+//Add Staff Modal
 $('#addStaffButton').on('click', function() {
-    // Create a new div to hold the select and remove button
-    const $fieldContainer = $('<div class="d-flex align-items-center mt-2"></div>');
-
-    // Create a new select element with options
-    const $newSelect = $('<select class="form-control me-2"></select>');
-    const options = ["S01", "S02", "S03", "S04", "S05"];
-    options.forEach(function(optionValue) {
-        $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
-    });
-
-    // Create a remove button
-    const $removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
-
-    // Add click event to remove the field
-    $removeButton.on('click', function() {
-        $fieldContainer.remove(); // Remove this container when clicked
-    });
-
-    // Append select and remove button to the field container
-    $fieldContainer.append($newSelect).append($removeButton);
-
-    // Append the new field container to the additionalStaffField
-    $('#additionalEquipmentStaff').append($fieldContainer);
+    addDropdownEquipment("#additionalEquipmentStaff","#staff-equipment",["S01", "S02", "S03", "S04", "S05"])
 });
 
 //save equipment
@@ -221,58 +175,13 @@ $('#EquipmentButtonUpdate').on('click', () => {
 });
 
 //Add Field Update Modal
-// jQuery to add a new dropdown with predefined options and a remove button
 $('#addFieldButtonUpdate').on('click', function() {
-    // Create a new div to hold the select and remove button
-    const $fieldContainer = $('<div class="d-flex align-items-center mt-2"></div>');
-
-    // Create a new select element with options
-    const $newSelect = $('<select class="form-control me-2"></select>');
-    const options = ["F01", "F02", "F03", "F04", "F05"];
-    options.forEach(function(optionValue) {
-        $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
-    });
-
-    // Create a remove button
-    const $removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
-
-    // Add click event to remove the field
-    $removeButton.on('click', function() {
-        $fieldContainer.remove(); // Remove this container when clicked
-    });
-
-    // Append select and remove button to the field container
-    $fieldContainer.append($newSelect).append($removeButton);
-
-    // Append the new field container to the additionalStaffField
-    $('#additionalFieldEquipmentUpdate').append($fieldContainer);
+    addDropdownEquipment("#additionalFieldEquipmentUpdate","#equipment-fieldUpdate",["F01", "F02", "F03", "F04", "F05"])
 });
 
 //Add Staff Update Modal
 $('#addStaffButtonUpdate').on('click', function() {
-    // Create a new div to hold the select and remove button
-    const $staffContainer = $('<div class="d-flex align-items-center mt-2"></div>');
-
-    // Create a new select element with options
-    const $newSelect = $('<select class="form-control me-2"></select>');
-    const options = ["S01", "S02", "S03", "S04", "S05"];
-    options.forEach(function(optionValue) {
-        $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
-    });
-
-    // Create a remove button
-    const $removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
-
-    // Add click event to remove the field
-    $removeButton.on('click', function() {
-        $staffContainer.remove(); // Remove this container when clicked
-    });
-
-    // Append select and remove button to the field container
-    $staffContainer.append($newSelect).append($removeButton);
-
-    // Append the new field container to the additionalStaffField
-    $('#additionalStaffEquUpdate').append($staffContainer);
+    addDropdownEquipment("#additionalStaffEquUpdate","#equ-staffUpdate",["S01", "S02", "S03", "S04", "S05"])
 });
 
 //delete Equipment
@@ -295,6 +204,24 @@ $('#confirmEquDeleteYes').on('click', function () {
 $('#confirmEquDeleteNo').on('click',()=>{
     $('#confirmEquipmentDeleteModal').modal('hide'); // Hide the modal
 });
+
+function addDropdownEquipment(containerId, selectClass, options) {
+    const $container = $('<div class="d-flex align-items-center mt-2"></div>');
+    const $select = $('<select id="optionSelect" class="form-control me-2"></select>').addClass(selectClass);
+
+    // Populate select options
+    options.forEach(option => $select.append(`<option value="${option}">${option}</option>`));
+
+    // Remove button
+    const $removeBtn = $('<button class="btn btn-danger">Remove</button>');
+    $removeBtn.on('click', function() {
+        $container.remove();
+    });
+
+    $container.append($select).append($removeBtn);
+    $(containerId).append($container);
+}
+
 
 // Function to clear the equipment modal input fields
 function clearEquipmentModalFields(equipmentName,equipmentType,equipmentStatus,count,initialStaff,initialEquipment,additionalEquipmentStaff,additionalEquipmentField) {
