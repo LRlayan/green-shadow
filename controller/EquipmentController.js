@@ -150,12 +150,12 @@ $('#EquipmentButtonUpdate').on('click', () => {
     $('#updateEquipment-modal').modal('hide');
 });
 
-//Add Field Update Modal
+//Add additional Field Update Modal
 $('#addFieldButtonUpdate').on('click', function() {
     addDropdownEquipment("#additionalFieldEquipmentUpdate","#equipment-fieldUpdate",["F01", "F02", "F03", "F04", "F05"])
 });
 
-//Add Staff Update Modal
+//Add additional Staff field Update Modal
 $('#addStaffButtonUpdate').on('click', function() {
     addDropdownEquipment("#additionalStaffEquUpdate","#equ-staffUpdate",["S01", "S02", "S03", "S04", "S05"])
 });
