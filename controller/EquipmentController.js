@@ -66,7 +66,7 @@ function loadEquipmentTable(){
     });
 }
 
-// Assuming your table rows are in tbody with id "EquipmentDetailsTable"
+// set values for update modal
 $('#equipmentDetailsTable').on('click', 'tr', function () {
     // Clear any existing inputs in the modal's dynamic dropdowns
     $('#additionalStaffEquUpdate').empty();
