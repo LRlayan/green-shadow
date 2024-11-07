@@ -63,7 +63,6 @@ $(document).ready(function () {
         let category = $(this).find(".category").text()
         let fuelType = $(this).find(".fuelType").text()
         let status = $(this).find(".status").text()
-        let staffMember = $(this).find(".staffMember").text()
         let remark = $(this).find(".remark").text()
 
         clickTableRow = $(this).index();
@@ -74,8 +73,11 @@ $(document).ready(function () {
         $('#updateCategoryVehicle').val(category);
         $('#updateFuelType').val(fuelType);
         $('#updateStatus').val(status);
-        $('#updateStaffMember').val(staffMember);
         $('#updateRemark').val(remark);
+
+        let staffMemberArray = $(this).find(".staffMember").text().split(", ");
+
+        populateDropdownVehicle("#updateStaffVehicle",staffMemberArray,["S01", "S02", "S03", "S04", "S05"]);
     });
 
     // Show delete confirmation modal
@@ -152,7 +154,7 @@ $(document).ready(function () {
         $(containerId).append($container);
     }
 
-    function populateDropdownEquipment(container, selectedValues, options) {
+    function populateDropdownVehicle(container, selectedValues, options) {
         $(container).empty();
         selectedValues.forEach(value => {
             // Create a wrapper div for each dropdown and the remove button
