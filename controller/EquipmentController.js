@@ -173,6 +173,12 @@ $('#confirmEquDeleteYes').on('click', function () {
     equipmentDetails.splice(index, 1); // Remove the vehicle from the array
     loadEquipmentTable(); // Refresh the table
     $('#confirmEquipmentDeleteModal').modal('hide'); // Hide the modal
+
+    // Ensure the modal and backdrop are fully removed when hidden (overlay)
+    $('#confirmEquipmentDeleteModal').on('hidden.bs.modal', function () {
+        $('body').removeClass('modal-open'); // Removes the modal-open class from body
+        $('.modal-backdrop').remove();       // Removes the leftover backdrop element
+    });
 });
 
 //No button
