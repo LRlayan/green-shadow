@@ -125,9 +125,14 @@ $(document).ready(function () {
         loadVehicleTable();
     });
 
-    //Add Staff Modal
+    //Add additional Staff Modal
     $('#addVehicleStaffButton').on('click', function() {
         addDropdownVehicle("#additionalVehicleStaff","#staff-vehicle",["S01", "S02", "S03", "S04", "S05"])
+    });
+
+    //Add additional Staff field Update Modal
+    $('#addVehicleStaffButtonUpdate').on('click', function() {
+        addDropdownVehicle("#additionalVehicleStaffUpdate","#staff-vehicleUpdate",["S01", "S02", "S03", "S04", "S05"])
     });
 
     function addDropdownVehicle(containerId, selectClass, options) {
