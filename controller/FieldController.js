@@ -220,29 +220,36 @@ $("#updateFieldButton").on("click", function() {
         if (selectedValue) updatedFieldLogs.push(selectedValue);
     });
 
-    let updatedCrops = updatedFieldCrop.join(', ');
-    let updatedStaff = updatedFieldStaff.join(', ');
-    let updatedLogs = updatedFieldLogs.join(', ');
-
     let fieldImage1 = $('#updatePreview1').attr('src');
     let fieldImage2 = $('#updatePreview2').attr('src');
 
-    $('.card-name').html(`<strong>Name:</strong> ${updatedFieldName}`);
-    $('.card-location').html(`<strong>Location:</strong> ${updatedLocation}`);
-    $('.card-extent-size').html(`<strong>Extent Size:</strong> ${updatedExtentSize}`);
-    $('.card-crop').html(`<strong>Crop:</strong> ${updatedCrops}`);
-    $('.card-staff').html(`<strong>Staff:</strong> ${updatedStaff}`);
-    $('.card-log').html(`<strong>Log:</strong> ${updatedLogs}`);
+    // Update existing card details
+    const cardId = $(this).data('card-id');
+    const fieldCard = $(`#${cardId}`);
 
-    let img1 = $('#img1 img').attr('id');
-    let img2 = $('#img2 img').attr('id');
+    fieldCard.find('.card-name').text(`Name: ${updatedFieldName}`);
+    fieldCard.find('.card-location').text(`Location: ${updatedLocation}`);
+    fieldCard.find('.card-extent-size').text(`Extent Size: ${updatedExtentSize}`);
+    fieldCard.find('.card-crop').text(`Crop: ${updatedFieldCrop}`);
+    fieldCard.find('.card-staff').text(`Staff: ${updatedFieldStaff}`);
+    fieldCard.find('.card-log').text(`Log: ${updatedFieldLogs}`);
+    fieldCard.find('.image-preview1').attr('src', fieldImage1);
+    fieldCard.find('.image-preview2').attr('src', fieldImage2);
 
-    $("#" + img1).attr('src', fieldImage1);
-    $("#" + img2).attr('src', fieldImage2);
-
+    $('#updateCropForm')[0].reset();
+    $('#previewCrop').addClass('d-none');
+    $('#additionalLogInCropUpdate').empty();
+    $('#additionalFieldInCropUpdate').empty();
     clearUpdateFieldForm();
-    // Close the modal after updating
     $("#updateFieldModal").modal("hide");
+});
+
+$('#updateFieldImage1Input').on('click',function (){
+    previewFieldImage("#updateFieldImage1Input","#updatePreview1");
+});
+
+$('#updateFieldImage2Input').on('click',function (){
+    previewFieldImage("#updateFieldImage2Input","#updatePreview2");
 });
 
 //add a dropdown with predefined options and a remove button
