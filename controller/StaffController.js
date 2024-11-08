@@ -100,6 +100,11 @@ $(document).ready(function() {
         let staffDetail = new Staff("01",firstName,lastName,joinedDate,designation,gender,dob,addressLine01,addressLine02,addressLine03,addressLine04,addressLine05,contactNo,emailStaff,roleStaff,fieldStaff,staffVehicle,staffLogs,staffEquipment);
         staffDetails.push(staffDetail);
         loadStaffTable();
+        $('#staffForm')[0].reset()
+        $('#additionalStaffField').empty();
+        $('#additionalStaffVehicle').empty();
+        $('#additionalStaffEquipment').empty();
+        $('#newStaffModal').modal('hide');
     });
 
     function loadStaffTable(){
