@@ -155,10 +155,10 @@ $(document).ready(function() {
         let contactNo = $(this).find(".contactNo").text();
         let email = $(this).find(".email").text();
         let role = $(this).find(".role").text().trim();
-        let fieldsArray = $(this).find(".fields").text().split(",");
-        let logs = $(this).find(".logs").text().split(",");
-        let vehicleArray = $(this).find(".vehicle").text().split(",");
-        let equipmentArray = $(this).find(".equipment").text().split(",");
+        let fieldsArray = $(this).find(".fields").text().split(", ");
+        let logs = $(this).find(".logs").text().split(", ");
+        let vehicleArray = $(this).find(".vehicle").text().split(", ");
+        let equipmentArray = $(this).find(".equipment").text().split(", ");
 
         clickTableRow = $(this).index();
 
@@ -201,49 +201,12 @@ $(document).ready(function() {
         $('#updateVehicle').empty();
         $('#updateEquipment').empty();
 
-        // Create input fields for each field ID in fieldsArray
-        fieldsArray.forEach(field => {
-            const fieldContainer = $('<div class="d-flex align-items-center mb-2"></div>');
-            const fieldInput = $(`<input type="text" class="form-control me-2" value="${field.trim()}">`);
-            const removeButton = $('<button class="btn btn-danger">Remove</button>');
-
-            removeButton.on('click', function () {
-                fieldContainer.remove(); // Remove field input and button when "Remove" is clicked
-            });
-
-            fieldContainer.append(fieldInput, removeButton);
-            $('#updateField').append(fieldContainer);
-        });
-
-        // Create input fields for each vehicle ID in vehicleArray
-        vehicleArray.forEach(field => {
-            const vehicleContainer = $('<div class="d-flex align-items-center mb-2"></div>');
-            const vehicleInput = $(`<input type="text" class="form-control me-2" value="${field.trim()}">`);
-            const removeButton = $('<button class="btn btn-danger">Remove</button>');
-
-            removeButton.on('click', function () {
-                vehicleContainer.remove(); // Remove field input and button when "Remove" is clicked
-            });
-
-            vehicleContainer.append(vehicleInput, removeButton);
-            $('#updateVehicle').append(vehicleContainer);
-        });
-
-        // Create input fields for each equipment ID in equipmentArray
-        equipmentArray.forEach(field => {
-            const equipmentContainer = $('<div class="d-flex align-items-center mb-2"></div>');
-            const equipmentInput = $(`<input type="text" class="form-control me-2" value="${field.trim()}">`);
-            const removeButton = $('<button class="btn btn-danger">Remove</button>');
-
-            removeButton.on('click', function () {
-                equipmentContainer.remove(); // Remove field input and button when "Remove" is clicked
-            });
-
-            equipmentContainer.append(equipmentInput, removeButton);
-            $('#updateEquipment').append(equipmentContainer);
-        });
+        populateDropdownStaff("#updateField",fieldsArray,["F01", "F02", "F03", "F04", "F05"]);
+        populateDropdownStaff("#updateVehicle",vehicleArray,["V01", "V02", "V03", "V04", "V05"]);
+        populateDropdownStaff("#updateEquipment",equipmentArray,["E01", "E02", "E03", "E04", "E05"]);
     });
 
+    //UPDATE STAFF MEMBER
     $('#updateMemberButton').on('click',function (){
         // Get updated values from modal inputs
         let firstName = $('#firstNameUpdate').val();
@@ -329,6 +292,35 @@ $(document).ready(function() {
         // Reload the equipment table to reflect updated data
         loadStaffTable();
     });
+
+    function populateDropdownStaff(container, selectedValues, options) {
+        $(container).empty();
+        selectedValues.forEach(value => {
+            // Create a wrapper div for each dropdown and the remove button
+            const dropdownWrapper = $('<div class="dropdown-wrapper mb-3" style="display: flex; align-items: center;"></div>');
+
+            // Create the dropdown
+            const dropdown = $('<select class="form-control me-2"></select>');
+            options.forEach(option => {
+                dropdown.append(`<option value="${option}" ${option.trim() === value ? 'selected' : ''}>${option}</option>`);
+            });
+
+            // Create the remove button
+            const removeButton = $('<button type="button" class="btn btn-danger ml-2">Remove</button>');
+
+            // Add click event to remove the dropdown when the button is clicked
+            removeButton.click(function() {
+                dropdownWrapper.remove();
+            });
+
+            // Append dropdown and remove button to the wrapper
+            dropdownWrapper.append(dropdown);
+            dropdownWrapper.append(removeButton);
+
+            // Append the wrapper to the container
+            $(container).append(dropdownWrapper);
+        });
+    }
 
     //delete Staff Member Details
     // Show delete confirmation modal
