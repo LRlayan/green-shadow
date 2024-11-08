@@ -92,6 +92,8 @@ $(document).ready(function() {
 
     //update Staff member
     $('#staffDetailsTable').on('click','tr', function (){
+        resetForm("#updateStaffForm","#updateField","#updateVehicle","#updateEquipment","#additionalStaffEquipmentUpdate","#additionalStaffVehicleUpdate","#additionalStaffFieldUpdate");
+
         let fName = $(this).find(".fName").text();
         let lName = $(this).find(".lName").text();
         let designation = $(this).find(".designation").text().trim();
@@ -147,14 +149,9 @@ $(document).ready(function() {
             }
         });
 
-        // Clear any existing inputs in the modal's dynamic dropdowns
-        $('#updateField').empty();
-        $('#updateVehicle').empty();
-        $('#updateEquipment').empty();
-
         populateDropdownStaff("#updateField",fieldsArray,["F01", "F02", "F03", "F04", "F05"]);
         populateDropdownStaff("#updateVehicle",vehicleArray,["V01", "V02", "V03", "V04", "V05"]);
-        populateDropdownStaff("#updateEquipment",equipmentArray,["E01", "E02", "E03", "E04", "E05"]);
+        populateDropdownStaff("#updateEquipment",equipmentArray,["E01", "E02", "E03", "E04", "E05"],"equipment");
     });
 
     //UPDATE STAFF MEMBER
@@ -241,34 +238,39 @@ $(document).ready(function() {
 
         // Reload the equipment table to reflect updated data
         loadStaffTable();
+        resetForm("#updateStaffForm","#updateField","#updateVehicle","#updateEquipment","#additionalStaffEquipmentUpdate","#additionalStaffVehicleUpdate","#additionalStaffFieldUpdate");
         $('#updateStaffModal').modal('hide');
     });
 
-    function populateDropdownStaff(container, selectedValues, options) {
+    function resetForm(){
+        $('#updateStaffForm')[0].reset();
+        $('#updateField').empty();
+        $('#updateVehicle').empty();
+        $('#updateEquipment').empty();
+        $('#additionalStaffEquipmentUpdate').empty();
+        $('#additionalStaffVehicleUpdate').empty();
+        $('#additionalStaffFieldUpdate').empty();
+    }
+
+    function populateDropdownStaff(container, selectedValues, options, type) {
         $(container).empty();
         selectedValues.forEach(value => {
-            // Create a wrapper div for each dropdown and the remove button
-            const dropdownWrapper = $('<div class="dropdown-wrapper mb-3" style="display: flex; align-items: center;"></div>');
-
-            // Create the dropdown
+            const dropdownWrapper = $('<div class="dropdown-wrapper mb-3 d-flex align-items-center"></div>');
             const dropdown = $('<select class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>');
             options.forEach(option => {
                 dropdown.append(`<option value="${option}" ${option.trim() === value ? 'selected' : ''}>${option}</option>`);
             });
+            dropdownWrapper.append(dropdown);
+            if (type === "equipment") {
+                const quantityInput = $('<input type="number" class="form-control me-2 text-white" placeholder="Count" min="1" value="1" style="background-color:#2B2B2B">');
+                dropdownWrapper.append(quantityInput); // Add the quantity input to the wrapper
+            }
 
-            // Create the remove button
             const removeButton = $('<button type="button" class="btn btn-danger ml-2">Remove</button>');
-
-            // Add click event to remove the dropdown when the button is clicked
             removeButton.click(function() {
                 dropdownWrapper.remove();
             });
-
-            // Append dropdown and remove button to the wrapper
-            dropdownWrapper.append(dropdown);
             dropdownWrapper.append(removeButton);
-
-            // Append the wrapper to the container
             $(container).append(dropdownWrapper);
         });
     }
