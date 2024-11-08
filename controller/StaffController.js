@@ -1,8 +1,8 @@
 import Staff from "../model/Staff.js";
 import {staffDetails} from "../db/db.js"
 
-let clickTableRow = 0;
 $(document).ready(function() {
+    let clickTableRow = 0;
     //save staff member
     $('#addFieldButtonInStaff').on('click',(e)=>{
         e.preventDefault();
@@ -91,8 +91,7 @@ $(document).ready(function() {
     }
 
     //update Staff member
-    $('#staffDetailsTable').on('click','tr', ()=>{
-
+    $('#staffDetailsTable').on('click','tr', function (){
         let fName = $(this).find(".fName").text();
         let lName = $(this).find(".lName").text();
         let designation = $(this).find(".designation").text().trim();
@@ -161,8 +160,8 @@ $(document).ready(function() {
     //UPDATE STAFF MEMBER
     $('#updateMemberButton').on('click',function (){
         // Get updated values from modal inputs
-        let firstName = $('#firstNameUpdate').val();
-        let lName = $('#lastNameUpdate').val();
+        let memberFirstName = $('#firstNameUpdate').val();
+        let memberLastName = $('#lastNameUpdate').val();
         let joinedDate = $('#joinedDateUpdate').val();
         let dob = $('#dobUpdate').val();
         let addressLine01 = $('#addressLine01Update').val();
@@ -178,28 +177,10 @@ $(document).ready(function() {
 
         // Collect updated field values
         let updatedFieldStaff = [];
-        $("#filed-staffUpdate select").each(function() {
+        $("#updateField select").each(function() {
             let fieldValue = $(this).val();
             if (fieldValue) {
                 updatedFieldStaff.push(fieldValue);
-            }
-        });
-
-        // Collect updated vehicle values
-        let updatedVehicleStaff = [];
-        $("#vehicle-staffUpdate select").each(function() {
-            let vehicleValue = $(this).val();
-            if (vehicleValue) {
-                updatedVehicleStaff.push(vehicleValue);
-            }
-        });
-
-        // Collect updated equipment values
-        let updatedEquipmentStaff = [];
-        $("#equipment-staffUpdate input").each(function() {
-            let equipmentValue = $(this).val();
-            if (equipmentValue) {
-                updatedEquipmentStaff.push(equipmentValue);
             }
         });
 
@@ -209,10 +190,28 @@ $(document).ready(function() {
             if (selectedValue) updatedFieldStaff.push(selectedValue);
         });
 
+        // Collect updated vehicle values
+        let updatedVehicleStaff = [];
+        $("#updateVehicle select").each(function() {
+            let vehicleValue = $(this).val();
+            if (vehicleValue) {
+                updatedVehicleStaff.push(vehicleValue);
+            }
+        });
+
         // Collect values from all vehicle dropdowns
         $('#additionalStaffVehicleUpdate select').each(function () {
             const selectedValue = $(this).val();
             if (selectedValue) updatedVehicleStaff.push(selectedValue);
+        });
+
+        // Collect updated equipment values
+        let updatedEquipmentStaff = [];
+        $("#updateEquipment input").each(function() {
+            let equipmentValue = $(this).val();
+            if (equipmentValue) {
+                updatedEquipmentStaff.push(equipmentValue);
+            }
         });
 
         // Collect values from all equipment dropdowns
@@ -220,6 +219,26 @@ $(document).ready(function() {
             const selectedValue = $(this).val();
             if (selectedValue) updatedEquipmentStaff.push(selectedValue);
         });
+
+        let staff = staffDetails[clickTableRow];
+        console.log(staff)
+        staff.firstName = memberFirstName;
+        staff.lastName = memberLastName;
+        staff.joinedDate = joinedDate;
+        staff.designation = designation;
+        staff.gender = gender;
+        staff.dob = dob;
+        staff.addressLine01 = addressLine01;
+        staff.addressLine02 = addressLine02;
+        staff.addressLine03 = addressLine03;
+        staff.addressLine04 = addressLine04;
+        staff.addressLine05 = addressLine05;
+        staff.contactNo = contactNo;
+        staff.email = email;
+        staff.role = role;
+        staff.fieldList = updatedFieldStaff;
+        staff.vehicle = updatedVehicleStaff;
+        staff.equipmentList = updatedEquipmentStaff;
 
         // Reload the equipment table to reflect updated data
         loadStaffTable();
