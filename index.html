@@ -1045,15 +1045,19 @@
                                         <div class="row mb-3">
                                             <!-- Log Date -->
                                             <div class="mb-3">
-                                                <label for="logDate" class="form-label">Log Date</label>
-                                                <input type="text" class="form-control" id="logDate">
+                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                    <input type="text" class="form-control text-white" id="logDate">
+                                                    <label for="logDate" class="form-label" style="margin-left: 0;">Log Date</label>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <!-- Log Details -->
                                             <div class="mb-3">
-                                                <label for="log-details" class="form-label">Log Details</label>
-                                                <input type="text" class="form-control" id="log-details">
+                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                    <input type="text" class="form-control text-white" id="log-details">
+                                                    <label for="log-details" class="form-label" style="margin-left: 0;">Log Details</label>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -1064,8 +1068,8 @@
                                                     <button type="button" class="btn btn-success" id="addLogFieldButton">Add Fields</button>
                                                 </div>
                                                 <div id="initialLogFiled" class="input-group">
-                                                    <select id="log-filedId" class="form-control mt-2">
-                                                        <option value="">Select Field</option>
+                                                    <select id="log-filedId" class="form-control mt-2" style="background-color:#2B2B2B">
+                                                        <option value="" style="background-color:#2B2B2B" >Select Field</option>
                                                     </select>
                                                 </div>
                                                 <div id="additionalLogField" class="mt-2"></div> <!-- Container for dynamic log inputs -->
@@ -1077,8 +1081,8 @@
                                                     <button type="button" class="btn btn-success" id="addLogCropButton">Add Crop</button>
                                                 </div>
                                                 <div id="initialLogCrop" class="input-group">
-                                                    <select id="log-cropId" class="form-control mt-2">
-                                                        <option value="">Select Crop</option>
+                                                    <select id="log-cropId" class="form-control mt-2 " style="background-color:#2B2B2B">
+                                                        <option value="" style="background-color:#2B2B2B">Select Crop</option>
                                                     </select>
                                                 </div>
                                                 <div id="additionalLogCrop" class="mt-2"></div> <!-- Container for dynamic log inputs -->
@@ -1092,8 +1096,8 @@
                                                     <button type="button" class="btn btn-success" id="addLogStaffButton">Add Staff</button>
                                                 </div>
                                                 <div id="initialLogStaff" class="input-group">
-                                                    <select id="log-staffId" class="form-control mt-2">
-                                                        <option value="">Select Crop</option>
+                                                    <select id="log-staffId" class="form-control mt-2" style="background-color:#2B2B2B">
+                                                        <option value="" style="background-color:#2B2B2B">Select Crop</option>
                                                     </select>
                                                 </div>
                                                 <div id="additionalLogStaff" class="mt-2"></div> <!-- Container for dynamic log inputs -->
@@ -1101,7 +1105,7 @@
                                             <!--Monitoring Log Image -->
                                             <div class="col-md-6">
                                                 <label for="logCropImageInput" class="form-label">Log Crop Image</label>
-                                                <input type="file" class="form-control" id="logCropImageInput" accept="image/*">
+                                                <input type="file" class="form-control text-white" id="logCropImageInput" accept="image/*" style="background-color:#2B2B2B">
                                                 <img id="previewCropLogImg" alt="crop log Image Preview" class="img-fluid mt-2 d-none" style="max-height: 150px;">
                                             </div>
                                         </div>

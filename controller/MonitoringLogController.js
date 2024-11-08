@@ -278,10 +278,10 @@ $(document).ready(function() {
     //add additional combo box in add modal
     function addDropdownLogs(containerId, selectClass, options) {
         const $container = $('<div class="d-flex align-items-center mt-2"></div>');
-        const $select = $('<select id="optionSelect" class="form-control me-2"></select>').addClass(selectClass);
+        const $select = $('<select id="optionSelect" class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>').addClass(selectClass);
 
         // Populate select options
-        options.forEach(option => $select.append(`<option value="${option}">${option}</option>`));
+        options.forEach(option => $select.append(`<option value="${option}" style="background-color:#2B2B2B">${option}</option>`));
 
         // Remove button
         const $removeBtn = $('<button class="btn btn-danger">Remove</button>');
