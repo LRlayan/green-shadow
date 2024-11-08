@@ -3,54 +3,6 @@ import {staffDetails} from "../db/db.js"
 
 let clickTableRow = 0;
 $(document).ready(function() {
-
-    // Function to add a row with sample data
-    function addRowToTable(staffData) {
-        const $newRow = $('<tr></tr>');
-
-        // Append data fields as cells in the row
-        Object.keys(staffData).forEach(key => {
-            $newRow.append(`<td>${staffData[key]}</td>`);
-        });
-
-        // Set data attributes for easy access during row click
-        $newRow.data("staffData", staffData);
-
-        // Add click event to populate update modal when row is clicked
-        $newRow.on("click", function () {
-            populateUpdateModal($(this).data("staffData"));
-        });
-
-        // Append delete button
-        const $deleteBtn = $('<button class="btn btn-danger btn-sm">Delete</button>').on("click", function() {
-            // Store the row for deletion reference in modal
-            $('#confirmStaffDeleteModal').data('rowToDelete', $newRow);
-            // Show confirmation modal
-            $('#confirmStaffDeleteModal').modal('show');
-        });
-        $newRow.append($('<td></td>').append($deleteBtn));
-
-        // Append the new row to the table body
-        $('#staffDetailsTable').append($newRow);
-    }
-
-// Function to dynamically generate input fields and set values
-    function addDynamicFields(containerId, values) {
-        const $container = $('#' + containerId);
-        $container.empty(); // Clear any existing inputs
-
-        values.forEach((value, index) => {
-            // Create a new input for each value
-            const $input = $('<input>')
-                .addClass('form-control mb-2')
-                .attr('type', 'text')
-                .attr('placeholder', `Enter value ${index + 1}`)
-                .val(value); // Set the existing value
-
-            $container.append($input);
-        });
-    }
-
     //save staff member
     $('#addFieldButtonInStaff').on('click',(e)=>{
         e.preventDefault();
@@ -129,7 +81,7 @@ $(document).ready(function() {
                 <td class="role">${staff.role}</td>
                 <td class="fields">${staff.fieldList.join(', ')}</td>
                 <td class="logs">${staff.logList.join(', ')}</td>
-                <td class="vehicle">${staff.vehicle}</td>
+                <td class="vehicle">${staff.vehicle.join(', ')}</td>
                 <td class="equipment">${staff.equipmentList.join(', ')}</td>
                 <td><button class="btn btn-danger delete-button" data-index="${index}">Delete</button></td>
             </tr>
@@ -226,7 +178,7 @@ $(document).ready(function() {
 
         // Collect updated field values
         let updatedFieldStaff = [];
-        $("#filed-staffUpdate input").each(function() {
+        $("#filed-staffUpdate select").each(function() {
             let fieldValue = $(this).val();
             if (fieldValue) {
                 updatedFieldStaff.push(fieldValue);
@@ -235,7 +187,7 @@ $(document).ready(function() {
 
         // Collect updated vehicle values
         let updatedVehicleStaff = [];
-        $("#vehicle-staffUpdate input").each(function() {
+        $("#vehicle-staffUpdate select").each(function() {
             let vehicleValue = $(this).val();
             if (vehicleValue) {
                 updatedVehicleStaff.push(vehicleValue);
@@ -269,28 +221,9 @@ $(document).ready(function() {
             if (selectedValue) updatedEquipmentStaff.push(selectedValue);
         });
 
-        // Update the selected staff object with the new values
-        let staff = staffDetails[clickTableRow];
-        staff.firstName = firstName;
-        staff.lastName = lName;
-        staff.designation = joinedDate;
-        staff.gender = dob;
-        staff.joinedDate = addressLine01;
-        staff.dob = addressLine02;
-        staff.addressLine01 = addressLine03;
-        staff.addressLine02 = addressLine04;
-        staff.addressLine03 = addressLine05;
-        staff.addressLine04 = contactNo;
-        staff.addressLine05 = email;
-        staff.contactNo = role;
-        staff.email = designation;
-        staff.role = gender;
-        staff.fieldList = updatedFieldStaff;
-        staff.vehicle = updatedVehicleStaff;
-        staff.equipmentList = updatedEquipmentStaff;
-
         // Reload the equipment table to reflect updated data
         loadStaffTable();
+        $('#updateStaffModal').modal('hide');
     });
 
     function populateDropdownStaff(container, selectedValues, options) {
