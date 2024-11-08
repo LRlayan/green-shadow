@@ -144,7 +144,6 @@ $('#EquipmentButtonUpdate').on('click', () => {
     // Reload the equipment table to reflect updated data
     loadEquipmentTable();
     // Close the modal after updating
-
     clearEquipmentModalFields("#equipmentNameUpdate","#equipmentTypeUpdate","#equipmentStatusUpdate","#countUpdate","#initialFieldEquipmentUpdate select","#initialStaffEquUpdate select","#additionalStaffEquUpdate","#additionalFieldEquipmentUpdate");
     $('#updateEquipment-modal').modal('hide');
 });
