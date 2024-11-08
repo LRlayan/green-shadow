@@ -33,41 +33,6 @@ $(document).ready(function() {
         // Append the new row to the table body
         $('#staffDetailsTable').append($newRow);
     }
-    // Function to populate the update modal with data from the selected row
-    // function populateUpdateModal(staffData) {
-    //     $('#firstNameUpdate').val(staffData.firstName);
-    //     $('#lastNameUpdate').val(staffData.lastName);
-    //     $('#joinedDateUpdate').val(staffData.joinedDate);
-    //     $('#dobUpdate').val(staffData.dob);
-    //     $('#addressLine01Update').val(staffData.buildingNo);
-    //     $('#addressLine02Update').val(staffData.lane);
-    //     $('#addressLine03Update').val(staffData.city);
-    //     $('#addressLine04Update').val(staffData.state);
-    //     $('#addressLine05Update').val(staffData.postalCode);
-    //     $('#ContactNoUpdate').val(staffData.contactNo);
-    //     $('#emailStaffUpdate').val(staffData.email);
-    //
-    //     // Function to set combo box values, adding options if missing
-    //     function setComboBoxValue(comboBoxId, value) {
-    //         const $comboBox = $(`#${comboBoxId}`);
-    //         if ($comboBox.find(`option[value="${value}"]`).length === 0) {
-    //             // If the value is missing, add it as an option
-    //             $comboBox.append(new Option(value, value));
-    //         }
-    //         $comboBox.val(value); // Set the selected value
-    //     }
-    //
-    //     // Set combo box selections and add missing options if needed
-    //     setComboBoxValue('designationUpdate', staffData.designation);
-    //     setComboBoxValue('genderUpdate', staffData.gender);
-    //     setComboBoxValue('roleStaffUpdate', staffData.role);
-    //
-    //     // Populate fields with multiple values
-    //     addDynamicFields('updateField', staffData.field.split(','));
-    //     addDynamicFields('updateStaffLogs', staffData.logs.split(','));
-    //     addDynamicFields('updateVehicle', staffData.vehicle.split(','));
-    //     addDynamicFields('updateEquipment', staffData.equipment.split(','));
-    // }
 
 // Function to dynamically generate input fields and set values
     function addDynamicFields(containerId, values) {
@@ -87,8 +52,8 @@ $(document).ready(function() {
     }
 
     //save staff member
-    $('#addFieldButtonInStaff').on('click',()=>{
-        event.preventDefault();
+    $('#addFieldButtonInStaff').on('click',(e)=>{
+        e.preventDefault();
         // Collect form data
         let firstName = $("#firstName").val();
         let lastName = $("#lastName").val();
@@ -416,7 +381,7 @@ $(document).ready(function() {
         const $fieldContainer = $('<div class="d-flex align-items-center mt-2"></div>');
 
         // Create a new select element with options
-        const $newSelect = $('<select class="form-control me-2"></select>');
+        const $newSelect = $('<select class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>');
         const options = ["F01", "F02", "F03", "F04", "F05"];
         options.forEach(function(optionValue) {
             $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
@@ -444,7 +409,7 @@ $(document).ready(function() {
         const $logsContainer = $('<div class="d-flex align-items-center mt-2"></div>');
 
         // Create a new select element with options
-        const $newSelect = $('<select class="form-control me-2"></select>');
+        const $newSelect = $('<select class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>');
         const optionLogs = ["L01", "L02", "L03", "L04", "L05"];
         optionLogs.forEach(function(optionValue) {
             $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
@@ -471,7 +436,7 @@ $(document).ready(function() {
         const $logsContainer = $('<div class="d-flex align-items-center mt-2"></div>');
 
         // Create a new select element with options
-        const $newSelect = $('<select class="form-control me-2"></select>');
+        const $newSelect = $('<select class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>');
         const optionLogs = ["L01", "L02", "L03", "L04", "L05"];
         optionLogs.forEach(function(optionValue) {
             $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
@@ -499,7 +464,7 @@ $(document).ready(function() {
         const $vehicleContainer = $('<div class="d-flex align-items-center mt-2"></div>');
 
         // Create a new select element with options
-        const $newSelect = $('<select class="form-control me-2"></select>');
+        const $newSelect = $('<select class="form-control me-2 text-white"></select>');
         const optionVehicle = ["V01", "V02", "V03", "V04", "V05"];
         optionVehicle.forEach(function(optionValue) {
             $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
@@ -527,7 +492,7 @@ $(document).ready(function() {
         const $vehicleContainer = $('<div class="d-flex align-items-center mt-2"></div>');
 
         // Create a new select element with options
-        const $newSelect = $('<select class="form-control me-2"></select>');
+        const $newSelect = $('<select class="form-control me-2 text-white"></select>');
         const optionVehicle = ["V01", "V02", "V03", "V04", "V05"];
         optionVehicle.forEach(function(optionValue) {
             $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
@@ -561,7 +526,7 @@ $(document).ready(function() {
     // jQuery to add a new equipment dropdown with a count input and remove button
     $('#addStaffEquipmentButton').on('click', function() {
         // Create a container for the equipment select, count input, and remove button
-        const $equipmentContainer = $('<div class="d-flex align-items-center mt-2"></div>');
+        const $equipmentContainer = $('<div class="d-flex align-items-center mt-2 text-white"></div>');
 
         // Create the equipment select element
         const $newSelect = $('<select class="form-control me-2"></select>');
