@@ -148,10 +148,6 @@ $('#updateFieldModalButton').on('click',function (){
     let scientificName = $('#updateScientificName').val();
     let category = $('#updateCategory').val();
     let season = $('#updateCropSeason').val();
-    console.log("name " ,cropName)
-    console.log("sname " ,scientificName)
-    console.log("category " ,category)
-    console.log("season " ,season)
 
     let updatedCropField = [];
     $("#updateFieldId select").each(function() {
@@ -180,15 +176,12 @@ $('#updateFieldModalButton').on('click',function (){
         const selectedValue = $(this).val();
         if (selectedValue) updatedCropLogs.push(selectedValue);
     });
-    console.log("field " ,updatedCropField)
-    console.log("log " ,updatedCropLogs)
 
     let cropImage = $('#updatePreview').attr('src'); // Use the image preview if available
 
     // Update existing card details
     const cardId = $(this).data('card-id'); //update button in card
     const cropCard = $(`#${cardId}`);
-    console.log("card id ",cardId)
 
     cropCard.find('.card-name').text(`Name: ${cropName}`);
     cropCard.find('.card-scientific').text(`Scientific Name: ${scientificName}`);
