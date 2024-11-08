@@ -168,21 +168,21 @@ $('#equipmentDetailsTable').on('click', '.delete-button', function () {
 
 // Handle the confirmation of deletion - yes button
 $('#confirmEquDeleteYes').on('click', function () {
-    const index = $(this).data('index'); // Get the stored index
+    const index = $(this).data('index');
     equipmentDetails.splice(index, 1); // Remove the vehicle from the array
     loadEquipmentTable(); // Refresh the table
-    $('#confirmEquipmentDeleteModal').modal('hide'); // Hide the modal
+    $('#confirmEquipmentDeleteModal').modal('hide');
 
     // Ensure the modal and backdrop are fully removed when hidden (overlay)
     $('#confirmEquipmentDeleteModal').on('hidden.bs.modal', function () {
-        $('body').removeClass('modal-open'); // Removes the modal-open class from body
-        $('.modal-backdrop').remove();       // Removes the leftover backdrop element
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
     });
 });
 
 //No button
 $('#confirmEquDeleteNo').on('click',()=>{
-    $('#confirmEquipmentDeleteModal').modal('hide'); // Hide the modal
+    $('#confirmEquipmentDeleteModal').modal('hide');
 });
 
 // Listen for the modal to be shown
@@ -190,9 +190,7 @@ $('#equipment-modal').on('show.bs.modal', function (event) {
     // Get the button that triggered the modal
     var button = $(event.relatedTarget);
 
-    // Check if the data-action is 'add'
     if (button.data('action') === 'add') {
-        // Clear the form inputs
         $('#equipmentForm')[0].reset();
         resetForm("#additionalEquipmentStaff", "#additionalEquipmentField");
     }
@@ -228,7 +226,7 @@ function populateDropdownEquipment(container, selectedValues, options) {
         const dropdownWrapper = $('<div class="dropdown-wrapper mb-3" style="display: flex; align-items: center;"></div>');
 
         // Create the dropdown
-        const dropdown = $('<select class="form-control me-2"></select>');
+        const dropdown = $('<select class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>');
         options.forEach(option => {
             dropdown.append(`<option value="${option}" ${option.trim() === value ? 'selected' : ''}>${option}</option>`);
         });
