@@ -157,7 +157,7 @@ function populateDropdown(container, selectedValues, options) {
         const dropdownWrapper = $('<div class="dropdown-wrapper mb-3" style="display: flex; align-items: center;"></div>');
 
         // Create the dropdown
-        const dropdown = $('<select class="form-control me-2"></select>');
+        const dropdown = $('<select class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>');
         options.forEach(option => {
             dropdown.append(`<option value="${option}" ${option.trim() === value ? 'selected' : ''}>${option}</option>`);
         });
@@ -263,7 +263,7 @@ $('#updateFieldImage2Input').on('click',function (){
 //add a dropdown with predefined options and a remove button
 function addDropdown(containerId, selectClass, options) {
     const $container = $('<div class="d-flex align-items-center mt-2"></div>');
-    const $select = $('<select id="optionSelect" class="form-control me-2"></select>').addClass(selectClass);
+    const $select = $('<select id="optionSelect" class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>').addClass(selectClass);
 
     // Populate select options
     options.forEach(option => $select.append(`<option value="${option}">${option}</option>`));
