@@ -202,7 +202,7 @@ $(document).ready(function() {
             const dropdownWrapper = $('<div class="dropdown-wrapper mb-3" style="display: flex; align-items: center;"></div>');
 
             // Create the dropdown
-            const dropdown = $('<select class="form-control me-2"></select>');
+            const dropdown = $('<select class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>');
             options.forEach(option => {
                 dropdown.append(`<option value="${option}" ${option.trim() === value ? 'selected' : ''}>${option}</option>`);
             });

@@ -1068,8 +1068,8 @@
                                                     <button type="button" class="btn btn-success" id="addLogFieldButton">Add Fields</button>
                                                 </div>
                                                 <div id="initialLogFiled" class="input-group">
-                                                    <select id="log-filedId" class="form-control mt-2" style="background-color:#2B2B2B">
-                                                        <option value="" style="background-color:#2B2B2B" >Select Field</option>
+                                                    <select id="log-filedId" class="form-control mt-2">
+                                                        <option value="">Select Field</option>
                                                     </select>
                                                 </div>
                                                 <div id="additionalLogField" class="mt-2"></div> <!-- Container for dynamic log inputs -->
@@ -1081,8 +1081,8 @@
                                                     <button type="button" class="btn btn-success" id="addLogCropButton">Add Crop</button>
                                                 </div>
                                                 <div id="initialLogCrop" class="input-group">
-                                                    <select id="log-cropId" class="form-control mt-2 " style="background-color:#2B2B2B">
-                                                        <option value="" style="background-color:#2B2B2B">Select Crop</option>
+                                                    <select id="log-cropId" class="form-control mt-2 ">
+                                                        <option value="">Select Crop</option>
                                                     </select>
                                                 </div>
                                                 <div id="additionalLogCrop" class="mt-2"></div> <!-- Container for dynamic log inputs -->
@@ -1096,8 +1096,8 @@
                                                     <button type="button" class="btn btn-success" id="addLogStaffButton">Add Staff</button>
                                                 </div>
                                                 <div id="initialLogStaff" class="input-group">
-                                                    <select id="log-staffId" class="form-control mt-2" style="background-color:#2B2B2B">
-                                                        <option value="" style="background-color:#2B2B2B">Select Crop</option>
+                                                    <select id="log-staffId" class="form-control mt-2">
+                                                        <option value="">Select Crop</option>
                                                     </select>
                                                 </div>
                                                 <div id="additionalLogStaff" class="mt-2"></div> <!-- Container for dynamic log inputs -->
@@ -1130,14 +1130,18 @@
                                     <form id="updateLogForm">
                                         <div class="mb-3">
                                             <!-- Log Date -->
-                                            <label for="updateLogDate" class="form-label">Log Date</label>
-                                            <input type="text" class="form-control" id="updateLogDate">
+                                            <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                <input type="text" class="form-control text-white" id="updateLogDate">
+                                                <label for="updateLogDate" class="form-label" style="margin-left: 0;">Log Date</label>
+                                            </div>
                                         </div>
                                         <div class="row mb-3">
                                             <!-- Log Details -->
                                             <div class="mb-3">
-                                                <label for="updateLog-details" class="form-label">Log Details</label>
-                                                <input type="text" class="form-control" id="updateLog-details">
+                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                    <input type="text" class="form-control text-white" id="updateLog-details">
+                                                    <label for="updateLog-details" class="form-label" style="margin-left: 0;">Log Details</label>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
