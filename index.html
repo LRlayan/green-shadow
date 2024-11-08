@@ -397,26 +397,34 @@
                                         <div class="row mb-3">
                                             <!-- Crop Name -->
                                             <div class="col-md-6">
-                                                <label for="cropName" class="form-label">Crop Name</label>
-                                                <input type="text" class="form-control" id="cropName">
+                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                    <input type="text" class="form-control text-white" id="cropName">
+                                                    <label for="cropName" class="form-label" style="margin-left: 0;">Crop Name</label>
+                                                </div>
                                             </div>
                                             <!-- Crop Scientific Name -->
                                             <div class="col-md-6">
-                                                <label for="crop-scientificName" class="form-label">Scientific Name</label>
-                                                <input type="text" class="form-control" id="crop-scientificName">
+                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                    <input type="text" class="form-control text-white" id="crop-scientificName">
+                                                    <label for="crop-scientificName" class="form-label" style="margin-left: 0;">Scientific Name</label>
+                                                </div>
                                             </div>
                                         </div>
 
                                         <div class="row mb-3">
                                             <!-- Category -->
                                             <div class="col-md-6">
-                                                <label for="crop-Category" class="form-label">Category</label>
-                                                <input type="text" class="form-control" id="crop-Category">
+                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                    <input type="text" class="form-control text-white" id="crop-Category">
+                                                    <label for="crop-Category" class="form-label" style="margin-left: 0;">Category</label>
+                                                </div>
                                             </div>
                                             <!-- Crop Season -->
                                             <div class="col-md-6">
-                                                <label for="crop-season" class="form-label">Crop Season</label>
-                                                <input type="text" class="form-control" id="crop-season">
+                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                    <input type="text" class="form-control text-white" id="crop-season">
+                                                    <label for="crop-season" class="form-label" style="margin-left: 0;">Crop Season</label>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -463,25 +471,33 @@
                                         <div class="row mb-3">
                                             <!-- Crop Name -->
                                             <div class="col-md-6">
-                                                <label for="updateCropName" class="form-label">Crop Name</label>
-                                                <input type="text" class="form-control" id="updateCropName">
+                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                    <input type="text" class="form-control text-white" id="updateCropName">
+                                                    <label for="updateCropName" class="form-label" style="margin-left: 0;">Crop Name</label>
+                                                </div>
                                             </div>
                                             <!-- Crop Scientific Name -->
                                             <div class="col-md-6">
-                                                <label for="updateScientificName" class="form-label">Scientific Name</label>
-                                                <input type="text" class="form-control" id="updateScientificName">
+                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                    <input type="text" class="form-control text-white" id="updateScientificName">
+                                                    <label for="updateScientificName" class="form-label" style="margin-left: 0;">Scientific Name</label>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <!-- Category -->
                                             <div class="col-md-6">
-                                                <label for="updateCategory" class="form-label">Category</label>
-                                                <input type="text" class="form-control" id="updateCategory">
+                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                    <input type="text" class="form-control text-white" id="updateCategory">
+                                                    <label for="updateCategory" class="form-label" style="margin-left: 0;">Category</label>
+                                                </div>
                                             </div>
                                             <!-- Crop Season -->
                                             <div class="col-md-6">
-                                                <label for="updateCropSeason" class="form-label">Crop Season</label>
-                                                <input type="text" class="form-control" id="updateCropSeason">
+                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                    <input type="text" class="form-control text-white" id="updateCropSeason">
+                                                    <label for="updateCropSeason" class="form-label" style="margin-left: 0;">Crop Season</label>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="row mb-3" id="updateFieldContainer">
@@ -512,33 +528,13 @@
                                                 <!-- Initial dropdown with predefined options -->
                                                 <div id="initialLogInCropUpdate" class="input-group">
                                                     <select id="logInCropUpdate" class="form-control mt-2">
-                                                        <option value="">Select Field</option>
+                                                        <option value="">Select Log</option>
                                                     </select>
                                                 </div>
                                                 <!-- Container for additional dynamic dropdowns -->
                                                 <div id="additionalLogInCropUpdate" class="mt-2"></div>
                                                 <div class="mb-3 mt-3" id="updateLogInCropContainer">
                                                     <div id="updateLogId"></div> <!-- fields container for dynamic inputs -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <!-- Staff IDs -->
-                                            <div class="col-md-6">
-                                                <div class="d-flex justify-content-between align-items-center mb-2">
-                                                    <label for="logInStaffUpdate" class="form-label">Logs</label>
-                                                    <button type="button" class="btn btn-success" id="addStaffBtnInCropUpdate">Assign New Logs</button>
-                                                </div>
-                                                <!-- Initial dropdown with predefined options -->
-                                                <div id="initialFieldInStaffUpdate" class="input-group">
-                                                    <select id="logInStaffUpdate" class="form-control mt-2">
-                                                        <option value="">Select Field</option>
-                                                    </select>
-                                                </div>
-                                                <!-- Container for additional dynamic dropdowns -->
-                                                <div id="additionalLogInStaffUpdate" class="mt-2"></div>
-                                                <div class="mb-3 mt-3" id="updateLogInStaffContainer">
-                                                    <div id="updateStaffId"></div> <!-- fields container for dynamic inputs -->
                                                 </div>
                                             </div>
                                         </div>
@@ -554,7 +550,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" id="updateFieldModalButton" class="btn btn-success" form="updateFieldForm">Update Field</button>
+                                    <button type="submit" id="updateFieldModalButton" class="btn btn-success" form="updateFieldForm">Update Crop</button>
                                 </div>
                             </div>
                         </div>

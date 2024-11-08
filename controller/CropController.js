@@ -95,6 +95,7 @@ function previewCropImage(imageInputId,imgPreviewId){
 $('#cropCard').on('click', '.update-button', function() {
     const cardId = $(this).data('card-id');
     const cropCard = $(`#${cardId}`);
+    console.log("cardId :" , cardId);
 
     // Populate modal with card details for updating
     $('#updateCropName').val(cropCard.find('.card-name').text().replace('Name:', '').trim());
@@ -105,7 +106,7 @@ $('#cropCard').on('click', '.update-button', function() {
     let log = cropCard.find('.card-logs').text().replace('Logs:', '').trim().split(', ').map(item => item.trim());
     $('#updatePreview').attr('src', cropCard.find('.image-preview').attr('src')).removeClass('d-none');
     $('#cropImageInput').val(''); // Clear file input for new upload
-    $('#updateCropModalButton').data('card-id', cardId); // Set action and card ID
+    $('#updateFieldModalButton').data('card-id', cardId); // Set action and card ID
     $('#updateCropModal').modal('show');
 
     populateDropdownCrop('#updateFieldId', field, ["F01", "F02", "F03", "F04", "F05"]);
@@ -125,10 +126,10 @@ $('#addLogsBtnInCropUpdate').on('click', function() {
 //add additional combo box in update modal
 function addDropdownUpdate(containerId, selectClass, options) {
     const $container = $('<div class="d-flex align-items-center mt-2"></div>');
-    const $select = $('<select id="optionSelect" class="form-control me-2"></select>').addClass(selectClass);
+    const $select = $('<select id="optionSelect" class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>').addClass(selectClass);
 
     // Populate select options
-    options.forEach(option => $select.append(`<option value="${option}">${option}</option>`));
+    options.forEach(option => $select.append(`<option value="${option}" class="text-white">${option}</option>`));
 
     // Remove button
     const $removeBtn = $('<button class="btn btn-danger">Remove</button>');
@@ -141,12 +142,16 @@ function addDropdownUpdate(containerId, selectClass, options) {
 }
 
 //crop card update
-$('#updateCropModalButton').on('click',function (){
+$('#updateFieldModalButton').on('click',function (){
 
     let cropName = $('#updateCropName').val();
     let scientificName = $('#updateScientificName').val();
     let category = $('#updateCategory').val();
     let season = $('#updateCropSeason').val();
+    console.log("name " ,cropName)
+    console.log("sname " ,scientificName)
+    console.log("category " ,category)
+    console.log("season " ,season)
 
     let updatedCropField = [];
     $("#updateFieldId select").each(function() {
@@ -175,12 +180,15 @@ $('#updateCropModalButton').on('click',function (){
         const selectedValue = $(this).val();
         if (selectedValue) updatedCropLogs.push(selectedValue);
     });
+    console.log("field " ,updatedCropField)
+    console.log("log " ,updatedCropLogs)
 
     let cropImage = $('#updatePreview').attr('src'); // Use the image preview if available
 
     // Update existing card details
     const cardId = $(this).data('card-id'); //update button in card
     const cropCard = $(`#${cardId}`);
+    console.log("card id ",cardId)
 
     cropCard.find('.card-name').text(`Name: ${cropName}`);
     cropCard.find('.card-scientific').text(`Scientific Name: ${scientificName}`);
@@ -204,7 +212,7 @@ function populateDropdownCrop(container, selectedValues, options) {
         const dropdownWrapper = $('<div class="dropdown-wrapper mb-3" style="display: flex; align-items: center;"></div>');
 
         // Create the dropdown
-        const dropdown = $('<select class="form-control me-2"></select>');
+        const dropdown = $('<select class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>');
         options.forEach(option => {
             dropdown.append(`<option value="${option}" ${option.trim() === value ? 'selected' : ''}>${option}</option>`);
         });
