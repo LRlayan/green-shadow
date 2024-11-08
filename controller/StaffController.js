@@ -349,265 +349,88 @@ $(document).ready(function() {
     //Add Field
     // jQuery to add a new dropdown with predefined options and a remove button
     $('#addStaffFieldButton').on('click', function() {
-        // Create a new div to hold the select and remove button
-        const $fieldContainer = $('<div class="d-flex align-items-center mt-2"></div>');
-
-        // Create a new select element with options
-        const $newSelect = $('<select class="form-control me-2"></select>');
-        const options = ["F01", "F02", "F03", "F04", "F05"];
-        options.forEach(function(optionValue) {
-            $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
-        });
-
-        // Create a remove button
-        const $removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
-
-        // Add click event to remove the field
-        $removeButton.on('click', function() {
-            $fieldContainer.remove(); // Remove this container when clicked
-        });
-
-        // Append select and remove button to the field container
-        $fieldContainer.append($newSelect).append($removeButton);
-
-        // Append the new field container to the additionalStaffField
-        $('#additionalStaffField').append($fieldContainer);
+        addDropdownStaff("#additionalStaffField","#filed-staff",["F01", "F02", "F03", "F04", "F05"]);
     });
 
     //Add Field Update Modal
     // jQuery to add a new dropdown with predefined options and a remove button
     $('#addStaffFieldButtonUpdate').on('click', function() {
-        // Create a new div to hold the select and remove button
-        const $fieldContainer = $('<div class="d-flex align-items-center mt-2"></div>');
-
-        // Create a new select element with options
-        const $newSelect = $('<select class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>');
-        const options = ["F01", "F02", "F03", "F04", "F05"];
-        options.forEach(function(optionValue) {
-            $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
-        });
-
-        // Create a remove button
-        const $removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
-
-        // Add click event to remove the field
-        $removeButton.on('click', function() {
-            $fieldContainer.remove(); // Remove this container when clicked
-        });
-
-        // Append select and remove button to the field container
-        $fieldContainer.append($newSelect).append($removeButton);
-
-        // Append the new field container to the additionalStaffField
-        $('#additionalStaffFieldUpdate').append($fieldContainer);
-    });
-
-    //Add Log
-    // jQuery to add a new dropdown with predefined options and a remove button
-    $('#addStaffLogDetailButton').on('click', function() {
-        // Create a new div to hold the select and remove button
-        const $logsContainer = $('<div class="d-flex align-items-center mt-2"></div>');
-
-        // Create a new select element with options
-        const $newSelect = $('<select class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>');
-        const optionLogs = ["L01", "L02", "L03", "L04", "L05"];
-        optionLogs.forEach(function(optionValue) {
-            $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
-        });
-
-        // Create a remove button
-        const $removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
-
-        // Add click event to remove the field
-        $removeButton.on('click', function() {
-            $logsContainer.remove(); // Remove this container when clicked
-        });
-
-        // Append select and remove button to the field container
-        $logsContainer.append($newSelect).append($removeButton);
-
-        // Append the new field container to the additionalStaffField
-        $('#additionalStaffLog').append($logsContainer);
-    });
-
-    //Add Log Update
-    $('#addStaffLogsButtonUpdate').on('click', function() {
-        // Create a new div to hold the select and remove button
-        const $logsContainer = $('<div class="d-flex align-items-center mt-2"></div>');
-
-        // Create a new select element with options
-        const $newSelect = $('<select class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>');
-        const optionLogs = ["L01", "L02", "L03", "L04", "L05"];
-        optionLogs.forEach(function(optionValue) {
-            $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
-        });
-
-        // Create a remove button
-        const $removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
-
-        // Add click event to remove the field
-        $removeButton.on('click', function() {
-            $logsContainer.remove(); // Remove this container when clicked
-        });
-
-        // Append select and remove button to the field container
-        $logsContainer.append($newSelect).append($removeButton);
-
-        // Append the new field container to the additionalStaffField
-        $('#additionalStaffLogsUpdate').append($logsContainer);
+        addDropdownStaff("#additionalStaffFieldUpdate","#filed-staffUpdate",["F01", "F02", "F03", "F04", "F05"]);
     });
 
     //Add Vehicle
     // jQuery to add a new dropdown with predefined options and a remove button
     $('#addStaffVehicleButton').on('click', function() {
-        // Create a new div to hold the select and remove button
-        const $vehicleContainer = $('<div class="d-flex align-items-center mt-2"></div>');
-
-        // Create a new select element with options
-        const $newSelect = $('<select class="form-control me-2 text-white"></select>');
-        const optionVehicle = ["V01", "V02", "V03", "V04", "V05"];
-        optionVehicle.forEach(function(optionValue) {
-            $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
-        });
-
-        // Create a remove button
-        const $removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
-
-        // Add click event to remove the field
-        $removeButton.on('click', function() {
-            $vehicleContainer.remove(); // Remove this container when clicked
-        });
-
-        // Append select and remove button to the field container
-        $vehicleContainer.append($newSelect).append($removeButton);
-
-        // Append the new field container to the additionalStaffField
-        $('#additionalStaffVehicle').append($vehicleContainer);
+        addDropdownStaff("#additionalStaffVehicle","#vehicle-staff",["V01", "V02", "V03", "V04", "V05"]);
     });
 
     //Add Vehicle Update
     // jQuery to add a new dropdown with predefined options and a remove button
     $('#addStaffVehicleButtonUpdate').on('click', function() {
-        // Create a new div to hold the select and remove button
-        const $vehicleContainer = $('<div class="d-flex align-items-center mt-2"></div>');
-
-        // Create a new select element with options
-        const $newSelect = $('<select class="form-control me-2 text-white"></select>');
-        const optionVehicle = ["V01", "V02", "V03", "V04", "V05"];
-        optionVehicle.forEach(function(optionValue) {
-            $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
-        });
-
-        // Create a remove button
-        const $removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
-
-        // Add click event to remove the field
-        $removeButton.on('click', function() {
-            $vehicleContainer.remove(); // Remove this container when clicked
-        });
-
-        // Append select and remove button to the field container
-        $vehicleContainer.append($newSelect).append($removeButton);
-
-        // Append the new field container to the additionalStaffField
-        $('#additionalStaffVehicleUpdate').append($vehicleContainer);
+        addDropdownStaff("#additionalStaffVehicleUpdate","#vehicle-staffUpdate",["V01", "V02", "V03", "V04", "V05"]);
     });
 
     //Add Equipment
     // Predefined counts for each equipment ID
     const equipmentCounts = {
-        "L01": 5,
-        "L02": 3,
-        "L03": 7,
-        "L04": 2,
-        "L05": 4
+        "E01": 5,
+        "E02": 3,
+        "E03": 7,
+        "E04": 2,
+        "E05": 4
     };
 
     // jQuery to add a new equipment dropdown with a count input and remove button
     $('#addStaffEquipmentButton').on('click', function() {
-        // Create a container for the equipment select, count input, and remove button
-        const $equipmentContainer = $('<div class="d-flex align-items-center mt-2 text-white"></div>');
-
-        // Create the equipment select element
-        const $newSelect = $('<select class="form-control me-2"></select>');
-        $newSelect.append('<option value="">Select Equipment</option>'); // Default option
-        const optionLogs = ["L01", "L02", "L03", "L04", "L05"];
-        optionLogs.forEach(function(optionValue) {
-            $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
-        });
-
-        // Create a quantity input field
-        const $quantityInput = $('<input type="number" class="form-control me-2" placeholder="Count" min="1" value="1" readonly>');
-
-        // Update count input based on selected equipment
-        $newSelect.on('change', function() {
-            const selectedEquipment = $(this).val();
-            if (selectedEquipment && equipmentCounts[selectedEquipment]) {
-                $quantityInput.val(equipmentCounts[selectedEquipment]);
-            } else {
-                $quantityInput.val(1); // Default value if none selected
-            }
-        });
-
-        // Create a remove button
-        const $removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
-        $removeButton.on('click', function() {
-            $equipmentContainer.remove(); // Remove this container when clicked
-        });
-
-        // Append the select, quantity input, and remove button to the container
-        $equipmentContainer.append($newSelect).append($quantityInput).append($removeButton);
-
-        // Append the new equipment container to the additionalStaffEquipment section
-        $('#additionalStaffEquipment').append($equipmentContainer);
+        addDropdownStaff("#additionalStaffEquipment","#equipment-staff",["E01", "E02", "E03", "E04", "E05"],"equipment",equipmentCounts);
     });
 
     //Add Equipment Update Modal
     // Predefined counts for each equipment ID
     const equipmentCountsUpdate = {
-        "L01": 5,
-        "L02": 3,
-        "L03": 7,
-        "L04": 2,
-        "L05": 4
+        "E01": 5,
+        "E02": 3,
+        "E03": 7,
+        "E04": 2,
+        "E05": 4
     };
 
     // jQuery to add a new equipment dropdown with a count input and remove button
     $('#addStaffEquipmentButtonUpdate').on('click', function() {
-        // Create a container for the equipment select, count input, and remove button
-        const $equipmentContainer = $('<div class="d-flex align-items-center mt-2"></div>');
-
-        // Create the equipment select element
-        const $newSelect = $('<select class="form-control me-2"></select>');
-        $newSelect.append('<option value="">Select Equipment</option>'); // Default option
-        const optionLogs = ["L01", "L02", "L03", "L04", "L05"];
-        optionLogs.forEach(function(optionValue) {
-            $newSelect.append(`<option value="${optionValue}">${optionValue}</option>`);
-        });
-
-        // Create a quantity input field
-        const $quantityInput = $('<input type="number" class="form-control me-2" placeholder="Count" min="1" value="1" readonly>');
-
-        // Update count input based on selected equipment
-        $newSelect.on('change', function() {
-            const selectedEquipment = $(this).val();
-            if (selectedEquipment && equipmentCountsUpdate[selectedEquipment]) {
-                $quantityInput.val(equipmentCountsUpdate[selectedEquipment]);
-            } else {
-                $quantityInput.val(1); // Default value if none selected
-            }
-        });
-
-        // Create a remove button
-        const $removeButton = $('<button type="button" class="btn btn-danger">Remove</button>');
-        $removeButton.on('click', function() {
-            $equipmentContainer.remove(); // Remove this container when clicked
-        });
-
-        // Append the select, quantity input, and remove button to the container
-        $equipmentContainer.append($newSelect).append($quantityInput).append($removeButton);
-
-        // Append the new equipment container to the additionalStaffEquipment section
-        $('#additionalStaffEquipmentUpdate').append($equipmentContainer);
+        addDropdownStaff('#additionalStaffEquipmentUpdate','#equipment-staffUpdate',["E01", "E02", "E03", "E04", "E05"],"equipment",equipmentCountsUpdate)
     });
+
+    function addDropdownStaff(containerId, selectClass, options, type, equipmentCountsList) {
+        const $container = $('<div class="d-flex align-items-center mt-2"></div>');
+        const $select = $('<select id="optionSelect" class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>').addClass(selectClass);
+
+        // Populate select options
+        options.forEach(option => $select.append(`<option class="text-white" style="background-color:#2B2B2B" value="${option}">${option}</option>`));
+
+        // Remove button
+        const $removeBtn = $('<button class="btn btn-danger">Remove</button>');
+        $removeBtn.on('click', function() {
+            $container.remove();
+        });
+
+        $container.append($select).append($removeBtn);
+        $(containerId).append($container);
+
+        if (type === "equipment"){
+            // Create a quantity input field
+            const $quantityInput = $('<input type="number" class="form-control me-2 text-white" placeholder="Count" min="1" value="1" style="background-color:#2B2B2B">');
+
+            // Update count input based on selected equipment
+            $select.on('change', function() {
+                const selectedEquipment = $(this).val();
+                if (selectedEquipment && equipmentCountsList[selectedEquipment]) {
+                    $quantityInput.val(equipmentCountsList[selectedEquipment]);
+                } else {
+                    $quantityInput.val(1); // Default value if none selected
+                }
+            });
+            // Append the select, quantity input, and remove button to the container
+            $container.append($select).append($quantityInput).append($removeBtn);
+        }
+    }
 });
