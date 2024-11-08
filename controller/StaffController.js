@@ -207,7 +207,7 @@ $(document).ready(function() {
 
         // Collect updated equipment values
         let updatedEquipmentStaff = [];
-        $("#updateEquipment input").each(function() {
+        $("#updateEquipment select").each(function() {
             let equipmentValue = $(this).val();
             if (equipmentValue) {
                 updatedEquipmentStaff.push(equipmentValue);
@@ -221,7 +221,6 @@ $(document).ready(function() {
         });
 
         let staff = staffDetails[clickTableRow];
-        console.log(staff)
         staff.firstName = memberFirstName;
         staff.lastName = memberLastName;
         staff.joinedDate = joinedDate;
@@ -252,7 +251,7 @@ $(document).ready(function() {
             const dropdownWrapper = $('<div class="dropdown-wrapper mb-3" style="display: flex; align-items: center;"></div>');
 
             // Create the dropdown
-            const dropdown = $('<select class="form-control me-2"></select>');
+            const dropdown = $('<select class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>');
             options.forEach(option => {
                 dropdown.append(`<option value="${option}" ${option.trim() === value ? 'selected' : ''}>${option}</option>`);
             });
@@ -275,7 +274,6 @@ $(document).ready(function() {
     }
 
     //delete Staff Member Details
-    // Show delete confirmation modal
     $('#staffDetailsTable').on('click', '.delete-button', function () {
         const index = $(this).data('index');
         $('#confirmDeleteYes').data('index', index);
@@ -284,10 +282,16 @@ $(document).ready(function() {
 
     // Handle the confirmation of deletion - yes button
     $('#confirmDeleteYes').on('click', function () {
-        const index = $(this).data('index'); // Get the stored index
-        staffDetails.splice(index, 1); // Remove the vehicle from the array
+        const index = $(this).data('index');
+        staffDetails.splice(index, 1);
         loadStaffTable(); // Refresh the table
-        $('#confirmStaffDeleteModal').modal('hide'); // Hide the modal
+        $('#confirmStaffDeleteModal').modal('hide');
+
+        // Ensure the modal and backdrop are fully removed when hidden (overlay)
+        $('#confirmStaffDeleteModal').on('hidden.bs.modal', function () {
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
+        });
     });
 
 //No button
