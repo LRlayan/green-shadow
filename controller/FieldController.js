@@ -1,8 +1,6 @@
 let fieldCode = 0;
 let cardCount = 0;
 
-$(document).ready(function() {
-
     // add field card(save)
     $('#fieldForm').on('submit', function (e) {
         cardCount++;
@@ -19,68 +17,54 @@ $(document).ready(function() {
         // Collect all crop IDs from the main select and additional fields
         $('#filed-cropId').val() && cropIds.push($('#filed-cropId').val()); // Add main select value if not empty
         $('#additionalCrop select').each(function () {
-            cropIds.push($(this).val()); // Collect each additional select value
+            let ids = $(this).val();
+            const crops = {
+                cropCode:ids
+            }
+            cropIds.push(crops);
         });
 
         // Collect all staff IDs from the main select and additional fields
         $('#filed-staffId').val() && staffIds.push($('#filed-staffId').val()); // Add main select value if not empty
         $('#additionalStaff select').each(function () {
-            staffIds.push($(this).val()); // Collect each additional select value
+            let ids = $(this).val();
+            const staff = {
+                memberCode:ids
+            }
+            staffIds.push(staff);
         });
 
         // Remove empty values (if any)
-        cropIds = cropIds.filter(id => id);
-        staffIds = staffIds.filter(id => id);
+        cropIds = cropIds.filter(id => ({ cropCode: id }));
+        staffIds = staffIds.filter(id => ({ memberCode: id }));
 
-        // Use the image preview if available
-        let fieldImage1 = $('#preview1').attr('src');
-        let fieldImage2 = $('#preview2').attr('src');
+        let fieldImageFile1 = $('#fieldImage1Input')[0].files[0];
+        let fieldImageFile2 = $('#fieldImage2Input')[0].files[0];
 
-        // Generate a unique ID for each carousel and card
-        let uniqueCarouselId = `carousel${Math.floor(Math.random() * 100000)}`;
-        let uniqueId = Math.floor(Math.random() * 100);
+        const formData = new FormData();
+        formData.append("name", fieldName);
+        formData.append("location", location); //"e.g., 79.8612, 6.9271"
+        formData.append("extentSize", extentSize);
+        formData.append("fieldImage1", fieldImageFile1);
+        formData.append("fieldImage2", fieldImageFile2);
+        // formData.append("staffList", new Blob([JSON.stringify(staffIds)], { type: "application/json" }));
+        // formData.append("cropList", new Blob([JSON.stringify(cropIds)], { type: "application/json" }));
 
-        let newFieldCard = `
-        <div id="card${cardCount}" class="col-md-6 col-lg-4 mb-4">
-            <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
-                <div id="${uniqueCarouselId}" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        <div id="img1" class="carousel-item active">
-                            <img src="${fieldImage1}" id="image1" class="d-block w-100 fixed-image image-preview1" alt="Field Image 1">
-                        </div>
-                        <div id="img2" class="carousel-item">
-                            <img src="${fieldImage2}" id="image2" class="d-block w-100 fixed-image image-preview2" alt="Field Image 2">
-                        </div>            
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#${uniqueCarouselId}" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#${uniqueCarouselId}" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">Field Details</h5>
-                    <p class="card-filedCode"><strong>Code:</strong> C${uniqueId}</p>
-                    <p class="card-name"><strong>Name:</strong> ${fieldName}</p>
-                    <p class="card-location"><strong>Location:</strong> ${location}</p>
-                    <p class="card-extent-size"><strong>Extent Size:</strong> ${extentSize}</p>
-                    <p class="card-crop"><strong>Crop:</strong> ${cropIds.join(', ')}</p>
-                    <p class="card-staff"><strong>Staff:</strong> ${staffIds.join(', ')}</p>
-                    <p class="card-log"><strong>Log:</strong> ${logIds.join(', ')}</p>
-                    <div class="d-flex justify-content-between">
-                        <button class="btn btn-success flex-grow-1 me-2 update-button" data-card-id="card${cardCount}">Update</button>
-                        <button type="button" class="btn btn-danger flex-grow-1 delete-button delete-button" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-card-id="card${cardCount}">Delete</button>
-                    </div>
-                </div>                            
-            </div> 
-        </div>       
-        `;
-
-        // Append the new card to the row container
-        $('#fieldCard').append(newFieldCard);
+        $.ajax({
+            url: "http://localhost:5050/api/v1/fields",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                alert("saved field");
+                let loadFieldCard = new LoadFieldCard();
+                loadFieldCard.loadAllFieldCard();
+            },
+            error: function (xhr, status, error) {
+                alert("Faild field");
+            }
+        });
 
         // Reset the form
         $('#fieldForm')[0].reset();
@@ -323,6 +307,83 @@ function previewFieldImage(imageInputId,imgPreviewId){
     });
 }
 
+export class LoadFieldCard{
+    loadAllFieldCard(){
+        $.ajax({
+            url: "http://localhost:5050/api/v1/fields",
+            type: "GET",
+            success: function (fields) {
+                // Clear existing crop cards
+                $("#fieldCard").empty();
+                console.log("Retrieved fields:", fields);
+
+                // Loop through each crop and create a card
+                fields.forEach((field, index) => {
+
+                    if (field.location.x) {
+                        console.log("x not null",field.location.x)
+                    } else {
+                        console.warn("Item or item.x is null or undefined:", item);
+                    }
+
+                    let imageData1 = `data:image/jpeg;base64,${field.fieldImage1}`;
+                    let imageData2 = `data:image/jpeg;base64,${field.fieldImage2}`;
+                    const carouselId = `carousel${index}`;
+                    // Generate a unique ID for each carousel and card
+                    let uniqueCarouselId = `carousel${Math.floor(Math.random() * 100000)}`;
+                    let uniqueId = Math.floor(Math.random() * 100);
+
+                    let newFieldCard = `
+                    <div id="card${index}" class="col-md-6 col-lg-4 mb-4">
+                        <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
+                            <div id="${carouselId}" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div id="img1" class="carousel-item active">
+                                        <img src="${imageData1}" id="image1" class="d-block w-100 fixed-image image-preview1" alt="Field Image 1">
+                                    </div>
+                                    <div id="img2" class="carousel-item">
+                                        <img src="${imageData2}" id="image2" class="d-block w-100 fixed-image image-preview2" alt="Field Image 2">
+                                    </div>            
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Field Details</h5>
+                                <p class="card-filedCode"><strong>Code:</strong> ${field.fieldCode}</p>
+                                <p class="card-name"><strong>Name:</strong> ${field.name}</p>
+                                <p class="card-location"><strong>Location:</strong> x: ${field.location.x} y: ${field.location.y}</p>
+                                <p class="card-extent-size"><strong>Extent Size:</strong> ${field.extentSize}</p>
+                                <p class="card-crop"><strong>Crop:</strong> ${field.cropList.join(', ')}</p>
+                                <p class="card-staff"><strong>Staff:</strong> ${field.staffList.join(', ')}</p>
+                                <p class="card-log"><strong>Log:</strong> ${field.logList.join(', ')}</p>
+                                <div class="d-flex justify-content-between">
+                                    <button class="btn btn-success flex-grow-1 me-2 update-button" data-card-id="card${index}">Update</button>
+                                    <button type="button" class="btn btn-danger flex-grow-1 delete-button delete-button" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-card-id="card${index}">Delete</button>
+                                </div>
+                            </div>                            
+                        </div> 
+                    </div>       
+                    `;
+
+                    // Append the new card to the row container
+                    $('#fieldCard').append(newFieldCard);
+                });
+            },
+            error: function (xhr, status, error) {
+                console.error("Failed to retrieve fields:", xhr.responseText);
+                alert("Failed to retrieve crops");
+            }
+        });
+    }
+}
+
 // Function to clear the update field form
 function clearUpdateFieldForm() {
     // Clear text inputs
@@ -354,4 +415,3 @@ function clearFieldForm() {
     $('#preview1').addClass('d-none').attr('src', '');
     $('#preview2').addClass('d-none').attr('src', '');
 }
-});
