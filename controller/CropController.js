@@ -264,7 +264,6 @@ export class LoadCards{
             success: function (crops) {
                 // Clear existing crop cards
                 $("#cropCard").empty();
-                console.log("Retrieved crops:", crops);
 
                 // Loop through each crop and create a card
                 crops.forEach((crop, index) => {
