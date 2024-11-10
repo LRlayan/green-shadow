@@ -1,4 +1,5 @@
 import { LoadCards } from './CropController.js';
+import {LoadFieldCard} from './FieldController.js';
 
 $('#signInAndSignUp-sec').css({display: 'block'})
 $('#header-sec').css({display:'none'});
@@ -49,6 +50,8 @@ $('#dashboard').on('click',function (){
 });
 
 $('#field').on('click',function (){
+    const loadCard = new LoadFieldCard();
+    loadCard.loadAllFieldCard();
     $('#main-label').text('Field Manage');
     $('#field-sec').css({display:'block'});
     $('#dashboard-sec').css({display:'none'});
