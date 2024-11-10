@@ -1,3 +1,5 @@
+import { LoadCards } from './CropController.js';
+
 $('#signInAndSignUp-sec').css({display: 'block'})
 $('#header-sec').css({display:'none'});
 $('#dashboard-sec').css({display:'none'});
@@ -58,6 +60,8 @@ $('#field').on('click',function (){
 });
 
 $('#crops').on('click',function (){
+    const loadCard = new LoadCards();
+    loadCard.loadAllCropCard();
     $('#main-label').text('Crop Manage');
     $('#crops-sec').css({display:'block'});
     $('#dashboard-sec').css({display:'none'});
