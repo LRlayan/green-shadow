@@ -20,41 +20,41 @@ $('#cropForm').on('submit', function (e) {
     // Collect all field IDs from the main select and additional fields
     $('#crop-FieldId').val() && fieldIds.push($('#crop-FieldId').val()); // Add main select value if not empty
     $('#additionalField select').each(function () {
-        fieldIds.push($(this).val()); // Collect each additional select value
+        let ids = $(this).val();
+        const fields = {
+            fieldCode:ids
+        }
+        fieldIds.push(fields);
     });
 
     // Remove empty values (if any)
-    fieldIds = fieldIds.filter(id => id);
+    fieldIds = fieldIds.filter(id => ({ fieldCode: id }));
 
-    let cropImage = $('#previewCropImg').attr('src'); // Use the image preview if available
+    let cropImageFile = $('#cropImageInput')[0].files[0];
 
-    // Create new card HTML
-    let newCard = `
-            <div class="col-md-6 col-lg-4 mb-4" id="card${cardCount}">
-                <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
-                    <div class="card-image-container">
-                        <img src="${cropImage}" class="card-img-top image-preview" alt="Crop Image">
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">Crop Details</h5>
-                        <p class="card-cropCode"><strong>Code:</strong> C${Math.floor(Math.random() * 100)}</p>
-                        <p class="card-name"><strong>Name:</strong> ${cropName}</p>
-                        <p class="card-scientific"><strong>Scientific Name:</strong> ${scientificName}</p>
-                        <p class="card-category"><strong>Category:</strong> ${category}</p>
-                        <p class="card-season"><strong>Crop Season:</strong> ${season}</p>
-                        <p class="card-FieldId"><strong>Field ID:</strong> ${fieldIds.join(', ')}</p>
-                        <p class="card-logs"><strong>Logs:</strong> ${logIds.join(', ')}</p>
-                        <div class="d-flex justify-content-between">
-                            <button class="btn btn-success flex-grow-1 me-2 update-button" data-card-id="card${cardCount}">Update</button>
-                            <button class="btn btn-danger flex-grow-1 delete-button" data-bs-toggle="modal" data-card-id="card${cardCount}" data-bs-target="#confirmCropDeleteModal">Delete</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
+    const formData = new FormData();
+    formData.append("cropName", cropName);
+    formData.append("scientificName", scientificName);
+    formData.append("category", category);
+    formData.append("season", season);
+    formData.append("cropImage", cropImageFile);
+    formData.append("fieldList", new Blob([JSON.stringify(fieldIds)], { type: "application/json" }));
 
-    // Append the new card to the row container
-    $('#cropCard').append(newCard);
+    $.ajax({
+        url: "http://localhost:5050/api/v1/crops",
+        type: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            alert("saved crop");
+            let loadCard = new LoadCards();
+            loadCard.loadAllCropCard();
+        },
+        error: function (xhr, status, error) {
+            alert("Faild crop");
+        }
+    });
 
     // Reset the form
     $('#cropForm')[0].reset();
