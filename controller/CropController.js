@@ -256,6 +256,53 @@ $(document).ready(function() {
     }
 });
 
+export class LoadCards{
+    loadAllCropCard() {
+        $.ajax({
+            url: "http://localhost:5050/api/v1/crops",
+            type: "GET",
+            success: function (crops) {
+                // Clear existing crop cards
+                $("#cropCard").empty();
+                console.log("Retrieved crops:", crops);
+
+                // Loop through each crop and create a card
+                crops.forEach((crop, index) => {
+                    let imageData = `data:image/jpeg;base64,${crop.cropImage}`;
+
+                    let newCard = `
+                        <div class="col-md-6 col-lg-4 mb-4" id="card${index}">
+                            <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
+                                <div class="card-image-container">
+                                    <img src="${imageData}" class="card-img-top image-preview" alt="Crop Image">
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Crop Details</h5>
+                                    <p class="card-cropCode"><strong>Code:</strong> ${crop.cropCode}</p>
+                                    <p class="card-name"><strong>Name:</strong> ${crop.cropName}</p>
+                                    <p class="card-scientific"><strong>Scientific Name:</strong> ${crop.scientificName}</p>
+                                    <p class="card-category"><strong>Category:</strong> ${crop.category}</p>
+                                    <p class="card-season"><strong>Crop Season:</strong> ${crop.season}</p>
+                                    <div class="d-flex justify-content-between">
+                                        <button class="btn btn-success flex-grow-1 me-2 update-button" data-card-id="card${index}">Update</button>
+                                        <button class="btn btn-danger flex-grow-1 delete-button" data-bs-toggle="modal" data-card-id="card${index}" data-bs-target="#confirmCropDeleteModal">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    // Append the new card to the crop container
+                    $("#cropCard").append(newCard);
+                });
+            },
+            error: function (xhr, status, error) {
+                alert("Failed to retrieve crops");
+            }
+        });
+    }
+}
+
 function clearAddModal(){
     $('#cropName, #crop-scientificName, #crop-Category,#crop-season').val(''); // Clear input fields
     $('#previewCropImg').hide().attr('src', ''); // Reset image preview
