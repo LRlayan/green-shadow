@@ -1,3 +1,5 @@
+import {LoadFieldCard} from './FieldController.js';
+
 let cardCount = 0;
 
 $('#newCropButton').on('click',function (){
@@ -64,7 +66,13 @@ $('#cropForm').on('submit', function (e) {
 
 // Function to add dynamic field dropdown in the add modal
 $('#addFieldButton').on('click', function() {
-    addDropdownUpdate('#additionalField', '#crop-FieldId', ["F01", "F02", "F03", "F04", "F05"]);
+    let fieldCard = new LoadFieldCard();
+    fieldCard.loadAllFieldCard().then(fieldCodes => {
+        console.log("Field codes:", fieldCodes);
+        addDropdownUpdate('#additionalField', '#crop-FieldId', fieldCodes);
+    }).catch(error => {
+        console.error("Error loading field cards:", error);
+    });
 });
 
 $('#cropImageInput').on('click',function (){
@@ -115,7 +123,13 @@ $('#cropCard').on('click', '.update-button', function() {
 
 // Function to add dynamic field dropdown in the update modal
 $('#addFieldBtnInCropUpdate').on('click', function() {
-    addDropdownUpdate('#additionalFieldInCropUpdate', '#fieldInCropUpdate', ["F01", "F02", "F03", "F04", "F05"]);
+    // let fieldCard = new LoadFieldCard();
+    // fieldCard.loadAllFieldCard().then(fieldCodes => {
+    //     console.log("Field codes:", fieldCodes);
+        addDropdownUpdate('#additionalFieldInCropUpdate', '#fieldInCropUpdate', ["F01","F02","F03","F04","F05"]);
+    // }).catch(error => {
+    //     console.error("Error loading field cards:", error);
+    // });
 });
 
 // Function to add dynamic Log dropdown in the update modal
@@ -269,6 +283,8 @@ export class LoadCards {
 
                     // Loop through each crop and create a card
                     crops.forEach((crop, index) => {
+                        const fieldList = crop.fieldList ? crop.fieldList.map(field => field.fieldCode).join(", ") : "No field available";
+                        const logList = crop.logList ? crop.logList.map(log => log.logCode).join(", ") : "No log available";
                         let imageData = `data:image/jpeg;base64,${crop.cropImage}`;
 
                         let newCard = `
@@ -284,8 +300,8 @@ export class LoadCards {
                                     <p class="card-scientific"><strong>Scientific Name:</strong> ${crop.scientificName}</p>
                                     <p class="card-category"><strong>Category:</strong> ${crop.category}</p>
                                     <p class="card-season"><strong>Crop Season:</strong> ${crop.season}</p>
-                                    <p class="card-FieldId"><strong>Field ID:</strong> ${crop.fieldList.join(', ')}</p>
-                                    <p class="card-logs"><strong>Logs:</strong> ${crop.logList.join(', ')}</p>
+                                    <p class="card-FieldId"><strong>Field ID:</strong> ${fieldList}</p>
+                                    <p class="card-logs"><strong>Logs:</strong></p>
                                     <div class="d-flex justify-content-between">
                                         <button class="btn btn-success flex-grow-1 me-2 update-button" data-card-id="card${index}">Update</button>
                                         <button class="btn btn-danger flex-grow-1 delete-button" data-bs-toggle="modal" data-card-id="card${index}" data-bs-target="#confirmCropDeleteModal">Delete</button>
@@ -302,6 +318,7 @@ export class LoadCards {
                 },
                 error: function (xhr, status, error) {
                     alert("Failed to retrieve crops");
+                    reject(error);
                 }
             });
         });
