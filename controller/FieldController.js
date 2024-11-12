@@ -20,20 +20,20 @@ let cardCount = 0;
         $('#filed-cropId').val() && cropIds.push($('#filed-cropId').val()); // Add main select value if not empty
         $('#additionalCrop select').each(function () {
             let ids = $(this).val();
-            // const crops = {
-            //     cropCode:ids
-            // }
-            cropIds.push(ids);
+            const crops = {
+                cropCode:ids
+            }
+            cropIds.push(crops);
         });
 
         // Collect all staff IDs from the main select and additional fields
         $('#filed-staffId').val() && staffIds.push($('#filed-staffId').val()); // Add main select value if not empty
         $('#additionalStaff select').each(function () {
             let ids = $(this).val();
-            // const staff = {
-            //     memberCode:ids
-            // }
-            staffIds.push(ids);
+            const staff = {
+                memberCode:ids
+            }
+            staffIds.push(staff);
         });
 
         // Remove empty values (if any)
@@ -330,12 +330,7 @@ export class LoadFieldCard {
                 url: "http://localhost:5050/api/v1/fields",
                 type: "GET",
                 success: function (fields) {
-                    // Clear existing field cards
                     $("#fieldCard").empty();
-                    console.log("Retrieved fields:", fields);
-
-                    // Extract field codes
-                    const fieldCodes = fields.map(field => field.fieldCode);
 
                     // Loop through each field and create a card
                     fields.forEach((field, index) => {
