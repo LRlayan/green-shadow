@@ -1,3 +1,5 @@
+import { LoadCards } from './CropController.js';
+
 let fieldCode = 0;
 let cardCount = 0;
 
@@ -18,24 +20,24 @@ let cardCount = 0;
         $('#filed-cropId').val() && cropIds.push($('#filed-cropId').val()); // Add main select value if not empty
         $('#additionalCrop select').each(function () {
             let ids = $(this).val();
-            const crops = {
-                cropCode:ids
-            }
-            cropIds.push(crops);
+            // const crops = {
+            //     cropCode:ids
+            // }
+            cropIds.push(ids);
         });
 
         // Collect all staff IDs from the main select and additional fields
         $('#filed-staffId').val() && staffIds.push($('#filed-staffId').val()); // Add main select value if not empty
         $('#additionalStaff select').each(function () {
             let ids = $(this).val();
-            const staff = {
-                memberCode:ids
-            }
-            staffIds.push(staff);
+            // const staff = {
+            //     memberCode:ids
+            // }
+            staffIds.push(ids);
         });
 
         // Remove empty values (if any)
-        cropIds = cropIds.filter(id => ({ cropCode: id }));
+        cropIds = cropIds.filter(crop => ({ cropCode: crop }));
         staffIds = staffIds.filter(id => ({ memberCode: id }));
 
         let fieldImageFile1 = $('#fieldImage1Input')[0].files[0];
@@ -48,7 +50,7 @@ let cardCount = 0;
         formData.append("fieldImage1", fieldImageFile1);
         formData.append("fieldImage2", fieldImageFile2);
         // formData.append("staffList", new Blob([JSON.stringify(staffIds)], { type: "application/json" }));
-        // formData.append("cropList", new Blob([JSON.stringify(cropIds)], { type: "application/json" }));
+        formData.append("cropList", new Blob([JSON.stringify(cropIds)], { type: "application/json" }));
 
         $.ajax({
             url: "http://localhost:5050/api/v1/fields",
@@ -57,9 +59,17 @@ let cardCount = 0;
             processData: false,
             contentType: false,
             success: function (response) {
-                alert("saved field");
                 let loadFieldCard = new LoadFieldCard();
-                loadFieldCard.loadAllFieldCard();
+                let loadCropList = new LoadSelectedFieldWithCrop();
+
+                loadFieldCard.loadAllFieldCard().then(fieldCodes => {
+                    console.log("Field codes:", fieldCodes);
+                    loadCropList.loadSelectedFiled(fieldCodes);
+                    // Here you can use the retrieved fieldCodes array as needed
+                    alert("saved field");
+                }).catch(error => {
+                    console.error("Error loading field cards:", error);
+                });
             },
             error: function (xhr, status, error) {
                 alert("Faild field");
@@ -84,7 +94,13 @@ let cardCount = 0;
 
     // Add Additional Crop Combo box
     $('#addFieldCropButton').on('click', function() {
-        addDropdown('#additionalCrop', 'filed-cropId', ["C01", "C02", "C03", "C04", "C05"]);
+        let cropCard = new LoadCards();
+        cropCard.loadAllCropCard().then(cropCodes => {
+            console.log("Field codes:", cropCodes);
+            addDropdown('#additionalCrop', 'filed-cropId', cropCodes);
+        }).catch(error => {
+            console.error("Error loading field cards:", error);
+        });
     });
     // Add Additional Staff Combo box
     $('#addFieldStaffButton').on('click', function() {
@@ -307,78 +323,97 @@ function previewFieldImage(imageInputId,imgPreviewId){
     });
 }
 
-export class LoadFieldCard{
-    loadAllFieldCard(){
-        $.ajax({
-            url: "http://localhost:5050/api/v1/fields",
-            type: "GET",
-            success: function (fields) {
-                // Clear existing crop cards
-                $("#fieldCard").empty();
-                console.log("Retrieved fields:", fields);
+export class LoadFieldCard {
+    loadAllFieldCard() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: "http://localhost:5050/api/v1/fields",
+                type: "GET",
+                success: function (fields) {
+                    // Clear existing field cards
+                    $("#fieldCard").empty();
+                    console.log("Retrieved fields:", fields);
 
-                // Loop through each crop and create a card
-                fields.forEach((field, index) => {
+                    // Extract field codes
+                    const fieldCodes = fields.map(field => field.fieldCode);
 
-                    if (field.location.x) {
-                        console.log("x not null",field.location.x)
-                    } else {
-                        console.warn("Item or item.x is null or undefined:", item);
-                    }
+                    // Loop through each field and create a card
+                    fields.forEach((field, index) => {
+                        const cropList = field.cropList ? field.cropList.map(crop => crop.cropCode).join(", ") : "No crops available";
 
-                    let imageData1 = `data:image/jpeg;base64,${field.fieldImage1}`;
-                    let imageData2 = `data:image/jpeg;base64,${field.fieldImage2}`;
-                    const carouselId = `carousel${index}`;
-                    // Generate a unique ID for each carousel and card
-                    let uniqueCarouselId = `carousel${Math.floor(Math.random() * 100000)}`;
-                    let uniqueId = Math.floor(Math.random() * 100);
+                        let imageData1 = `data:image/jpeg;base64,${field.fieldImage1}`;
+                        let imageData2 = `data:image/jpeg;base64,${field.fieldImage2}`;
+                        const carouselId = `carousel${index}`;
 
-                    let newFieldCard = `
-                    <div id="card${index}" class="col-md-6 col-lg-4 mb-4">
-                        <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
-                            <div id="${carouselId}" class="carousel slide" data-bs-ride="carousel">
-                                <div class="carousel-inner">
-                                    <div id="img1" class="carousel-item active">
-                                        <img src="${imageData1}" id="image1" class="d-block w-100 fixed-image image-preview1" alt="Field Image 1">
+                        let newFieldCard = `
+                            <div id="card${index}" class="col-md-6 col-lg-4 mb-4">
+                                <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
+                                    <div id="${carouselId}" class="carousel slide" data-bs-ride="carousel">
+                                        <div class="carousel-inner">
+                                            <div id="img1" class="carousel-item active">
+                                                <img src="${imageData1}" id="image1" class="d-block w-100 fixed-image image-preview1" alt="Field Image 1">
+                                            </div>
+                                            <div id="img2" class="carousel-item">
+                                                <img src="${imageData2}" id="image2" class="d-block w-100 fixed-image image-preview2" alt="Field Image 2">
+                                            </div>            
+                                        </div>
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button>
                                     </div>
-                                    <div id="img2" class="carousel-item">
-                                        <img src="${imageData2}" id="image2" class="d-block w-100 fixed-image image-preview2" alt="Field Image 2">
-                                    </div>            
-                                </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">Field Details</h5>
-                                <p class="card-filedCode"><strong>Code:</strong> ${field.fieldCode}</p>
-                                <p class="card-name"><strong>Name:</strong> ${field.name}</p>
-                                <p class="card-location"><strong>Location:</strong> x: ${field.location.x} y: ${field.location.y}</p>
-                                <p class="card-extent-size"><strong>Extent Size:</strong> ${field.extentSize}</p>
-                                <p class="card-crop"><strong>Crop:</strong> ${field.cropList.join(', ')}</p>
-                                <p class="card-staff"><strong>Staff:</strong> ${field.staffList.join(', ')}</p>
-                                <p class="card-log"><strong>Log:</strong> ${field.logList.join(', ')}</p>
-                                <div class="d-flex justify-content-between">
-                                    <button class="btn btn-success flex-grow-1 me-2 update-button" data-card-id="card${index}">Update</button>
-                                    <button type="button" class="btn btn-danger flex-grow-1 delete-button delete-button" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-card-id="card${index}">Delete</button>
-                                </div>
-                            </div>                            
-                        </div> 
-                    </div>       
-                    `;
+                                    <div class="card-body">
+                                        <h5 class="card-title">Field Details</h5>
+                                        <p class="card-filedCode"><strong>Code:</strong> ${field.fieldCode}</p>
+                                        <p class="card-name"><strong>Name:</strong> ${field.name}</p>
+                                        <p class="card-location"><strong>Location:</strong> x: ${field.location.x} y: ${field.location.y}</p>
+                                        <p class="card-extent-size"><strong>Extent Size:</strong> ${field.extentSize}</p>
+                                        <p class="card-crop"><strong>Crop:</strong>${cropList}</p>
+                                        <div class="d-flex justify-content-between">
+                                            <button class="btn btn-success flex-grow-1 me-2 update-button" data-field-code="${field.fieldCode}">Update</button>
+                                            <button type="button" class="btn btn-danger flex-grow-1 delete-button" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-field-code="${field.fieldCode}">Delete</button>
+                                        </div>
+                                    </div>                            
+                                </div> 
+                            </div>       
+                        `;
 
-                    // Append the new card to the row container
-                    $('#fieldCard').append(newFieldCard);
-                });
+                        // Append the new card to the row container
+                        $('#fieldCard').append(newFieldCard);
+                    });
+
+                    // Resolve the promise with the list of field codes
+                    resolve(fieldCodes);
+                },
+                error: function (xhr, status, error) {
+                    alert("Failed to retrieve fields");
+                    reject(error);
+                }
+            });
+        });
+    }
+}
+
+export class LoadSelectedFieldWithCrop{
+    loadSelectedFiled(fieldCodes){
+        console.log("-> codes : ",fieldCodes)
+        let lastCode = fieldCodes.pop();
+        const fieldId = lastCode; // Replace with the actual fieldId you want to retrieve
+        console.log("pop code : " , fieldId)
+        $.ajax({
+            url: `http://localhost:5050/api/v1/fields/${fieldId}`,
+            type: "GET",
+            contentType: "application/json",
+            success: function(data) {
+                console.log("Field data:", data);
+                // Process the data as needed
             },
-            error: function (xhr, status, error) {
-                console.error("Failed to retrieve fields:", xhr.responseText);
-                alert("Failed to retrieve crops");
+            error: function(xhr, status, error) {
+                console.error("Error fetching field data:", xhr.responseText);
             }
         });
     }

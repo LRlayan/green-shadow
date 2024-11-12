@@ -256,20 +256,22 @@ $(document).ready(function() {
     }
 });
 
-export class LoadCards{
+export class LoadCards {
     loadAllCropCard() {
-        $.ajax({
-            url: "http://localhost:5050/api/v1/crops",
-            type: "GET",
-            success: function (crops) {
-                // Clear existing crop cards
-                $("#cropCard").empty();
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: "http://localhost:5050/api/v1/crops",
+                type: "GET",
+                success: function (crops) {
+                    // Clear existing crop cards
+                    $("#cropCard").empty();
+                    const cropCodes = crops.map(crop => crop.cropCode);
 
-                // Loop through each crop and create a card
-                crops.forEach((crop, index) => {
-                    let imageData = `data:image/jpeg;base64,${crop.cropImage}`;
+                    // Loop through each crop and create a card
+                    crops.forEach((crop, index) => {
+                        let imageData = `data:image/jpeg;base64,${crop.cropImage}`;
 
-                    let newCard = `
+                        let newCard = `
                         <div class="col-md-6 col-lg-4 mb-4" id="card${index}">
                             <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
                                 <div class="card-image-container">
@@ -293,13 +295,15 @@ export class LoadCards{
                         </div>
                     `;
 
-                    // Append the new card to the crop container
-                    $("#cropCard").append(newCard);
-                });
-            },
-            error: function (xhr, status, error) {
-                alert("Failed to retrieve crops");
-            }
+                        // Append the new card to the crop container
+                        $("#cropCard").append(newCard);
+                    });
+                    resolve(cropCodes);
+                },
+                error: function (xhr, status, error) {
+                    alert("Failed to retrieve crops");
+                }
+            });
         });
     }
 }
