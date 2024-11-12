@@ -331,9 +331,11 @@ export class LoadFieldCard {
                 type: "GET",
                 success: function (fields) {
                     $("#fieldCard").empty();
+                    const fieldCodes = fields.map(field => field.fieldCode);
 
                     // Loop through each field and create a card
                     fields.forEach((field, index) => {
+                        const location = field.location ? field.location.split(",") : ["No location data"];
                         const cropList = field.cropList ? field.cropList.map(crop => crop.cropCode).join(", ") : "No crops available";
 
                         let imageData1 = `data:image/jpeg;base64,${field.fieldImage1}`;
@@ -365,7 +367,7 @@ export class LoadFieldCard {
                                         <h5 class="card-title">Field Details</h5>
                                         <p class="card-filedCode"><strong>Code:</strong> ${field.fieldCode}</p>
                                         <p class="card-name"><strong>Name:</strong> ${field.name}</p>
-                                        <p class="card-location"><strong>Location:</strong> x: ${field.location.x} y: ${field.location.y}</p>
+                                        <p class="card-location"><strong>Location:</strong> x: ${location[0]} y: ${location[1]}</p>
                                         <p class="card-extent-size"><strong>Extent Size:</strong> ${field.extentSize}</p>
                                         <p class="card-crop"><strong>Crop:</strong>${cropList}</p>
                                         <div class="d-flex justify-content-between">
@@ -380,7 +382,6 @@ export class LoadFieldCard {
                         // Append the new card to the row container
                         $('#fieldCard').append(newFieldCard);
                     });
-
                     // Resolve the promise with the list of field codes
                     resolve(fieldCodes);
                 },
