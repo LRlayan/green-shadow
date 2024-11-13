@@ -65,8 +65,13 @@ let cardCount = 0;
                 loadFieldCard.loadAllFieldCard().then(fieldCodes => {
                     console.log("Field codes:", fieldCodes);
                     loadCropList.loadSelectedFiled(fieldCodes);
-                    // Here you can use the retrieved fieldCodes array as needed
-                    alert("saved field");
+
+                    Swal.fire({
+                        icon: "success",
+                        title: "Your work has been saved",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
                 }).catch(error => {
                     console.error("Error loading field cards:", error);
                 });
