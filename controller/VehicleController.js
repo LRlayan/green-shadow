@@ -34,30 +34,42 @@ $(document).ready(function () {
             staffEquipment: staffEquipment
         };
 
-        $.ajax({
-            url: "http://localhost:5050/api/v1/vehicles",  // Replace with your actual API endpoint
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(vehicleDTO),
-            success: function () {
-                alert("Vehicle saved successfully!");
-                const loadAllVehicle = new LoadAllVehicleDetails();
-                loadAllVehicle.loadVehicleTable().then(vehicleCode => {
-                    console.log("vehi ",vehicleCode)
-                }).catch(error =>{
-                    console.error("Error loading field cards:", error);
-                });
+        Swal.fire({
+            title: "Do you want to save the changes?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Save",
+            denyButtonText: `Don't save`
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "http://localhost:5050/api/v1/vehicles",  // Replace with your actual API endpoint
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(vehicleDTO),
+                    success: function () {
+                        const loadAllVehicle = new LoadAllVehicleDetails();
+                        loadAllVehicle.loadVehicleTable().then(vehicleCode => {
+                            Swal.fire("Saved!", "", "success");
+                        }).catch(error =>{
+                            console.error("Error loading field cards:", error);
+                        });
 
-                // Refresh the table with updated data
-                $('#additionalVehicleStaff').empty();
-                $('#vehicle-modal').modal("hide");
-            },
-            error: function (xhr, status, error) {
-                if (xhr.status === 400) {
-                    alert("Failed to save vehicle: Bad request");
-                } else {
-                    alert("Failed to save vehicle: Server error");
-                }
+                        // Refresh the table with updated data
+                        $('#additionalVehicleStaff').empty();
+                        $('#vehicle-modal').modal("hide");
+                    },
+                    error: function (xhr, status, error) {
+                        if (xhr.status === 400) {
+                            alert("Failed to save vehicle: Bad request");
+                        } else {
+                            alert("Failed to save vehicle: Server error");
+                        }
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
             }
         });
     });
