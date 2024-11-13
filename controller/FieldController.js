@@ -52,32 +52,39 @@ let cardCount = 0;
         // formData.append("staffList", new Blob([JSON.stringify(staffIds)], { type: "application/json" }));
         formData.append("cropList", new Blob([JSON.stringify(cropIds)], { type: "application/json" }));
 
-        $.ajax({
-            url: "http://localhost:5050/api/v1/fields",
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                let loadFieldCard = new LoadFieldCard();
-                let loadCropList = new LoadSelectedFieldWithCrop();
+        Swal.fire({
+            title: "Do you want to save the changes?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Save",
+            denyButtonText: `Don't save`
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "http://localhost:5050/api/v1/fields",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        let loadFieldCard = new LoadFieldCard();
+                        let loadCropList = new LoadSelectedFieldWithCrop();
 
-                loadFieldCard.loadAllFieldCard().then(fieldCodes => {
-                    console.log("Field codes:", fieldCodes);
-                    loadCropList.loadSelectedFiled(fieldCodes);
-
-                    Swal.fire({
-                        icon: "success",
-                        title: "Field has been saved",
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                }).catch(error => {
-                    console.error("Error loading field cards:", error);
+                        loadFieldCard.loadAllFieldCard().then(fieldCodes => {
+                            console.log("Field codes:", fieldCodes);
+                            loadCropList.loadSelectedFiled(fieldCodes);
+                            Swal.fire("Saved!", "", "success");
+                        }).catch(error => {
+                            console.error("Error loading field cards:", error);
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Faild field");
+                    }
                 });
-            },
-            error: function (xhr, status, error) {
-                alert("Faild field");
+            } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
             }
         });
 
