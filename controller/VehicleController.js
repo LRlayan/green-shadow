@@ -41,7 +41,14 @@ $(document).ready(function () {
             data: JSON.stringify(vehicleDTO),
             success: function () {
                 alert("Vehicle saved successfully!");
-                loadVehicleTable(); // Refresh the table with updated data
+                const loadAllVehicle = new LoadAllVehicleDetails();
+                loadAllVehicle.loadVehicleTable().then(vehicleCode => {
+                    console.log("vehi ",vehicleCode)
+                }).catch(error =>{
+                    console.error("Error loading field cards:", error);
+                });
+
+                // Refresh the table with updated data
                 $('#additionalVehicleStaff').empty();
                 $('#vehicle-modal').modal("hide");
             },
@@ -53,35 +60,7 @@ $(document).ready(function () {
                 }
             }
         });
-
-        let vehicleDetail = new Vehicle(licensePlateNumber,vehicleName,category,fuelType,status,staffEquipment,remark);
-        vehicleDetails.push(vehicleDetail);
-        loadVehicleTable(); // Refresh the table with updated data
     });
-
-    //load data to vehicle table
-    function loadVehicleTable() {
-        $('#vehicleDetailsTable').empty();
-        const tableBody = $("#vehicleDetailsTable");
-        tableBody.empty();
-
-        vehicleDetails.map((vehicle,index) => {
-            const row = `
-                <tr>
-                    <td class="code"></td>
-                    <td class="licensePlateNumber">${vehicle.licensePlateNumber}</td>
-                    <td class="vehicleName">${vehicle.vehicleName}</td>
-                    <td class="category">${vehicle.category}</td>
-                    <td class="fuelType">${vehicle.fuelType}</td>
-                    <td class="status">${vehicle.status}</td>
-                    <td class="staffMember">${vehicle.staffMember.join(', ')}</td>
-                    <td class="remark">${vehicle.remark}</td>
-                    <td><button class="btn btn-danger delete-button" data-index="${index}">Delete</button></td>
-                </tr>
-            `;
-            tableBody.append(row);
-        });
-    }
 
     // Assuming your table rows are in tbody with id "vehicleDetailsTable"
     $('#vehicleDetailsTable').on('click', 'tr', function () {
@@ -252,4 +231,56 @@ $(document).ready(function () {
     });
 });
 
+export class LoadAllVehicleDetails{
 
+    loadVehicleTable() {
+        $('#vehicleDetailsTable').empty();  // Clear existing rows
+        const tableBody = $("#vehicleDetailsTable");
+        const vehicleCodes = [];  // Array to store vehicle codes
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: "http://localhost:5050/api/v1/vehicles",
+                type: "GET",
+                success: function (vehicles) {  // Assume 'vehicles' is an array of vehicle objects
+                    vehicles.forEach(vehicle => {
+                        const vehicleDetail = new Vehicle(
+                            vehicle.licensePlateNumber,
+                            vehicle.name,
+                            vehicle.category,
+                            vehicle.fuelType,
+                            vehicle.status,
+                            vehicle.staff ? vehicle.staff.name : "N/A",  // Handle nested staff details
+                            vehicle.remark
+                        );
+
+                        // Add vehicle code to the array
+                        vehicleCodes.push(vehicle.vehicleCode);
+
+                        const row = `
+                            <tr>
+                                <td class="code">${vehicle.vehicleCode}</td>
+                                <td class="licensePlateNumber">${vehicleDetail.licensePlateNumber}</td>
+                                <td class="vehicleName">${vehicleDetail.vehicleName}</td>
+                                <td class="category">${vehicleDetail.category}</td>
+                                <td class="fuelType">${vehicleDetail.fuelType}</td>
+                                <td class="status">${vehicleDetail.status}</td>
+                                <td class="staffMember">${vehicleDetail.staffMember}</td>
+                                <td class="remark">${vehicleDetail.remark}</td>
+                                <td><button class="btn btn-danger delete-button" data-index="${vehicle.vehicleCode}">Delete</button></td>
+                            </tr>
+                        `;
+                        tableBody.append(row);  // Append each row to the table
+                    });
+
+                    // Resolve the promise with the array of vehicle codes
+                    resolve(vehicleCodes);
+                },
+                error: function (xhr, status, error) {
+                    alert("Failed to retrieve vehicle data");
+                    reject(error);
+                }
+            });
+        });
+    }
+}
