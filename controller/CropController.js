@@ -42,32 +42,38 @@ $('#cropForm').on('submit', function (e) {
     formData.append("cropImage", cropImageFile);
     formData.append("fieldList", new Blob([JSON.stringify(fieldIds)], { type: "application/json" }));
 
-    $.ajax({
-        url: "http://localhost:5050/api/v1/crops",
-        type: "POST",
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function (response) {
-            alert("saved crop");
-            let loadCard = new LoadCards();
-            loadCard.loadAllCropCard();
-            Swal.fire({
-                icon: "success",
-                title: "Crop has been saved",
-                showConfirmButton: false,
-                timer: 1500
+    Swal.fire({
+        title: "Do you want to save the changes?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Save",
+        denyButtonText: `Don't save`
+    }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "http://localhost:5050/api/v1/crops",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    // Reset the form
+                    $('#cropForm')[0].reset();
+                    $('#previewCrop').addClass('d-none'); // Hide image preview
+                    $('#newCropModal').modal('hide'); // Hide the modal
+                    let loadCard = new LoadCards();
+                    loadCard.loadAllCropCard();
+                    Swal.fire("Saved!", "", "success");
+                },
+                error: function (xhr, status, error) {
+                    alert("Faild crop");
+                }
             });
-        },
-        error: function (xhr, status, error) {
-            alert("Faild crop");
+        } else if (result.isDenied) {
+            Swal.fire("Changes are not saved", "", "info");
         }
     });
-
-    // Reset the form
-    $('#cropForm')[0].reset();
-    $('#previewCrop').addClass('d-none'); // Hide image preview
-    $('#newCropModal').modal('hide'); // Hide the modal
 });
 
 // Function to add dynamic field dropdown in the add modal
