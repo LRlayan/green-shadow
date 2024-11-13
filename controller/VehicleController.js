@@ -24,11 +24,39 @@ $(document).ready(function () {
             }
         });
 
+        let vehicleDTO = {
+            licensePlateNumber: licensePlateNumber,
+            name: vehicleName,
+            category: category,
+            fuelType: fuelType,
+            status: status,
+            remark: remark,
+            staffEquipment: staffEquipment
+        };
+
+        $.ajax({
+            url: "http://localhost:5050/api/v1/vehicles",  // Replace with your actual API endpoint
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(vehicleDTO),
+            success: function () {
+                alert("Vehicle saved successfully!");
+                loadVehicleTable(); // Refresh the table with updated data
+                $('#additionalVehicleStaff').empty();
+                $('#vehicle-modal').modal("hide");
+            },
+            error: function (xhr, status, error) {
+                if (xhr.status === 400) {
+                    alert("Failed to save vehicle: Bad request");
+                } else {
+                    alert("Failed to save vehicle: Server error");
+                }
+            }
+        });
+
         let vehicleDetail = new Vehicle(licensePlateNumber,vehicleName,category,fuelType,status,staffEquipment,remark);
         vehicleDetails.push(vehicleDetail);
         loadVehicleTable(); // Refresh the table with updated data
-        $('#additionalVehicleStaff').empty();
-        $('#vehicle-modal').modal("hide");
     });
 
     //load data to vehicle table
