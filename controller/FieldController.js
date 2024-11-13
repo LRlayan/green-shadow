@@ -68,7 +68,7 @@ let cardCount = 0;
 
                     Swal.fire({
                         icon: "success",
-                        title: "Your work has been saved",
+                        title: "Field has been saved",
                         showConfirmButton: false,
                         timer: 1500
                     });

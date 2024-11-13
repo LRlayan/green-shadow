@@ -52,6 +52,12 @@ $('#cropForm').on('submit', function (e) {
             alert("saved crop");
             let loadCard = new LoadCards();
             loadCard.loadAllCropCard();
+            Swal.fire({
+                icon: "success",
+                title: "Crop has been saved",
+                showConfirmButton: false,
+                timer: 1500
+            });
         },
         error: function (xhr, status, error) {
             alert("Faild crop");
