@@ -1,6 +1,7 @@
 import { LoadCards } from './CropController.js';
 import {LoadFieldCard} from './FieldController.js';
 import {LoadAllVehicleDetails} from './VehicleController.js';
+import {LoadAllEquipment} from './EquipmentController.js';
 
 $('#signInAndSignUp-sec').css({display: 'block'})
 $('#header-sec').css({display:'none'});
@@ -112,6 +113,8 @@ $('#vehicle').on('click',function (){
 });
 
 $('#equipment').on('click',function (){
+    const loadAllEquipment = new LoadAllEquipment();
+    loadAllEquipment.loadAllEquDetails();
     $('#main-label').text('Equipment Manage');
     $('#equipment-sec').css({display:'block'});
     $('#dashboard-sec').css({display:'none'});
