@@ -1,5 +1,6 @@
 import Staff from "../model/Staff.js";
 import {equipmentDetails, staffDetails, pairsValues , staffEquipmentCount} from "../db/db.js"
+import {LoadAllEquipment} from './EquipmentController.js';
 
 
 $(document).ready(function() {
@@ -28,7 +29,10 @@ $(document).ready(function() {
         $("#additionalStaffField select").each(function() {
             let fieldValue = $(this).val();
             if (fieldValue) {
-                fieldStaff.push(fieldValue);
+                const fields = {
+                    fieldCode:fieldValue
+                }
+                fieldStaff.push(fields);
             }
         });
 
@@ -37,16 +41,22 @@ $(document).ready(function() {
         $("#additionalStaffVehicle select").each(function() {
             let staffValue = $(this).val();
             if (staffValue) {
-                staffVehicle.push(staffValue);
+                const vehicle = {
+                    memberCode:staffValue
+                }
+                staffVehicle.push(vehicle);
             }
         });
 
         // Collect multiple staff values
         let staffEquipment = [];
         $("#additionalStaffEquipment select").each(function() {
-            let staffValue = $(this).val();
-            if (staffValue) {
-                staffEquipment.push(staffValue);
+            let equValue = $(this).val();
+            if (equValue) {
+                const equipment = {
+                    equipmentCode:equValue
+                }
+                staffEquipment.push(equipment);
             }
         });
 
@@ -395,7 +405,7 @@ $(document).ready(function() {
     //Add Field Update Modal
     // jQuery to add a new dropdown with predefined options and a remove button
     $('#addStaffFieldButtonUpdate').on('click', function() {
-        addDropdownStaff("#additionalStaffFieldUpdate","#filed-staffUpdate",["F01", "F02", "F03", "F04", "F05"]);
+        addDropdownStaff("#additionalStaffFieldUpdate","#filed-staffUpdate",["S01", "S02", "S03", "S04", "S05"]);
     });
 
     //Add Vehicle
@@ -422,7 +432,12 @@ $(document).ready(function() {
 
     // jQuery to add a new equipment dropdown with a count input and remove button
     $('#addStaffEquipmentButton').on('click', function() {
-        addDropdownStaff("#additionalStaffEquipment","#equipment-staff",["E01", "E02", "E03", "E04", "E05"],"equipment",equipmentCounts);
+        let equDetails = new LoadAllEquipment();
+        equDetails.loadAllEquDetails().then(equCodes =>{
+            addDropdownStaff("#additionalStaffEquipment","#equipment-staff",equCodes,"equipment",equipmentDetails);
+        }).catch(error => {
+            console.error("Error loading field equipment:", error);
+        });
     });
 
     //Add Equipment Update Modal
