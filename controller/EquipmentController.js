@@ -48,11 +48,10 @@ $('#addEquipmentButton').on('click',(e)=>{
     });
 
     let equipmentDTO = {
-        equipmentCode:"",
         name:equipmentName,
         type:equipmentType,
         status:equipmentStatus,
-        availableCount:6,
+        availableCount:count,
         staffEquipmentDetailsList:[],
         fieldList:fieldEquipment
     }
@@ -64,11 +63,10 @@ $('#addEquipmentButton').on('click',(e)=>{
         confirmButtonText: "Save",
         denyButtonText: `Don't save`
     }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
 
             $.ajax({
-                url: "http://localhost:5050/api/v1/equipment",  // Replace with your actual API endpoint
+                url: "http://localhost:5050/api/v1/equipment",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify(equipmentDTO),
@@ -82,9 +80,9 @@ $('#addEquipmentButton').on('click',(e)=>{
                 },
                 error: function (xhr, status, error) {
                     if (xhr.status === 400) {
-                        alert("Failed to save staff: Bad request");
+                        alert("Failed to save equipment: Bad request");
                     } else {
-                        alert("Failed to save staff: Server error");
+                        alert("Failed to save equipment: Server error");
                     }
                 }
             });
@@ -344,6 +342,7 @@ export class LoadAllEquipment{
                             equipmentDetails.push({ equipmentCode, count }); // Add to the array
                         }
                     });
+                    console.log("equ details : ",equipmentDetails)
                     console.log("length : ",equipmentDetails.length)
                     // Resolve the promise with the array of vehicle codes
                     resolve(equipmentCodes);
