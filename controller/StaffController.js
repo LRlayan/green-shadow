@@ -476,14 +476,28 @@ $(document).ready(function() {
             const $quantityInput = $('<input type="number" id="equipmentInput" class="form-control me-2 text-white" placeholder="Count" min="1" value="1" style="background-color:#2B2B2B">');
 
             // Update count input based on selected equipment
-            $('#optionSelect').on('change', function() {
+            $select.on('change', function() {
                 const selectedEquipment = $(this).val();
-                if (selectedEquipment && equipmentCountsList[selectedEquipment]) {
-                    $quantityInput.val(equipmentCountsList[selectedEquipment]);
+                if (selectedEquipment &&  equipmentCountsList.some(e => e.equipmentCode === selectedEquipment)) {
+                    const equipment = equipmentCountsList.find(e => e.equipmentCode === selectedEquipment);
+                    $quantityInput.val(equipment.count);
                 } else {
                     $quantityInput.val(1); // Default value if none selected
                 }
             });
+
+            //default equipmentCode count selected
+            const updateInputField = () => {
+                const selectedEquipment = $select.val();
+                const equipment = equipmentCountsList.find(e => e.equipmentCode === selectedEquipment);
+                if (equipment) {
+                    $quantityInput.val(equipment.count); // Set the count based on the selected equipment
+                } else {
+                    $quantityInput.val(1); // Default value if no matching equipment is found
+                }
+            };
+            updateInputField();
+
             // Append the select, quantity input, and remove button to the container
             $container.append($select).append($quantityInput).append($removeBtn);
 
