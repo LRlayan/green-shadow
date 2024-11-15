@@ -1,5 +1,5 @@
 import Equipment from "../model/Equipment.js";
-import {equipmentDetails} from "../db/db.js"
+import {equipmentDetails, staffEquipmentCount} from "../db/db.js"
 
 let clickTableRow = 0;
 
@@ -28,7 +28,10 @@ $('#addEquipmentButton').on('click',(e)=>{
     $("#additionalEquipmentStaff select").each(function() {
         let staffValue = $(this).val();
         if (staffValue) {
-            staffEquipment.push(staffValue);
+            const staff = {
+                memberCode:staffValue
+            }
+            staffEquipment.push(staff);
         }
     });
 
@@ -37,7 +40,59 @@ $('#addEquipmentButton').on('click',(e)=>{
     $("#additionalEquipmentField select").each(function() {
         let fieldValue = $(this).val();
         if (fieldValue) {
-            fieldEquipment.push(fieldValue);
+            const field = {
+                fieldCode:fieldValue
+            }
+            fieldEquipment.push(field);
+        }
+    });
+
+    let equipmentDTO = {
+        equipmentCode:"",
+        name:equipmentName,
+        type:equipmentType,
+        status:equipmentStatus,
+        availableCount:6,
+        staffEquipmentDetailsList:[],
+        fieldList:fieldEquipment
+    }
+
+    Swal.fire({
+        title: "Do you want to save the changes?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Save",
+        denyButtonText: `Don't save`
+    }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+
+            $.ajax({
+                url: "http://localhost:5050/api/v1/equipment",  // Replace with your actual API endpoint
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(equipmentDTO),
+                success: function () {
+                    Swal.fire("Saved!", "", "success");
+                    // const loadAllVehicle = new LoadAllVehicleDetails();
+                    // loadAllVehicle.loadStaffTable().then(vehicleCode => {
+                    //
+                    // }).catch(error =>{
+                    //     console.error("Error loading field cards:", error);
+                    // });
+                    clearEquipmentModalFields("#equipmentName","#equipmentType","#equipmentStatus","#count","#initialStaff select","#initialEquipment select","#additionalEquipmentStaff","#additionalEquipmentField");
+                    $("#equipment-modal").modal('hide');
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status === 400) {
+                        alert("Failed to save staff: Bad request");
+                    } else {
+                        alert("Failed to save staff: Server error");
+                    }
+                }
+            });
+        } else if (result.isDenied) {
+            Swal.fire("Changes are not saved", "", "info");
         }
     });
 
@@ -258,4 +313,10 @@ function clearEquipmentModalFields(equipmentName,equipmentType,equipmentStatus,c
     $(`${initialEquipment} select`).val('');
     $(`${additionalEquipmentStaff}`).empty(); // Remove dynamic staff dropdowns
     $(`${additionalEquipmentField}`).empty(); // Remove dynamic field dropdowns
+}
+
+export class loadAllEquipment{
+    loadAllEquDetails(){
+
+    }
 }
