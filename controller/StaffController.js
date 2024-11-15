@@ -1,5 +1,6 @@
 import Staff from "../model/Staff.js";
-import {staffDetails} from "../db/db.js"
+import {equipmentDetails, staffDetails, pairsValues , staffEquipmentCount} from "../db/db.js"
+
 
 $(document).ready(function() {
     let clickTableRow = 0;
@@ -48,15 +49,99 @@ $(document).ready(function() {
                 staffEquipment.push(staffValue);
             }
         });
-        let staffLogs = [];
-        let staffDetail = new Staff("01",firstName,lastName,joinedDate,designation,gender,dob,addressLine01,addressLine02,addressLine03,addressLine04,addressLine05,contactNo,emailStaff,roleStaff,fieldStaff,staffVehicle,staffLogs,staffEquipment);
-        staffDetails.push(staffDetail);
+
+        console.log("Gender : ",gender)
+
+        let staffDTO = {
+            firstName: firstName,
+            lastName: lastName,
+            joinedDate: joinedDate,
+            dateOfBirth: dob,
+            gender: gender,
+            designation: designation,
+            addressLine1: addressLine01,
+            addressLine2: addressLine02,
+            addressLine3: addressLine03,
+            addressLine4: addressLine04,
+            addressLine5: addressLine05,
+            contactNo: contactNo,
+            email: emailStaff,
+            role: roleStaff,
+            staffEquipmentDetailsList: staffEquipmentCount,
+            vehicleList: staffVehicle,
+            fieldList: fieldStaff,
+        };
+
+        let staffMember = {
+            memberCode: "Staff-01"
+        }
+
+        staffEquipmentCount.length = 0; // Clear previous values
+        pairsValues.forEach(pair => {
+            const equipmentCode = {
+                equipmentEntity : pair.selectedValue
+            }
+
+            const staffEquipmentDetailsList = {
+                id:"",
+                useEquipmentCount: pair.inputCount,
+                staffEntity: staffMember,
+                equipmentEntity: equipmentCode
+            };
+            staffEquipmentCount.push(staffEquipmentDetailsList);
+        });
+
+        Swal.fire({
+            title: "Do you want to save the changes?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Save",
+            denyButtonText: `Don't save`
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+
+                staffEquipmentCount.forEach(value => {
+                    console.log("print     ====")
+                    console.log("eq ",value.equipmentEntity)
+                    console.log("staff ",value.staffEntity)
+                    console.log("eseEquip ",value.useEquipmentCount)
+                })
+
+                $.ajax({
+                    url: "http://localhost:5050/api/v1/staff",  // Replace with your actual API endpoint
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(staffDTO),
+                    success: function () {
+                        Swal.fire("Saved!", "", "success");
+                        // const loadAllVehicle = new LoadAllVehicleDetails();
+                        // loadAllVehicle.loadStaffTable().then(vehicleCode => {
+                        //
+                        // }).catch(error =>{
+                        //     console.error("Error loading field cards:", error);
+                        // });
+
+                        $('#staffForm')[0].reset()
+                        $('#additionalStaffField').empty();
+                        $('#additionalStaffVehicle').empty();
+                        $('#additionalStaffEquipment').empty();
+                        $('#newStaffModal').modal('hide');
+                    },
+                    error: function (xhr, status, error) {
+                        if (xhr.status === 400) {
+                            alert("Failed to save staff: Bad request");
+                        } else {
+                            alert("Failed to save staff: Server error");
+                        }
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
+            }
+        });
+
         loadStaffTable();
-        $('#staffForm')[0].reset()
-        $('#additionalStaffField').empty();
-        $('#additionalStaffVehicle').empty();
-        $('#additionalStaffEquipment').empty();
-        $('#newStaffModal').modal('hide');
     });
 
     function loadStaffTable(){
@@ -373,10 +458,10 @@ $(document).ready(function() {
 
         if (type === "equipment"){
             // Create a quantity input field
-            const $quantityInput = $('<input type="number" class="form-control me-2 text-white" placeholder="Count" min="1" value="1" style="background-color:#2B2B2B">');
+            const $quantityInput = $('<input type="number" id="equipmentInput" class="form-control me-2 text-white" placeholder="Count" min="1" value="1" style="background-color:#2B2B2B">');
 
             // Update count input based on selected equipment
-            $select.on('change', function() {
+            $('#optionSelect').on('change', function() {
                 const selectedEquipment = $(this).val();
                 if (selectedEquipment && equipmentCountsList[selectedEquipment]) {
                     $quantityInput.val(equipmentCountsList[selectedEquipment]);
@@ -386,6 +471,38 @@ $(document).ready(function() {
             });
             // Append the select, quantity input, and remove button to the container
             $container.append($select).append($quantityInput).append($removeBtn);
+
+            $select.change(function () {
+                updatePairsArray($select, $quantityInput);
+            });
+            $quantityInput.on('input', function () {
+                updatePairsArray($select, $quantityInput);
+            });
         }
+    }
+
+    function updatePairsArray(comboBox, inputField) {
+        const selectedValue = comboBox.val();
+        const inputCount = inputField.val();
+
+        // Check if both combo box and input field have values
+        if (selectedValue && inputCount) {
+            // Find the existing pair in pairsArray if it exists
+            const existingPairIndex = pairsValues.findIndex(
+                pair => pair.comboBox === comboBox && pair.inputField === inputField
+            );
+
+            // If pair already exists, update it; otherwise, add new pair
+            if (existingPairIndex > -1) {
+                pairsValues[existingPairIndex] = { selectedValue, inputCount };
+            } else {
+                pairsValues.push({ selectedValue, inputCount });
+            }
+        }
+
+        console.log(pairsValues); // For testing, outputs the array to the console
+        pairsValues.forEach(pair => {
+            console.log(`${pair.selectedValue} - ${pair.inputCount}`);
+        });
     }
 });
