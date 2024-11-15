@@ -80,7 +80,6 @@ $('#cropForm').on('submit', function (e) {
 $('#addFieldButton').on('click', function() {
     let fieldCard = new LoadFieldCard();
     fieldCard.loadAllFieldCard().then(fieldCodes => {
-        console.log("Field codes:", fieldCodes);
         addDropdownUpdate('#additionalField', '#crop-FieldId', fieldCodes);
     }).catch(error => {
         console.error("Error loading field cards:", error);
