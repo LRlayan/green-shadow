@@ -256,13 +256,14 @@ export class LoadAllVehicleDetails{
                 type: "GET",
                 success: function (vehicles) {  // Assume 'vehicles' is an array of vehicle objects
                     vehicles.forEach(vehicle => {
+                        console.log("staff member : ",vehicle.staffMember)
                         const vehicleDetail = new Vehicle(
                             vehicle.licensePlateNumber,
                             vehicle.name,
                             vehicle.category,
                             vehicle.fuelType,
                             vehicle.status,
-                            vehicle.staff ? vehicle.staff.name : "N/A",  // Handle nested staff details
+                            vehicle.staffMember || "N/A",  // Handle nested staff details
                             vehicle.remark
                         );
 
