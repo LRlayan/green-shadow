@@ -73,13 +73,10 @@ $('#addEquipmentButton').on('click',(e)=>{
                 contentType: "application/json",
                 data: JSON.stringify(equipmentDTO),
                 success: function () {
-                    Swal.fire("Saved!", "", "success");
-                    // const loadAllVehicle = new LoadAllVehicleDetails();
-                    // loadAllVehicle.loadStaffTable().then(vehicleCode => {
-                    //
-                    // }).catch(error =>{
-                    //     console.error("Error loading field cards:", error);
-                    // });
+                    const loadAllEquipment = new LoadAllEquipment();
+                    loadAllEquipment.loadAllEquDetails().then(equ =>{
+                        Swal.fire("Saved!", "", "success");
+                    });
                     clearEquipmentModalFields("#equipmentName","#equipmentType","#equipmentStatus","#count","#initialStaff select","#initialEquipment select","#additionalEquipmentStaff","#additionalEquipmentField");
                     $("#equipment-modal").modal('hide');
                 },
@@ -96,30 +93,11 @@ $('#addEquipmentButton').on('click',(e)=>{
         }
     });
 
-    let equipmentDetail = new Equipment(equipmentName,equipmentType,equipmentStatus,count,staffEquipment,fieldEquipment);
-    equipmentDetails.push(equipmentDetail);
-    loadEquipmentTable();
-    clearEquipmentModalFields("#equipmentName","#equipmentType","#equipmentStatus","#count","#initialStaff select","#initialEquipment select","#additionalEquipmentStaff","#additionalEquipmentField");
+    // let equipmentDetail = new Equipment(equipmentName,equipmentType,equipmentStatus,count,staffEquipment,fieldEquipment);
+    // equipmentDetails.push(equipmentDetail);
+    // loadEquipmentTable();
+    // clearEquipmentModalFields("#equipmentName","#equipmentType","#equipmentStatus","#count","#initialStaff select","#initialEquipment select","#additionalEquipmentStaff","#additionalEquipmentField");
 });
-
-function loadEquipmentTable(){
-    $('#equipmentDetailsTable').empty();
-    equipmentDetails.map((equipment, index) => {
-        const row = `
-            <tr>
-                <td class="code">${equipment.code}</td>
-                <td class="name">${equipment.name}</td>
-                <td class="vehicleType">${equipment.type}</td>
-                <td class="status">${equipment.status}</td>
-                <td class="count">${equipment.count}</td>
-                <td class="staffMember">${equipment.assignStaff.join(', ')}</td>
-                <td class="fields">${equipment.assignField.join(', ')}</td>
-                <td><button class="btn btn-danger delete-button" data-index="${index}">Delete</button></td>
-            </tr>
-        `;
-        $('#equipmentDetailsTable').append(row);
-    });
-}
 
 // set values for update modal
 $('#equipmentDetailsTable').on('click', 'tr', function () {
@@ -315,8 +293,66 @@ function clearEquipmentModalFields(equipmentName,equipmentType,equipmentStatus,c
     $(`${additionalEquipmentField}`).empty(); // Remove dynamic field dropdowns
 }
 
-export class loadAllEquipment{
+export class LoadAllEquipment{
     loadAllEquDetails(){
+        $('#equipmentDetailsTable').empty();
+        const tableBody = $("#equipmentDetailsTable");
 
+        const equipmentCodes = [];
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: "http://localhost:5050/api/v1/equipment",
+                type: "GET",
+                success: function (equipment) {  // Assume 'vehicles' is an array of vehicle objects
+                    equipment.forEach(equ => {
+                        const equDetail = new Equipment(
+                            equ.name,
+                            equ.type,
+                            equ.status,
+                            equ.availableCount,
+                            equ.field ? equipment.field.fieldCode : "N/A",  // Handle nested staff details
+                            equ.staff ? equipment.staff.memberCode : "N/A"
+                        );
+
+                        console.log(equipment);
+
+                        // Add vehicle code to the array
+                        equipmentCodes.push(equ.equipmentCode);
+
+                        const row = `
+                            <tr>
+                                <td class="code">${equ.equipmentCode}</td>
+                                <td class="name">${equDetail.name}</td>
+                                <td class="vehicleType">${equDetail.type}</td>
+                                <td class="status">${equDetail.status}</td>
+                                <td class="count">${equDetail.count}</td>
+                                <td class="staffMember">${equDetail.assignStaff}</td>
+                                <td class="fields">${equDetail.assignField}</td>
+                                <td><button class="btn btn-danger delete-button" data-index="${equ.equipmentCode}">Delete</button></td>
+                            </tr>
+                        `;
+                        tableBody.append(row);  // Append each row to the table
+                    });
+
+                    $('#equipmentDetailsTable tr').each(function () {
+                        const equipmentCode = $(this).find('.code').text(); // Get the code value
+                        const count = parseInt($(this).find('.count').text()); // Get the count value (convert to integer)
+                        console.log("equ code : ",equipmentCode)
+                        console.log("equ count : ",count)
+                        if (equipmentCode && !isNaN(count)) { // Ensure valid values
+                            equipmentDetails.push({ equipmentCode, count }); // Add to the array
+                        }
+                    });
+                    console.log("length : ",equipmentDetails.length)
+                    // Resolve the promise with the array of vehicle codes
+                    resolve(equipmentCodes);
+                },
+                error: function (xhr, status, error) {
+                    alert("Failed to retrieve vehicle data");
+                    reject(error);
+                }
+            });
+        });
     }
 }
