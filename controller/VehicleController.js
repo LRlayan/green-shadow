@@ -123,8 +123,26 @@ $(document).ready(function () {
     // Handle the confirmation of deletion - yes button
     $('#confirmVehicleDeleteYes').on('click', function () {
         const index = $(this).data('index'); // Get the stored index
-        vehicleDetails.splice(index, 1); // Remove the vehicle from the array
-        loadVehicleTable(); // Refresh the table
+
+        $.ajax({
+            url: `http://localhost:5050/api/v1/vehicles/${index}`,
+            type: 'DELETE',
+            success: function () {
+                loadAllVehicle.loadVehicleTable();
+                Swal.fire('Deleted!', 'The vehicle has been deleted.', 'success');
+            },
+            error: function (xhr, status, error) {
+                console.error("Error deleting vehicle:", error);
+                if (xhr.status === 404) {
+                    Swal.fire('Error', 'Vehicle not found!', 'error');
+                } else if (xhr.status === 400) {
+                    Swal.fire('Error', 'Invalid vehicle ID!', 'error');
+                } else {
+                    Swal.fire('Error', 'Failed to delete vehicle. Please try again.', 'error');
+                }
+            }
+        });
+
         $('#confirmVehicleDeleteModal').modal('hide');
         // Ensure the modal and backdrop are fully removed when hidden (overlay)
         $('#confirmVehicleDeleteModal').on('hidden.bs.modal', function () {
