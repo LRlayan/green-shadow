@@ -2,8 +2,6 @@ import Staff from "../model/Staff.js";
 import {equipmentDetails, staffDetails, pairsValues , staffEquipmentCount} from "../db/db.js"
 import {LoadAllEquipment} from './EquipmentController.js';
 
-
-$(document).ready(function() {
     let clickTableRow = 0;
     //save staff member
     $('#addFieldButtonInStaff').on('click',(e)=>{
@@ -77,13 +75,13 @@ $(document).ready(function() {
             contactNo: contactNo,
             email: emailStaff,
             role: roleStaff,
-            staffEquipmentDetailsList: staffEquipmentCount,
+            staffEquipmentDetailsList: [],
             vehicleList: staffVehicle,
             fieldList: fieldStaff,
         };
 
         let staffMember = {
-            memberCode: "Staff-01"
+            memberCode: "MEMBER-1"
         }
 
         staffEquipmentCount.length = 0; // Clear previous values
@@ -124,14 +122,13 @@ $(document).ready(function() {
                     contentType: "application/json",
                     data: JSON.stringify(staffDTO),
                     success: function () {
-                        Swal.fire("Saved!", "", "success");
-                        // const loadAllVehicle = new LoadAllVehicleDetails();
-                        // loadAllVehicle.loadStaffTable().then(vehicleCode => {
-                        //
-                        // }).catch(error =>{
-                        //     console.error("Error loading field cards:", error);
-                        // });
-
+                        const allMember = new LoadAllStaffMember();
+                        allMember.loadAllMembers().then(staff =>{
+                            Swal.fire("Saved!", "", "success");
+                            console.log(staff)
+                        }).catch(error =>{
+                            console.error("Error loading staff member:", error);
+                        });
                         $('#staffForm')[0].reset()
                         $('#additionalStaffField').empty();
                         $('#additionalStaffVehicle').empty();
@@ -151,39 +148,39 @@ $(document).ready(function() {
             }
         });
 
-        loadStaffTable();
+        // loadStaffTable();
     });
 
-    function loadStaffTable(){
-        $('#staffDetailsTable').empty();
-        staffDetails.map((staff, index) => {
-            const row = `
-            <tr>
-                <td class="code">${staff.code}</td>
-                <td class="fName">${staff.firstName}</td>
-                <td class="lName">${staff.lastName}</td>
-                <td class="designation">${staff.designation}</td>
-                <td class="gender">${staff.gender}</td>
-                <td class="joinedDate">${staff.joinedDate}</td>
-                <td class="dob">${staff.dob}</td>
-                <td class="buildingNo">${staff.addressLine01}</td>
-                <td class="lane">${staff.addressLine02}</td>
-                <td class="city">${staff.addressLine03}</td>
-                <td class="state">${staff.addressLine04}</td>
-                <td class="postalCode">${staff.addressLine05}</td>
-                <td class="contactNo">${staff.contactNo}</td>
-                <td class="email">${staff.email}</td>
-                <td class="role">${staff.role}</td>
-                <td class="fields">${staff.fieldList.join(', ')}</td>
-                <td class="logs">${staff.logList.join(', ')}</td>
-                <td class="vehicle">${staff.vehicle.join(', ')}</td>
-                <td class="equipment">${staff.equipmentList.join(', ')}</td>
-                <td><button class="btn btn-danger delete-button" data-index="${index}">Delete</button></td>
-            </tr>
-        `;
-            $('#staffDetailsTable').append(row);
-        });
-    }
+    // function loadStaffTable(){
+    //     $('#staffDetailsTable').empty();
+    //     staffDetails.map((staff, index) => {
+    //         const row = `
+    //         <tr>
+    //             <td class="code">${staff.code}</td>
+    //             <td class="fName">${staff.firstName}</td>
+    //             <td class="lName">${staff.lastName}</td>
+    //             <td class="designation">${staff.designation}</td>
+    //             <td class="gender">${staff.gender}</td>
+    //             <td class="joinedDate">${staff.joinedDate}</td>
+    //             <td class="dob">${staff.dob}</td>
+    //             <td class="buildingNo">${staff.addressLine01}</td>
+    //             <td class="lane">${staff.addressLine02}</td>
+    //             <td class="city">${staff.addressLine03}</td>
+    //             <td class="state">${staff.addressLine04}</td>
+    //             <td class="postalCode">${staff.addressLine05}</td>
+    //             <td class="contactNo">${staff.contactNo}</td>
+    //             <td class="email">${staff.email}</td>
+    //             <td class="role">${staff.role}</td>
+    //             <td class="fields">${staff.fieldList.join(', ')}</td>
+    //             <td class="logs">${staff.logList.join(', ')}</td>
+    //             <td class="vehicle">${staff.vehicle.join(', ')}</td>
+    //             <td class="equipment">${staff.equipmentList.join(', ')}</td>
+    //             <td><button class="btn btn-danger delete-button" data-index="${index}">Delete</button></td>
+    //         </tr>
+    //     `;
+    //         $('#staffDetailsTable').append(row);
+    //     });
+    // }
 
     //update Staff member
     $('#staffDetailsTable').on('click','tr', function (){
@@ -421,15 +418,6 @@ $(document).ready(function() {
     });
 
     //Add Equipment
-    // Predefined counts for each equipment ID
-    const equipmentCounts = {
-        "E01": 5,
-        "E02": 3,
-        "E03": 7,
-        "E04": 2,
-        "E05": 4
-    };
-
     // jQuery to add a new equipment dropdown with a count input and remove button
     $('#addStaffEquipmentButton').on('click', function() {
         let equDetails = new LoadAllEquipment();
@@ -534,4 +522,78 @@ $(document).ready(function() {
             console.log(`${pair.selectedValue} - ${pair.inputCount}`);
         });
     }
-});
+
+export class LoadAllStaffMember {
+    loadAllMembers() {
+        $('#staffDetailsTable').empty();  // Clear existing rows
+        const tableBody = $("#staffDetailsTable");
+        const memberCodes = [];
+
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: "http://localhost:5050/api/v1/staff",
+                type: "GET",
+                success: function (staffMembers) {  // Assume 'vehicles' is an array of vehicle objects
+                    staffMembers.forEach(staffMember => {
+                        const staffDetail = new Staff(
+                            staffMembers.memberCode,
+                            staffMember.firstName,
+                            staffMember.lastName,
+                            staffMember.joinedDate,
+                            staffMember.designation,
+                            staffMember.gender,
+                            staffMember.dateOfBirth,
+                            staffMember.addressLine1,
+                            staffMember.addressLine2,
+                            staffMember.addressLine3,
+                            staffMember.addressLine4,
+                            staffMember.addressLine5,
+                            staffMember.contactNo,
+                            staffMember.email,
+                            staffMember.role,
+                            staffMember.fieldList || "N/A", // Handle nested staff details
+                            staffMember.vehicle || "N/A", // Handle nested staff details
+                            staffMember.logList || "N/A", // Handle nested staff details
+                            staffMember.equipmentList || "N/A" // Handle nested staff details
+                        );
+
+                        // Add vehicle code to the array
+                        memberCodes.push(staffMember.memberCode);
+                        const row = `
+                                <tr>
+                                    <td class="code">${staffMember.memberCode}</td>
+                                    <td class="fName">${staffDetail.firstName}</td>
+                                    <td class="lName">${staffDetail.lastName}</td>
+                                    <td class="designation">${staffDetail.designation}</td>
+                                    <td class="gender">${staffDetail.gender}</td>
+                                    <td class="joinedDate">${staffDetail.joinedDate}</td>
+                                    <td class="dob">${staffDetail.dob}</td>
+                                    <td class="buildingNo">${staffDetail.addressLine01}</td>
+                                    <td class="lane">${staffDetail.addressLine02}</td>
+                                    <td class="city">${staffDetail.addressLine03}</td>
+                                    <td class="state">${staffDetail.addressLine04}</td>
+                                    <td class="postalCode">${staffDetail.addressLine05}</td>
+                                    <td class="contactNo">${staffDetail.contactNo}</td>
+                                    <td class="email">${staffDetail.email}</td>
+                                    <td class="role">${staffDetail.role}</td>
+                                    <td class="fields">${staffDetail.fieldList}</td>
+                                    <td class="logs">${staffDetail.logList}</td>
+                                    <td class="vehicle">${staffDetail.vehicle}</td>
+                                    <td class="equipment">${staffDetail.equipmentList}</td>
+                                    <td><button class="btn btn-danger delete-button" data-index="${staffMembers.memberCode}">Delete</button></td>
+                                </tr>
+                            `;
+                        tableBody.append(row);  // Append each row to the table
+                    });
+
+                    // Resolve the promise with the array of vehicle codes
+                    resolve(memberCodes);
+                },
+                error: function (xhr, status, error) {
+                    alert("Failed to retrieve staff data");
+                    reject(error);
+                }
+            });
+        });
+    }
+}

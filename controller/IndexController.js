@@ -2,6 +2,7 @@ import { LoadCards } from './CropController.js';
 import {LoadFieldCard} from './FieldController.js';
 import {LoadAllVehicleDetails} from './VehicleController.js';
 import {LoadAllEquipment} from './EquipmentController.js';
+import {LoadAllStaffMember} from './StaffController.js';
 
 $('#signInAndSignUp-sec').css({display: 'block'})
 $('#header-sec').css({display:'none'});
@@ -78,6 +79,8 @@ $('#crops').on('click',function (){
 });
 
 $('#staff').on('click',function (){
+    const allStaffMember = new LoadAllStaffMember();
+    allStaffMember.loadAllMembers();
     $('#main-label').text('Staff Manage');
     $('#staff-sec').css({display:'block'});
     $('#dashboard-sec').css({display:'none'});
