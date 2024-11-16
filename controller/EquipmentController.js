@@ -133,8 +133,18 @@ $('#equipmentDetailsTable').on('click', 'tr', function () {
     $('#equipmentStatusUpdate').val(status);
     $('#countUpdate').val(count);
 
-    populateDropdownEquipment("#updateEquipmentFieldId",fieldsArray,["F01", "F02", "F03", "F04", "F05"]);
-    populateDropdownEquipment("#updateStaffEquipment",staffMemberArray,["S01", "S02", "S03", "S04", "S05"]);
+    loadAllField.loadAllFieldCard().then(fieldCode => {
+        populateDropdownEquipment("#updateEquipmentFieldId",fieldsArray,fieldCode);
+    }).catch(error => {
+        console.log("Not loading field codes ",error)
+    });
+
+    const loadAllMembers = new LoadAllStaffMember();
+    loadAllMembers.loadAllMembers().then(memberCode => {
+        populateDropdownEquipment("#updateStaffEquipment",staffMemberArray,memberCode);
+    }).catch(error => {
+        console.log("Not loading member codes ",error)
+    });
 });
 
 // Update equipment
@@ -193,12 +203,21 @@ $('#EquipmentButtonUpdate').on('click', () => {
 
 //Add additional Field Update Modal
 $('#addFieldButtonUpdate').on('click', function() {
-    addDropdownEquipment("#additionalFieldEquipmentUpdate","#equipment-fieldUpdate",["F01", "F02", "F03", "F04", "F05"])
+    loadAllField.loadAllFieldCard().then(fieldCode => {
+        addDropdownEquipment("#additionalFieldEquipmentUpdate", "#equipment-fieldUpdate", fieldCode)
+    }).catch(error => {
+        console.log("Not loading field codes ",error)
+    });
 });
 
 //Add additional Staff field Update Modal
 $('#addStaffButtonUpdate').on('click', function() {
-    addDropdownEquipment("#additionalStaffEquUpdate","#equ-staffUpdate",["S01", "S02", "S03", "S04", "S05"])
+    const loadAllMembers = new LoadAllStaffMember();
+    loadAllMembers.loadAllMembers().then(memberCode => {
+        addDropdownEquipment("#additionalStaffEquUpdate", "#equ-staffUpdate", memberCode)
+    }).catch(error => {
+        console.log("Not loading member codes ",error)
+    });
 });
 
 //delete Equipment
