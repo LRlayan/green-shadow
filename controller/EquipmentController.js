@@ -116,6 +116,7 @@ $('#equipmentDetailsTable').on('click', 'tr', function () {
     $('#additionalFieldEquipmentUpdate').empty();
 
     // Get values from the selected row
+    let code = $(this).find(".code").text();
     let name = $(this).find(".name").text();
     let type = $(this).find(".vehicleType").text();
     let status = $(this).find(".status").text();
@@ -128,6 +129,7 @@ $('#equipmentDetailsTable').on('click', 'tr', function () {
     let fieldsArray = $(this).find(".fields").text().split(", "); // Assuming comma-separated
 
     // Populate the modal fields with values from the row
+    $('#selectedEquipmentCode').val(code);
     $('#equipmentNameUpdate').val(name);
     $('#equipmentTypeUpdate').val(type);
     $('#equipmentStatusUpdate').val(status);
@@ -150,6 +152,7 @@ $('#equipmentDetailsTable').on('click', 'tr', function () {
 // Update equipment
 $('#EquipmentButtonUpdate').on('click', () => {
     // Get updated values from modal inputs
+    let equCode = $("#selectedEquipmentCode").val();
     let equipmentName = $("#equipmentNameUpdate").val();
     let equipmentType = $("#equipmentTypeUpdate").val();
     let equipmentStatus = $("#equipmentStatusUpdate").val();
@@ -186,19 +189,58 @@ $('#EquipmentButtonUpdate').on('click', () => {
     });
 
     // Update the selected equipment object with the new values
-    let equipment = equipmentDetails[clickTableRow];
-    equipment.name = equipmentName;
-    equipment.type = equipmentType;
-    equipment.status = equipmentStatus;
-    equipment.count = count;
-    equipment.assignStaff = updatedStaffEquipment;
-    equipment.assignField = updatedFieldEquipment;
+    // let equipment = equipmentDetails[clickTableRow];
+    // equipment.name = equipmentName;
+    // equipment.type = equipmentType;
+    // equipment.status = equipmentStatus;
+    // equipment.count = count;
+    // equipment.assignStaff = updatedStaffEquipment;
+    // equipment.assignField = updatedFieldEquipment;
 
-    // Reload the equipment table to reflect updated data
-    loadEquipmentTable();
-    // Close the modal after updating
-    clearEquipmentModalFields("#equipmentNameUpdate","#equipmentTypeUpdate","#equipmentStatusUpdate","#countUpdate","#initialFieldEquipmentUpdate select","#initialStaffEquUpdate select","#additionalStaffEquUpdate","#additionalFieldEquipmentUpdate");
-    $('#updateEquipment-modal').modal('hide');
+    const equipmentDTO = {
+        equipmentCode:equCode,
+        name:equipmentName,
+        type:equipmentType,
+        status:equipmentStatus,
+        availableCount: parseInt(count),
+        staffEquipmentDetailsList:[],
+        fieldList:[]
+    }
+    console.log("ecu code " , equCode)
+
+    Swal.fire({
+        title: "Do you want to update the changes?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Update",
+        denyButtonText: `Don't update`
+    }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+            $.ajax({
+                url: `http://localhost:5050/api/v1/equipment/${equCode}`, // Use the vehicleId from the clicked row
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(equipmentDTO),
+                success: function(response) {
+                    $('#updateEquipment-modal').modal('hide');
+                    const loadAllEquipment = new LoadAllEquipment();
+                    loadAllEquipment.loadAllEquDetails().then(equCodes =>{
+                        clearEquipmentModalFields("#equipmentNameUpdate","#equipmentTypeUpdate","#equipmentStatusUpdate","#countUpdate","#initialFieldEquipmentUpdate select","#initialStaffEquUpdate select","#additionalStaffEquUpdate","#additionalFieldEquipmentUpdate");
+                        Swal.fire("Updated!", "", "success");
+                    }).catch(error =>{
+                        console.error("equipment code not found:", error);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error updating equipment:", error);
+                    alert("Failed to update equipment. Please try again.");
+                }
+            });
+        } else if (result.isDenied) {
+            Swal.fire("Changes are not updated", "", "info");
+        }
+    });
 });
 
 //Add additional Field Update Modal
@@ -367,14 +409,10 @@ export class LoadAllEquipment{
                     $('#equipmentDetailsTable tr').each(function () {
                         const equipmentCode = $(this).find('.code').text(); // Get the code value
                         const count = parseInt($(this).find('.count').text()); // Get the count value (convert to integer)
-                        console.log("equ code : ",equipmentCode)
-                        console.log("equ count : ",count)
                         if (equipmentCode && !isNaN(count)) { // Ensure valid values
                             equipmentDetails.push({ equipmentCode, count }); // Add to the array
                         }
                     });
-                    console.log("equ details : ",equipmentDetails)
-                    console.log("length : ",equipmentDetails.length)
                     // Resolve the promise with the array of vehicle codes
                     resolve(equipmentCodes);
                 },
