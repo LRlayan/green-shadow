@@ -90,8 +90,6 @@ $(document).ready(function () {
         let status = $(this).find(".status").text()
         let remark = $(this).find(".remark").text()
 
-        console.log("vehi code : ",vehicleCode)
-        vehicleDetails.push(vehicleCode);
         clickTableRow = $(this).index();
 
         // Populate the modal fields
@@ -206,8 +204,8 @@ $(document).ready(function () {
             title: "Do you want to update the changes?",
             showDenyButton: true,
             showCancelButton: true,
-            confirmButtonText: "Save",
-            denyButtonText: `Don't save`
+            confirmButtonText: "Update",
+            denyButtonText: `Don't update`
         }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
