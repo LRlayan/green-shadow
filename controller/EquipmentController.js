@@ -102,11 +102,6 @@ $('#addEquipmentButton').on('click',(e)=>{
             Swal.fire("Changes are not saved", "", "info");
         }
     });
-
-    // let equipmentDetail = new Equipment(equipmentName,equipmentType,equipmentStatus,count,staffEquipment,fieldEquipment);
-    // equipmentDetails.push(equipmentDetail);
-    // loadEquipmentTable();
-    // clearEquipmentModalFields("#equipmentName","#equipmentType","#equipmentStatus","#count","#initialStaff select","#initialEquipment select","#additionalEquipmentStaff","#additionalEquipmentField");
 });
 
 // set values for update modal
@@ -188,15 +183,6 @@ $('#EquipmentButtonUpdate').on('click', () => {
         if (selectedValue) updatedStaffEquipment.push(selectedValue);
     });
 
-    // Update the selected equipment object with the new values
-    // let equipment = equipmentDetails[clickTableRow];
-    // equipment.name = equipmentName;
-    // equipment.type = equipmentType;
-    // equipment.status = equipmentStatus;
-    // equipment.count = count;
-    // equipment.assignStaff = updatedStaffEquipment;
-    // equipment.assignField = updatedFieldEquipment;
-
     const equipmentDTO = {
         equipmentCode:equCode,
         name:equipmentName,
@@ -273,8 +259,27 @@ $('#equipmentDetailsTable').on('click', '.delete-button', function () {
 // Handle the confirmation of deletion - yes button
 $('#confirmEquDeleteYes').on('click', function () {
     const index = $(this).data('index');
-    equipmentDetails.splice(index, 1); // Remove the vehicle from the array
-    loadEquipmentTable(); // Refresh the table
+
+    $.ajax({
+        url: `http://localhost:5050/api/v1/equipment/${index}`,
+        type: 'DELETE',
+        success: function () {
+            const loadAllEquipment = new LoadAllEquipment();
+            loadAllEquipment.loadAllEquDetails();
+            Swal.fire('Deleted!', 'The equipment has been deleted.', 'success');
+        },
+        error: function (xhr, status, error) {
+            console.error("Error deleting equipment:", error);
+            if (xhr.status === 404) {
+                Swal.fire('Error', 'Equipment not found!', 'error');
+            } else if (xhr.status === 400) {
+                Swal.fire('Error', 'Invalid equipment ID!', 'error');
+            } else {
+                Swal.fire('Error', 'Failed to delete equipment. Please try again.', 'error');
+            }
+        }
+    });
+
     $('#confirmEquipmentDeleteModal').modal('hide');
 
     // Ensure the modal and backdrop are fully removed when hidden (overlay)
@@ -385,9 +390,6 @@ export class LoadAllEquipment{
                             equ.field ? equipment.field.fieldCode : "N/A",  // Handle nested staff details
                             equ.staff ? equipment.staff.memberCode : "N/A"
                         );
-
-                        console.log(equipment);
-
                         // Add vehicle code to the array
                         equipmentCodes.push(equ.equipmentCode);
 
