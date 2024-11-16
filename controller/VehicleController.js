@@ -1,7 +1,10 @@
 import Vehicle from "../model/Vehicle.js";
 import {vehicleDetails} from "../db/db.js"
+import {LoadAllStaffMember} from './StaffController.js';
+
 $(document).ready(function () {
     let clickTableRow = 0;
+    const loadAllMember = new LoadAllStaffMember();
 
     //save vehicle
     $("#modalSubmitButton").on("click", (e)=> {
@@ -176,12 +179,16 @@ $(document).ready(function () {
 
     //Add additional Staff Modal
     $('#addVehicleStaffButton').on('click', function() {
-        addDropdownVehicle("#additionalVehicleStaff","#staff-vehicle",["S01", "S02", "S03", "S04", "S05"])
+        loadAllMember.loadAllMembers().then(memberCode =>{
+            addDropdownVehicle("#additionalVehicleStaff","#staff-vehicle",memberCode)
+        });
     });
 
     //Add additional Staff field Update Modal
     $('#addVehicleStaffButtonUpdate').on('click', function() {
-        addDropdownVehicle("#additionalVehicleStaffUpdate","#staff-vehicleUpdate",["S01", "S02", "S03", "S04", "S05"])
+        loadAllMember.loadAllMembers().then(memberCode => {
+            addDropdownVehicle("#additionalVehicleStaffUpdate", "#staff-vehicleUpdate", memberCode)
+        });
     });
 
     function addDropdownVehicle(containerId, selectClass, options) {
