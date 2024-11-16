@@ -99,8 +99,11 @@ $(document).ready(function () {
         $('#updateRemark').val(remark);
 
         let staffMemberArray = $(this).find(".staffMember").text().split(", ");
-
-        populateDropdownVehicle("#updateStaffVehicle",staffMemberArray,["S01", "S02", "S03", "S04", "S05"]);
+        loadAllMember.loadAllMembers().then(memberCode => {
+            populateDropdownVehicle("#updateStaffVehicle",staffMemberArray,memberCode);
+        }).catch(error => {
+            console.error("Error loading vehicle :", error);
+        })
     });
 
     // Show delete confirmation modal
@@ -179,8 +182,11 @@ $(document).ready(function () {
 
     //Add additional Staff Modal
     $('#addVehicleStaffButton').on('click', function() {
-        loadAllMember.loadAllMembers().then(memberCode =>{
+        loadAllMember.loadAllMembers().then(memberCode => {
+            console.log(memberCode)
             addDropdownVehicle("#additionalVehicleStaff","#staff-vehicle",memberCode)
+        }).catch(error => {
+            console.error("Error loading staff member details:", error);
         });
     });
 
@@ -188,6 +194,8 @@ $(document).ready(function () {
     $('#addVehicleStaffButtonUpdate').on('click', function() {
         loadAllMember.loadAllMembers().then(memberCode => {
             addDropdownVehicle("#additionalVehicleStaffUpdate", "#staff-vehicleUpdate", memberCode)
+        }).catch(error => {
+            console.error("Error loading staff member details:", error);
         });
     });
 
