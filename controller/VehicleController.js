@@ -318,7 +318,6 @@ $(document).ready(function () {
 });
 
 export class LoadAllVehicleDetails{
-
     loadVehicleTable() {
         $('#vehicleDetailsTable').empty();  // Clear existing rows
         const tableBody = $("#vehicleDetailsTable");
