@@ -1,5 +1,6 @@
 export default class Vehicle{
-    constructor(licensePlateNumber,vehicleName,category,fuelType,status,staffMember,remark) {
+    constructor(vehicleCode,licensePlateNumber,vehicleName,category,fuelType,status,staffMember,remark) {
+        this._vehicleCode = vehicleCode;
         this._licensePlateNumber = licensePlateNumber;
         this._vehicleName = vehicleName;
         this._category = category;
@@ -7,6 +8,14 @@ export default class Vehicle{
         this._status = status;
         this._staffMember = staffMember;
         this._remark = remark;
+    }
+
+    get vehicleCode() {
+        return this._vehicleCode;
+    }
+
+    set vehicleCode(value) {
+        return this._vehicleCode = value;
     }
 
     get licensePlateNumber() {
