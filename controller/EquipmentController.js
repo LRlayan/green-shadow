@@ -1,16 +1,28 @@
 import Equipment from "../model/Equipment.js";
 import {equipmentDetails, staffEquipmentCount} from "../db/db.js"
+import {LoadAllStaffMember} from "./StaffController.js";
+import {LoadFieldCard} from './FieldController.js';
 
 let clickTableRow = 0;
+const loadAllField = new LoadFieldCard();
 
 //Add Field Modal
 $('#addFieldButtonEquipment').on('click', function() {
-    addDropdownEquipment("#additionalEquipmentField","#field-equipment",["F01", "F02", "F03", "F04", "F05"])
+    loadAllField.loadAllFieldCard().then(fieldCode => {
+        addDropdownEquipment("#additionalEquipmentField","#field-equipment",fieldCode)
+    }).catch(error => {
+        console.log('Not loading equipment ',error)
+    });
 });
 
 //Add Staff Modal
 $('#addStaffButton').on('click', function() {
-    addDropdownEquipment("#additionalEquipmentStaff","#staff-equipment",["S01", "S02", "S03", "S04", "S05"])
+    const loadAllMembers = new LoadAllStaffMember();
+    loadAllMembers.loadAllMembers().then(memberCode => {
+        addDropdownEquipment("#additionalEquipmentStaff","#staff-equipment",memberCode)
+    }).catch(error => {
+        console.log("Not loading member ",error)
+    });
 });
 
 //save equipment
