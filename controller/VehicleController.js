@@ -1,10 +1,12 @@
 import Vehicle from "../model/Vehicle.js";
 import {vehicleDetails} from "../db/db.js"
 import {LoadAllStaffMember} from './StaffController.js';
+import {LoadCards} from "./CropController.js";
 
 $(document).ready(function () {
     let clickTableRow = 0;
     const loadAllMember = new LoadAllStaffMember();
+    const loadAllVehicle = new LoadAllVehicleDetails();
 
     //save vehicle
     $("#modalSubmitButton").on("click", (e)=> {
@@ -52,7 +54,6 @@ $(document).ready(function () {
                     contentType: "application/json",
                     data: JSON.stringify(vehicleDTO),
                     success: function () {
-                        const loadAllVehicle = new LoadAllVehicleDetails();
                         loadAllVehicle.loadVehicleTable().then(vehicleCode => {
                             Swal.fire("Saved!", "", "success");
                         }).catch(error =>{
@@ -81,6 +82,7 @@ $(document).ready(function () {
     $('#vehicleDetailsTable').on('click', 'tr', function () {
         $('#additionalVehicleStaffUpdate').empty();
         // Get values from the row
+        let vehicleCode = $(this).find(".code").text()
         let licensePlateNumber = $(this).find(".licensePlateNumber").text()
         let vehicleName = $(this).find(".vehicleName").text()
         let category = $(this).find(".category").text()
@@ -88,9 +90,12 @@ $(document).ready(function () {
         let status = $(this).find(".status").text()
         let remark = $(this).find(".remark").text()
 
+        console.log("vehi code : ",vehicleCode)
+        vehicleDetails.push(vehicleCode);
         clickTableRow = $(this).index();
 
         // Populate the modal fields
+        $('#selectedVehicleCode').val(vehicleCode);
         $('#updateLicensePlateNumber').val(licensePlateNumber);
         $('#updateVehicleName').val(vehicleName);
         $('#updateCategoryVehicle').val(category);
@@ -99,6 +104,8 @@ $(document).ready(function () {
         $('#updateRemark').val(remark);
 
         let staffMemberArray = $(this).find(".staffMember").text().split(", ");
+
+        const vehicle = new Vehicle(vehicleCode,licensePlateNumber,vehicleName,category,fuelType,status,staffMemberArray,remark);
         loadAllMember.loadAllMembers().then(memberCode => {
             populateDropdownVehicle("#updateStaffVehicle",staffMemberArray,memberCode);
         }).catch(error => {
@@ -138,7 +145,9 @@ $(document).ready(function () {
 
     // Handle the form submission for updating vehicle details
     $('#modalSubmitButtonUpdate').on('click', ()=> {
+
         // Collect form data
+        let vehicleCode = $("#selectedVehicleCode").val();
         let licensePlateNumber = $("#updateLicensePlateNumber").val();
         let vehicleName = $("#updateVehicleName").val();
         let category = $("#updateCategoryVehicle").val();
@@ -152,27 +161,61 @@ $(document).ready(function () {
         $("#updateStaffVehicle select").each(function() {
             let staffValue = $(this).val();
             if (staffValue) {
-                updatedStaffVehicle.push(staffValue);
+                updatedStaffVehicle.push({ memberCode: staffValue });
             }
         });
 
         // Collect values from all Staff Member dropdowns
         $('#additionalVehicleStaffUpdate select').each(function () {
             const selectedValue = $(this).val();
-            if (selectedValue) updatedStaffVehicle.push(selectedValue);
+            if (selectedValue) {
+                updatedStaffVehicle.push({ memberCode: selectedValue });
+            }
         });
 
-        let vehicle = vehicleDetails[clickTableRow];
-        vehicle.licensePlateNumber = licensePlateNumber;
-        vehicle.vehicleName = vehicleName;
-        vehicle.category = category;
-        vehicle.fuelType = fuelType;
-        vehicle.status = status;
-        vehicle.staffMember = updatedStaffVehicle;
-        vehicle.remark = remark;
-        loadVehicleTable();
-        resetForm('#additionalVehicleStaffUpdate');
-        $('#updateVehicle-modal').modal("hide");
+        const vehicleDTO = {
+            vehicleCode:vehicleCode,
+            licensePlateNumber: licensePlateNumber,
+            name: vehicleName,
+            category: category,
+            fuelType: fuelType,
+            status: status,
+            staffMembers: updatedStaffVehicle,
+            remark: remark
+        };
+
+        Swal.fire({
+            title: "Do you want to update the changes?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Save",
+            denyButtonText: `Don't save`
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `http://localhost:5050/api/v1/vehicles/${vehicleCode}`, // Use the vehicleId from the clicked row
+                    type: 'PUT',
+                    contentType: 'application/json', // JSON request
+                    data: JSON.stringify(vehicleDTO), // Convert the object to JSON
+                    success: function(response) {
+                        loadAllVehicle.loadVehicleTable().then(vehicleCode =>{
+                            Swal.fire("Saved!", "", "success");
+                            resetForm('#additionalVehicleStaffUpdate'); // Reset the form
+                        }).catch(error =>{
+                            console.error("vehicle code not found:", error);
+                        });
+                        $('#updateVehicle-modal').modal("hide"); // Hide the modal
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error updating vehicle:", error);
+                        alert("Failed to update vehicle. Please try again.");
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.fire("Changes are not updated", "", "info");
+            }
+        });
     });
 
     function resetForm(additionalField) {
@@ -273,6 +316,7 @@ export class LoadAllVehicleDetails{
                     vehicles.forEach(vehicle => {
                         console.log("staff member : ",vehicle.staffMember)
                         const vehicleDetail = new Vehicle(
+                            vehicle.vehicleCode,
                             vehicle.licensePlateNumber,
                             vehicle.name,
                             vehicle.category,
