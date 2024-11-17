@@ -4,10 +4,10 @@ import {LoadAllStaffMember} from "./StaffController.js";
 import {LoadFieldCard} from './FieldController.js';
 
 let clickTableRow = 0;
-const loadAllField = new LoadFieldCard();
 
 //Add Field Modal
 $('#addFieldButtonEquipment').on('click', function() {
+    const loadAllField = new LoadFieldCard();
     loadAllField.loadAllFieldCard().then(fieldCode => {
         addDropdownEquipment("#additionalEquipmentField","#field-equipment",fieldCode)
     }).catch(error => {
