@@ -1,5 +1,6 @@
 export default class Equipment{
-    constructor(name,type,status,count,assignStaff,assignField) {
+    constructor(code,name,type,status,count,assignStaff,assignField) {
+        this._code = code;
         this._name = name;
         this._type = type;
         this._status = status;
@@ -8,6 +9,13 @@ export default class Equipment{
         this._assignField = assignField;
     }
 
+    get code() {
+        return this._code
+    }
+
+    set code(value){
+        this._code = value;
+    }
 
     get name() {
         return this._name;
