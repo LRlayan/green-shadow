@@ -38,11 +38,8 @@ $('#addEquipmentButton').on('click',(e)=>{
     // Collect multiple staff values
     let staffEquipment = [];
     $("#additionalEquipmentStaff select").each(function() {
-        let staffValue = $(this).val();
-        if (staffValue) {
-            const staff = {
-                memberCode:staffValue
-            }
+        let staff = $(this).val();
+        if (staff) {
             staffEquipment.push(staff);
         }
     });
@@ -50,11 +47,8 @@ $('#addEquipmentButton').on('click',(e)=>{
     // Collect multiple field values
     let fieldEquipment = [];
     $("#additionalEquipmentField select").each(function() {
-        let fieldValue = $(this).val();
-        if (fieldValue) {
-            const field = {
-                fieldCode:fieldValue
-            }
+        let field = $(this).val();
+        if (field) {
             fieldEquipment.push(field);
         }
     });
@@ -92,9 +86,9 @@ $('#addEquipmentButton').on('click',(e)=>{
                 },
                 error: function (xhr, status, error) {
                     if (xhr.status === 400) {
-                        alert("Failed to save equipment: Bad request");
+                        Swal.fire('Error', 'Failed to save equipment. Please try again.', 'error');
                     } else {
-                        alert("Failed to save equipment: Server error");
+                        Swal.fire('Failed to save equipment: Server error.', 'error');
                     }
                 }
             });
@@ -383,12 +377,13 @@ export class LoadAllEquipment{
                 success: function (equipment) {  // Assume 'vehicles' is an array of vehicle objects
                     equipment.forEach(equ => {
                         const equDetail = new Equipment(
+                            equ.equipmentCode,
                             equ.name,
                             equ.type,
                             equ.status,
                             equ.availableCount,
-                            equ.field ? equipment.field.fieldCode : "N/A",  // Handle nested staff details
-                            equ.staff ? equipment.staff.memberCode : "N/A"
+                            equ.fieldList || "N/A",  // Handle nested staff details
+                            equ.staff || "N/A"
                         );
                         // Add vehicle code to the array
                         equipmentCodes.push(equ.equipmentCode);
@@ -400,8 +395,8 @@ export class LoadAllEquipment{
                                 <td class="vehicleType">${equDetail.type}</td>
                                 <td class="status">${equDetail.status}</td>
                                 <td class="count">${equDetail.count}</td>
-                                <td class="staffMember">${equDetail.assignStaff}</td>
-                                <td class="fields">${equDetail.assignField}</td>
+                                <td class="staffMember">${""}</td>
+                                <td class="fields">${equ.fieldList.join(', ')}</td>
                                 <td><button class="btn btn-danger delete-button" data-index="${equ.equipmentCode}">Delete</button></td>
                             </tr>
                         `;
