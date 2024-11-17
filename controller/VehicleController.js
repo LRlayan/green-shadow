@@ -6,6 +6,7 @@ import {LoadCards} from "./CropController.js";
 $(document).ready(function () {
     let clickTableRow = 0;
     let clickNewComboBoxBtn = 0;
+    console.log(clickNewComboBoxBtn,"start")
 
     const loadAllMember = new LoadAllStaffMember();
     const loadAllVehicle = new LoadAllVehicleDetails();
@@ -83,6 +84,7 @@ $(document).ready(function () {
 
     // Assuming your table rows are in tbody with id "vehicleDetailsTable"
     $('#vehicleDetailsTable').on('click', 'tr', function () {
+        clickNewComboBoxBtn = 1;
         $('#additionalVehicleStaffUpdate').empty();
         // Get values from the row
         let vehicleCode = $(this).find(".code").text()
@@ -248,7 +250,6 @@ $(document).ready(function () {
     //Add additional Staff Modal
     $('#addVehicleStaffButton').on('click', function() {
         clickNewComboBoxBtn++;
-        console.log(clickNewComboBoxBtn)
         if (clickNewComboBoxBtn == 1) {
             loadAllMember.loadAllMembers().then(memberCode => {
                 addDropdownVehicle("#additionalVehicleStaff", "#staff-vehicle", memberCode)
@@ -261,7 +262,6 @@ $(document).ready(function () {
     //Add additional Staff field Update Modal
     $('#addVehicleStaffButtonUpdate').on('click', function() {
         clickNewComboBoxBtn++;
-        console.log(clickNewComboBoxBtn)
         if (clickNewComboBoxBtn == 1){
             loadAllMember.loadAllMembers().then(memberCode => {
                 addDropdownVehicle("#additionalVehicleStaffUpdate", "#staff-vehicleUpdate", memberCode)
@@ -281,6 +281,7 @@ $(document).ready(function () {
         // Remove button
         const $removeBtn = $('<button class="btn btn-danger">Remove</button>');
         $removeBtn.on('click', function() {
+            clickNewComboBoxBtn = 0;
             $container.remove();
         });
 
@@ -301,10 +302,11 @@ $(document).ready(function () {
             });
 
             // Create the remove button
-            const removeButton = $('<button type="button" class="btn btn-danger ml-2">Remove</button>');
+            const removeButton = $('<button id="btn-remove" type="button" class="btn btn-danger ml-2">Remove</button>');
 
             // Add click event to remove the dropdown when the button is clicked
             removeButton.click(function() {
+                clickNewComboBoxBtn = 0;
                 dropdownWrapper.remove();
             });
 
