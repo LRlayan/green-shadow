@@ -3,7 +3,7 @@ import {equipmentDetails, staffDetails, pairsValues , staffEquipmentCount} from 
 import {LoadAllEquipment} from './EquipmentController.js';
 import {LoadFieldCard} from './FieldController.js';
 
-    let clickTableRow = 0;
+let clickTableRow = 0;
 
     //save staff member
     $('#addFieldButtonInStaff').on('click',(e)=>{
@@ -150,6 +150,7 @@ import {LoadFieldCard} from './FieldController.js';
     $('#staffDetailsTable').on('click','tr', function (){
         resetForm("#updateStaffForm","#updateField","#updateVehicle","#updateEquipment","#additionalStaffEquipmentUpdate","#additionalStaffVehicleUpdate","#additionalStaffFieldUpdate");
 
+        let code = $(this).find(".code").text();
         let fName = $(this).find(".fName").text();
         let lName = $(this).find(".lName").text();
         let designation = $(this).find(".designation").text().trim();
@@ -171,6 +172,7 @@ import {LoadFieldCard} from './FieldController.js';
 
         clickTableRow = $(this).index();
 
+        $('#selectedMemberCode').val(code);
         $('#firstNameUpdate').val(fName);
         $('#lastNameUpdate').val(lName);
         $('#joinedDateUpdate').val(joinedDate);
@@ -339,6 +341,26 @@ import {LoadFieldCard} from './FieldController.js';
     $('#confirmDeleteYes').on('click', function () {
         const index = $(this).data('index');
 
+        $.ajax({
+            url: `http://localhost:5050/api/v1/staff/${index}`,
+            type: 'DELETE',
+            success: function () {
+                const loadAllStaffMember = new LoadAllStaffMember();
+                loadAllStaffMember.loadAllMembers();
+                Swal.fire('Deleted!', 'The staff has been deleted.', 'success');
+            },
+            error: function (xhr, status, error) {
+                console.error("Error deleting staff:", error);
+                if (xhr.status === 404) {
+                    Swal.fire('Error', 'Staff not found!', 'error');
+                } else if (xhr.status === 400) {
+                    Swal.fire('Error', 'Invalid staff ID!', 'error');
+                } else {
+                    Swal.fire('Error', 'Failed to delete staff. Please try again.', 'error');
+                }
+            }
+        });
+
         $('#confirmStaffDeleteModal').modal('hide');
         clearOverlayOfModal();
     });
@@ -350,7 +372,6 @@ import {LoadFieldCard} from './FieldController.js';
     });
 
     //Add Field
-    // jQuery to add a new dropdown with predefined options and a remove button
     $('#addStaffFieldButton').on('click', function() {
         const loadAllField = new LoadFieldCard();
         loadAllField.loadAllFieldCard().then(fieldCode => {
@@ -361,25 +382,21 @@ import {LoadFieldCard} from './FieldController.js';
     });
 
     //Add Field Update Modal
-    // jQuery to add a new dropdown with predefined options and a remove button
     $('#addStaffFieldButtonUpdate').on('click', function() {
         addDropdownStaff("#additionalStaffFieldUpdate","#filed-staffUpdate",["S01", "S02", "S03", "S04", "S05"]);
     });
 
     //Add Vehicle
-    // jQuery to add a new dropdown with predefined options and a remove button
     $('#addStaffVehicleButton').on('click', function() {
         addDropdownStaff("#additionalStaffVehicle","#vehicle-staff",["V01", "V02", "V03", "V04", "V05"]);
     });
 
     //Add Vehicle Update
-    // jQuery to add a new dropdown with predefined options and a remove button
     $('#addStaffVehicleButtonUpdate').on('click', function() {
         addDropdownStaff("#additionalStaffVehicleUpdate","#vehicle-staffUpdate",["V01", "V02", "V03", "V04", "V05"]);
     });
 
     //Add Equipment
-    // jQuery to add a new equipment dropdown with a count input and remove button
     $('#addStaffEquipmentButton').on('click', function() {
         let equDetails = new LoadAllEquipment();
         equDetails.loadAllEquDetails().then(equCodes =>{
@@ -546,7 +563,7 @@ export class LoadAllStaffMember {
                                     <td class="logs">${staffDetail.logList}</td>
                                     <td class="vehicle">${staffDetail.vehicle}</td>
                                     <td class="equipment">${staffDetail.equipmentList}</td>
-                                    <td><button class="btn btn-danger delete-button" data-index="${staffMembers.memberCode}">Delete</button></td>
+                                    <td><button class="btn btn-danger delete-button" data-index="${staffMember.memberCode}">Delete</button></td>
                                 </tr>
                             `;
                         tableBody.append(row);  // Append each row to the table
