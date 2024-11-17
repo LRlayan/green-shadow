@@ -338,20 +338,15 @@ import {LoadFieldCard} from './FieldController.js';
     // Handle the confirmation of deletion - yes button
     $('#confirmDeleteYes').on('click', function () {
         const index = $(this).data('index');
-        staffDetails.splice(index, 1);
-        loadStaffTable(); // Refresh the table
-        $('#confirmStaffDeleteModal').modal('hide');
 
-        // Ensure the modal and backdrop are fully removed when hidden (overlay)
-        $('#confirmStaffDeleteModal').on('hidden.bs.modal', function () {
-            $('body').removeClass('modal-open');
-            $('.modal-backdrop').remove();
-        });
+        $('#confirmStaffDeleteModal').modal('hide');
+        clearOverlayOfModal();
     });
 
 //No button
-    $('#confirmDeleteNo').on('click',()=>{
+    $('#confirmDeleteNo,#btn-close-staff').on('click',()=>{
         $('#confirmStaffDeleteModal').modal('hide'); // Hide the modal
+        clearOverlayOfModal();
     });
 
     //Add Field
@@ -486,6 +481,14 @@ import {LoadFieldCard} from './FieldController.js';
             console.log(`${pair.selectedValue} - ${pair.inputCount}`);
         });
     }
+
+function clearOverlayOfModal(){
+    // Ensure the modal and backdrop are fully removed when hidden (overlay)
+    $('#confirmStaffDeleteModal').on('hidden.bs.modal', function () {
+        $('body').removeClass('modal-open'); // Removes the modal-open class from body
+        $('.modal-backdrop').remove();       // Removes the leftover backdrop element
+    });
+}
 
 export class LoadAllStaffMember {
     loadAllMembers() {
