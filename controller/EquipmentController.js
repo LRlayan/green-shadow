@@ -277,17 +277,13 @@ $('#confirmEquDeleteYes').on('click', function () {
     });
 
     $('#confirmEquipmentDeleteModal').modal('hide');
-
-    // Ensure the modal and backdrop are fully removed when hidden (overlay)
-    $('#confirmEquipmentDeleteModal').on('hidden.bs.modal', function () {
-        $('body').removeClass('modal-open');
-        $('.modal-backdrop').remove();
-    });
+    clearOverlayOfModal();
 });
 
 //No button
-$('#confirmEquDeleteNo').on('click',()=>{
+$('#confirmEquDeleteNo,#btn-close-equ').on('click',()=>{
     $('#confirmEquipmentDeleteModal').modal('hide');
+    clearOverlayOfModal();
 });
 
 // Listen for the modal to be shown
@@ -301,6 +297,13 @@ $('#equipment-modal').on('show.bs.modal', function (event) {
     }
 });
 
+function clearOverlayOfModal(){
+    // Ensure the modal and backdrop are fully removed when hidden (overlay)
+    $('#confirmEquipmentDeleteModal').on('hidden.bs.modal', function () {
+        $('body').removeClass('modal-open'); // Removes the modal-open class from body
+        $('.modal-backdrop').remove();       // Removes the leftover backdrop element
+    });
+}
 function resetForm(additionalInput1,additionalInput2){
     $('#equipmentForm')[0].reset();
     $(`${additionalInput1}`).empty();
@@ -353,7 +356,6 @@ function populateDropdownEquipment(container, selectedValues, options) {
     });
 }
 
-// Function to clear the equipment modal input fields
 function clearEquipmentModalFields(equipmentName,equipmentType,equipmentStatus,count,initialStaff,initialEquipment,additionalEquipmentStaff,additionalEquipmentField) {
     $(`${equipmentName}`).val('');
     $(`${equipmentType}`).val('');
