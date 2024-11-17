@@ -56,6 +56,7 @@ $(document).ready(function () {
                     contentType: "application/json",
                     data: JSON.stringify(vehicleDTO),
                     success: function () {
+                        clickNewComboBoxBtn = 0;
                         loadAllVehicle.loadVehicleTable().then(vehicleCode => {
                             Swal.fire("Saved!", "", "success");
                         }).catch(error =>{
@@ -157,8 +158,10 @@ $(document).ready(function () {
     });
 
     // Clear fields when the modal is closed
-    $('#vehicle-modal').on('hidden.bs.modal', function () {
-        $('#vehicleForm')[0].reset(); // Reset the form fields
+    $('#vehicle-modal,#updateVehicle-modal').on('hidden.bs.modal', function () {
+        $('#vehicleForm')[0].reset();
+        $('#updateVehicleForm')[0].reset();
+        $('#additionalVehicleStaffUpdate').empty();
     });
 
     // Handle the form submission for updating vehicle details
@@ -179,7 +182,7 @@ $(document).ready(function () {
         $("#updateStaffVehicle select").each(function() {
             let staffValue = $(this).val();
             if (staffValue) {
-                updatedStaffVehicle.push({ memberCode: staffValue });
+                updatedStaffVehicle = staffValue;
             }
         });
 
@@ -187,7 +190,7 @@ $(document).ready(function () {
         $('#additionalVehicleStaffUpdate select').each(function () {
             const selectedValue = $(this).val();
             if (selectedValue) {
-                updatedStaffVehicle.push({ memberCode: selectedValue });
+                updatedStaffVehicle = selectedValue;
             }
         });
 
@@ -198,7 +201,7 @@ $(document).ready(function () {
             category: category,
             fuelType: fuelType,
             status: status,
-            staffMembers: updatedStaffVehicle,
+            memberCode: updatedStaffVehicle,
             remark: remark
         };
 
@@ -244,11 +247,15 @@ $(document).ready(function () {
 
     //Add additional Staff Modal
     $('#addVehicleStaffButton').on('click', function() {
-        loadAllMember.loadAllMembers().then(memberCode => {
-            addDropdownVehicle("#additionalVehicleStaff","#staff-vehicle",memberCode)
-        }).catch(error => {
-            console.error("Error loading staff member details:", error);
-        });
+        clickNewComboBoxBtn++;
+        console.log(clickNewComboBoxBtn)
+        if (clickNewComboBoxBtn == 1) {
+            loadAllMember.loadAllMembers().then(memberCode => {
+                addDropdownVehicle("#additionalVehicleStaff", "#staff-vehicle", memberCode)
+            }).catch(error => {
+                console.error("Error loading staff member details:", error);
+            });
+        }
     });
 
     //Add additional Staff field Update Modal
@@ -320,6 +327,10 @@ $(document).ready(function () {
             $('#equipmentForm')[0].reset();
             resetForm("#additionalVehicleStaff");
         }
+    });
+
+    $('#closeModal, .btn-close , #close-btnUpdate').on('click',function (){
+        clickNewComboBoxBtn = 0;
     });
 });
 
