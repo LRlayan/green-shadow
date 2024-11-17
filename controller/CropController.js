@@ -255,7 +255,6 @@ function populateDropdownCrop(container, selectedValues, options) {
 // Show the confirmation modal and set the card ID to delete
 $(document).ready(function() {
     $(document).on('click', '.delete-button', function () {
-        // Get the card ID from the delete button and set it on the confirm delete button
         const cardId = $(this).data('card-id');
         $('#confirmCropDeleteButton').data('card-id', cardId);
         $('#confirmCropDeleteModal').modal('show');
@@ -264,7 +263,26 @@ $(document).ready(function() {
     // Handle the confirmation of the delete action
     $('#confirmCropDeleteButton').on('click', function () {
         const cardId = $(this).data('card-id');
-        removeFieldCard(cardId);
+
+        $.ajax({
+            url: `http://localhost:5050/api/v1/crops/${cardId}`,
+            type: 'DELETE',
+            success: function () {
+                const loadCropCard = new LoadCards();
+                loadCropCard.loadAllCropCard();
+                Swal.fire('Deleted!', 'The crop has been deleted.', 'success');
+            },
+            error: function (xhr, status, error) {
+                console.error("Error deleting crop:", error);
+                if (xhr.status === 404) {
+                    Swal.fire('Error', 'Crop not found!', 'error');
+                } else if (xhr.status === 400) {
+                    Swal.fire('Error', 'Invalid crop ID!', 'error');
+                } else {
+                    Swal.fire('Error', 'Failed to delete crop. Please try again.', 'error');
+                }
+            }
+        });
 
         // Hide the modal after deleting
         $('#confirmCropDeleteModal').modal('hide');
@@ -299,7 +317,7 @@ export class LoadCards {
                         let imageData = `data:image/jpeg;base64,${crop.cropImage}`;
 
                         let newCard = `
-                        <div class="col-md-6 col-lg-4 mb-4" id="card${index}">
+                        <div class="col-md-6 col-lg-4 mb-4" id="card${crop.cropCode}">
                             <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
                                 <div class="card-image-container">
                                     <img src="${imageData}" class="card-img-top image-preview" alt="Crop Image">
@@ -315,7 +333,7 @@ export class LoadCards {
                                     <p class="card-logs"><strong>Logs:</strong></p>
                                     <div class="d-flex justify-content-between">
                                         <button class="btn btn-success flex-grow-1 me-2 update-button" data-card-id="card${index}">Update</button>
-                                        <button class="btn btn-danger flex-grow-1 delete-button" data-bs-toggle="modal" data-card-id="card${index}" data-bs-target="#confirmCropDeleteModal">Delete</button>
+                                        <button class="btn btn-danger flex-grow-1 delete-button" data-bs-toggle="modal" data-card-id="${crop.cropCode}" data-bs-target="#confirmCropDeleteModal">Delete</button>
                                     </div>
                                 </div>
                             </div>
