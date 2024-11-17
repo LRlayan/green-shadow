@@ -1,4 +1,5 @@
 import { LoadCards } from './CropController.js';
+import { LoadAllStaffMember } from './StaffController.js';
 
 let fieldCode = 0;
 let cardCount = 0;
@@ -19,10 +20,7 @@ let cardCount = 0;
         // Collect all crop IDs from the main select and additional fields
         $('#filed-cropId').val() && cropIds.push($('#filed-cropId').val()); // Add main select value if not empty
         $('#additionalCrop select').each(function () {
-            let ids = $(this).val();
-            const crops = {
-                cropCode:ids
-            }
+            let crops = $(this).val();
             cropIds.push(crops);
         });
 
@@ -30,10 +28,7 @@ let cardCount = 0;
         $('#filed-staffId').val() && staffIds.push($('#filed-staffId').val()); // Add main select value if not empty
         $('#additionalStaff select').each(function () {
             let ids = $(this).val();
-            const staff = {
-                memberCode:ids
-            }
-            staffIds.push(staff);
+            staffIds.push(ids);
         });
 
         // Remove empty values (if any)
@@ -49,7 +44,7 @@ let cardCount = 0;
         formData.append("extentSize", extentSize);
         formData.append("fieldImage1", fieldImageFile1);
         formData.append("fieldImage2", fieldImageFile2);
-        // formData.append("staffList", new Blob([JSON.stringify(staffIds)], { type: "application/json" }));
+        formData.append("staffList", new Blob([JSON.stringify(staffIds)], { type: "application/json" }));
         formData.append("cropList", new Blob([JSON.stringify(cropIds)], { type: "application/json" }));
 
         Swal.fire({
@@ -76,9 +71,9 @@ let cardCount = 0;
                         $('#preview2').addClass('d-none'); // Hide image preview
                         $('#newFieldModal').modal('hide');
                         clearFieldForm();
+                        Swal.fire("Saved!", "", "success");
                         loadFieldCard.loadAllFieldCard().then(fieldCodes => {
-                            loadCropList.loadSelectedFiled(fieldCodes);
-                            Swal.fire("Saved!", "", "success");
+
                         }).catch(error => {
                             console.error("Error loading field cards:", error);
                         });
@@ -113,7 +108,10 @@ let cardCount = 0;
     });
     // Add Additional Staff Combo box
     $('#addFieldStaffButton').on('click', function() {
-        addDropdown('#additionalStaff', 'filed-staffId', ["S01", "S02", "S03", "S04", "S05"]);
+        const loadAllStaffMember = new LoadAllStaffMember();
+        loadAllStaffMember.loadAllMembers().then(memberCode => {
+            addDropdown('#additionalStaff', 'filed-staffId', memberCode);
+        })
     });
 
 // Update Field Card Modal setup
@@ -360,8 +358,6 @@ export class LoadFieldCard {
                     // Loop through each field and create a card
                     fields.forEach((field, index) => {
                         const location = field.location ? field.location.split(",") : ["No location data"];
-                        const cropList = field.cropList ? field.cropList.map(crop => crop.cropCode).join(", ") : "No crops available";
-
                         let imageData1 = `data:image/jpeg;base64,${field.fieldImage1}`;
                         let imageData2 = `data:image/jpeg;base64,${field.fieldImage2}`;
                         const carouselId = `carousel${index}`;
@@ -393,7 +389,7 @@ export class LoadFieldCard {
                                         <p class="card-name"><strong>Name:</strong> ${field.name}</p>
                                         <p class="card-location"><strong>Location:</strong> x: ${location[0]} y: ${location[1]}</p>
                                         <p class="card-extent-size"><strong>Extent Size:</strong> ${field.extentSize}</p>
-                                        <p class="card-crop"><strong>Crop:</strong>${cropList}</p>
+                                        <p class="card-crop"><strong>Crop:</strong>${field.cropCodeList.join(', ')}</p>
                                         <div class="d-flex justify-content-between">
                                             <button class="btn btn-success flex-grow-1 me-2 update-button" data-field-code="${field.fieldCode}">Update</button>
                                             <button type="button" class="btn btn-danger flex-grow-1 delete-button" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-field-code="${field.fieldCode}">Delete</button>
