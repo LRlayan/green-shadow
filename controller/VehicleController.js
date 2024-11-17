@@ -145,18 +145,14 @@ $(document).ready(function () {
                 }
             }
         });
-
         $('#confirmVehicleDeleteModal').modal('hide');
-        // Ensure the modal and backdrop are fully removed when hidden (overlay)
-        $('#confirmVehicleDeleteModal').on('hidden.bs.modal', function () {
-            $('body').removeClass('modal-open'); // Removes the modal-open class from body
-            $('.modal-backdrop').remove();       // Removes the leftover backdrop element
-        });
+        clearOverlayOfModal();
     });
 
     //No button
-    $('#confirmVehicleDeleteNo').on('click',()=>{
+    $('#confirmVehicleDeleteNo,#close-btn-delete').on('click',()=>{
         $('#confirmVehicleDeleteModal').modal('hide'); // Hide the modal
+        clearOverlayOfModal();
     });
 
     // Clear fields when the modal is closed
@@ -334,6 +330,14 @@ $(document).ready(function () {
     $('#closeModal, .btn-close , #close-btnUpdate').on('click',function (){
         clickNewComboBoxBtn = 0;
     });
+
+    function clearOverlayOfModal(){
+        // Ensure the modal and backdrop are fully removed when hidden (overlay)
+        $('#confirmVehicleDeleteModal').on('hidden.bs.modal', function () {
+            $('body').removeClass('modal-open'); // Removes the modal-open class from body
+            $('.modal-backdrop').remove();       // Removes the leftover backdrop element
+        });
+    }
 });
 
 export class LoadAllVehicleDetails{
