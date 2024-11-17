@@ -22,10 +22,7 @@ $('#cropForm').on('submit', function (e) {
     // Collect all field IDs from the main select and additional fields
     $('#crop-FieldId').val() && fieldIds.push($('#crop-FieldId').val()); // Add main select value if not empty
     $('#additionalField select').each(function () {
-        let ids = $(this).val();
-        const fields = {
-            fieldCode:ids
-        }
+        let fields = $(this).val();
         fieldIds.push(fields);
     });
 
@@ -312,10 +309,7 @@ export class LoadCards {
 
                     // Loop through each crop and create a card
                     crops.forEach((crop, index) => {
-                        const fieldList = crop.fieldList ? crop.fieldList.map(field => field.fieldCode).join(", ") : "No field available";
-                        const logList = crop.logList ? crop.logList.map(log => log.logCode).join(", ") : "No log available";
                         let imageData = `data:image/jpeg;base64,${crop.cropImage}`;
-
                         let newCard = `
                         <div class="col-md-6 col-lg-4 mb-4" id="card${crop.cropCode}">
                             <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
@@ -329,7 +323,7 @@ export class LoadCards {
                                     <p class="card-scientific"><strong>Scientific Name:</strong> ${crop.scientificName}</p>
                                     <p class="card-category"><strong>Category:</strong> ${crop.category}</p>
                                     <p class="card-season"><strong>Crop Season:</strong> ${crop.season}</p>
-                                    <p class="card-FieldId"><strong>Field ID:</strong> ${fieldList}</p>
+                                    <p class="card-FieldId"><strong>Field ID:</strong> ${crop.fieldCodeList.join(', ')}</p>
                                     <p class="card-logs"><strong>Logs:</strong></p>
                                     <div class="d-flex justify-content-between">
                                         <button class="btn btn-success flex-grow-1 me-2 update-button" data-card-id="card${index}">Update</button>
