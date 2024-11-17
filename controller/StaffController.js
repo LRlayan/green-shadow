@@ -1,8 +1,10 @@
 import Staff from "../model/Staff.js";
 import {equipmentDetails, staffDetails, pairsValues , staffEquipmentCount} from "../db/db.js"
 import {LoadAllEquipment} from './EquipmentController.js';
+import {LoadFieldCard} from './FieldController.js';
 
     let clickTableRow = 0;
+
     //save staff member
     $('#addFieldButtonInStaff').on('click',(e)=>{
         e.preventDefault();
@@ -27,10 +29,7 @@ import {LoadAllEquipment} from './EquipmentController.js';
         $("#additionalStaffField select").each(function() {
             let fieldValue = $(this).val();
             if (fieldValue) {
-                const fields = {
-                    fieldCode:fieldValue
-                }
-                fieldStaff.push(fields);
+                fieldStaff.push(fieldValue);
             }
         });
 
@@ -58,8 +57,6 @@ import {LoadAllEquipment} from './EquipmentController.js';
             }
         });
 
-        console.log("Gender : ",gender)
-
         let staffDTO = {
             firstName: firstName,
             lastName: lastName,
@@ -77,7 +74,7 @@ import {LoadAllEquipment} from './EquipmentController.js';
             role: roleStaff,
             staffEquipmentDetailsList: [],
             vehicleList: staffVehicle,
-            fieldList: fieldStaff,
+            fieldCodeList: fieldStaff,
         };
 
         let staffMember = {
@@ -147,40 +144,7 @@ import {LoadAllEquipment} from './EquipmentController.js';
                 Swal.fire("Changes are not saved", "", "info");
             }
         });
-
-        // loadStaffTable();
     });
-
-    // function loadStaffTable(){
-    //     $('#staffDetailsTable').empty();
-    //     staffDetails.map((staff, index) => {
-    //         const row = `
-    //         <tr>
-    //             <td class="code">${staff.code}</td>
-    //             <td class="fName">${staff.firstName}</td>
-    //             <td class="lName">${staff.lastName}</td>
-    //             <td class="designation">${staff.designation}</td>
-    //             <td class="gender">${staff.gender}</td>
-    //             <td class="joinedDate">${staff.joinedDate}</td>
-    //             <td class="dob">${staff.dob}</td>
-    //             <td class="buildingNo">${staff.addressLine01}</td>
-    //             <td class="lane">${staff.addressLine02}</td>
-    //             <td class="city">${staff.addressLine03}</td>
-    //             <td class="state">${staff.addressLine04}</td>
-    //             <td class="postalCode">${staff.addressLine05}</td>
-    //             <td class="contactNo">${staff.contactNo}</td>
-    //             <td class="email">${staff.email}</td>
-    //             <td class="role">${staff.role}</td>
-    //             <td class="fields">${staff.fieldList.join(', ')}</td>
-    //             <td class="logs">${staff.logList.join(', ')}</td>
-    //             <td class="vehicle">${staff.vehicle.join(', ')}</td>
-    //             <td class="equipment">${staff.equipmentList.join(', ')}</td>
-    //             <td><button class="btn btn-danger delete-button" data-index="${index}">Delete</button></td>
-    //         </tr>
-    //     `;
-    //         $('#staffDetailsTable').append(row);
-    //     });
-    // }
 
     //update Staff member
     $('#staffDetailsTable').on('click','tr', function (){
@@ -396,7 +360,12 @@ import {LoadAllEquipment} from './EquipmentController.js';
     //Add Field
     // jQuery to add a new dropdown with predefined options and a remove button
     $('#addStaffFieldButton').on('click', function() {
-        addDropdownStaff("#additionalStaffField","#filed-staff",["F01", "F02", "F03", "F04", "F05"]);
+        const loadAllField = new LoadFieldCard();
+        loadAllField.loadAllFieldCard().then(fieldCode => {
+            addDropdownStaff("#additionalStaffField","#filed-staff",fieldCode);
+        }).catch(error => {
+            console.log("Not Loading field code",error)
+        });
     });
 
     //Add Field Update Modal
@@ -535,6 +504,7 @@ export class LoadAllStaffMember {
                 type: "GET",
                 success: function (staffMembers) {  // Assume 'vehicles' is an array of vehicle objects
                     staffMembers.forEach(staffMember => {
+                        console.log( "staff  : ",staffMember)
                         const staffDetail = new Staff(
                             staffMembers.memberCode,
                             staffMember.firstName,
@@ -551,7 +521,7 @@ export class LoadAllStaffMember {
                             staffMember.contactNo,
                             staffMember.email,
                             staffMember.role,
-                            staffMember.fieldList || "N/A", // Handle nested staff details
+                            staffMember.fieldCodeList || "N/A", // Handle nested staff details
                             staffMember.vehicle || "N/A", // Handle nested staff details
                             staffMember.logList || "N/A", // Handle nested staff details
                             staffMember.equipmentList || "N/A" // Handle nested staff details
