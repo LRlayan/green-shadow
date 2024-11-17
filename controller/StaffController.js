@@ -291,9 +291,6 @@ import {LoadFieldCard} from './FieldController.js';
         staff.fieldList = updatedFieldStaff;
         staff.vehicle = updatedVehicleStaff;
         staff.equipmentList = updatedEquipmentStaff;
-
-        // Reload the equipment table to reflect updated data
-        loadStaffTable();
         resetForm("#updateStaffForm","#updateField","#updateVehicle","#updateEquipment","#additionalStaffEquipmentUpdate","#additionalStaffVehicleUpdate","#additionalStaffFieldUpdate");
         $('#updateStaffModal').modal('hide');
     });
@@ -454,7 +451,6 @@ import {LoadFieldCard} from './FieldController.js';
                 }
             };
             updateInputField();
-
             // Append the select, quantity input, and remove button to the container
             $container.append($select).append($quantityInput).append($removeBtn);
 
@@ -485,7 +481,6 @@ import {LoadFieldCard} from './FieldController.js';
                 pairsValues.push({ selectedValue, inputCount });
             }
         }
-
         console.log(pairsValues); // For testing, outputs the array to the console
         pairsValues.forEach(pair => {
             console.log(`${pair.selectedValue} - ${pair.inputCount}`);
@@ -504,7 +499,6 @@ export class LoadAllStaffMember {
                 type: "GET",
                 success: function (staffMembers) {  // Assume 'vehicles' is an array of vehicle objects
                     staffMembers.forEach(staffMember => {
-                        console.log( "staff  : ",staffMember)
                         const staffDetail = new Staff(
                             staffMembers.memberCode,
                             staffMember.firstName,
@@ -526,7 +520,6 @@ export class LoadAllStaffMember {
                             staffMember.logList || "N/A", // Handle nested staff details
                             staffMember.equipmentList || "N/A" // Handle nested staff details
                         );
-
                         // Add vehicle code to the array
                         memberCodes.push(staffMember.memberCode);
                         const row = `
