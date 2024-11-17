@@ -25,7 +25,7 @@ $(document).ready(function () {
         $("#additionalVehicleStaff select").each(function() {
             let staffValue = $(this).val();
             if (staffValue) {
-                staffEquipment.push(staffValue);
+                staffEquipment = staffValue;
             }
         });
 
@@ -36,7 +36,7 @@ $(document).ready(function () {
             fuelType: fuelType,
             status: status,
             remark: remark,
-            staffEquipment: staffEquipment
+            memberCode: staffEquipment
         };
 
         Swal.fire({
@@ -329,7 +329,8 @@ export class LoadAllVehicleDetails{
                 type: "GET",
                 success: function (vehicles) {  // Assume 'vehicles' is an array of vehicle objects
                     vehicles.forEach(vehicle => {
-                        console.log("staff member : ",vehicle.staffMember)
+                        console.log(vehicle)
+                        console.log("staff member : ",vehicle.memberCode)
                         const vehicleDetail = new Vehicle(
                             vehicle.vehicleCode,
                             vehicle.licensePlateNumber,
@@ -337,7 +338,7 @@ export class LoadAllVehicleDetails{
                             vehicle.category,
                             vehicle.fuelType,
                             vehicle.status,
-                            vehicle.staffMember || "N/A",  // Handle nested staff details
+                            vehicle.memberCode || "N/A",  // Handle nested staff details
                             vehicle.remark
                         );
 
