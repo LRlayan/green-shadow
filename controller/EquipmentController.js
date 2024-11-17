@@ -124,6 +124,7 @@ $('#equipmentDetailsTable').on('click', 'tr', function () {
     $('#equipmentStatusUpdate').val(status);
     $('#countUpdate').val(count);
 
+    const loadAllField = new LoadFieldCard();
     loadAllField.loadAllFieldCard().then(fieldCode => {
         populateDropdownEquipment("#updateEquipmentFieldId",fieldsArray,fieldCode);
     }).catch(error => {
@@ -184,7 +185,7 @@ $('#EquipmentButtonUpdate').on('click', () => {
         status:equipmentStatus,
         availableCount: parseInt(count),
         staffEquipmentDetailsList:[],
-        fieldList:[]
+        fieldList:updatedFieldEquipment
     }
     console.log("ecu code " , equCode)
 
@@ -225,6 +226,7 @@ $('#EquipmentButtonUpdate').on('click', () => {
 
 //Add additional Field Update Modal
 $('#addFieldButtonUpdate').on('click', function() {
+    const loadAllField = new LoadFieldCard();
     loadAllField.loadAllFieldCard().then(fieldCode => {
         addDropdownEquipment("#additionalFieldEquipmentUpdate", "#equipment-fieldUpdate", fieldCode)
     }).catch(error => {
