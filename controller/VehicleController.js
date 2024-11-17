@@ -113,9 +113,9 @@ $(document).ready(function () {
 
     // Show delete confirmation modal
     $('#vehicleDetailsTable').on('click', '.delete-button', function () {
-        const index = $(this).data('index'); // Get the index of the vehicle to delete
-        $('#confirmVehicleDeleteYes').data('index', index); // Store index in the button for later use
-        $('#confirmVehicleDeleteModal').modal('show'); // Show the confirmation modal
+        const index = $(this).data('index');
+        $('#confirmVehicleDeleteYes').data('index', index);
+        $('#confirmVehicleDeleteModal').modal('show');
     });
 
     // Handle the confirmation of deletion - yes button
