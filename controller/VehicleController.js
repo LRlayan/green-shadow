@@ -5,6 +5,8 @@ import {LoadCards} from "./CropController.js";
 
 $(document).ready(function () {
     let clickTableRow = 0;
+    let clickNewComboBoxBtn = 0;
+
     const loadAllMember = new LoadAllStaffMember();
     const loadAllVehicle = new LoadAllVehicleDetails();
 
@@ -215,6 +217,7 @@ $(document).ready(function () {
                     contentType: 'application/json', // JSON request
                     data: JSON.stringify(vehicleDTO), // Convert the object to JSON
                     success: function(response) {
+                        clickNewComboBoxBtn = 0;
                         loadAllVehicle.loadVehicleTable().then(vehicleCode =>{
                             Swal.fire("Saved!", "", "success");
                             resetForm('#additionalVehicleStaffUpdate'); // Reset the form
@@ -242,7 +245,6 @@ $(document).ready(function () {
     //Add additional Staff Modal
     $('#addVehicleStaffButton').on('click', function() {
         loadAllMember.loadAllMembers().then(memberCode => {
-            console.log(memberCode)
             addDropdownVehicle("#additionalVehicleStaff","#staff-vehicle",memberCode)
         }).catch(error => {
             console.error("Error loading staff member details:", error);
@@ -251,11 +253,15 @@ $(document).ready(function () {
 
     //Add additional Staff field Update Modal
     $('#addVehicleStaffButtonUpdate').on('click', function() {
-        loadAllMember.loadAllMembers().then(memberCode => {
-            addDropdownVehicle("#additionalVehicleStaffUpdate", "#staff-vehicleUpdate", memberCode)
-        }).catch(error => {
-            console.error("Error loading staff member details:", error);
-        });
+        clickNewComboBoxBtn++;
+        console.log(clickNewComboBoxBtn)
+        if (clickNewComboBoxBtn == 1){
+            loadAllMember.loadAllMembers().then(memberCode => {
+                addDropdownVehicle("#additionalVehicleStaffUpdate", "#staff-vehicleUpdate", memberCode)
+            }).catch(error => {
+                console.error("Error loading staff member details:", error);
+            });
+        }
     });
 
     function addDropdownVehicle(containerId, selectClass, options) {
@@ -329,8 +335,6 @@ export class LoadAllVehicleDetails{
                 type: "GET",
                 success: function (vehicles) {  // Assume 'vehicles' is an array of vehicle objects
                     vehicles.forEach(vehicle => {
-                        console.log(vehicle)
-                        console.log("staff member : ",vehicle.memberCode)
                         const vehicleDetail = new Vehicle(
                             vehicle.vehicleCode,
                             vehicle.licensePlateNumber,
@@ -341,10 +345,8 @@ export class LoadAllVehicleDetails{
                             vehicle.memberCode || "N/A",  // Handle nested staff details
                             vehicle.remark
                         );
-
                         // Add vehicle code to the array
                         vehicleCodes.push(vehicle.vehicleCode);
-
                         const row = `
                             <tr>
                                 <td class="code">${vehicle.vehicleCode}</td>
