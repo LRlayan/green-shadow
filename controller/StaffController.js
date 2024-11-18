@@ -2,6 +2,7 @@ import Staff from "../model/Staff.js";
 import {equipmentDetails, staffDetails, pairsValues , staffEquipmentCount} from "../db/db.js"
 import {LoadAllEquipment} from './EquipmentController.js';
 import {LoadFieldCard} from './FieldController.js';
+import {LoadAllVehicleDetails} from "./VehicleController.js";
 
 let clickTableRow = 0;
 
@@ -36,11 +37,8 @@ let clickTableRow = 0;
         // Collect multiple staff values
         let staffVehicle = [];
         $("#additionalStaffVehicle select").each(function() {
-            let staffValue = $(this).val();
-            if (staffValue) {
-                const vehicle = {
-                    memberCode:staffValue
-                }
+            let vehicle = $(this).val();
+            if (vehicle) {
                 staffVehicle.push(vehicle);
             }
         });
@@ -383,17 +381,26 @@ let clickTableRow = 0;
 
     //Add Field Update Modal
     $('#addStaffFieldButtonUpdate').on('click', function() {
-        addDropdownStaff("#additionalStaffFieldUpdate","#filed-staffUpdate",["S01", "S02", "S03", "S04", "S05"]);
+        const loadAllField = new LoadFieldCard();
+        loadAllField.loadAllFieldCard().then(fieldCode => {
+            addDropdownStaff("#additionalStaffFieldUpdate","#filed-staffUpdate",fieldCode);
+        });
     });
 
     //Add Vehicle
     $('#addStaffVehicleButton').on('click', function() {
-        addDropdownStaff("#additionalStaffVehicle","#vehicle-staff",["V01", "V02", "V03", "V04", "V05"]);
+        const loadAllVehicleDetails = new LoadAllVehicleDetails();
+        loadAllVehicleDetails.loadVehicleTable().then(vehicleCode => {
+            addDropdownStaff("#additionalStaffVehicle","#vehicle-staff",vehicleCode);
+        });
     });
 
     //Add Vehicle Update
     $('#addStaffVehicleButtonUpdate').on('click', function() {
-        addDropdownStaff("#additionalStaffVehicleUpdate","#vehicle-staffUpdate",["V01", "V02", "V03", "V04", "V05"]);
+        const loadAllVehicleDetails = new LoadAllVehicleDetails();
+        loadAllVehicleDetails.loadVehicleTable().then(vehicleCode => {
+            addDropdownStaff("#additionalStaffVehicleUpdate","#vehicle-staffUpdate",vehicleCode);
+        });
     });
 
     //Add Equipment
