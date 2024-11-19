@@ -320,3 +320,51 @@ let cardCount = 0;
         $(`${imageInput}`).val('');
         $(`${additionalStaffField},${additionalCropField},${additionalLogField}`).empty();
     }
+
+    export class LoadAllLogs{
+        loadAllLogsDetails(){
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: "http://localhost:5050/api/v1/logs",
+                    type: "GET",
+                    success: function (logs) {
+                        $("#logCard").empty();
+                        const logCodes = logs.map(log => log.logCode);
+                        // Loop through each field and create a card
+                        logs.forEach((log, index) => {
+                            let logImage = `data:image/jpeg;base64,${log.observedImage}`;
+
+                            let newLogCard = `
+                            <div class="col-md-6 col-lg-4 mb-4" id="card${index}">
+                                <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
+                                    <div class="card-image-container">
+                                        <img src="${logImage}" class="card-img-top image-preview" alt="log Image">
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">Log Details</h5>
+                                        <p class="card-log-code"><strong>Log Code:</strong>${log.logCode}</p>
+                                        <p class="card-log-date"><strong>Log Date:</strong>${log.date}</p>
+                                        <p class="card-log-details"><strong>Log Details:</strong>${log.logDetails}</p>
+                                        <p class="card-log-fields"><strong>Field:</strong>${log.fieldList.join(', ')}</p>
+                                        <p class="card-log-crop"><strong>Crop:</strong>${log.cropList.join(', ')}</p>
+                                        <p class="card-log-staff"><strong>Staff:</strong>${log.staffList.join(', ')}</p>
+                                        <div class="d-flex justify-content-between">
+                                            <button class="btn btn-success flex-grow-1 me-2 update-button" data-card-id="card${log.logCode}">Update</button>
+                                            <button class="btn btn-danger flex-grow-1 delete-button" data-card-id="card${log.logCode}">Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            `;
+                            $('#logCard').append(newLogCard);
+                        });
+                        resolve(logCodes);
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Failed to retrieve logs");
+                        reject(error);
+                    }
+                });
+            });
+        }
+    }
