@@ -15,6 +15,17 @@ $('#vehicle-sec').css({display:'none'});
 $('#equipment-sec').css({display:'none'});
 $('#sections-wrapper').css({display:'none'});
 
+const loadFieldCard = new LoadFieldCard();
+const loadCropCard = new LoadCards();
+const allStaffMember = new LoadAllStaffMember();
+const loadAllVehicle = new LoadAllVehicleDetails();
+const loadAllEquipment = new LoadAllEquipment();
+loadAllVehicle.loadVehicleTable();
+allStaffMember.loadAllMembers();
+loadFieldCard.loadAllFieldCard();
+loadCropCard.loadAllCropCard();
+loadAllEquipment.loadAllEquDetails();
+
 $('#btn-signIn').on('click',function (){
     $('#sections-wrapper').css({display:'block'});
     $('#header-sec').css({display: 'block'});
@@ -53,8 +64,6 @@ $('#dashboard').on('click',function (){
 });
 
 $('#field').on('click',function (){
-    const loadCard = new LoadFieldCard();
-    loadCard.loadAllFieldCard();
     $('#main-label').text('Field Manage');
     $('#field-sec').css({display:'block'});
     $('#dashboard-sec').css({display:'none'});
@@ -66,8 +75,6 @@ $('#field').on('click',function (){
 });
 
 $('#crops').on('click',function (){
-    const loadCard = new LoadCards();
-    loadCard.loadAllCropCard();
     $('#main-label').text('Crop Manage');
     $('#crops-sec').css({display:'block'});
     $('#dashboard-sec').css({display:'none'});
@@ -79,8 +86,6 @@ $('#crops').on('click',function (){
 });
 
 $('#staff').on('click',function (){
-    const allStaffMember = new LoadAllStaffMember();
-    allStaffMember.loadAllMembers();
     $('#main-label').text('Staff Manage');
     $('#staff-sec').css({display:'block'});
     $('#dashboard-sec').css({display:'none'});
@@ -103,8 +108,6 @@ $('#log').on('click',function (){
 });
 
 $('#vehicle').on('click',function (){
-    const loadAllVehicle = new LoadAllVehicleDetails();
-    loadAllVehicle.loadVehicleTable();
     $('#main-label').text('Vehicle Manage');
     $('#vehicle-sec').css({display:'block'});
     $('#dashboard-sec').css({display:'none'});
@@ -116,8 +119,6 @@ $('#vehicle').on('click',function (){
 });
 
 $('#equipment').on('click',function (){
-    const loadAllEquipment = new LoadAllEquipment();
-    loadAllEquipment.loadAllEquDetails();
     $('#main-label').text('Equipment Manage');
     $('#equipment-sec').css({display:'block'});
     $('#dashboard-sec').css({display:'none'});
