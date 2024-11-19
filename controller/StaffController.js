@@ -543,7 +543,7 @@ export class LoadAllStaffMember {
                             staffMember.email,
                             staffMember.role,
                             staffMember.fieldCodeList || "N/A", // Handle nested staff details
-                            staffMember.vehicle || "N/A", // Handle nested staff details
+                            staffMember.vehicleList || "N/A", // Handle nested staff details
                             staffMember.logList || "N/A", // Handle nested staff details
                             staffMember.equipmentList || "N/A" // Handle nested staff details
                         );
