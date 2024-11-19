@@ -1,77 +1,89 @@
+import {LoadFieldCard} from "./FieldController.js";
+import {LoadAllStaffMember} from "./StaffController.js";
+import {LoadCards} from "./CropController.js";
+
 let cardCount = 0;
-$(document).ready(function() {
 
     $('#newButton').on('click',function (){
         clearModel('#logDate','#log-details','previewCropLogImg','#logCropImageInput','#additionalLogStaff','#additionalLogCrop','#additionalLogField');
     });
 
-    // Handle form submission
+    // Handle form submission - save
     $('#addLogButton').on('click', function (e) {
         cardCount++;
-        e.preventDefault(); // Prevent form from actually submitting
+        e.preventDefault();
 
-        // Retrieve form values
         let logDate = $('#logDate').val();
-        let details = $('#log-details').val();
-        let fieldIds = []; // Sample field IDs
-        let cropIds = []; // Array to store crop IDs
-        let staffIds = []; // Array to store staff IDs
+        let logDetails = $('#log-details').val();
+        let fieldIds = [];
+        let cropIds = [];
+        let staffIds = [];
 
-        // Collect all crop IDs from main and additional selects
         $('#log-filedId').val() && fieldIds.push($('#log-filedId').val());
         $('#additionalLogField select').each(function () {
-            fieldIds.push($(this).val()); // Add each non-empty additional select value
+            fieldIds.push($(this).val());
         });
 
-        // Collect all staff IDs from main and additional selects
         $('#log-cropId').val() && cropIds.push($('#log-cropId').val());
         $('#additionalLogCrop select').each(function () {
             cropIds.push($(this).val());
         });
 
-        // Collect all staff IDs from main and additional selects
         $('#log-staffId').val() && staffIds.push($('#log-staffId').val());
         $('#additionalLogStaff select').each(function () {
             staffIds.push($(this).val());
         });
 
         // Clean up arrays to remove any empty values
-        fieldIds = fieldIds.filter(id => id);
-        cropIds = cropIds.filter(id => id);
-        staffIds = staffIds.filter(id => id);
+        fieldIds = fieldIds.filter(fieldCode => ({fieldCode:fieldCode}));
+        cropIds = cropIds.filter(cropId => ({cropCode:cropId}));
+        staffIds = staffIds.filter(staffId => ({memberCode:staffId}));
 
-        let logImage = $('#previewCropLogImg').attr('src');
+        let observedImage = $('#logCropImageInput')[0].files[0];
 
-        let newLogCard = `
-                    <div class="col-md-6 col-lg-4 mb-4" id="card${cardCount}">
-                        <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
-                            <div class="card-image-container">
-                                <img src="${logImage}" class="card-img-top image-preview" alt="log Image">
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">Log Details</h5>
-                                <p class="card-log-code"><strong>Log Code:</strong>C${Math.floor(Math.random() * 100)}</p>
-                                <p class="card-log-date"><strong>Log Date:</strong>${logDate}</p>
-                                <p class="card-log-details"><strong>Log Details:</strong>${details}</p>
-                                <p class="card-log-fields"><strong>Field:</strong>${fieldIds.join(', ')}</p>
-                                <p class="card-log-crop"><strong>Crop:</strong>${cropIds.join(', ')}</p>
-                                <p class="card-log-staff"><strong>Staff:</strong>${staffIds.join(', ')}</p>
-                                <div class="d-flex justify-content-between">
-                                    <button class="btn btn-success flex-grow-1 me-2 update-button" data-card-id="card${cardCount}">Update</button>
-                                    <button class="btn btn-danger flex-grow-1 delete-button" data-card-id="card${cardCount}">Delete</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-    `;
+        const formData = new FormData();
+        formData.append("date",logDate);
+        formData.append("logDetails",logDetails);
+        formData.append("observedImage",observedImage);
+        formData.append("staffList",new Blob([JSON.stringify(staffIds)], { type: "application/json" }));
+        formData.append("cropList",new Blob([JSON.stringify(cropIds)], { type: "application/json" }));
+        formData.append("fieldList",new Blob([JSON.stringify(fieldIds)], { type: "application/json" }));
 
-        // Append the new card to the row container
-        $('#logCard').append(newLogCard);
-
-        // Reset the form and previews
-        $('#logForm')[0].reset();
-        $('#previewCropLogImg').addClass('d-none');
-        $('#newMonitoringLogModal').modal('hide');
+        Swal.fire({
+            title: "Do you want to save the changes?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Save",
+            denyButtonText: `Don't save`
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "http://localhost:5050/api/v1/logs",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        Swal.fire("Saved!", "", "success");
+                        const loadAllLogs = new LoadAllLogs();
+                        loadAllLogs.loadAllLogsDetails().then(logCodes => {
+                        }).catch(error => {
+                            console.error("Error loading log cards:", error);
+                        });
+                        // Reset the form and previews
+                        $('#logForm')[0].reset();
+                        $('#previewCropLogImg').addClass('d-none');
+                        $('#newMonitoringLogModal').modal('hide');
+                    },
+                    error: function (xhr, status, error) {
+                        Swal.fire('Error', 'Failed Load logs!', 'error');
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
+            }
+        });
     });
 
     //SET DATA FOR UPDATE MODAL AFTER CLICK CARD UPDATE BUTTON
@@ -262,17 +274,26 @@ $(document).ready(function() {
 
     // Function to add dynamic staff field dropdown in the add modal
     $('#addLogStaffButton').on('click', function() {
-        addDropdownLogs('#additionalLogStaff', '#log-staffId', ["S01", "S02", "S03", "S04", "S05"]);
+        const loadAllStaffMember = new LoadAllStaffMember();
+        loadAllStaffMember.loadAllMembers().then(staffCode => {
+            addDropdownLogs('#additionalLogStaff', '#log-staffId', staffCode);
+        })
     });
 
     // Function to add dynamic field dropdown in the add modal
     $('#addLogFieldButton').on('click', function() {
-        addDropdownLogs('#additionalLogField', '#log-filedId', ["F01", "F02", "F03", "F04", "F05"]);
+        const loadFieldCard = new LoadFieldCard();
+        loadFieldCard.loadAllFieldCard().then(fieldCard => {
+            addDropdownLogs('#additionalLogField', '#log-filedId', fieldCard);
+        })
     });
 
     // Function to add dynamic field dropdown in the add modal
     $('#addLogCropButton').on('click', function() {
-        addDropdownLogs('#additionalLogCrop', '#log-cropId', ["C01", "C02", "C03", "C04", "C05"]);
+        const loadALlCrop = new LoadCards();
+        loadALlCrop.loadAllCropCard().then(cropCode => {
+            addDropdownLogs('#additionalLogCrop', '#log-cropId', cropCode);
+        })
     });
 
     //add additional combo box in add modal
@@ -299,4 +320,3 @@ $(document).ready(function() {
         $(`${imageInput}`).val('');
         $(`${additionalStaffField},${additionalCropField},${additionalLogField}`).empty();
     }
-});
