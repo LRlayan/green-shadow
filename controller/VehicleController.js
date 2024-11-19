@@ -1,12 +1,10 @@
 import Vehicle from "../model/Vehicle.js";
 import {vehicleDetails} from "../db/db.js"
 import {LoadAllStaffMember} from './StaffController.js';
-import {LoadCards} from "./CropController.js";
 
 $(document).ready(function () {
     let clickTableRow = 0;
     let clickNewComboBoxBtn = 0;
-    console.log(clickNewComboBoxBtn,"start")
 
     const loadAllMember = new LoadAllStaffMember();
     const loadAllVehicle = new LoadAllVehicleDetails();
