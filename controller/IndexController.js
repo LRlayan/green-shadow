@@ -3,6 +3,7 @@ import {LoadFieldCard} from './FieldController.js';
 import {LoadAllVehicleDetails} from './VehicleController.js';
 import {LoadAllEquipment} from './EquipmentController.js';
 import {LoadAllStaffMember} from './StaffController.js';
+import {LoadAllLogs} from "./MonitoringLogController.js";
 
 $('#signInAndSignUp-sec').css({display: 'block'})
 $('#header-sec').css({display:'none'});
@@ -20,11 +21,13 @@ const loadCropCard = new LoadCards();
 const allStaffMember = new LoadAllStaffMember();
 const loadAllVehicle = new LoadAllVehicleDetails();
 const loadAllEquipment = new LoadAllEquipment();
+const loadAllLogs = new LoadAllLogs();
 loadAllVehicle.loadVehicleTable();
 allStaffMember.loadAllMembers();
 loadFieldCard.loadAllFieldCard();
 loadCropCard.loadAllCropCard();
 loadAllEquipment.loadAllEquDetails();
+loadAllLogs.loadAllLogsDetails();
 
 $('#btn-signIn').on('click',function (){
     $('#sections-wrapper').css({display:'block'});
