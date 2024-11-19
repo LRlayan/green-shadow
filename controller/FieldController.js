@@ -317,8 +317,6 @@ $(document).ready(function() {
                 }
             }
         });
-
-        // Hide the modal after deleting
         $('#confirmDeleteModal').modal('hide');
     });
 
@@ -398,11 +396,8 @@ export class LoadFieldCard {
                                 </div> 
                             </div>       
                         `;
-
-                        // Append the new card to the row container
                         $('#fieldCard').append(newFieldCard);
                     });
-                    // Resolve the promise with the list of field codes
                     resolve(fieldCodes);
                 },
                 error: function (xhr, status, error) {
@@ -435,7 +430,6 @@ export class LoadSelectedFieldWithCrop{
     }
 }
 
-// Function to clear the update field form
 function clearUpdateFieldForm() {
     // Clear text inputs
     $('#updateFieldName').val('');
