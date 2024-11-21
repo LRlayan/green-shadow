@@ -239,17 +239,6 @@ let cardCount = 0;
             }
         });
 
-        // Update existing card details
-        const cardId = $(this).data('card-id'); //update button in card
-        const cropCard = $(`#${cardId}`);
-
-        cropCard.find('.card-log-date').text(`Log Date: ${logDate}`);
-        cropCard.find('.card-log-details').text(`Log Details: ${logDetails}`);
-        cropCard.find('.card-log-fields').text(`Field: ${updatedLogField.join(', ')}`);
-        cropCard.find('.card-log-staff').text(`Staff: ${updatedStaffLogs.join(', ')}`);
-        cropCard.find('.card-log-crop').text(`Crop: ${updatedCropLogs.join(', ')}`);
-        cropCard.find('.image-preview').attr('src', logImage);
-
         $('#updateLogForm')[0].reset();
         $('#updatePreviewCropLogImg').addClass('d-none');
         $('#additionalFieldInLogUpdate').empty();
