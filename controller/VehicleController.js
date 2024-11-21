@@ -22,7 +22,7 @@ $(document).ready(function () {
         let remark = $("#remark").val();
 
         // Collect multiple staff values
-        let staffEquipment = [];
+        let staffEquipment = null;
         $("#additionalVehicleStaff select").each(function() {
             let staffValue = $(this).val();
             if (staffValue) {
