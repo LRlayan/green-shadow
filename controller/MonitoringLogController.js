@@ -66,7 +66,7 @@ let cardCount = 0;
                     contentType: false,
                     success: function (response) {
                         Swal.fire("Saved!", "", "success");
-                        $('#logForm').reset[0];
+                        $('#logForm')[0].reset();
                         $('#additionalLogField').empty();
                         $('#additionalLogCrop').empty();
                         $('#additionalLogStaff').empty();
@@ -92,24 +92,32 @@ let cardCount = 0;
 
     //SET DATA FOR UPDATE MODAL AFTER CLICK CARD UPDATE BUTTON
     $('#logCard').on('click','.update-button',function (){
-        const cardId = $(this).data('card-id');
-        const cropCard = $(`#${cardId}`);
+        const card = $(this).closest('.card');
+        const cardDate = card.find('.card-log-date').text().replace('Log Date:', '').trim();
+        const details = card.find('.card-log-details').text().replace('Log Details:', '').trim();
+        const fields = card.find('.card-log-fields').text().replace('Field:', '').trim().split(', ');
+        const crops = card.find('.card-log-crop').text().replace('Crop:', '').trim().split(', ');
+        const staff = card.find('.card-log-staff').text().replace('Staff:', '').trim().split(', ');
+        $('#updatePreviewCropLogImg').attr('src', card.find('.image-preview').attr('src')).removeClass('d-none');
 
-        // Populate modal with card details for updating
-        $('#updateLogDate').val(cropCard.find('.card-log-date').text().replace('Log Date:', '').trim());
-        $('#updateLog-details').val(cropCard.find('.card-log-details').text().replace('Log Details:', ''));
-        let field = cropCard.find('.card-log-fields').text().replace('Field:', '').trim().split(', ').map(item => item.trim());
-        let staff = cropCard.find('.card-log-staff').text().replace('Staff:', '').trim().split(', ').map(item => item.trim());
-        let crop = cropCard.find('.card-log-crop').text().replace('Crop:', '').trim().split(', ').map(item => item.trim());
-        $('#updatePreviewCropLogImg').attr('src', cropCard.find('.image-preview').attr('src')).removeClass('d-none');
-
-        $('#updateLogCropImageInput').val(''); // Clear file input for new upload
-        $('#updateLogModalButton').data('card-id', cardId); // Set card ID
+        $('#updateLogDate').val(cardDate);
+        $('#updateLog-details').val(details);
         $('#updateMonitoringLogModal').modal('show');
 
-        populateDropdownLog('#updateLogFieldId', field, ["F01", "F02", "F03", "F04", "F05"]);
-        populateDropdownLog('#updateLogInCropId', crop, ["C01", "C02", "C03", "C04", "C05"]);
-        populateDropdownLog('#updateLogInStaffId', staff, ["S01", "S02", "S03", "S04", "S05"]);
+        const loadAllField = new LoadFieldCard();
+        loadAllField.loadAllFieldCard().then(fieldCode => {
+            populateDropdownLog('#updateLogFieldId', fields, fieldCode);
+        });
+
+        const loadAllCrops = new LoadCards();
+        loadAllCrops.loadAllCropCard().then(cropCode => {
+            populateDropdownLog('#updateLogInCropId', crops, cropCode);
+        });
+
+        const loadAllStaffMember = new LoadAllStaffMember();
+        loadAllStaffMember.loadAllMembers().then(memberCode => {
+            populateDropdownLog('#updateLogInStaffId', staff, memberCode);
+        });
     });
 
     //UPDATE LOG CARD
@@ -354,7 +362,7 @@ let cardCount = 0;
 
                             let newLogCard = `
                             <div class="col-md-6 col-lg-4 mb-4" id="card${index}">
-                                <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
+                                <div class="card text-white" data-card-code="${log.logCode}" style="background-color: #2b2b2b; border: 1px solid gray;">
                                     <div class="card-image-container">
                                         <img src="${logImage}" class="card-img-top image-preview" alt="log Image">
                                     </div>
