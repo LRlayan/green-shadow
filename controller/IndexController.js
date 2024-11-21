@@ -65,6 +65,7 @@ $('#dashboard').on('click',function (){
 });
 
 $('#field').on('click',function (){
+    loadFieldCard.loadAllFieldCard();
     $('#main-label').text('Field Manage');
     $('#field-sec').css({display:'block'});
     $('#dashboard-sec').css({display:'none'});
@@ -76,6 +77,7 @@ $('#field').on('click',function (){
 });
 
 $('#crops').on('click',function (){
+    loadCropCard.loadAllCropCard();
     $('#main-label').text('Crop Manage');
     $('#crops-sec').css({display:'block'});
     $('#dashboard-sec').css({display:'none'});
@@ -87,6 +89,7 @@ $('#crops').on('click',function (){
 });
 
 $('#staff').on('click',function (){
+    allStaffMember.loadAllMembers();
     $('#main-label').text('Staff Manage');
     $('#staff-sec').css({display:'block'});
     $('#dashboard-sec').css({display:'none'});
@@ -98,6 +101,7 @@ $('#staff').on('click',function (){
 });
 
 $('#log').on('click',function (){
+    loadAllLogs.loadAllLogsDetails();
     $('#main-label').text('Logs Services');
     $('#monitoring-log-sec').css({display:'block'});
     $('#dashboard-sec').css({display:'none'});
@@ -122,6 +126,7 @@ $('#vehicle').on('click',function (){
 });
 
 $('#equipment').on('click',function (){
+    loadAllEquipment.loadAllEquDetails();
     $('#main-label').text('Equipment Manage');
     $('#equipment-sec').css({display:'block'});
     $('#dashboard-sec').css({display:'none'});
