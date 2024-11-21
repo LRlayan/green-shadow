@@ -111,6 +111,7 @@ function previewCropImage(imageInputId,imgPreviewId){
 // SET CARD DATA UPDATE MODAL
 $('#cropCard').on('click', '.update-button', function() {
     const card = $(this).closest('.card');
+    $('#selectedCropCode').val(card.find('.card-cropCode').text().replace('Code:', '').trim());
     $('#updateCropName').val(card.find('.card-name').text().replace('Name:', '').trim());
     $('#updateScientificName').val(card.find('.card-scientific').text().replace('Scientific Name: ', '').trim());
     $('#updateCategory').val(card.find('.card-category').text().replace('Category: ', ''));
@@ -169,8 +170,8 @@ function addDropdownUpdate(containerId, selectClass, options) {
 }
 
 //CROP CARD UPDATE
-$('#updateFieldModalButton').on('click',function (){
-
+$('#updateFieldModalButton').on('click',async function (){
+    let cropCode = $('#selectedCropCode').val();
     let cropName = $('#updateCropName').val();
     let scientificName = $('#updateScientificName').val();
     let category = $('#updateCategory').val();
@@ -204,25 +205,72 @@ $('#updateFieldModalButton').on('click',function (){
         if (selectedValue) updatedCropLogs.push(selectedValue);
     });
 
-    let cropImage = $('#updatePreview').attr('src'); // Use the image preview if available
+    updatedCropLogs = updatedCropLogs.filter(id => ({logCode:id}));
+    updatedCropField = updatedCropField.filter(id => ({fieldCode:id}));
 
-    // Update existing card details
-    const cardId = $(this).data('card-id'); //update button in card
-    const cropCard = $(`#${cardId}`);
+    let cropImage = $('#updateCropImage')[0].files[0];
 
-    cropCard.find('.card-name').text(`Name: ${cropName}`);
-    cropCard.find('.card-scientific').text(`Scientific Name: ${scientificName}`);
-    cropCard.find('.card-category').text(`Category: ${category}`);
-    cropCard.find('.card-season').text(`Crop Season: ${season}`);
-    cropCard.find('.card-FieldId').text(`Field ID: ${updatedCropField.join(', ')}`);
-    cropCard.find('.card-logs').text(`Logs: ${updatedCropLogs.join(', ')}`);
-    cropCard.find('.image-preview').attr('src', cropImage);
+    const formData = new FormData();
+    formData.append("cropName", cropName);
+    formData.append("scientificName", scientificName);
+    formData.append("category", category);
+    formData.append("season", season);
+    formData.append("fieldList", new Blob([JSON.stringify(updatedCropField)], { type: "application/json" }));
+    formData.append("logList", new Blob([JSON.stringify(updatedCropLogs)], { type: "application/json" }));
 
-    $('#updateCropForm')[0].reset();
-    $('#previewCrop').addClass('d-none');
-    $('#additionalLogInCropUpdate').empty();
-    $('#additionalFieldInCropUpdate').empty();
-    $('#updateCropModal').modal('hide');
+    if (!cropImage) {
+        const previewImage = $('#updatePreview').attr('src');
+        if (previewImage) {
+            try {
+                const response = await fetch(previewImage);
+                const blob = await response.blob();
+                formData.append("cropImage", blob);
+            } catch (error) {
+                Swal.fire('Error', 'Failed to process the image. Please try again.', 'error');
+                return;
+            }
+        } else {
+            Swal.fire('Error', 'No image provided!', 'error');
+            return;
+        }
+    }else {
+        formData.append("cropImage", cropImage);
+    }
+
+    Swal.fire({
+        title: "Do you want to update the changes?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Update",
+        denyButtonText: `Don't update`
+    }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+            $.ajax({
+                url: `http://localhost:5050/api/v1/crops/${cropCode}`,
+                type: "PUT",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    // Reset the form
+                    $('#updateCropForm')[0].reset();
+                    $('#previewCrop').addClass('d-none');
+                    $('#additionalLogInCropUpdate').empty();
+                    $('#additionalFieldInCropUpdate').empty();
+                    $('#updateCropModal').modal('hide');
+                    let loadAllCrops = new LoadCards();
+                    loadAllCrops.loadAllCropCard();
+                    Swal.fire("Updated!", "", "success");
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire("Faild crop", "", "info");
+                }
+            });
+        } else if (result.isDenied) {
+            Swal.fire("Changes are not saved", "", "info");
+        }
+    });
 });
 
 function populateDropdownCrop(container, selectedValues, options) {
