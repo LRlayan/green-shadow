@@ -1,4 +1,5 @@
 import {LoadFieldCard} from './FieldController.js';
+import {LoadAllLogs} from "./MonitoringLogController.js";
 
 let cardCount = 0;
 
@@ -107,42 +108,46 @@ function previewCropImage(imageInputId,imgPreviewId){
     });
 }
 
-// Handle update button click
+// SET CARD DATA UPDATE MODAL
 $('#cropCard').on('click', '.update-button', function() {
-    const cardId = $(this).data('card-id');
-    const cropCard = $(`#${cardId}`);
-    console.log("cardId :" , cardId);
-
-    // Populate modal with card details for updating
-    $('#updateCropName').val(cropCard.find('.card-name').text().replace('Name:', '').trim());
-    $('#updateScientificName').val(cropCard.find('.card-scientific').text().replace('Scientific Name: ', '').trim());
-    $('#updateCategory').val(cropCard.find('.card-category').text().replace('Category: ', ''));
-    $('#updateCropSeason').val(cropCard.find('.card-season').text().replace('Crop Season: ', ''));
-    let field = cropCard.find('.card-FieldId').text().replace('Field ID:', '').trim().split(', ').map(item => item.trim());
-    let log = cropCard.find('.card-logs').text().replace('Logs:', '').trim().split(', ').map(item => item.trim());
-    $('#updatePreview').attr('src', cropCard.find('.image-preview').attr('src')).removeClass('d-none');
-    $('#cropImageInput').val(''); // Clear file input for new upload
-    $('#updateFieldModalButton').data('card-id', cardId); // Set action and card ID
+    const card = $(this).closest('.card');
+    $('#updateCropName').val(card.find('.card-name').text().replace('Name:', '').trim());
+    $('#updateScientificName').val(card.find('.card-scientific').text().replace('Scientific Name: ', '').trim());
+    $('#updateCategory').val(card.find('.card-category').text().replace('Category: ', ''));
+    $('#updateCropSeason').val(card.find('.card-season').text().replace('Crop Season: ', ''));
+    let field = card.find('.card-FieldId').text().replace('Field ID:', '').trim().split(', ');
+    let log = card.find('.card-logs').text().replace('Logs:', '').trim().split(', ');
+    $('#updatePreview').attr('src', card.find('.image-preview').attr('src')).removeClass('d-none');
+    $('#cropImageInput').val('');
+    $('#updateFieldModalButton').data('card-id', card);
     $('#updateCropModal').modal('show');
 
-    populateDropdownCrop('#updateFieldId', field, ["F01", "F02", "F03", "F04", "F05"]);
-    populateDropdownCrop('#updateLogId', log, ["L01", "L02", "L03", "L04", "L05"]);
+    const loadAllField = new LoadFieldCard();
+    loadAllField.loadAllFieldCard().then(fieldCode => {
+        populateDropdownCrop('#updateFieldId', field, fieldCode);
+    });
+    const loadAllLogs = new LoadAllLogs();
+    loadAllLogs.loadAllLogsDetails().then(logCode => {
+        populateDropdownCrop('#updateLogId', log, logCode);
+    });
 });
 
 // Function to add dynamic field dropdown in the update modal
 $('#addFieldBtnInCropUpdate').on('click', function() {
-    // let fieldCard = new LoadFieldCard();
-    // fieldCard.loadAllFieldCard().then(fieldCodes => {
-    //     console.log("Field codes:", fieldCodes);
-        addDropdownUpdate('#additionalFieldInCropUpdate', '#fieldInCropUpdate', ["F01","F02","F03","F04","F05"]);
-    // }).catch(error => {
-    //     console.error("Error loading field cards:", error);
-    // });
+    let fieldCard = new LoadFieldCard();
+    fieldCard.loadAllFieldCard().then(fieldCodes => {
+        addDropdownUpdate('#additionalFieldInCropUpdate', '#fieldInCropUpdate', fieldCodes);
+    }).catch(error => {
+        console.error("Error loading field cards:", error);
+    });
 });
 
 // Function to add dynamic Log dropdown in the update modal
 $('#addLogsBtnInCropUpdate').on('click', function() {
-    addDropdownUpdate('#additionalLogInCropUpdate', '#logInCropUpdate', ["L01", "L02", "L03", "L04", "L05"]);
+    let loadAllLogs = new LoadAllLogs();
+    loadAllLogs.loadAllLogsDetails().then(logCodes => {
+        addDropdownUpdate('#additionalLogInCropUpdate', '#logInCropUpdate', logCodes);
+    });
 });
 
 //add additional combo box in update modal
@@ -163,7 +168,7 @@ function addDropdownUpdate(containerId, selectClass, options) {
     $(containerId).append($container);
 }
 
-//crop card update
+//CROP CARD UPDATE
 $('#updateFieldModalButton').on('click',function (){
 
     let cropName = $('#updateCropName').val();
@@ -312,7 +317,7 @@ export class LoadCards {
                         let imageData = `data:image/jpeg;base64,${crop.cropImage}`;
                         let newCard = `
                         <div class="col-md-6 col-lg-4 mb-4" id="card${crop.cropCode}">
-                            <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
+                            <div class="card text-white" data-card-code="${crop.cropCode}" style="background-color: #2b2b2b; border: 1px solid gray;">
                                 <div class="card-image-container">
                                     <img src="${imageData}" class="card-img-top image-preview" alt="Crop Image">
                                 </div>
@@ -326,7 +331,7 @@ export class LoadCards {
                                     <p class="card-FieldId"><strong>Field ID:</strong> ${crop.fieldCodeList.join(', ')}</p>
                                     <p class="card-logs"><strong>Logs:</strong>${crop.logCodeList.join(', ')}</p>
                                     <div class="d-flex justify-content-between">
-                                        <button class="btn btn-success flex-grow-1 me-2 update-button" data-card-id="card${index}">Update</button>
+                                        <button class="btn btn-success flex-grow-1 me-2 update-button" data-card-id="card${crop.cropCode}">Update</button>
                                         <button class="btn btn-danger flex-grow-1 delete-button" data-bs-toggle="modal" data-card-id="${crop.cropCode}" data-bs-target="#confirmCropDeleteModal">Delete</button>
                                     </div>
                                 </div>
