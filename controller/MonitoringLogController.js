@@ -331,15 +331,24 @@ let cardCount = 0;
     }
 
     $('#addFieldBtnInLogUpdate').on('click',function (){
-        addDropdownLogs("#additionalFieldInLogUpdate","#fieldInLogUpdate",["F01", "F02", "F03", "F04","F05"]);
+        const allFieldCard = new LoadFieldCard();
+        allFieldCard.loadAllFieldCard().then(fieldCode => {
+            addDropdownLogs("#additionalFieldInLogUpdate","#fieldInLogUpdate",fieldCode);
+        })
     });
 
     $('#addLogCropButtonUpdate').on('click',function (){
-        addDropdownLogs("#additionalLogsCropUpdate","#log-cropIdUpdate",["C01", "C02", "C03", "C04","C05"]);
+        const allCropCard = new LoadCards();
+        allCropCard.loadAllCropCard().then(cropCode => {
+            addDropdownLogs("#additionalLogsCropUpdate", "#log-cropIdUpdate", cropCode);
+        });
     });
 
     $('#addLogStaffButtonUpdate').on('click',function (){
-        addDropdownLogs("#additionalLogStaffUpdate","#log-staffIdUpdate",["S01", "S02", "S03", "S04","S05"]);
+        const allMemberCard = new LoadAllStaffMember();
+        allMemberCard.loadAllMembers().then(staffCode => {
+            addDropdownLogs("#additionalLogStaffUpdate", "#log-staffIdUpdate", staffCode);
+        });
     });
 
     $('#logCropImageInput').on('click',function (){
