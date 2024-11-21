@@ -324,7 +324,7 @@ export class LoadCards {
                                     <p class="card-category"><strong>Category:</strong> ${crop.category}</p>
                                     <p class="card-season"><strong>Crop Season:</strong> ${crop.season}</p>
                                     <p class="card-FieldId"><strong>Field ID:</strong> ${crop.fieldCodeList.join(', ')}</p>
-                                    <p class="card-logs"><strong>Logs:</strong></p>
+                                    <p class="card-logs"><strong>Logs:</strong>${crop.logCodeList.join(', ')}</p>
                                     <div class="d-flex justify-content-between">
                                         <button class="btn btn-success flex-grow-1 me-2 update-button" data-card-id="card${index}">Update</button>
                                         <button class="btn btn-danger flex-grow-1 delete-button" data-bs-toggle="modal" data-card-id="${crop.cropCode}" data-bs-target="#confirmCropDeleteModal">Delete</button>
