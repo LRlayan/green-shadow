@@ -66,6 +66,10 @@ let cardCount = 0;
                     contentType: false,
                     success: function (response) {
                         Swal.fire("Saved!", "", "success");
+                        $('#logForm').reset[0];
+                        $('#additionalLogField').empty();
+                        $('#additionalLogCrop').empty();
+                        $('#additionalLogStaff').empty();
                         const loadAllLogs = new LoadAllLogs();
                         loadAllLogs.loadAllLogsDetails().then(logCodes => {
                         }).catch(error => {
