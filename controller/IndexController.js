@@ -19,10 +19,8 @@ $('#sections-wrapper').css({display:'none'});
 const loadFieldCard = new LoadFieldCard();
 const loadCropCard = new LoadCards();
 const allStaffMember = new LoadAllStaffMember();
-const loadAllVehicle = new LoadAllVehicleDetails();
 const loadAllEquipment = new LoadAllEquipment();
 const loadAllLogs = new LoadAllLogs();
-loadAllVehicle.loadVehicleTable();
 allStaffMember.loadAllMembers();
 loadFieldCard.loadAllFieldCard();
 loadCropCard.loadAllCropCard();
@@ -111,6 +109,8 @@ $('#log').on('click',function (){
 });
 
 $('#vehicle').on('click',function (){
+    const loadAllVehicle = new LoadAllVehicleDetails();
+    loadAllVehicle.loadVehicleTable();
     $('#main-label').text('Vehicle Manage');
     $('#vehicle-sec').css({display:'block'});
     $('#dashboard-sec').css({display:'none'});
