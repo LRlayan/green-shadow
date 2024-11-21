@@ -93,6 +93,7 @@ let cardCount = 0;
     //SET DATA FOR UPDATE MODAL AFTER CLICK CARD UPDATE BUTTON
     $('#logCard').on('click','.update-button',function (){
         const card = $(this).closest('.card');
+        const cardCode = card.find('.card-log-code').text().replace('Log Code:', '').trim();
         const cardDate = card.find('.card-log-date').text().replace('Log Date:', '').trim();
         const details = card.find('.card-log-details').text().replace('Log Details:', '').trim();
         const fields = card.find('.card-log-fields').text().replace('Field:', '').trim().split(', ');
@@ -100,6 +101,7 @@ let cardCount = 0;
         const staff = card.find('.card-log-staff').text().replace('Staff:', '').trim().split(', ');
         $('#updatePreviewCropLogImg').attr('src', card.find('.image-preview').attr('src')).removeClass('d-none');
 
+        $('#selectedLogCode').val(cardCode);
         $('#updateLogDate').val(cardDate);
         $('#updateLog-details').val(details);
         $('#updateMonitoringLogModal').modal('show');
@@ -121,7 +123,8 @@ let cardCount = 0;
     });
 
     //UPDATE LOG CARD
-    $('#updateLogModalButton').on('click',function (){
+    $('#updateLogModalButton').on('click',async  function (){
+        let logCode = $('#selectedLogCode').val();
         let logDate = $('#updateLogDate').val();
         let logDetails = $('#updateLog-details').val();
 
@@ -170,7 +173,72 @@ let cardCount = 0;
             if (selectedValue) updatedStaffLogs.push(selectedValue);
         });
 
-        let logImage = $('#updatePreviewCropLogImg').attr('src');
+        // Remove empty values (if any)
+        updatedLogField = updatedLogField.filter(id => ({ fieldCode: id }));
+        updatedCropLogs = updatedCropLogs.filter(id => ({ cropCode: id }));
+        updatedStaffLogs = updatedStaffLogs.filter(id => ({ memberCode: id }));
+
+        let logImage = $('#updateLogCropImageInput')[0].files[0];
+
+        const formData = new FormData();
+        formData.append("date", logDate);
+        formData.append("logDetails", logDetails);
+        formData.append("staffList", new Blob([JSON.stringify(updatedStaffLogs)], { type: "application/json" }));
+        formData.append("cropList", new Blob([JSON.stringify(updatedCropLogs)], { type: "application/json" }));
+        formData.append("fieldList", new Blob([JSON.stringify(updatedLogField)], { type: "application/json" }));
+
+        if (!logImage) {
+            const previewImageSrc = $('#updatePreviewCropLogImg').attr('src');
+            if (previewImageSrc) {
+                try {
+                    const response = await fetch(previewImageSrc);
+                    const blob = await response.blob();
+                    formData.append("observedImage", blob);
+                } catch (error) {
+                    Swal.fire('Error', 'Failed to process the image. Please try again.', 'error');
+                    return;
+                }
+            } else {
+                Swal.fire('Error', 'No image provided!', 'error');
+                return;
+            }
+        } else {
+            formData.append("observedImage", logImage); // Attach uploaded image
+        }
+
+        Swal.fire({
+            title: "Do you want to update the changes?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Update",
+            denyButtonText: `Don't update`
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: `http://localhost:5050/api/v1/logs/${logCode}`,
+                    type: "PUT",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        // Reset the form
+                        $('#logForm')[0].reset();
+                        $('#updatePreviewCropLogImg').addClass('d-none'); // Hide image preview
+                        $('#updateMonitoringLogModal').modal('hide'); // Hide the modal
+                        let loadLogCard = new LoadAllLogs();
+                        loadLogCard.loadAllLogsDetails();
+                        Swal.fire("Saved!", "", "success");
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Faild crop");
+                    }
+                });
+            } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
+            }
+        });
+
         // Update existing card details
         const cardId = $(this).data('card-id'); //update button in card
         const cropCard = $(`#${cardId}`);
