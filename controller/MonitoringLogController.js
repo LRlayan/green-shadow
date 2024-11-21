@@ -190,7 +190,26 @@ let cardCount = 0;
     // Handle the confirmation of the delete action
     $('#confirmLogDeleteButton').on('click', function () {
         const cardId = $(this).data('card-id');
-        removeFieldCard(cardId);
+
+        $.ajax({
+            url: `http://localhost:5050/api/v1/logs/${cardId}`,
+            type: 'DELETE',
+            success: function () {
+                Swal.fire('Deleted!', 'The Logs card has been deleted.', 'success');
+                const loadLogCard = new LoadAllLogs();
+                loadLogCard.loadAllLogsDetails();
+            },
+            error: function (xhr, status, error) {
+                console.error("Error deleting logs:", error);
+                if (xhr.status === 404) {
+                    Swal.fire('Error', 'Log not found!', 'error');
+                } else if (xhr.status === 400) {
+                    Swal.fire('Error', 'Invalid log code!', 'error');
+                } else {
+                    Swal.fire('Error', 'Failed to delete logs. Please try again.', 'error');
+                }
+            }
+        });
 
         // Hide the modal after deleting
         $('#confirmLogDeleteModal').modal('hide');
@@ -201,11 +220,6 @@ let cardCount = 0;
         $('body').removeClass('modal-open'); // Removes the modal-open class from body
         $('.modal-backdrop').remove();       // Removes the leftover backdrop element
     });
-
-    function removeFieldCard(id) {
-        $('#' + id).remove();
-    }
-
 
     function populateDropdownLog(container, selectedValues, options) {
         $(container).empty();
@@ -349,8 +363,8 @@ let cardCount = 0;
                                         <p class="card-log-crop"><strong>Crop:</strong>${log.cropList.join(', ')}</p>
                                         <p class="card-log-staff"><strong>Staff:</strong>${log.staffList.join(', ')}</p>
                                         <div class="d-flex justify-content-between">
-                                            <button class="btn btn-success flex-grow-1 me-2 update-button" data-card-id="card${log.logCode}">Update</button>
-                                            <button class="btn btn-danger flex-grow-1 delete-button" data-card-id="card${log.logCode}">Delete</button>
+                                            <button class="btn btn-success flex-grow-1 me-2 update-button" data-card-id="${log.logCode}">Update</button>
+                                            <button class="btn btn-danger flex-grow-1 delete-button" data-card-id="${log.logCode}">Delete</button>
                                         </div>
                                     </div>
                                 </div>
