@@ -205,9 +205,15 @@ let clickTableRow = 0;
             }
         });
 
-        populateDropdownStaff("#updateField",fieldsArray,["F01", "F02", "F03", "F04", "F05"]);
-        populateDropdownStaff("#updateVehicle",vehicleArray,["V01", "V02", "V03", "V04", "V05"]);
-        populateDropdownStaff("#updateEquipment",equipmentArray,["E01", "E02", "E03", "E04", "E05"],"equipment");
+        // populateDropdownStaff("#updateField",fieldsArray,["F01", "F02", "F03", "F04", "F05"]);
+        const loadAllVehicle = new LoadAllVehicleDetails();
+        loadAllVehicle.loadVehicleTable().then(vehicleCode => {
+            populateDropdownStaff("#updateVehicle",vehicleArray,vehicleCode);
+        });
+        const loadEquipment = new LoadAllEquipment();
+        loadEquipment.loadAllEquDetails().then(equCode => {
+            populateDropdownStaff("#updateEquipment",equipmentArray,equCode,"equipment");
+        });
     });
 
     //UPDATE STAFF MEMBER
@@ -228,20 +234,20 @@ let clickTableRow = 0;
         let designation = $('#designationUpdate').val();
         let gender = $('#genderUpdate').val();
 
-        // Collect updated field values
-        let updatedFieldStaff = [];
-        $("#updateField select").each(function() {
-            let fieldValue = $(this).val();
-            if (fieldValue) {
-                updatedFieldStaff.push(fieldValue);
-            }
-        });
-
-        // Collect values from all Field dropdowns
-        $('#additionalStaffFieldUpdate select').each(function () {
-            const selectedValue = $(this).val();
-            if (selectedValue) updatedFieldStaff.push(selectedValue);
-        });
+        // // Collect updated field values
+        // let updatedFieldStaff = [];
+        // $("#updateField select").each(function() {
+        //     let fieldValue = $(this).val();
+        //     if (fieldValue) {
+        //         updatedFieldStaff.push(fieldValue);
+        //     }
+        // });
+        //
+        // // Collect values from all Field dropdowns
+        // $('#additionalStaffFieldUpdate select').each(function () {
+        //     const selectedValue = $(this).val();
+        //     if (selectedValue) updatedFieldStaff.push(selectedValue);
+        // });
 
         // Collect updated vehicle values
         let updatedVehicleStaff = [];
@@ -358,7 +364,6 @@ let clickTableRow = 0;
                 }
             }
         });
-
         $('#confirmStaffDeleteModal').modal('hide');
         clearOverlayOfModal();
     });
@@ -380,12 +385,12 @@ let clickTableRow = 0;
     });
 
     //Add Field Update Modal
-    $('#addStaffFieldButtonUpdate').on('click', function() {
-        const loadAllField = new LoadFieldCard();
-        loadAllField.loadAllFieldCard().then(fieldCode => {
-            addDropdownStaff("#additionalStaffFieldUpdate","#filed-staffUpdate",fieldCode);
-        });
-    });
+    // $('#addStaffFieldButtonUpdate').on('click', function() {
+    //     const loadAllField = new LoadFieldCard();
+    //     loadAllField.loadAllFieldCard().then(fieldCode => {
+    //         addDropdownStaff("#additionalStaffFieldUpdate","#filed-staffUpdate",fieldCode);
+    //     });
+    // });
 
     //Add Vehicle
     $('#addStaffVehicleButton').on('click', function() {
