@@ -218,6 +218,7 @@ $('#staffDetailsTable').on('click','tr', function (){
 //UPDATE STAFF MEMBER
 $('#updateMemberButton').on('click',function (){
     // Get updated values from modal inputs
+    let memberCode = $('#selectedMemberCode').val();
     let memberFirstName = $('#firstNameUpdate').val();
     let memberLastName = $('#lastNameUpdate').val();
     let joinedDate = $('#joinedDateUpdate').val();
@@ -274,26 +275,58 @@ $('#updateMemberButton').on('click',function (){
         if (selectedValue) updatedEquipmentStaff.push(selectedValue);
     });
 
-    let staff = staffDetails[clickTableRow];
-    staff.firstName = memberFirstName;
-    staff.lastName = memberLastName;
-    staff.joinedDate = joinedDate;
-    staff.designation = designation;
-    staff.gender = gender;
-    staff.dob = dob;
-    staff.addressLine01 = addressLine01;
-    staff.addressLine02 = addressLine02;
-    staff.addressLine03 = addressLine03;
-    staff.addressLine04 = addressLine04;
-    staff.addressLine05 = addressLine05;
-    staff.contactNo = contactNo;
-    staff.email = email;
-    staff.role = role;
-    staff.fieldList = updatedFieldStaff;
-    staff.vehicle = updatedVehicleStaff;
-    staff.equipmentList = updatedEquipmentStaff;
-    resetForm("#updateStaffForm","#updateField","#updateVehicle","#updateEquipment","#additionalStaffEquipmentUpdate","#additionalStaffVehicleUpdate","#additionalStaffFieldUpdate");
-    $('#updateStaffModal').modal('hide');
+    const staffDTO = {
+        memberCode:memberCode,
+        firstName:memberFirstName,
+        lastName:memberLastName,
+        joinedDate:joinedDate,
+        dateOfBirth:dob,
+        gender:gender,
+        designation:designation,
+        addressLine1:addressLine01,
+        addressLine2:addressLine02,
+        addressLine3:addressLine03,
+        addressLine4:addressLine04,
+        addressLine5:addressLine05,
+        contactNo:contactNo,
+        email:email,
+        role:role,
+        staffEquipmentDetailsList:[],
+        vehicleList:updatedVehicleStaff
+    }
+
+    Swal.fire({
+        title: "Do you want to update the changes?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Update",
+        denyButtonText: `Don't update`
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: `http://localhost:5050/api/v1/staff/${memberCode}`, // Use the vehicleId from the clicked row
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(staffDTO),
+                success: function(response) {
+                    resetForm("#updateStaffForm","#updateField","#updateVehicle","#updateEquipment","#additionalStaffEquipmentUpdate","#additionalStaffVehicleUpdate","#additionalStaffFieldUpdate");
+                    const loadAllStaff = new LoadAllStaffMember();
+                    loadAllStaff.loadAllMembers().then(memberCode =>{
+                        Swal.fire("Updated!", "", "success");
+                    }).catch(error =>{
+                        console.error("staff code not found:", error);
+                    });
+                    $('#updateStaffModal').modal('hide');
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error updating staff:", error);
+                    Swal.fire("Failed to update staff. Please try again.", "", "Error");
+                }
+            });
+        } else if (result.isDenied) {
+            Swal.fire("Changes are not updated", "", "info");
+        }
+    });
 });
 
 function resetForm(){
@@ -521,7 +554,7 @@ export class LoadAllStaffMember {
             $.ajax({
                 url: "http://localhost:5050/api/v1/staff",
                 type: "GET",
-                success: function (staffMembers) {  // Assume 'vehicles' is an array of vehicle objects
+                success: function (staffMembers) {
                     staffMembers.forEach(staffMember => {
                         const staffDetail = new Staff(
                             staffMembers.memberCode,
@@ -544,7 +577,6 @@ export class LoadAllStaffMember {
                             staffMember.logList || "N/A", // Handle nested staff details
                             staffMember.equipmentList || "N/A" // Handle nested staff details
                         );
-                        // Add vehicle code to the array
                         memberCodes.push(staffMember.memberCode);
                         const row = `
                                 <tr>
@@ -570,10 +602,8 @@ export class LoadAllStaffMember {
                                     <td><button class="btn btn-danger delete-button" data-index="${staffMember.memberCode}">Delete</button></td>
                                 </tr>
                             `;
-                        tableBody.append(row);  // Append each row to the table
+                        tableBody.append(row);
                     });
-
-                    // Resolve the promise with the array of vehicle codes
                     resolve(memberCodes);
                 },
                 error: function (xhr, status, error) {
