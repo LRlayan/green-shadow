@@ -181,8 +181,6 @@ $(document).ready(function () {
                 updatedStaffVehicle = staffValue;
             }
         });
-
-        // Collect values from all Staff Member dropdowns
         $('#additionalVehicleStaffUpdate select').each(function () {
             const selectedValue = $(this).val();
             if (selectedValue) {
@@ -208,22 +206,21 @@ $(document).ready(function () {
             confirmButtonText: "Update",
             denyButtonText: `Don't update`
         }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
                 $.ajax({
-                    url: `http://localhost:5050/api/v1/vehicles/${vehicleCode}`, // Use the vehicleId from the clicked row
+                    url: `http://localhost:5050/api/v1/vehicles/${vehicleCode}`,
                     type: 'PUT',
-                    contentType: 'application/json', // JSON request
-                    data: JSON.stringify(vehicleDTO), // Convert the object to JSON
+                    contentType: 'application/json',
+                    data: JSON.stringify(vehicleDTO),
                     success: function(response) {
                         clickNewComboBoxBtn = 0;
                         loadAllVehicle.loadVehicleTable().then(vehicleCode =>{
                             Swal.fire("Saved!", "", "success");
-                            resetForm('#additionalVehicleStaffUpdate'); // Reset the form
+                            resetForm('#additionalVehicleStaffUpdate');
                         }).catch(error =>{
                             console.error("vehicle code not found:", error);
                         });
-                        $('#updateVehicle-modal').modal("hide"); // Hide the modal
+                        $('#updateVehicle-modal').modal("hide");
                     },
                     error: function(xhr, status, error) {
                         console.error("Error updating vehicle:", error);
