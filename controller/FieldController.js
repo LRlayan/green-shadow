@@ -1,21 +1,20 @@
 import { LoadCards } from './CropController.js';
 import { LoadAllStaffMember } from './StaffController.js';
+import {LoadAllLogs} from "./MonitoringLogController.js";
 
 let fieldCode = 0;
 let cardCount = 0;
 
-    // add field card(save)
+    // SAVE MODAL
     $('#fieldForm').on('submit', function (e) {
         cardCount++;
-        e.preventDefault(); // Prevent form from actually submitting
+        e.preventDefault();
 
-        // Retrieve form values
         let fieldName = $('#fieldName').val();
         let location = $('#fieldLocation').val();
         let extentSize = $('#extentSize').val();
-        let cropIds = []; // Initialize an array to store crop IDs
-        let staffIds = []; // Initialize an array to store staff IDs
-        let logIds = ["L01","L02"]; // Initialize an array to store log IDs
+        let cropIds = [];
+        let staffIds = [];
 
         // Collect all crop IDs from the main select and additional fields
         $('#filed-cropId').val() && cropIds.push($('#filed-cropId').val()); // Add main select value if not empty
@@ -25,7 +24,7 @@ let cardCount = 0;
         });
 
         // Collect all staff IDs from the main select and additional fields
-        $('#filed-staffId').val() && staffIds.push($('#filed-staffId').val()); // Add main select value if not empty
+        $('#filed-staffId').val() && staffIds.push($('#filed-staffId').val());
         $('#additionalStaff select').each(function () {
             let ids = $(this).val();
             staffIds.push(ids);
@@ -40,7 +39,7 @@ let cardCount = 0;
 
         const formData = new FormData();
         formData.append("name", fieldName);
-        formData.append("location", location); //"e.g., 79.8612, 6.9271"
+        formData.append("location", location); //"e.g. 79.8612, 6.9271"
         formData.append("extentSize", extentSize);
         formData.append("fieldImage1", fieldImageFile1);
         formData.append("fieldImage2", fieldImageFile2);
@@ -114,47 +113,66 @@ let cardCount = 0;
         })
     });
 
-// Update Field Card Modal setup
+// SET DATA FOR UPDATE MODAL
 $('#fieldCard').on('click', '.update-button', function () {
-    clearUpdateFieldForm();
+    const card = $(this).closest('.card');
+    $('#selectedFieldCode').val(card.find('.card-filedCode').text().replace('Code:', '').trim());
+    $('#updateFieldName').val(card.find('.card-name').text().replace('Name:', '').trim());
+    let location = card.find('.card-location').text().replace('Location:', '').trim();
+    $('#updateExtentSize').val(card.find('.card-extent-size').text().replace('Extent Size:', '').trim());
+    const crop = card.find('.card-crop').text().replace('Crop:', '').trim().split(', ');
+    const staff = card.find('.card-staff').text().replace('Staff:', '').trim().split(', ');
+    const logs = card.find('.card-log').text().replace('Log:', '').trim().split(', ');
+    $('#updatePreview1').attr('src', card.find('.image-preview1').attr('src')).removeClass('d-none');
+    $('#updatePreview2').attr('src', card.find('.image-preview2').attr('src')).removeClass('d-none');
 
-    const cardId = $(this).data('card-id'); // Fetch the card ID from the clicked update button
-    const fieldCard = $(`#${cardId}`);
-
-    fieldCode = fieldCard.find('.card-filedCode').text().replace('Code:', '').trim();
-    $('#updateFieldName').val(fieldCard.find('.card-name').text().replace('Name:', '').trim());
-    $('#updateFieldLocation').val(fieldCard.find('.card-location').text().replace('Location:', '').trim());
-    $('#updateExtentSize').val(fieldCard.find('.card-extent-size').text().replace('Extent Size:', '').trim());
-    const crop = fieldCard.find('.card-crop').text().replace('Crop:', '').trim().split(', ').map(item => item.trim());
-    const staff = fieldCard.find('.card-staff').text().replace('Staff:', '').trim().split(', ').map(item => item.trim());
-    const logs = fieldCard.find('.card-log').text().replace('Log:', '').trim().split(', ').map(item => item.trim());
-    $('#updatePreview1').attr('src', fieldCard.find('.image-preview1').attr('src')).removeClass('d-none');
-    $('#updatePreview2').attr('src', fieldCard.find('.image-preview2').attr('src')).removeClass('d-none');
+    let coordinates = location.match(/x:\s*(-?\d+\.?\d*)\s*y:\s*(-?\d+\.?\d*)/);
+    if (coordinates) {
+        let formattedCoordinates = `${coordinates[1]}, ${coordinates[2]}`;
+        $('#updateFieldLocation').val(formattedCoordinates);
+    }
 
     // Populate dropdowns with multiple selections
-    populateDropdown('#updateFieldCropId', crop, ["C01", "C02", "C03", "C04", "C05"]);
-    populateDropdown('#updateLogCrop', logs, ["L01", "L02", "L03", "L04", "L05"]);
-    populateDropdown('#updateStaffCrop', staff, ["S01", "S02", "S03", "S04", "S05"]);
+    const loadAllCrop = new LoadCards();
+    loadAllCrop.loadAllCropCard().then(cropCode => {
+        populateDropdown('#updateFieldCropId', crop, cropCode);
+    });
+    const loadAllLog = new LoadAllLogs();
+    loadAllLog.loadAllLogsDetails().then(logCode => {
+        populateDropdown('#updateLogCrop', logs, logCode);
+    });
+    const loadAllStaff = new LoadAllStaffMember();
+    loadAllStaff.loadAllMembers().then(memberCode => {
+        populateDropdown('#updateStaffCrop', staff, memberCode);
+    });
 
     $('#updateFieldImage1Input').val('');
     $('#updateFieldImage2Input').val('');
-    $('#updateFieldButton').data('card-id', cardId);
     $('#updateFieldModal').modal('show');
 });
 
 // Function to add dynamic Crop dropdown in the update modal
 $('#addFieldCropButtonUpdate').on('click', function() {
-    addDropdown('#additionalFieldCropUpdate', 'fieldCropUpdate', ["C01", "C02", "C03", "C04", "C05"]);
+    const loadAllCrop = new LoadCards();
+    loadAllCrop.loadAllCropCard().then(cropCode => {
+        addDropdown('#additionalFieldCropUpdate', 'fieldCropUpdate', cropCode);
+    });
 });
 
 // Function to add dynamic Staff dropdown in the update modal
 $('#addFieldStaffButtonUpdate').on('click', function() {
-    addDropdown('#additionalStaffCropUpdate', 'staffCropUpdate', ["S01", "S02", "S03", "S04", "S05"]);
+    const loadAllStaff = new LoadAllStaffMember();
+    loadAllStaff.loadAllMembers().then(memberCode => {
+        addDropdown('#additionalStaffCropUpdate', 'staffCropUpdate', memberCode);
+    });
 });
 
 // Function to add dynamic Log dropdown in the update modal
 $('#addFieldLogButtonUpdate').on('click', function() {
-    addDropdown('#additionalLogCropUpdate', 'logCropUpdate', ["L01", "L02", "L03", "L04", "L05"]);
+    const loadAllLogs = new LoadAllLogs();
+    loadAllLogs.loadAllLogsDetails().then(logCode => {
+        addDropdown('#additionalLogCropUpdate', 'logCropUpdate', logCode);
+    });
 });
 
 function populateDropdown(container, selectedValues, options) {
@@ -186,9 +204,9 @@ function populateDropdown(container, selectedValues, options) {
     });
 }
 
-//update field card
-$("#updateFieldButton").on("click", function() {
-    // Get updated values from the modal inputs
+//UPDATE FIELD CARD
+$("#updateFieldButton").on("click", async function() {
+    let fieldCode = $('#selectedFieldCode').val();
     let updatedFieldName = $("#updateFieldName").val();
     let updatedLocation = $("#updateFieldLocation").val();
     let updatedExtentSize = $("#updateExtentSize").val();
@@ -200,8 +218,6 @@ $("#updateFieldButton").on("click", function() {
             updatedFieldCrop.push(cropValue);
         }
     });
-
-    // Collect values from all Field dropdowns
     $('#additionalFieldCropUpdate select').each(function () {
         const selectedValue = $(this).val();
         if (selectedValue) updatedFieldCrop.push(selectedValue);
@@ -214,8 +230,6 @@ $("#updateFieldButton").on("click", function() {
             updatedFieldStaff.push(staffValue);
         }
     });
-
-    // Collect values from all Field dropdowns
     $('#additionalStaffCropUpdate select').each(function () {
         const selectedValue = $(this).val();
         if (selectedValue) updatedFieldStaff.push(selectedValue);
@@ -228,35 +242,83 @@ $("#updateFieldButton").on("click", function() {
             updatedFieldLogs.push(staffValue);
         }
     });
-
-    // Collect values from all Field dropdowns
     $('#additionalLogCropUpdate select').each(function () {
         const selectedValue = $(this).val();
         if (selectedValue) updatedFieldLogs.push(selectedValue);
     });
 
-    let fieldImage1 = $('#updatePreview1').attr('src');
-    let fieldImage2 = $('#updatePreview2').attr('src');
+    updatedFieldCrop = updatedFieldCrop.filter(id => ({cropCode:id}));
+    updatedFieldStaff = updatedFieldStaff.filter(id => ({memberCode:id}));
+    updatedFieldLogs = updatedFieldLogs.filter(id => ({logCode:id}));
 
-    // Update existing card details
-    const cardId = $(this).data('card-id');
-    const fieldCard = $(`#${cardId}`);
+    let fieldImage1 = $('#updateFieldImage1Input')[0].files[0];
+    let fieldImage2 = $('#updateFieldImage2Input')[0].files[0];
 
-    fieldCard.find('.card-name').text(`Name: ${updatedFieldName}`);
-    fieldCard.find('.card-location').text(`Location: ${updatedLocation}`);
-    fieldCard.find('.card-extent-size').text(`Extent Size: ${updatedExtentSize}`);
-    fieldCard.find('.card-crop').text(`Crop: ${updatedFieldCrop}`);
-    fieldCard.find('.card-staff').text(`Staff: ${updatedFieldStaff}`);
-    fieldCard.find('.card-log').text(`Log: ${updatedFieldLogs}`);
-    fieldCard.find('.image-preview1').attr('src', fieldImage1);
-    fieldCard.find('.image-preview2').attr('src', fieldImage2);
+    const formData = new FormData();
+    formData.append("name", updatedFieldName);
+    formData.append("location", updatedLocation);
+    formData.append("extentSize", updatedExtentSize);
+    formData.append("memberCodeList", new Blob([JSON.stringify(updatedFieldStaff)], { type: "application/json" }));
+    formData.append("cropCodeList", new Blob([JSON.stringify(updatedFieldCrop)], { type: "application/json" }));
+    formData.append("logCodeList", new Blob([JSON.stringify(updatedFieldLogs)], { type: "application/json" }));
 
-    $('#updateCropForm')[0].reset();
-    $('#previewCrop').addClass('d-none');
-    $('#additionalLogInCropUpdate').empty();
-    $('#additionalFieldInCropUpdate').empty();
-    clearUpdateFieldForm();
-    $("#updateFieldModal").modal("hide");
+    if (!fieldImage1 || !fieldImage2) {
+        const previewImage1 = $('#updatePreview1').attr('src');
+        const previewImage2 = $('#updatePreview2').attr('src');
+        if (previewImage1 && previewImage2) {
+            try {
+                const response1 = await fetch(previewImage1);
+                const response2 = await fetch(previewImage2);
+                const blob1 = await response1.blob();
+                const blob2 = await response2.blob();
+                formData.append("fieldImage1", blob1);
+                formData.append("fieldImage2", blob2);
+            } catch (error) {
+                Swal.fire('Error', 'Failed to process the image. Please try again.', 'error');
+                return;
+            }
+        } else {
+            Swal.fire('Error', 'No image provided!', 'error');
+            return;
+        }
+    }else {
+        formData.append("fieldImage1", fieldImage1);
+        formData.append("fieldImage2", fieldImage2);
+    }
+
+    Swal.fire({
+        title: "Do you want to update the changes?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Update",
+        denyButtonText: `Don't update`
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: `http://localhost:5050/api/v1/fields/${fieldCode}`,
+                type: "PUT",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    $('#updateCropForm')[0].reset();
+                    $('#previewCrop').addClass('d-none');
+                    $('#additionalLogInCropUpdate').empty();
+                    $('#additionalFieldInCropUpdate').empty();
+                    clearUpdateFieldForm();
+                    $("#updateFieldModal").modal("hide");
+                    let loadAllField = new LoadFieldCard();
+                    loadAllField.loadAllFieldCard();
+                    Swal.fire("Updated!", "", "success");
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire("Faild crop", "", "info");
+                }
+            });
+        } else if (result.isDenied) {
+            Swal.fire("Changes are not saved", "", "info");
+        }
+    });
 });
 
 $('#updateFieldImage1Input').on('click',function (){
@@ -352,17 +414,15 @@ export class LoadFieldCard {
                 success: function (fields) {
                     $("#fieldCard").empty();
                     const fieldCodes = fields.map(field => field.fieldCode);
-
                     // Loop through each field and create a card
                     fields.forEach((field, index) => {
                         const location = field.location ? field.location.split(",") : ["No location data"];
                         let imageData1 = `data:image/jpeg;base64,${field.fieldImage1}`;
                         let imageData2 = `data:image/jpeg;base64,${field.fieldImage2}`;
                         const carouselId = `carousel${index}`;
-
                         let newFieldCard = `
                             <div id="card${index}" class="col-md-6 col-lg-4 mb-4">
-                                <div class="card text-white" style="background-color: #2b2b2b; border: 1px solid gray;">
+                                <div class="card text-white" data-card-code="${field.fieldCode}" style="background-color: #2b2b2b; border: 1px solid gray;">
                                     <div id="${carouselId}" class="carousel slide" data-bs-ride="carousel">
                                         <div class="carousel-inner">
                                             <div id="img1" class="carousel-item active">
@@ -387,7 +447,9 @@ export class LoadFieldCard {
                                         <p class="card-name"><strong>Name:</strong> ${field.name}</p>
                                         <p class="card-location"><strong>Location:</strong> x: ${location[0]} y: ${location[1]}</p>
                                         <p class="card-extent-size"><strong>Extent Size:</strong> ${field.extentSize}</p>
-                                        <p class="card-crop"><strong>Crop:</strong>${field.cropCodeList.join(', ')}</p>
+                                        <p class="card-crop"><strong>Crop:</strong>${field.cropCodeList && field.cropCodeList.length > 0 ? field.cropCodeList.join(', ') : "No Crops"}</p>
+                                        <p class="card-log"><strong>Log:</strong>${field.logCodeList && field.logCodeList.length > 0 ? field.logCodeList.join(', ') : "No Logs"}</p>
+                                        <p class="card-staff"><strong>Staff:</strong>${field.memberCodeList && field.memberCodeList.length > 0 ? field.memberCodeList.join(', ') : "No Members"}</p>
                                         <div class="d-flex justify-content-between">
                                             <button class="btn btn-success flex-grow-1 me-2 update-button" data-field-code="${field.fieldCode}">Update</button>
                                             <button type="button" class="btn btn-danger flex-grow-1 delete-button" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-field-code="${field.fieldCode}">Delete</button>
