@@ -116,17 +116,17 @@ $('#cropCard').on('click', '.update-button', function() {
     $('#updateScientificName').val(card.find('.card-scientific').text().replace('Scientific Name: ', '').trim());
     $('#updateCategory').val(card.find('.card-category').text().replace('Category: ', ''));
     $('#updateCropSeason').val(card.find('.card-season').text().replace('Crop Season: ', ''));
-    let field = card.find('.card-FieldId').text().replace('Field ID:', '').trim().split(', ');
+    // let field = card.find('.card-FieldId').text().replace('Field ID:', '').trim().split(', ');
     let log = card.find('.card-logs').text().replace('Logs:', '').trim().split(', ');
     $('#updatePreview').attr('src', card.find('.image-preview').attr('src')).removeClass('d-none');
     $('#cropImageInput').val('');
     $('#updateFieldModalButton').data('card-id', card);
     $('#updateCropModal').modal('show');
 
-    const loadAllField = new LoadFieldCard();
-    loadAllField.loadAllFieldCard().then(fieldCode => {
-        populateDropdownCrop('#updateFieldId', field, fieldCode);
-    });
+    // const loadAllField = new LoadFieldCard();
+    // loadAllField.loadAllFieldCard().then(fieldCode => {
+    //     populateDropdownCrop('#updateFieldId', field, fieldCode);
+    // });
     const loadAllLogs = new LoadAllLogs();
     loadAllLogs.loadAllLogsDetails().then(logCode => {
         populateDropdownCrop('#updateLogId', log, logCode);
@@ -134,14 +134,14 @@ $('#cropCard').on('click', '.update-button', function() {
 });
 
 // Function to add dynamic field dropdown in the update modal
-$('#addFieldBtnInCropUpdate').on('click', function() {
-    let fieldCard = new LoadFieldCard();
-    fieldCard.loadAllFieldCard().then(fieldCodes => {
-        addDropdownUpdate('#additionalFieldInCropUpdate', '#fieldInCropUpdate', fieldCodes);
-    }).catch(error => {
-        console.error("Error loading field cards:", error);
-    });
-});
+// $('#addFieldBtnInCropUpdate').on('click', function() {
+//     let fieldCard = new LoadFieldCard();
+//     fieldCard.loadAllFieldCard().then(fieldCodes => {
+//         addDropdownUpdate('#additionalFieldInCropUpdate', '#fieldInCropUpdate', fieldCodes);
+//     }).catch(error => {
+//         console.error("Error loading field cards:", error);
+//     });
+// });
 
 // Function to add dynamic Log dropdown in the update modal
 $('#addLogsBtnInCropUpdate').on('click', function() {
@@ -177,19 +177,17 @@ $('#updateFieldModalButton').on('click',async function (){
     let category = $('#updateCategory').val();
     let season = $('#updateCropSeason').val();
 
-    let updatedCropField = [];
-    $("#updateFieldId select").each(function() {
-        let fieldValue = $(this).val();
-        if (fieldValue) {
-            updatedCropField.push(fieldValue);
-        }
-    });
-
-    // Collect values from all Field dropdowns
-    $('#additionalFieldInCropUpdate select').each(function () {
-        const selectedValue = $(this).val();
-        if (selectedValue) updatedCropField.push(selectedValue);
-    });
+    // let updatedCropField = [];
+    // $("#updateFieldId select").each(function() {
+    //     let fieldValue = $(this).val();
+    //     if (fieldValue) {
+    //         updatedCropField.push(fieldValue);
+    //     }
+    // });
+    // $('#additionalFieldInCropUpdate select').each(function () {
+    //     const selectedValue = $(this).val();
+    //     if (selectedValue) updatedCropField.push(selectedValue);
+    // });
 
     let updatedCropLogs = [];
     $("#updateLogId select").each(function() {
@@ -198,15 +196,13 @@ $('#updateFieldModalButton').on('click',async function (){
             updatedCropLogs.push(logValue);
         }
     });
-
-    // Collect values from all Field dropdowns
     $('#additionalLogInCropUpdate select').each(function () {
         const selectedValue = $(this).val();
         if (selectedValue) updatedCropLogs.push(selectedValue);
     });
 
     updatedCropLogs = updatedCropLogs.filter(id => ({logCode:id}));
-    updatedCropField = updatedCropField.filter(id => ({fieldCode:id}));
+    // updatedCropField = updatedCropField.filter(id => ({fieldCode:id}));
 
     let cropImage = $('#updateCropImage')[0].files[0];
 
@@ -215,7 +211,7 @@ $('#updateFieldModalButton').on('click',async function (){
     formData.append("scientificName", scientificName);
     formData.append("category", category);
     formData.append("season", season);
-    formData.append("fieldList", new Blob([JSON.stringify(updatedCropField)], { type: "application/json" }));
+    // formData.append("fieldList", new Blob([JSON.stringify(updatedCropField)], { type: "application/json" }));
     formData.append("logList", new Blob([JSON.stringify(updatedCropLogs)], { type: "application/json" }));
 
     if (!cropImage) {
@@ -244,7 +240,6 @@ $('#updateFieldModalButton').on('click',async function (){
         confirmButtonText: "Update",
         denyButtonText: `Don't update`
     }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
             $.ajax({
                 url: `http://localhost:5050/api/v1/crops/${cropCode}`,
@@ -253,7 +248,6 @@ $('#updateFieldModalButton').on('click',async function (){
                 processData: false,
                 contentType: false,
                 success: function (response) {
-                    // Reset the form
                     $('#updateCropForm')[0].reset();
                     $('#previewCrop').addClass('d-none');
                     $('#additionalLogInCropUpdate').empty();
@@ -309,11 +303,8 @@ $(document).ready(function() {
         $('#confirmCropDeleteButton').data('card-id', cardId);
         $('#confirmCropDeleteModal').modal('show');
     });
-
-    // Handle the confirmation of the delete action
     $('#confirmCropDeleteButton').on('click', function () {
         const cardId = $(this).data('card-id');
-
         $.ajax({
             url: `http://localhost:5050/api/v1/crops/${cardId}`,
             type: 'DELETE',
@@ -333,20 +324,12 @@ $(document).ready(function() {
                 }
             }
         });
-
-        // Hide the modal after deleting
         $('#confirmCropDeleteModal').modal('hide');
     });
-
-    // Ensure the modal and backdrop are fully removed when hidden (overlay)
     $('#confirmCropDeleteModal').on('hidden.bs.modal', function () {
-        $('body').removeClass('modal-open'); // Removes the modal-open class from body
-        $('.modal-backdrop').remove();       // Removes the leftover backdrop element
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
     });
-
-    function removeFieldCard(id) {
-        $('#' + id).remove();
-    }
 });
 
 export class LoadCards {
