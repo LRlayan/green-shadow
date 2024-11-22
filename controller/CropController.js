@@ -1,24 +1,19 @@
 import {LoadFieldCard} from './FieldController.js';
-import {LoadAllLogs} from "./MonitoringLogController.js";
-
-let cardCount = 0;
 
 $('#newCropButton').on('click',function (){
     clearAddModal();
 });
 
-// Handle form submission
+// SAVE CROP
 $('#cropForm').on('submit', function (e) {
-    cardCount++;
-    e.preventDefault(); // Prevent form from actually submitting
+    e.preventDefault();
 
     // Retrieve form values
     let cropName = $('#cropName').val();
     let scientificName = $('#crop-scientificName').val();
     let category = $('#crop-Category').val();
     let season = $('#crop-season').val();
-    let fieldIds = []; // Initialize an array to store field IDs
-    let logIds=["L01","L02"];
+    let fieldIds = [];
 
     // Collect all field IDs from the main select and additional fields
     $('#crop-FieldId').val() && fieldIds.push($('#crop-FieldId').val()); // Add main select value if not empty
@@ -47,7 +42,6 @@ $('#cropForm').on('submit', function (e) {
         confirmButtonText: "Save",
         denyButtonText: `Don't save`
     }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
             $.ajax({
                 url: "http://localhost:5050/api/v1/crops",
@@ -56,10 +50,9 @@ $('#cropForm').on('submit', function (e) {
                 processData: false,
                 contentType: false,
                 success: function (response) {
-                    // Reset the form
                     $('#cropForm')[0].reset();
-                    $('#previewCrop').addClass('d-none'); // Hide image preview
-                    $('#newCropModal').modal('hide'); // Hide the modal
+                    $('#previewCrop').addClass('d-none');
+                    $('#newCropModal').modal('hide');
                     let loadCard = new LoadCards();
                     loadCard.loadAllCropCard();
                     Swal.fire("Saved!", "", "success");
@@ -103,7 +96,7 @@ function previewCropImage(imageInputId,imgPreviewId){
             };
             reader.readAsDataURL(file);
         } else {
-            $(`${imgPreviewId}`).addClass('d-none'); // Hide if no file is selected
+            $(`${imgPreviewId}`).addClass('d-none');
         }
     });
 }
@@ -116,39 +109,10 @@ $('#cropCard').on('click', '.update-button', function() {
     $('#updateScientificName').val(card.find('.card-scientific').text().replace('Scientific Name: ', '').trim());
     $('#updateCategory').val(card.find('.card-category').text().replace('Category: ', ''));
     $('#updateCropSeason').val(card.find('.card-season').text().replace('Crop Season: ', ''));
-    // let field = card.find('.card-FieldId').text().replace('Field ID:', '').trim().split(', ');
-    let log = card.find('.card-logs').text().replace('Logs:', '').trim().split(', ');
     $('#updatePreview').attr('src', card.find('.image-preview').attr('src')).removeClass('d-none');
     $('#cropImageInput').val('');
     $('#updateFieldModalButton').data('card-id', card);
     $('#updateCropModal').modal('show');
-
-    // const loadAllField = new LoadFieldCard();
-    // loadAllField.loadAllFieldCard().then(fieldCode => {
-    //     populateDropdownCrop('#updateFieldId', field, fieldCode);
-    // });
-    const loadAllLogs = new LoadAllLogs();
-    loadAllLogs.loadAllLogsDetails().then(logCode => {
-        populateDropdownCrop('#updateLogId', log, logCode);
-    });
-});
-
-// Function to add dynamic field dropdown in the update modal
-// $('#addFieldBtnInCropUpdate').on('click', function() {
-//     let fieldCard = new LoadFieldCard();
-//     fieldCard.loadAllFieldCard().then(fieldCodes => {
-//         addDropdownUpdate('#additionalFieldInCropUpdate', '#fieldInCropUpdate', fieldCodes);
-//     }).catch(error => {
-//         console.error("Error loading field cards:", error);
-//     });
-// });
-
-// Function to add dynamic Log dropdown in the update modal
-$('#addLogsBtnInCropUpdate').on('click', function() {
-    let loadAllLogs = new LoadAllLogs();
-    loadAllLogs.loadAllLogsDetails().then(logCodes => {
-        addDropdownUpdate('#additionalLogInCropUpdate', '#logInCropUpdate', logCodes);
-    });
 });
 
 //add additional combo box in update modal
@@ -176,34 +140,6 @@ $('#updateFieldModalButton').on('click',async function (){
     let scientificName = $('#updateScientificName').val();
     let category = $('#updateCategory').val();
     let season = $('#updateCropSeason').val();
-
-    // let updatedCropField = [];
-    // $("#updateFieldId select").each(function() {
-    //     let fieldValue = $(this).val();
-    //     if (fieldValue) {
-    //         updatedCropField.push(fieldValue);
-    //     }
-    // });
-    // $('#additionalFieldInCropUpdate select').each(function () {
-    //     const selectedValue = $(this).val();
-    //     if (selectedValue) updatedCropField.push(selectedValue);
-    // });
-
-    let updatedCropLogs = [];
-    $("#updateLogId select").each(function() {
-        let logValue = $(this).val();
-        if (logValue) {
-            updatedCropLogs.push(logValue);
-        }
-    });
-    $('#additionalLogInCropUpdate select').each(function () {
-        const selectedValue = $(this).val();
-        if (selectedValue) updatedCropLogs.push(selectedValue);
-    });
-
-    updatedCropLogs = updatedCropLogs.filter(id => ({logCode:id}));
-    // updatedCropField = updatedCropField.filter(id => ({fieldCode:id}));
-
     let cropImage = $('#updateCropImage')[0].files[0];
 
     const formData = new FormData();
@@ -211,8 +147,6 @@ $('#updateFieldModalButton').on('click',async function (){
     formData.append("scientificName", scientificName);
     formData.append("category", category);
     formData.append("season", season);
-    // formData.append("fieldList", new Blob([JSON.stringify(updatedCropField)], { type: "application/json" }));
-    formData.append("logList", new Blob([JSON.stringify(updatedCropLogs)], { type: "application/json" }));
 
     if (!cropImage) {
         const previewImage = $('#updatePreview').attr('src');
@@ -339,10 +273,8 @@ export class LoadCards {
                 url: "http://localhost:5050/api/v1/crops",
                 type: "GET",
                 success: function (crops) {
-                    // Clear existing crop cards
                     $("#cropCard").empty();
                     const cropCodes = crops.map(crop => crop.cropCode);
-
                     // Loop through each crop and create a card
                     crops.forEach((crop, index) => {
                         let imageData = `data:image/jpeg;base64,${crop.cropImage}`;
@@ -369,8 +301,6 @@ export class LoadCards {
                             </div>
                         </div>
                     `;
-
-                        // Append the new card to the crop container
                         $("#cropCard").append(newCard);
                     });
                     resolve(cropCodes);
@@ -386,8 +316,8 @@ export class LoadCards {
 
 function clearAddModal(){
     $('#cropName, #crop-scientificName, #crop-Category,#crop-season').val(''); // Clear input fields
-    $('#previewCropImg').hide().attr('src', ''); // Reset image preview
-    $('#cropImageInput').val(''); // Clear file input
-    $('#additionalField').empty(); // Clear file input
+    $('#previewCropImg').hide().attr('src', '');
+    $('#cropImageInput').val('');
+    $('#additionalField').empty();
 }
 
