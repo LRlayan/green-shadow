@@ -79,7 +79,7 @@ $('#addFieldButtonInStaff').on('click',(e)=>{
         memberCode: "MEMBER-1"
     }
 
-    staffEquipmentCount.length = 0; // Clear previous values
+    staffEquipmentCount.length = 0;
     pairsValues.forEach(pair => {
         const equipmentCode = {
             equipmentEntity : pair.selectedValue
@@ -101,7 +101,6 @@ $('#addFieldButtonInStaff').on('click',(e)=>{
         confirmButtonText: "Save",
         denyButtonText: `Don't save`
     }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
 
             staffEquipmentCount.forEach(value => {
@@ -112,7 +111,7 @@ $('#addFieldButtonInStaff').on('click',(e)=>{
             })
 
             $.ajax({
-                url: "http://localhost:5050/api/v1/staff",  // Replace with your actual API endpoint
+                url: "http://localhost:5050/api/v1/staff",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify(staffDTO),
@@ -162,9 +161,6 @@ $('#staffDetailsTable').on('click','tr', function (){
     let contactNo = $(this).find(".contactNo").text();
     let email = $(this).find(".email").text();
     let role = $(this).find(".role").text().trim();
-    // let fieldsArray = $(this).find(".fields").text().split(", ");
-    // let logs = $(this).find(".logs").text().split(", ");
-    let vehicleArray = $(this).find(".vehicle").text().split(", ");
     let equipmentArray = $(this).find(".equipment").text().split(", ");
 
     clickTableRow = $(this).index();
@@ -204,11 +200,6 @@ $('#staffDetailsTable').on('click','tr', function (){
         }
     });
 
-    // populateDropdownStaff("#updateField",fieldsArray,["F01", "F02", "F03", "F04", "F05"]);
-    const loadAllVehicle = new LoadAllVehicleDetails();
-    loadAllVehicle.loadVehicleTable().then(vehicleCode => {
-        populateDropdownStaff("#updateVehicle",vehicleArray,vehicleCode);
-    });
     const loadEquipment = new LoadAllEquipment();
     loadEquipment.loadAllEquDetails().then(equCode => {
         populateDropdownStaff("#updateEquipment",equipmentArray,equCode,"equipment");
@@ -233,34 +224,6 @@ $('#updateMemberButton').on('click',function (){
     let role = $('#roleStaffUpdate').val();
     let designation = $('#designationUpdate').val();
     let gender = $('#genderUpdate').val();
-
-    // // Collect updated field values
-    // let updatedFieldStaff = [];
-    // $("#updateField select").each(function() {
-    //     let fieldValue = $(this).val();
-    //     if (fieldValue) {
-    //         updatedFieldStaff.push(fieldValue);
-    //     }
-    // });
-    //
-    // // Collect values from all Field dropdowns
-    // $('#additionalStaffFieldUpdate select').each(function () {
-    //     const selectedValue = $(this).val();
-    //     if (selectedValue) updatedFieldStaff.push(selectedValue);
-    // });
-
-    // Collect updated vehicle values
-    let updatedVehicleStaff = [];
-    $("#updateVehicle select").each(function() {
-        let vehicleValue = $(this).val();
-        if (vehicleValue) {
-            updatedVehicleStaff.push(vehicleValue);
-        }
-    });
-    $('#additionalStaffVehicleUpdate select').each(function () {
-        const selectedValue = $(this).val();
-        if (selectedValue) updatedVehicleStaff.push(selectedValue);
-    });
 
     // Collect updated equipment values
     let updatedEquipmentStaff = [];
@@ -292,7 +255,6 @@ $('#updateMemberButton').on('click',function (){
         email:email,
         role:role,
         staffEquipmentDetailsList:[],
-        vehicleList:updatedVehicleStaff
     }
 
     Swal.fire({
@@ -412,27 +374,11 @@ $('#addStaffFieldButton').on('click', function() {
     });
 });
 
-    //Add Field Update Modal
-    // $('#addStaffFieldButtonUpdate').on('click', function() {
-    //     const loadAllField = new LoadFieldCard();
-    //     loadAllField.loadAllFieldCard().then(fieldCode => {
-    //         addDropdownStaff("#additionalStaffFieldUpdate","#filed-staffUpdate",fieldCode);
-    //     });
-    // });
-
 //Add Vehicle
 $('#addStaffVehicleButton').on('click', function() {
     const loadAllVehicleDetails = new LoadAllVehicleDetails();
     loadAllVehicleDetails.loadVehicleTable().then(vehicleCode => {
         addDropdownStaff("#additionalStaffVehicle","#vehicle-staff",vehicleCode);
-    });
-});
-
-//Add Vehicle Update
-$('#addStaffVehicleButtonUpdate').on('click', function() {
-    const loadAllVehicleDetails = new LoadAllVehicleDetails();
-    loadAllVehicleDetails.loadVehicleTable().then(vehicleCode => {
-        addDropdownStaff("#additionalStaffVehicleUpdate","#vehicle-staffUpdate",vehicleCode);
     });
 });
 
