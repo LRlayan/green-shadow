@@ -122,7 +122,7 @@ $('#fieldCard').on('click', '.update-button', function () {
     $('#updateExtentSize').val(card.find('.card-extent-size').text().replace('Extent Size:', '').trim());
     const crop = card.find('.card-crop').text().replace('Crop:', '').trim().split(', ');
     const staff = card.find('.card-staff').text().replace('Staff:', '').trim().split(', ');
-    const logs = card.find('.card-log').text().replace('Log:', '').trim().split(', ');
+    // const logs = card.find('.card-log').text().replace('Log:', '').trim().split(', ');
     $('#updatePreview1').attr('src', card.find('.image-preview1').attr('src')).removeClass('d-none');
     $('#updatePreview2').attr('src', card.find('.image-preview2').attr('src')).removeClass('d-none');
 
@@ -137,10 +137,10 @@ $('#fieldCard').on('click', '.update-button', function () {
     loadAllCrop.loadAllCropCard().then(cropCode => {
         populateDropdown('#updateFieldCropId', crop, cropCode);
     });
-    const loadAllLog = new LoadAllLogs();
-    loadAllLog.loadAllLogsDetails().then(logCode => {
-        populateDropdown('#updateLogCrop', logs, logCode);
-    });
+    // const loadAllLog = new LoadAllLogs();
+    // loadAllLog.loadAllLogsDetails().then(logCode => {
+    //     populateDropdown('#updateLogCrop', logs, logCode);
+    // });
     const loadAllStaff = new LoadAllStaffMember();
     loadAllStaff.loadAllMembers().then(memberCode => {
         populateDropdown('#updateStaffCrop', staff, memberCode);
@@ -167,13 +167,13 @@ $('#addFieldStaffButtonUpdate').on('click', function() {
     });
 });
 
-// Function to add dynamic Log dropdown in the update modal
-$('#addFieldLogButtonUpdate').on('click', function() {
-    const loadAllLogs = new LoadAllLogs();
-    loadAllLogs.loadAllLogsDetails().then(logCode => {
-        addDropdown('#additionalLogCropUpdate', 'logCropUpdate', logCode);
-    });
-});
+// // Function to add dynamic Log dropdown in the update modal
+// $('#addFieldLogButtonUpdate').on('click', function() {
+//     const loadAllLogs = new LoadAllLogs();
+//     loadAllLogs.loadAllLogsDetails().then(logCode => {
+//         addDropdown('#additionalLogCropUpdate', 'logCropUpdate', logCode);
+//     });
+// });
 
 function populateDropdown(container, selectedValues, options) {
     $(container).empty();
@@ -235,21 +235,21 @@ $("#updateFieldButton").on("click", async function() {
         if (selectedValue) updatedFieldStaff.push(selectedValue);
     });
 
-    let updatedFieldLogs = [];
-    $("#updateLogCrop select").each(function() {
-        let staffValue = $(this).val();
-        if (staffValue) {
-            updatedFieldLogs.push(staffValue);
-        }
-    });
-    $('#additionalLogCropUpdate select').each(function () {
-        const selectedValue = $(this).val();
-        if (selectedValue) updatedFieldLogs.push(selectedValue);
-    });
+    // let updatedFieldLogs = [];
+    // $("#updateLogCrop select").each(function() {
+    //     let staffValue = $(this).val();
+    //     if (staffValue) {
+    //         updatedFieldLogs.push(staffValue);
+    //     }
+    // });
+    // $('#additionalLogCropUpdate select').each(function () {
+    //     const selectedValue = $(this).val();
+    //     if (selectedValue) updatedFieldLogs.push(selectedValue);
+    // });
 
     updatedFieldCrop = updatedFieldCrop.filter(id => ({cropCode:id}));
     updatedFieldStaff = updatedFieldStaff.filter(id => ({memberCode:id}));
-    updatedFieldLogs = updatedFieldLogs.filter(id => ({logCode:id}));
+    // updatedFieldLogs = updatedFieldLogs.filter(id => ({logCode:id}));
 
     let fieldImage1 = $('#updateFieldImage1Input')[0].files[0];
     let fieldImage2 = $('#updateFieldImage2Input')[0].files[0];
@@ -260,7 +260,7 @@ $("#updateFieldButton").on("click", async function() {
     formData.append("extentSize", updatedExtentSize);
     formData.append("memberCodeList", new Blob([JSON.stringify(updatedFieldStaff)], { type: "application/json" }));
     formData.append("cropCodeList", new Blob([JSON.stringify(updatedFieldCrop)], { type: "application/json" }));
-    formData.append("logCodeList", new Blob([JSON.stringify(updatedFieldLogs)], { type: "application/json" }));
+    // formData.append("logCodeList", new Blob([JSON.stringify(updatedFieldLogs)], { type: "application/json" }));
 
     if (!fieldImage1 || !fieldImage2) {
         const previewImage1 = $('#updatePreview1').attr('src');
