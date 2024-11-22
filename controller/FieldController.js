@@ -1,110 +1,110 @@
 import { LoadCards } from './CropController.js';
 import { LoadAllStaffMember } from './StaffController.js';
 
-    // SAVE MODAL
-    $('#fieldForm').on('submit', function (e) {
-        e.preventDefault();
+// SAVE MODAL
+$('#fieldForm').on('submit', function (e) {
+    e.preventDefault();
 
-        let fieldName = $('#fieldName').val();
-        let location = $('#fieldLocation').val();
-        let extentSize = $('#extentSize').val();
-        let cropIds = [];
-        let staffIds = [];
+    let fieldName = $('#fieldName').val();
+    let location = $('#fieldLocation').val();
+    let extentSize = $('#extentSize').val();
+    let cropIds = [];
+    let staffIds = [];
 
-        // Collect all crop IDs from the main select and additional fields
-        $('#filed-cropId').val() && cropIds.push($('#filed-cropId').val()); // Add main select value if not empty
-        $('#additionalCrop select').each(function () {
-            let crops = $(this).val();
-            cropIds.push(crops);
-        });
-
-        // Collect all staff IDs from the main select and additional fields
-        $('#filed-staffId').val() && staffIds.push($('#filed-staffId').val());
-        $('#additionalStaff select').each(function () {
-            let ids = $(this).val();
-            staffIds.push(ids);
-        });
-
-        // Remove empty values (if any)
-        cropIds = cropIds.filter(crop => ({ cropCode: crop }));
-        staffIds = staffIds.filter(id => ({ memberCode: id }));
-
-        let fieldImageFile1 = $('#fieldImage1Input')[0].files[0];
-        let fieldImageFile2 = $('#fieldImage2Input')[0].files[0];
-
-        const formData = new FormData();
-        formData.append("name", fieldName);
-        formData.append("location", location); //"e.g. 79.8612, 6.9271"
-        formData.append("extentSize", extentSize);
-        formData.append("fieldImage1", fieldImageFile1);
-        formData.append("fieldImage2", fieldImageFile2);
-        formData.append("staffList", new Blob([JSON.stringify(staffIds)], { type: "application/json" }));
-        formData.append("cropList", new Blob([JSON.stringify(cropIds)], { type: "application/json" }));
-
-        Swal.fire({
-            title: "Do you want to save the changes?",
-            showDenyButton: true,
-            showCancelButton: true,
-            confirmButtonText: "Save",
-            denyButtonText: `Don't save`
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: "http://localhost:5050/api/v1/fields",
-                    type: "POST",
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function (response) {
-                        let loadFieldCard = new LoadFieldCard();
-                        let loadCropList = new LoadSelectedFieldWithCrop();
-                        $('#fieldForm')[0].reset();
-                        $('#preview1').addClass('d-none');
-                        $('#preview2').addClass('d-none');
-                        $('#newFieldModal').modal('hide');
-                        clearFieldForm();
-                        Swal.fire("Saved!", "", "success");
-                        loadFieldCard.loadAllFieldCard().then(fieldCodes => {
-
-                        }).catch(error => {
-                            console.error("Error loading field cards:", error);
-                        });
-                    },
-                    error: function (xhr, status, error) {
-                        alert("Faild field");
-                    }
-                });
-            } else if (result.isDenied) {
-                Swal.fire("Changes are not saved", "", "info");
-            }
-        });
+    // Collect all crop IDs from the main select and additional fields
+    $('#filed-cropId').val() && cropIds.push($('#filed-cropId').val()); // Add main select value if not empty
+    $('#additionalCrop select').each(function () {
+        let crops = $(this).val();
+        cropIds.push(crops);
     });
 
-    $('#fieldImage1Input').on('click',function (){
-        previewFieldImage('#fieldImage1Input','#preview1')
+    // Collect all staff IDs from the main select and additional fields
+    $('#filed-staffId').val() && staffIds.push($('#filed-staffId').val());
+    $('#additionalStaff select').each(function () {
+        let ids = $(this).val();
+        staffIds.push(ids);
     });
 
-    $('#fieldImage2Input').on('click',function (){
-        previewFieldImage('#fieldImage2Input','#preview2')
-    });
+    // Remove empty values (if any)
+    cropIds = cropIds.filter(crop => ({ cropCode: crop }));
+    staffIds = staffIds.filter(id => ({ memberCode: id }));
 
-    // Add Additional Crop Combo box
-    $('#addFieldCropButton').on('click', function() {
-        let cropCard = new LoadCards();
-        cropCard.loadAllCropCard().then(cropCodes => {
-            console.log("Field codes:", cropCodes);
-            addDropdown('#additionalCrop', 'filed-cropId', cropCodes);
-        }).catch(error => {
-            console.error("Error loading field cards:", error);
-        });
+    let fieldImageFile1 = $('#fieldImage1Input')[0].files[0];
+    let fieldImageFile2 = $('#fieldImage2Input')[0].files[0];
+
+    const formData = new FormData();
+    formData.append("name", fieldName);
+    formData.append("location", location); //"e.g. 79.8612, 6.9271"
+    formData.append("extentSize", extentSize);
+    formData.append("fieldImage1", fieldImageFile1);
+    formData.append("fieldImage2", fieldImageFile2);
+    formData.append("staffList", new Blob([JSON.stringify(staffIds)], { type: "application/json" }));
+    formData.append("cropList", new Blob([JSON.stringify(cropIds)], { type: "application/json" }));
+
+    Swal.fire({
+        title: "Do you want to save the changes?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Save",
+        denyButtonText: `Don't save`
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: "http://localhost:5050/api/v1/fields",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    let loadFieldCard = new LoadFieldCard();
+                    let loadCropList = new LoadSelectedFieldWithCrop();
+                    $('#fieldForm')[0].reset();
+                    $('#preview1').addClass('d-none');
+                    $('#preview2').addClass('d-none');
+                    $('#newFieldModal').modal('hide');
+                    clearFieldForm();
+                    Swal.fire("Saved!", "", "success");
+                    loadFieldCard.loadAllFieldCard().then(fieldCodes => {
+
+                    }).catch(error => {
+                        console.error("Error loading field cards:", error);
+                    });
+                },
+                error: function (xhr, status, error) {
+                    alert("Faild field");
+                }
+            });
+        } else if (result.isDenied) {
+            Swal.fire("Changes are not saved", "", "info");
+        }
     });
-    // Add Additional Staff Combo box
-    $('#addFieldStaffButton').on('click', function() {
-        const loadAllStaffMember = new LoadAllStaffMember();
-        loadAllStaffMember.loadAllMembers().then(memberCode => {
-            addDropdown('#additionalStaff', 'filed-staffId', memberCode);
-        })
+});
+
+$('#fieldImage1Input').on('click',function (){
+    previewFieldImage('#fieldImage1Input','#preview1')
+});
+
+$('#fieldImage2Input').on('click',function (){
+    previewFieldImage('#fieldImage2Input','#preview2')
+});
+
+// Add Additional Crop Combo box
+$('#addFieldCropButton').on('click', function() {
+    let cropCard = new LoadCards();
+    cropCard.loadAllCropCard().then(cropCodes => {
+        console.log("Field codes:", cropCodes);
+        addDropdown('#additionalCrop', 'filed-cropId', cropCodes);
+    }).catch(error => {
+        console.error("Error loading field cards:", error);
     });
+});
+// Add Additional Staff Combo box
+$('#addFieldStaffButton').on('click', function() {
+    const loadAllStaffMember = new LoadAllStaffMember();
+    loadAllStaffMember.loadAllMembers().then(memberCode => {
+        addDropdown('#additionalStaff', 'filed-staffId', memberCode);
+    })
+});
 
 // SET DATA FOR UPDATE MODAL
 $('#fieldCard').on('click', '.update-button', function () {
