@@ -1,5 +1,4 @@
 import Vehicle from "../model/Vehicle.js";
-import {vehicleDetails} from "../db/db.js"
 import {LoadAllStaffMember} from './StaffController.js';
 
 $(document).ready(function () {
@@ -9,9 +8,9 @@ $(document).ready(function () {
     const loadAllMember = new LoadAllStaffMember();
     const loadAllVehicle = new LoadAllVehicleDetails();
 
-    //save vehicle
+    //SAVE VEHICLE
     $("#modalSubmitButton").on("click", (e)=> {
-        e.preventDefault(); // Prevent form submission
+        e.preventDefault();
 
         // Collect form data
         let licensePlateNumber = $("#licensePlateNumber").val();
@@ -47,10 +46,9 @@ $(document).ready(function () {
             confirmButtonText: "Save",
             denyButtonText: `Don't save`
         }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
                 $.ajax({
-                    url: "http://localhost:5050/api/v1/vehicles",  // Replace with your actual API endpoint
+                    url: "http://localhost:5050/api/v1/vehicles",
                     type: "POST",
                     contentType: "application/json",
                     data: JSON.stringify(vehicleDTO),
@@ -61,8 +59,6 @@ $(document).ready(function () {
                         }).catch(error =>{
                             console.error("Error loading field cards:", error);
                         });
-
-                        // Refresh the table with updated data
                         $('#additionalVehicleStaff').empty();
                         $('#vehicle-modal').modal("hide");
                     },
@@ -80,11 +76,10 @@ $(document).ready(function () {
         });
     });
 
-    // Assuming your table rows are in tbody with id "vehicleDetailsTable"
+    // SET DATA VEHICLE UPDATE MODAL
     $('#vehicleDetailsTable').on('click', 'tr', function () {
         clickNewComboBoxBtn = 1;
         $('#additionalVehicleStaffUpdate').empty();
-        // Get values from the row
         let vehicleCode = $(this).find(".code").text()
         let licensePlateNumber = $(this).find(".licensePlateNumber").text()
         let vehicleName = $(this).find(".vehicleName").text()
@@ -95,7 +90,6 @@ $(document).ready(function () {
 
         clickTableRow = $(this).index();
 
-        // Populate the modal fields
         $('#selectedVehicleCode').val(vehicleCode);
         $('#updateLicensePlateNumber').val(licensePlateNumber);
         $('#updateVehicleName').val(vehicleName);
@@ -147,7 +141,7 @@ $(document).ready(function () {
         clearOverlayOfModal();
     });
 
-    //No button
+    //Delete modal No button
     $('#confirmVehicleDeleteNo,#close-btn-delete').on('click',()=>{
         $('#confirmVehicleDeleteModal').modal('hide'); // Hide the modal
         clearOverlayOfModal();
@@ -170,7 +164,6 @@ $(document).ready(function () {
         let category = $("#updateCategoryVehicle").val();
         let fuelType = $("#updateFuelType").val();
         let status = $("#updateStatus").val();
-        let staffMember = $("#updateStaffMember").val();
         let remark = $("#updateRemark").val();
 
         // Collect updated staff values
@@ -300,23 +293,15 @@ $(document).ready(function () {
                 clickNewComboBoxBtn = 0;
                 dropdownWrapper.remove();
             });
-
-            // Append dropdown and remove button to the wrapper
             dropdownWrapper.append(dropdown);
             dropdownWrapper.append(removeButton);
-
-            // Append the wrapper to the container
             $(container).append(dropdownWrapper);
         });
     }
 
     $('#vehicle-modal').on('show.bs.modal', function (event) {
-        // Get the button that triggered the modal
         var button = $(event.relatedTarget);
-
-        // Check if the data-action is 'add'
         if (button.data('action') === 'add') {
-            // Clear the form inputs
             $('#equipmentForm')[0].reset();
             resetForm("#additionalVehicleStaff");
         }
@@ -329,23 +314,23 @@ $(document).ready(function () {
     function clearOverlayOfModal(){
         // Ensure the modal and backdrop are fully removed when hidden (overlay)
         $('#confirmVehicleDeleteModal').on('hidden.bs.modal', function () {
-            $('body').removeClass('modal-open'); // Removes the modal-open class from body
-            $('.modal-backdrop').remove();       // Removes the leftover backdrop element
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
         });
     }
 });
 
 export class LoadAllVehicleDetails{
     loadVehicleTable() {
-        $('#vehicleDetailsTable').empty();  // Clear existing rows
+        $('#vehicleDetailsTable').empty();
         const tableBody = $("#vehicleDetailsTable");
-        const vehicleCodes = [];  // Array to store vehicle codes
+        const vehicleCodes = [];
 
         return new Promise((resolve, reject) => {
             $.ajax({
                 url: "http://localhost:5050/api/v1/vehicles",
                 type: "GET",
-                success: function (vehicles) {  // Assume 'vehicles' is an array of vehicle objects
+                success: function (vehicles) {
                     vehicles.forEach(vehicle => {
                         const vehicleDetail = new Vehicle(
                             vehicle.vehicleCode,
@@ -354,10 +339,9 @@ export class LoadAllVehicleDetails{
                             vehicle.category,
                             vehicle.fuelType,
                             vehicle.status,
-                            vehicle.memberCode || "N/A",  // Handle nested staff details
+                            vehicle.memberCode || "N/A",
                             vehicle.remark
                         );
-                        // Add vehicle code to the array
                         vehicleCodes.push(vehicle.vehicleCode);
                         const row = `
                             <tr>
@@ -372,10 +356,8 @@ export class LoadAllVehicleDetails{
                                 <td><button class="btn btn-danger delete-button" data-index="${vehicle.vehicleCode}">Delete</button></td>
                             </tr>
                         `;
-                        tableBody.append(row);  // Append each row to the table
+                        tableBody.append(row);
                     });
-
-                    // Resolve the promise with the array of vehicle codes
                     resolve(vehicleCodes);
                 },
                 error: function (xhr, status, error) {
