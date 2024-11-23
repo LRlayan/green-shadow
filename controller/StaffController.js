@@ -1,5 +1,5 @@
 import Staff from "../model/Staff.js";
-import {equipmentDetails, staffDetails, pairsValues , staffEquipmentCount} from "../db/db.js"
+import {equipmentDetails} from "../db/db.js"
 import {LoadAllEquipment} from './EquipmentController.js';
 import {LoadFieldCard} from './FieldController.js';
 import {LoadAllVehicleDetails} from "./VehicleController.js";
@@ -9,7 +9,6 @@ let clickTableRow = 0;
 //SAVE STAFF MEMBER
 $('#addFieldButtonInStaff').on('click',(e)=>{
     e.preventDefault();
-    // Collect form data
     let firstName = $("#firstName").val();
     let lastName = $("#lastName").val();
     let joinedDate = $("#joinedDate").val();
@@ -33,7 +32,6 @@ $('#addFieldButtonInStaff').on('click',(e)=>{
             fieldStaff.push(fieldValue);
         }
     });
-
     // Collect multiple staff values
     let staffVehicle = [];
     $("#additionalStaffVehicle select").each(function() {
@@ -48,10 +46,7 @@ $('#addFieldButtonInStaff').on('click',(e)=>{
     $("#additionalStaffEquipment select").each(function() {
         let equValue = $(this).val();
         if (equValue) {
-            const equipment = {
-                equipmentCode:equValue
-            }
-            staffEquipment.push(equipment);
+            staffEquipment.push(equValue);
         }
     });
 
@@ -70,29 +65,10 @@ $('#addFieldButtonInStaff').on('click',(e)=>{
         contactNo: contactNo,
         email: emailStaff,
         role: roleStaff,
-        staffEquipmentDetailsList: [],
         vehicleList: staffVehicle,
         fieldCodeList: fieldStaff,
+        equipmentList: staffEquipment,
     };
-
-    let staffMember = {
-        memberCode: "MEMBER-1"
-    }
-
-    staffEquipmentCount.length = 0;
-    pairsValues.forEach(pair => {
-        const equipmentCode = {
-            equipmentEntity : pair.selectedValue
-        }
-
-        const staffEquipmentDetailsList = {
-            id:"",
-            useEquipmentCount: pair.inputCount,
-            staffEntity: staffMember,
-            equipmentEntity: equipmentCode
-        };
-        staffEquipmentCount.push(staffEquipmentDetailsList);
-    });
 
     Swal.fire({
         title: "Do you want to save the changes?",
@@ -102,14 +78,6 @@ $('#addFieldButtonInStaff').on('click',(e)=>{
         denyButtonText: `Don't save`
     }).then((result) => {
         if (result.isConfirmed) {
-
-            staffEquipmentCount.forEach(value => {
-                console.log("print     ====")
-                console.log("eq ",value.equipmentEntity)
-                console.log("staff ",value.staffEntity)
-                console.log("eseEquip ",value.useEquipmentCount)
-            })
-
             $.ajax({
                 url: "http://localhost:5050/api/v1/staff",
                 type: "POST",
@@ -208,7 +176,6 @@ $('#staffDetailsTable').on('click','tr', function (){
 
 //UPDATE STAFF MEMBER
 $('#updateMemberButton').on('click',function (){
-    // Get updated values from modal inputs
     let memberCode = $('#selectedMemberCode').val();
     let memberFirstName = $('#firstNameUpdate').val();
     let memberLastName = $('#lastNameUpdate').val();
@@ -254,7 +221,6 @@ $('#updateMemberButton').on('click',function (){
         contactNo:contactNo,
         email:email,
         role:role,
-        staffEquipmentDetailsList:[],
     }
 
     Swal.fire({
