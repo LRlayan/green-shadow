@@ -25,11 +25,10 @@ $('#addStaffButton').on('click', function() {
     });
 });
 
-//save equipment
+//SAVE EQUIPMENT
 $('#addEquipmentButton').on('click',(e)=>{
     e.preventDefault();
 
-    // Collect form data
     let equipmentName = $("#equipmentName").val();
     let equipmentType = $("#equipmentType").val();
     let equipmentStatus = $("#equipmentStatus").val();
@@ -58,7 +57,7 @@ $('#addEquipmentButton').on('click',(e)=>{
         type:equipmentType,
         status:equipmentStatus,
         availableCount:count,
-        staffEquipmentDetailsList:[],
+        staffCodeList:staffEquipment,
         fieldList:fieldEquipment
     }
 
@@ -98,13 +97,11 @@ $('#addEquipmentButton').on('click',(e)=>{
     });
 });
 
-// set values for update modal
+// SET VALUES FOR UPDATE MODAL
 $('#equipmentDetailsTable').on('click', 'tr', function () {
-    // Clear any existing inputs in the modal's dynamic dropdowns
     $('#additionalStaffEquUpdate').empty();
     $('#additionalFieldEquipmentUpdate').empty();
 
-    // Get values from the selected row
     let code = $(this).find(".code").text();
     let name = $(this).find(".name").text();
     let type = $(this).find(".vehicleType").text();
@@ -114,10 +111,9 @@ $('#equipmentDetailsTable').on('click', 'tr', function () {
     clickTableRow = $(this).index();
 
     // Split multiple values in "staffMember" and "fields" columns
-    let staffMemberArray = $(this).find(".staffMember").text().split(", "); // Assuming comma-separated
-    let fieldsArray = $(this).find(".fields").text().split(", "); // Assuming comma-separated
+    let staffMemberArray = $(this).find(".staffMember").text().split(", ");
+    let fieldsArray = $(this).find(".fields").text().split(", ");
 
-    // Populate the modal fields with values from the row
     $('#selectedEquipmentCode').val(code);
     $('#equipmentNameUpdate').val(name);
     $('#equipmentTypeUpdate').val(type);
@@ -139,9 +135,8 @@ $('#equipmentDetailsTable').on('click', 'tr', function () {
     });
 });
 
-// Update equipment
+// UPDATE EQUIPMENT
 $('#EquipmentButtonUpdate').on('click', () => {
-    // Get updated values from modal inputs
     let equCode = $("#selectedEquipmentCode").val();
     let equipmentName = $("#equipmentNameUpdate").val();
     let equipmentType = $("#equipmentTypeUpdate").val();
@@ -184,10 +179,9 @@ $('#EquipmentButtonUpdate').on('click', () => {
         type:equipmentType,
         status:equipmentStatus,
         availableCount: parseInt(count),
-        staffEquipmentDetailsList:[],
+        staffCodeList:updatedStaffEquipment,
         fieldList:updatedFieldEquipment
     }
-    console.log("ecu code " , equCode)
 
     Swal.fire({
         title: "Do you want to update the changes?",
@@ -196,10 +190,9 @@ $('#EquipmentButtonUpdate').on('click', () => {
         confirmButtonText: "Update",
         denyButtonText: `Don't update`
     }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
             $.ajax({
-                url: `http://localhost:5050/api/v1/equipment/${equCode}`, // Use the vehicleId from the clicked row
+                url: `http://localhost:5050/api/v1/equipment/${equCode}`,
                 type: 'PUT',
                 contentType: 'application/json',
                 data: JSON.stringify(equipmentDTO),
@@ -238,24 +231,22 @@ $('#addFieldButtonUpdate').on('click', function() {
 $('#addStaffButtonUpdate').on('click', function() {
     const loadAllMembers = new LoadAllStaffMember();
     loadAllMembers.loadAllMembers().then(memberCode => {
-        addDropdownEquipment("#additionalStaffEquUpdate", "#equ-staffUpdate", memberCode)
+       addDropdownEquipment("#additionalStaffEquUpdate", "#equ-staffUpdate", memberCode);
     }).catch(error => {
         console.log("Not loading member codes ",error)
     });
 });
 
-//delete Equipment
-// Show delete confirmation modal
+// SHOW DELETE CONFIRMATION MODAL
 $('#equipmentDetailsTable').on('click', '.delete-button', function () {
     const index = $(this).data('index');
     $('#confirmEquDeleteYes').data('index', index);
     $('#confirmEquipmentDeleteModal').modal('show');
 });
 
-// Handle the confirmation of deletion - yes button
+// DELETE EQUIPMENT
 $('#confirmEquDeleteYes').on('click', function () {
     const index = $(this).data('index');
-
     $.ajax({
         url: `http://localhost:5050/api/v1/equipment/${index}`,
         type: 'DELETE',
@@ -275,7 +266,6 @@ $('#confirmEquDeleteYes').on('click', function () {
             }
         }
     });
-
     $('#confirmEquipmentDeleteModal').modal('hide');
     clearOverlayOfModal();
 });
@@ -288,9 +278,7 @@ $('#confirmEquDeleteNo,#btn-close-equ').on('click',()=>{
 
 // Listen for the modal to be shown
 $('#equipment-modal').on('show.bs.modal', function (event) {
-    // Get the button that triggered the modal
     var button = $(event.relatedTarget);
-
     if (button.data('action') === 'add') {
         $('#equipmentForm')[0].reset();
         resetForm("#additionalEquipmentStaff", "#additionalEquipmentField");
@@ -300,8 +288,8 @@ $('#equipment-modal').on('show.bs.modal', function (event) {
 function clearOverlayOfModal(){
     // Ensure the modal and backdrop are fully removed when hidden (overlay)
     $('#confirmEquipmentDeleteModal').on('hidden.bs.modal', function () {
-        $('body').removeClass('modal-open'); // Removes the modal-open class from body
-        $('.modal-backdrop').remove();       // Removes the leftover backdrop element
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
     });
 }
 function resetForm(additionalInput1,additionalInput2){
@@ -313,16 +301,12 @@ function resetForm(additionalInput1,additionalInput2){
 function addDropdownEquipment(containerId, selectClass, options) {
     const $container = $('<div class="d-flex align-items-center mt-2"></div>');
     const $select = $('<select id="optionSelect" class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>').addClass(selectClass);
-
-    // Populate select options
     options.forEach(option => $select.append(`<option class="text-white" style="background-color:#2B2B2B" value="${option}">${option}</option>`));
-
     // Remove button
     const $removeBtn = $('<button class="btn btn-danger">Remove</button>');
     $removeBtn.on('click', function() {
         $container.remove();
     });
-
     $container.append($select).append($removeBtn);
     $(containerId).append($container);
 }
@@ -338,20 +322,14 @@ function populateDropdownEquipment(container, selectedValues, options) {
         options.forEach(option => {
             dropdown.append(`<option value="${option}" ${option.trim() === value ? 'selected' : ''}>${option}</option>`);
         });
-
         // Create the remove button
         const removeButton = $('<button type="button" class="btn btn-danger ml-2">Remove</button>');
-
         // Add click event to remove the dropdown when the button is clicked
         removeButton.click(function() {
             dropdownWrapper.remove();
         });
-
-        // Append dropdown and remove button to the wrapper
         dropdownWrapper.append(dropdown);
         dropdownWrapper.append(removeButton);
-
-        // Append the wrapper to the container
         $(container).append(dropdownWrapper);
     });
 }
@@ -361,10 +339,10 @@ function clearEquipmentModalFields(equipmentName,equipmentType,equipmentStatus,c
     $(`${equipmentType}`).val('');
     $(`${equipmentStatus}`).val('');
     $(`${count}`).val('');
-    $(`${initialStaff} select`).val(''); // Clear initial dropdowns
+    $(`${initialStaff} select`).val('');
     $(`${initialEquipment} select`).val('');
-    $(`${additionalEquipmentStaff}`).empty(); // Remove dynamic staff dropdowns
-    $(`${additionalEquipmentField}`).empty(); // Remove dynamic field dropdowns
+    $(`${additionalEquipmentStaff}`).empty();
+    $(`${additionalEquipmentField}`).empty();
 }
 
 export class LoadAllEquipment{
@@ -378,7 +356,7 @@ export class LoadAllEquipment{
             $.ajax({
                 url: "http://localhost:5050/api/v1/equipment",
                 type: "GET",
-                success: function (equipment) {  // Assume 'vehicles' is an array of vehicle objects
+                success: function (equipment) {
                     equipment.forEach(equ => {
                         const equDetail = new Equipment(
                             equ.equipmentCode,
@@ -386,10 +364,10 @@ export class LoadAllEquipment{
                             equ.type,
                             equ.status,
                             equ.availableCount,
-                            equ.fieldList || "N/A",  // Handle nested staff details
-                            equ.staff || "N/A"
+                            equ.fieldList || "N/A",
+                            equ.useCount,
+                            equ.staffCodeList || "N/A"
                         );
-                        // Add vehicle code to the array
                         equipmentCodes.push(equ.equipmentCode);
 
                         const row = `
@@ -399,22 +377,21 @@ export class LoadAllEquipment{
                                 <td class="vehicleType">${equDetail.type}</td>
                                 <td class="status">${equDetail.status}</td>
                                 <td class="count">${equDetail.count}</td>
-                                <td class="staffMember">${""}</td>
+                                <td class="staffMember">${equ.staffCodeList}</td>
                                 <td class="fields">${equ.fieldList.join(', ')}</td>
                                 <td><button class="btn btn-danger delete-button" data-index="${equ.equipmentCode}">Delete</button></td>
                             </tr>
                         `;
-                        tableBody.append(row);  // Append each row to the table
+                        tableBody.append(row);
                     });
 
                     $('#equipmentDetailsTable tr').each(function () {
-                        const equipmentCode = $(this).find('.code').text(); // Get the code value
-                        const count = parseInt($(this).find('.count').text()); // Get the count value (convert to integer)
-                        if (equipmentCode && !isNaN(count)) { // Ensure valid values
-                            equipmentDetails.push({ equipmentCode, count }); // Add to the array
+                        const equipmentCode = $(this).find('.code').text();
+                        const count = parseInt($(this).find('.count').text());
+                        if (equipmentCode && !isNaN(count)) {
+                            equipmentDetails.push({ equipmentCode, count });
                         }
                     });
-                    // Resolve the promise with the array of vehicle codes
                     resolve(equipmentCodes);
                 },
                 error: function (xhr, status, error) {
