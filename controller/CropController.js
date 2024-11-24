@@ -230,9 +230,9 @@ function populateDropdownCrop(container, selectedValues, options) {
     });
 }
 
-// Show the confirmation modal and set the card ID to delete
+// DELETE CROP CARD
 $(document).ready(function() {
-    $(document).on('click', '.delete-button', function () {
+    $('#cropCard').on('click', '.delete-button', function () {
         const cardId = $(this).data('card-id');
         $('#confirmCropDeleteButton').data('card-id', cardId);
         $('#confirmCropDeleteModal').modal('show');

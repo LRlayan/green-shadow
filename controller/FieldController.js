@@ -315,7 +315,7 @@ function addDropdown(containerId, selectClass, options) {
 
 //DELETE FIELD CARD
 $(document).ready(function() {
-    $(document).on('click', '.delete-button', function () {
+    $('#fieldCard').on('click', '.delete-button', function () {
         // Get the card ID from the delete button and set it on the confirm delete button
         const cardId = $(this).data('field-code');
         $('#confirmDeleteButton').data('field-code', cardId);

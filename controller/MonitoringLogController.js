@@ -8,7 +8,7 @@ let cardCount = 0;
         clearModel('#logDate','#log-details','previewCropLogImg','#logCropImageInput','#additionalLogStaff','#additionalLogCrop','#additionalLogField');
     });
 
-    // Handle form submission - save
+    // SAVE LOGS
     $('#addLogButton').on('click', function (e) {
         cardCount++;
         e.preventDefault();
@@ -56,7 +56,6 @@ let cardCount = 0;
             confirmButtonText: "Save",
             denyButtonText: `Don't save`
         }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
                 $.ajax({
                     url: "http://localhost:5050/api/v1/logs",
@@ -75,7 +74,6 @@ let cardCount = 0;
                         }).catch(error => {
                             console.error("Error loading log cards:", error);
                         });
-                        // Reset the form and previews
                         $('#logForm')[0].reset();
                         $('#previewCropLogImg').addClass('d-none');
                         $('#newMonitoringLogModal').modal('hide');
@@ -203,7 +201,7 @@ let cardCount = 0;
                 return;
             }
         } else {
-            formData.append("observedImage", logImage); // Attach uploaded image
+            formData.append("observedImage", logImage);
         }
 
         Swal.fire({
@@ -213,7 +211,6 @@ let cardCount = 0;
             confirmButtonText: "Update",
             denyButtonText: `Don't update`
         }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
                 $.ajax({
                     url: `http://localhost:5050/api/v1/logs/${logCode}`,
@@ -224,8 +221,8 @@ let cardCount = 0;
                     success: function (response) {
                         // Reset the form
                         $('#logForm')[0].reset();
-                        $('#updatePreviewCropLogImg').addClass('d-none'); // Hide image preview
-                        $('#updateMonitoringLogModal').modal('hide'); // Hide the modal
+                        $('#updatePreviewCropLogImg').addClass('d-none');
+                        $('#updateMonitoringLogModal').modal('hide');
                         let loadLogCard = new LoadAllLogs();
                         loadLogCard.loadAllLogsDetails();
                         Swal.fire("Saved!", "", "success");
@@ -248,15 +245,14 @@ let cardCount = 0;
         $('#updateMonitoringLogModal').modal('hide');
     });
 
-    // DELETE LOG CARD
-    $(document).on('click', '.delete-button', function () {
-        // Get the card ID from the delete button and set it on the confirm delete button
+    // SHOW LOG CARD FOR DELETE
+    $('#logCard').on('click', '.delete-button', function () {
         const cardId = $(this).data('card-id');
         $('#confirmLogDeleteButton').data('card-id', cardId);
         $('#confirmLogDeleteModal').modal('show');
     });
 
-    // Handle the confirmation of the delete action
+    // DELETE LOG CARD
     $('#confirmLogDeleteButton').on('click', function () {
         const cardId = $(this).data('card-id');
 

@@ -360,18 +360,18 @@ $('#addStaffEquipmentButton').on('click', function() {
 
 //Add Equipment Update Modal
 // Predefined counts for each equipment ID
-const equipmentCountsUpdate = {
-    "E01": 5,
-    "E02": 3,
-    "E03": 7,
-    "E04": 2,
-    "E05": 4
-};
-
-// jQuery to add a new equipment dropdown with a count input and remove button
-$('#addStaffEquipmentButtonUpdate').on('click', function() {
-    addDropdownStaff('#additionalStaffEquipmentUpdate','#equipment-staffUpdate',["E01", "E02", "E03", "E04", "E05"],"equipment",equipmentCountsUpdate)
-});
+// const equipmentCountsUpdate = {
+//     "E01": 5,
+//     "E02": 3,
+//     "E03": 7,
+//     "E04": 2,
+//     "E05": 4
+// };
+//
+// // jQuery to add a new equipment dropdown with a count input and remove button
+// $('#addStaffEquipmentButtonUpdate').on('click', function() {
+//     addDropdownStaff('#additionalStaffEquipmentUpdate','#equipment-staffUpdate',["E01", "E02", "E03", "E04", "E05"],"equipment",equipmentCountsUpdate)
+// });
 
 function addDropdownStaff(containerId, selectClass, options, type, equipmentCountsList) {
     const $container = $('<div class="d-flex align-items-center mt-2"></div>');
@@ -418,35 +418,35 @@ function addDropdownStaff(containerId, selectClass, options, type, equipmentCoun
         // Append the select, quantity input, and remove button to the container
         $container.append($select).append($quantityInput).append($removeBtn);
 
-        $select.change(function () {
-            updatePairsArray($select, $quantityInput);
-        });
-        $quantityInput.on('input', function () {
-            updatePairsArray($select, $quantityInput);
-        });
+        // $select.change(function () {
+        //     updatePairsArray($select, $quantityInput);
+        // });
+        // $quantityInput.on('input', function () {
+        //     updatePairsArray($select, $quantityInput);
+        // });
     }
 }
 
-function updatePairsArray(comboBox, inputField) {
-    const selectedValue = comboBox.val();
-    const inputCount = inputField.val();
+// function updatePairsArray(comboBox, inputField) {
+//     const selectedValue = comboBox.val();
+//     const inputCount = inputField.val();
 
     // Check if both combo box and input field have values
-    if (selectedValue && inputCount) {
-        const existingPairIndex = pairsValues.findIndex(
-            pair => pair.comboBox === comboBox && pair.inputField === inputField
-        );
-        if (existingPairIndex > -1) {
-            pairsValues[existingPairIndex] = { selectedValue, inputCount };
-        } else {
-            pairsValues.push({ selectedValue, inputCount });
-        }
-    }
-    console.log(pairsValues);
-    pairsValues.forEach(pair => {
-        console.log(`${pair.selectedValue} - ${pair.inputCount}`);
-    });
-}
+    // if (selectedValue && inputCount) {
+    //     const existingPairIndex = pairsValues.findIndex(
+    //         pair => pair.comboBox === comboBox && pair.inputField === inputField
+    //     );
+    //     if (existingPairIndex > -1) {
+    //         pairsValues[existingPairIndex] = { selectedValue, inputCount };
+    //     } else {
+    //         pairsValues.push({ selectedValue, inputCount });
+    //     }
+    // }
+    // console.log(pairsValues);
+    // pairsValues.forEach(pair => {
+    //     console.log(`${pair.selectedValue} - ${pair.inputCount}`);
+    // });
+// }
 
 function clearOverlayOfModal(){
     // Ensure the modal and backdrop are fully removed when hidden (overlay)
@@ -511,7 +511,7 @@ export class LoadAllStaffMember {
                                     <td class="logs">${staffDetail.logList}</td>
                                     <td class="vehicle">${staffDetail.vehicle}</td>
                                     <td class="equipment">${staffDetail.equipmentList}</td>
-                                    <td><button class="btn btn-danger delete-button" data-index="${staffMember.memberCode}">Delete</button></td>
+                                    <td><button class="btn btn-danger delete-button" data-index="${staffMember.memberCode}" data-bs-target="#confirmStaffDeleteModal">Delete</button></td>
                                 </tr>
                             `;
                         tableBody.append(row);
