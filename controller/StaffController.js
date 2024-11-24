@@ -3,10 +3,15 @@ import {equipmentDetails} from "../db/db.js"
 import {LoadAllEquipment} from './EquipmentController.js';
 import {LoadFieldCard} from './FieldController.js';
 import {LoadAllVehicleDetails} from "./VehicleController.js";
+import {CurrentDate} from "./indexController.js";
 
 let clickTableRow = 0;
 
 //SAVE STAFF MEMBER
+$('#staffNewBtn').on('click',function (){
+    const currentDate = new CurrentDate();
+    $('#joinedDate').val(currentDate.getCurrentFormattedDate());
+});
 $('#addFieldButtonInStaff').on('click',(e)=>{
     e.preventDefault();
     let firstName = $("#firstName").val();

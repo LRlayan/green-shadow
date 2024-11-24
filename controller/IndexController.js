@@ -16,17 +16,6 @@ $('#vehicle-sec').css({display:'none'});
 $('#equipment-sec').css({display:'none'});
 $('#sections-wrapper').css({display:'none'});
 
-const loadFieldCard = new LoadFieldCard();
-const loadCropCard = new LoadCards();
-const allStaffMember = new LoadAllStaffMember();
-const loadAllEquipment = new LoadAllEquipment();
-const loadAllLogs = new LoadAllLogs();
-allStaffMember.loadAllMembers();
-loadFieldCard.loadAllFieldCard();
-loadCropCard.loadAllCropCard();
-loadAllEquipment.loadAllEquDetails();
-loadAllLogs.loadAllLogsDetails();
-
 $('#btn-signIn').on('click',function (){
     $('#sections-wrapper').css({display:'block'});
     $('#header-sec').css({display: 'block'});
@@ -65,6 +54,7 @@ $('#dashboard').on('click',function (){
 });
 
 $('#field').on('click',function (){
+    const loadFieldCard = new LoadFieldCard();
     loadFieldCard.loadAllFieldCard();
     $('#main-label').text('Field Manage');
     $('#field-sec').css({display:'block'});
@@ -77,6 +67,7 @@ $('#field').on('click',function (){
 });
 
 $('#crops').on('click',function (){
+    const loadCropCard = new LoadCards();
     loadCropCard.loadAllCropCard();
     $('#main-label').text('Crop Manage');
     $('#crops-sec').css({display:'block'});
@@ -89,6 +80,7 @@ $('#crops').on('click',function (){
 });
 
 $('#staff').on('click',function (){
+    const allStaffMember = new LoadAllStaffMember();
     allStaffMember.loadAllMembers();
     $('#main-label').text('Staff Manage');
     $('#staff-sec').css({display:'block'});
@@ -101,6 +93,7 @@ $('#staff').on('click',function (){
 });
 
 $('#log').on('click',function (){
+    const loadAllLogs = new LoadAllLogs();
     loadAllLogs.loadAllLogsDetails();
     $('#main-label').text('Logs Services');
     $('#monitoring-log-sec').css({display:'block'});
@@ -126,6 +119,7 @@ $('#vehicle').on('click',function (){
 });
 
 $('#equipment').on('click',function (){
+    const loadAllEquipment = new LoadAllEquipment();
     loadAllEquipment.loadAllEquDetails();
     $('#main-label').text('Equipment Manage');
     $('#equipment-sec').css({display:'block'});
@@ -137,3 +131,12 @@ $('#equipment').on('click',function (){
     $('#vehicle-sec').css({display:'none'});
 });
 
+export class CurrentDate {
+    getCurrentFormattedDate() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+}

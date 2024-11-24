@@ -1,18 +1,17 @@
 import {LoadFieldCard} from "./FieldController.js";
 import {LoadAllStaffMember} from "./StaffController.js";
 import {LoadCards} from "./CropController.js";
-
-let cardCount = 0;
+import {CurrentDate} from "./indexController.js";
 
     $('#newButton').on('click',function (){
         clearModel('#logDate','#log-details','previewCropLogImg','#logCropImageInput','#additionalLogStaff','#additionalLogCrop','#additionalLogField');
+        const currentDate = new CurrentDate();
+        $('#logDate').val(currentDate.getCurrentFormattedDate());
     });
 
     // SAVE LOGS
     $('#addLogButton').on('click', function (e) {
-        cardCount++;
         e.preventDefault();
-
         let logDate = $('#logDate').val();
         let logDetails = $('#log-details').val();
         let fieldIds = [];
