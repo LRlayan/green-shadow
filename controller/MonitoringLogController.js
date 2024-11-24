@@ -437,9 +437,9 @@ let cardCount = 0;
                                         <p class="card-log-code"><strong>Log Code:</strong>${log.logCode}</p>
                                         <p class="card-log-date"><strong>Log Date:</strong>${log.date}</p>
                                         <p class="card-log-details"><strong>Log Details:</strong>${log.logDetails}</p>
-                                        <p class="card-log-fields"><strong>Field:</strong>${log.fieldList.join(', ')}</p>
-                                        <p class="card-log-crop"><strong>Crop:</strong>${log.cropList.join(', ')}</p>
-                                        <p class="card-log-staff"><strong>Staff:</strong>${log.staffList.join(', ')}</p>
+                                        <p class="card-log-fields"><strong>Field:</strong>${log.fieldList && log.fieldList.length > 0 ? log.fieldList.join(', ') : "No Field"}</p>
+                                        <p class="card-log-crop"><strong>Crop:</strong>${log.cropList && log.cropList.length > 0 ? log.cropList.join(', ') : "No Crops"}</p>
+                                        <p class="card-log-staff"><strong>Staff:</strong>${log.staffList && log.staffList.length > 0 ? log.staffList.join(', ') : "No Member"}</p>
                                         <div class="d-flex justify-content-between">
                                             <button class="btn btn-success flex-grow-1 me-2 update-button" data-card-id="${log.logCode}">Update</button>
                                             <button class="btn btn-danger flex-grow-1 delete-button" data-card-id="${log.logCode}">Delete</button>
