@@ -254,39 +254,41 @@ $("#updateFieldButton").on("click", async function() {
         formData.append("fieldImage2", fieldImage2);
     }
 
-    Swal.fire({
+    const swalResult = await Swal.fire({
         title: "Do you want to update the changes?",
         showDenyButton: true,
         showCancelButton: true,
         confirmButtonText: "Update",
         denyButtonText: `Don't update`
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
+    });
+
+    if (swalResult.isConfirmed) {
+        try {
+            const response = await $.ajax({
                 url: `http://localhost:5050/api/v1/fields/${fieldCode}`,
                 type: "PUT",
                 data: formData,
                 processData: false,
-                contentType: false,
-                success: function (response) {
-                    $('#updateCropForm')[0].reset();
-                    $('#previewCrop').addClass('d-none');
-                    $('#additionalLogInCropUpdate').empty();
-                    $('#additionalFieldInCropUpdate').empty();
-                    clearUpdateFieldForm();
-                    $("#updateFieldModal").modal("hide");
-                    let loadAllField = new LoadFieldCard();
-                    loadAllField.loadAllFieldCard();
-                    Swal.fire("Updated!", "", "success");
-                },
-                error: function (xhr, status, error) {
-                    Swal.fire("Faild crop", "", "info");
-                }
+                contentType: false
             });
-        } else if (result.isDenied) {
-            Swal.fire("Changes are not saved", "", "info");
+            $('#updateCropForm')[0].reset();
+            $('#previewCrop').addClass('d-none');
+            $('#additionalLogInCropUpdate').empty();
+            $('#additionalFieldInCropUpdate').empty();
+            clearUpdateFieldForm();
+            $("#updateFieldModal").modal("hide");
+
+            let loadAllField = new LoadFieldCard();
+            await loadAllField.loadAllFieldCard();
+
+            Swal.fire("Updated!", "", "success");
+        } catch (error) {
+            console.error("Update failed:", error);
+            Swal.fire("Failed to update field", "", "error");
         }
-    });
+    } else if (swalResult.isDenied) {
+        Swal.fire("Changes are not saved", "", "info");
+    }
 });
 
 $('#updateFieldImage1Input').on('click',function (){
