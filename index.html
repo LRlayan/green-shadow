@@ -1263,20 +1263,28 @@
                                             <!-- Category -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="category" class="form-control" >
-                                                    <label for="category" class="form-label" style="margin-left: 0;">Category</label>
-                                                    <div class="form-notch">
-                                                        <div class="form-notch-leading" style="width: 9px;"></div>
-                                                        <div class="form-notch-middle" style="width: 68.8px;"></div>
-                                                        <div class="form-notch-trailing"></div>
-                                                    </div>
+                                                    <label for="category" class="form-label text-white" style="margin-left: 0;">Category</label>
+                                                    <select class="form-control text-white" id="category" style="background-color:#2B2B2B">
+                                                        <option class="text-white" value="" disabled selected>Select Category</option>
+                                                        <option class="text-white" value="Car">Car</option>
+                                                        <option class="text-white" value="Motor Bike">Motor Bike</option>
+                                                        <option class="text-white" value="Van">Van</option>
+                                                        <option class="text-white" value="Land Masters">Land Masters</option>
+                                                        <option class="text-white" value="Tractor-4WD">Tractor-4WD</option>
+                                                        <option class="text-white" value="Tankers Truck">Tankers Truck</option>
+                                                        <option class="text-white" value="Land Vehicle">Land Vehicle</option>
+                                                        <option class="text-white" value="Lorry">Lorry</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                             <!-- Fuel Type -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="fuelType" class="form-control">
-                                                    <label for="fuelType" class="form-label" style="margin-left: 0;">Fuel Type</label>
+                                                    <label for="fuelType" class="form-label text-white" style="margin-left: 0;">Fuel Type</label>
+                                                    <select class="form-control text-white" id="fuelType" style="background-color:#2B2B2B">
+                                                        <option class="text-white" value="Petrol" selected>Petrol</option>
+                                                        <option class="text-white" value="Diesel">Diesel</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -1284,16 +1292,17 @@
                                             <!-- Status -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="status" class="form-control">
-                                                    <label for="status" class="form-label" style="margin-left: 0;">Status</label>
+                                                    <label for="roleStaff" class="form-label text-white">Status</label>
+                                                    <select class="form-control text-white" id="status" style="background-color:#2B2B2B">
+                                                        <option class="text-white" value="Available" selected>Available</option>
+                                                        <option class="text-white" value="NotAvailable">Not Available</option>
+                                                    </select>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row mb-3">
                                             <!-- add staff -->
                                             <div class="col-md-6">
                                                 <div class="d-flex justify-content-between align-items-center mb-2">
-                                                    <label for="staff-vehicle" class="form-label">Staff Member</label>
+                                                    <label for="staff-vehicle" class="form-label text-white">Staff Member</label>
                                                     <button type="button" class="btn btn-success" id="addVehicleStaffButton">Assign New Member</button>
                                                 </div>
                                                 <!-- Initial dropdown with predefined options -->
