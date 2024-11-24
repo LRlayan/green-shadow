@@ -5,7 +5,7 @@ $('#newCropButton').on('click',function (){
 });
 
 // SAVE CROP
-$('#cropForm').on('submit', function (e) {
+$('#cropForm').on('submit', async function (e) {
     e.preventDefault();
 
     // Retrieve form values
@@ -35,36 +35,37 @@ $('#cropForm').on('submit', function (e) {
     formData.append("cropImage", cropImageFile);
     formData.append("fieldList", new Blob([JSON.stringify(fieldIds)], { type: "application/json" }));
 
-    Swal.fire({
-        title: "Do you want to save the changes?",
+    const result = await Swal.fire({
+        title: "Do you want to save the crop?",
         showDenyButton: true,
         showCancelButton: true,
         confirmButtonText: "Save",
-        denyButtonText: `Don't save`
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
+        denyButtonText: `Don't save`,
+    });
+
+    if (result.isConfirmed) {
+        try {
+            const response = await $.ajax({
                 url: "http://localhost:5050/api/v1/crops",
                 type: "POST",
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function (response) {
-                    $('#cropForm')[0].reset();
-                    $('#previewCrop').addClass('d-none');
-                    $('#newCropModal').modal('hide');
-                    let loadCard = new LoadCards();
-                    loadCard.loadAllCropCard();
-                    Swal.fire("Saved!", "", "success");
-                },
-                error: function (xhr, status, error) {
-                    alert("Faild crop");
-                }
             });
-        } else if (result.isDenied) {
-            Swal.fire("Changes are not saved", "", "info");
+            $('#cropForm')[0].reset();
+            $('#previewCrop').addClass('d-none');
+            $('#newCropModal').modal('hide');
+
+            Swal.fire("Saved!", "The crop has been successfully saved.", "success");
+            const loadCard = new LoadCards();
+            await loadCard.loadAllCropCard();
+        } catch (error) {
+            console.error("Error saving crop:", error);
+            Swal.fire("Error", "Failed to save the crop. Please try again.", "error");
         }
-    });
+    } else if (result.isDenied) {
+        Swal.fire("Changes are not saved", "No data was submitted.", "info");
+    }
 });
 
 // Function to add dynamic field dropdown in the add modal
@@ -167,38 +168,39 @@ $('#updateFieldModalButton').on('click',async function (){
         formData.append("cropImage", cropImage);
     }
 
-    Swal.fire({
+    const result = await Swal.fire({
         title: "Do you want to update the changes?",
         showDenyButton: true,
         showCancelButton: true,
         confirmButtonText: "Update",
-        denyButtonText: `Don't update`
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
+        denyButtonText: `Don't update`,
+    });
+
+    if (result.isConfirmed) {
+        try {
+            const response = await $.ajax({
                 url: `http://localhost:5050/api/v1/crops/${cropCode}`,
                 type: "PUT",
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function (response) {
-                    $('#updateCropForm')[0].reset();
-                    $('#previewCrop').addClass('d-none');
-                    $('#additionalLogInCropUpdate').empty();
-                    $('#additionalFieldInCropUpdate').empty();
-                    $('#updateCropModal').modal('hide');
-                    let loadAllCrops = new LoadCards();
-                    loadAllCrops.loadAllCropCard();
-                    Swal.fire("Updated!", "", "success");
-                },
-                error: function (xhr, status, error) {
-                    Swal.fire("Faild crop", "", "info");
-                }
             });
-        } else if (result.isDenied) {
-            Swal.fire("Changes are not saved", "", "info");
+            $('#updateCropForm')[0].reset();
+            $('#previewCrop').addClass('d-none');
+            $('#additionalLogInCropUpdate').empty();
+            $('#additionalFieldInCropUpdate').empty();
+            $('#updateCropModal').modal('hide');
+
+            const loadAllCrops = new LoadCards();
+            Swal.fire("Updated!", "Crop information has been successfully updated.", "success");
+            await loadAllCrops.loadAllCropCard();
+        } catch (error) {
+            console.error("Error updating crop:", error);
+            Swal.fire("Error", "Failed to update the crop. Please try again.", "error");
         }
-    });
+    } else if (result.isDenied) {
+        Swal.fire("Changes are not saved", "The crop update was canceled.", "info");
+    }
 });
 
 function populateDropdownCrop(container, selectedValues, options) {
@@ -237,28 +239,28 @@ $(document).ready(function() {
         $('#confirmCropDeleteButton').data('card-id', cardId);
         $('#confirmCropDeleteModal').modal('show');
     });
-    $('#confirmCropDeleteButton').on('click', function () {
+    $('#confirmCropDeleteButton').on('click', async function () {
         const cardId = $(this).data('card-id');
-        $.ajax({
-            url: `http://localhost:5050/api/v1/crops/${cardId}`,
-            type: 'DELETE',
-            success: function () {
-                const loadCropCard = new LoadCards();
-                loadCropCard.loadAllCropCard();
-                Swal.fire('Deleted!', 'The crop has been deleted.', 'success');
-            },
-            error: function (xhr, status, error) {
-                console.error("Error deleting crop:", error);
-                if (xhr.status === 404) {
-                    Swal.fire('Error', 'Crop not found!', 'error');
-                } else if (xhr.status === 400) {
-                    Swal.fire('Error', 'Invalid crop ID!', 'error');
-                } else {
-                    Swal.fire('Error', 'Failed to delete crop. Please try again.', 'error');
-                }
+        try {
+            const response = await $.ajax({
+                url: `http://localhost:5050/api/v1/crops/${cardId}`,
+                type: 'DELETE',
+            });
+            Swal.fire('Deleted!', 'The crop has been deleted.', 'success');
+            const loadCropCard = new LoadCards();
+            loadCropCard.loadAllCropCard();
+        } catch (xhr) {
+            console.error("Error deleting crop:", xhr.statusText);
+            if (xhr.status === 404) {
+                Swal.fire('Error', 'Crop not found!', 'error');
+            } else if (xhr.status === 400) {
+                Swal.fire('Error', 'Invalid crop ID!', 'error');
+            } else {
+                Swal.fire('Error', 'Failed to delete crop. Please try again.', 'error');
             }
-        });
-        $('#confirmCropDeleteModal').modal('hide');
+        }finally{
+            $('#confirmCropDeleteModal').modal('hide');
+        }
     });
     $('#confirmCropDeleteModal').on('hidden.bs.modal', function () {
         $('body').removeClass('modal-open');

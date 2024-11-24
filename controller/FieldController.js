@@ -64,15 +64,9 @@ $('#fieldForm').on('submit', async function (e) {
             $('#preview1').addClass('d-none');
             $('#preview2').addClass('d-none');
             $('#newFieldModal').modal('hide');
-            clearFieldForm();
-
             Swal.fire("Saved!", "", "success");
-
-            try {
-                await loadFieldCard.loadAllFieldCard();
-            } catch (error) {
-                console.error("Error loading field cards:", error);
-            }
+            clearFieldForm();
+            await loadFieldCard.loadAllFieldCard();
         } catch (error) {
             console.error("AJAX error:", error);
             Swal.fire("Failed to save the field", "", "error");
