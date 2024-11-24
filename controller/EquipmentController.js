@@ -373,8 +373,8 @@ export class LoadAllEquipment{
                                 <td class="vehicleType">${equDetail.type}</td>
                                 <td class="status">${equDetail.status}</td>
                                 <td class="count">${equDetail.count}</td>
-                                <td class="staffMember">${equ.staffCodeList}</td>
-                                <td class="fields">${equ.fieldList.join(', ')}</td>
+                                <td class="staffMember">${equ.staffCodeList.join(', ') || "No Member"}</td>
+                                <td class="fields">${equ.fieldList.join(', ') || "No field"}</td>
                                 <td><button class="btn btn-danger delete-button" data-index="${equ.equipmentCode}">Delete</button></td>
                             </tr>
                         `;

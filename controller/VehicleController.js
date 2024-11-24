@@ -351,7 +351,7 @@ export class LoadAllVehicleDetails{
                                 <td class="category">${vehicleDetail.category}</td>
                                 <td class="fuelType">${vehicleDetail.fuelType}</td>
                                 <td class="status">${vehicleDetail.status}</td>
-                                <td class="staffMember">${vehicleDetail.staffMember}</td>
+                                <td class="staffMember">${vehicleDetail.staffMember || "No Member"}</td>
                                 <td class="remark">${vehicleDetail.remark}</td>
                                 <td><button class="btn btn-danger delete-button" data-index="${vehicle.vehicleCode}">Delete</button></td>
                             </tr>

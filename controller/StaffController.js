@@ -484,10 +484,10 @@ export class LoadAllStaffMember {
                             staffMember.contactNo,
                             staffMember.email,
                             staffMember.role,
-                            staffMember.fieldCodeList || "N/A", // Handle nested staff details
-                            staffMember.vehicleList || "N/A", // Handle nested staff details
-                            staffMember.logList || "N/A", // Handle nested staff details
-                            staffMember.equipmentList || "N/A" // Handle nested staff details
+                            staffMember.fieldCodeList || "No Fields",
+                            staffMember.vehicleList || "No Vehicle",
+                            staffMember.logList || "No logs",
+                            staffMember.equipmentList || "No Member"
                         );
                         memberCodes.push(staffMember.memberCode);
                         const row = `
