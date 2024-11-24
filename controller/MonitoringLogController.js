@@ -10,7 +10,7 @@ import {CurrentDate} from "./indexController.js";
     });
 
     // SAVE LOGS
-    $('#addLogButton').on('click', function (e) {
+    $('#addLogButton').on('click', async function (e) {
         e.preventDefault();
         let logDate = $('#logDate').val();
         let logDetails = $('#log-details').val();
@@ -48,43 +48,44 @@ import {CurrentDate} from "./indexController.js";
         formData.append("cropList",new Blob([JSON.stringify(cropIds)], { type: "application/json" }));
         formData.append("fieldList",new Blob([JSON.stringify(fieldIds)], { type: "application/json" }));
 
-        Swal.fire({
-            title: "Do you want to save the changes?",
-            showDenyButton: true,
-            showCancelButton: true,
-            confirmButtonText: "Save",
-            denyButtonText: `Don't save`
-        }).then((result) => {
+        try {
+            const result = await Swal.fire({
+                title: "Do you want to save the changes?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Save",
+                denyButtonText: `Don't save`
+            });
+
             if (result.isConfirmed) {
-                $.ajax({
+                await $.ajax({
                     url: "http://localhost:5050/api/v1/logs",
                     type: "POST",
                     data: formData,
                     processData: false,
-                    contentType: false,
-                    success: function (response) {
-                        Swal.fire("Saved!", "", "success");
-                        $('#logForm')[0].reset();
-                        $('#additionalLogField').empty();
-                        $('#additionalLogCrop').empty();
-                        $('#additionalLogStaff').empty();
-                        const loadAllLogs = new LoadAllLogs();
-                        loadAllLogs.loadAllLogsDetails().then(logCodes => {
-                        }).catch(error => {
-                            console.error("Error loading log cards:", error);
-                        });
-                        $('#logForm')[0].reset();
-                        $('#previewCropLogImg').addClass('d-none');
-                        $('#newMonitoringLogModal').modal('hide');
-                    },
-                    error: function (xhr, status, error) {
-                        Swal.fire('Error', 'Failed Load logs!', 'error');
-                    }
+                    contentType: false
                 });
+
+                Swal.fire("Saved!", "", "success");
+                $('#logForm')[0].reset();
+                $('#additionalLogField').empty();
+                $('#additionalLogCrop').empty();
+                $('#additionalLogStaff').empty();
+
+                const loadAllLogs = new LoadAllLogs();
+                await loadAllLogs.loadAllLogsDetails().catch(error => {
+                    console.error("Error loading log cards:", error);
+                });
+
+                $('#previewCropLogImg').addClass('d-none');
+                $('#newMonitoringLogModal').modal('hide');
             } else if (result.isDenied) {
                 Swal.fire("Changes are not saved", "", "info");
             }
-        });
+        } catch (error) {
+            Swal.fire('Error', 'Failed to load logs!', 'error');
+            console.error("Error during log saving process:", error);
+        }
     });
 
     //SET DATA FOR UPDATE MODAL AFTER CLICK CARD UPDATE BUTTON
@@ -125,57 +126,61 @@ import {CurrentDate} from "./indexController.js";
         let logDate = $('#updateLogDate').val();
         let logDetails = $('#updateLog-details').val();
 
-        //field
-        let updatedLogField = [];
-        $('#updateLogFieldId select').each(function() {
-            let fieldValue = $(this).val();
-            if (fieldValue) {
-                updatedLogField.push(fieldValue);
-            }
-        });
-
-        // Collect values from all Field dropdowns
-        $('#additionalFieldInLogUpdate select').each(function () {
-            const selectedValue = $(this).val();
-            if (selectedValue) updatedLogField.push(selectedValue);
-        });
-
-        //crop
-        let updatedCropLogs = [];
-        $('#updateLogInCropId select').each(function() {
-            let fieldValue = $(this).val();
-            if (fieldValue) {
-                updatedCropLogs.push(fieldValue);
-            }
-        });
-
-        // Collect values from all Field dropdowns
-        $('#additionalLogsCropUpdate select').each(function () {
-            const selectedValue = $(this).val();
-            if (selectedValue) updatedCropLogs.push(selectedValue);
-        });
-
-        //staff
-        let updatedStaffLogs = [];
-        $('#updateLogInStaffId select').each(function() {
-            let fieldValue = $(this).val();
-            if (fieldValue) {
-                updatedStaffLogs.push(fieldValue);
-            }
-        });
-
-        // Collect values from all Field dropdowns
-        $('#additionalLogStaffUpdate select').each(function () {
-            const selectedValue = $(this).val();
-            if (selectedValue) updatedStaffLogs.push(selectedValue);
-        });
+        // //field
+        // let updatedLogField = [];
+        // $('#updateLogFieldId select').each(function() {
+        //     let fieldValue = $(this).val();
+        //     if (fieldValue) {
+        //         updatedLogField.push(fieldValue);
+        //     }
+        // });
+        //
+        // // Collect values from all Field dropdowns
+        // $('#additionalFieldInLogUpdate select').each(function () {
+        //     const selectedValue = $(this).val();
+        //     if (selectedValue) updatedLogField.push(selectedValue);
+        // });
+        //
+        // //crop
+        // let updatedCropLogs = [];
+        // $('#updateLogInCropId select').each(function() {
+        //     let fieldValue = $(this).val();
+        //     if (fieldValue) {
+        //         updatedCropLogs.push(fieldValue);
+        //     }
+        // });
+        //
+        // // Collect values from all Field dropdowns
+        // $('#additionalLogsCropUpdate select').each(function () {
+        //     const selectedValue = $(this).val();
+        //     if (selectedValue) updatedCropLogs.push(selectedValue);
+        // });
+        //
+        // //staff
+        // let updatedStaffLogs = [];
+        // $('#updateLogInStaffId select').each(function() {
+        //     let fieldValue = $(this).val();
+        //     if (fieldValue) {
+        //         updatedStaffLogs.push(fieldValue);
+        //     }
+        // });
+        //
+        // // Collect values from all Field dropdowns
+        // $('#additionalLogStaffUpdate select').each(function () {
+        //     const selectedValue = $(this).val();
+        //     if (selectedValue) updatedStaffLogs.push(selectedValue);
+        // });
+        let updatedLogField = collectSelectedValues('#updateLogFieldId select', '#additionalFieldInLogUpdate select');
+        let updatedCropLogs = collectSelectedValues('#updateLogInCropId select', '#additionalLogsCropUpdate select');
+        let updatedStaffLogs = collectSelectedValues('#updateLogInStaffId select', '#additionalLogStaffUpdate select');
 
         // Remove empty values (if any)
         updatedLogField = updatedLogField.filter(id => ({ fieldCode: id }));
         updatedCropLogs = updatedCropLogs.filter(id => ({ cropCode: id }));
         updatedStaffLogs = updatedStaffLogs.filter(id => ({ memberCode: id }));
 
-        let logImage = $('#updateLogCropImageInput')[0].files[0];
+        // let logImage = $('#updateLogCropImageInput')[0].files[0];
+        let logImage = await handleLogImage();
 
         const formData = new FormData();
         formData.append("date", logDate);
@@ -203,46 +208,72 @@ import {CurrentDate} from "./indexController.js";
             formData.append("observedImage", logImage);
         }
 
-        Swal.fire({
+        const result = await Swal.fire({
             title: "Do you want to update the changes?",
             showDenyButton: true,
             showCancelButton: true,
             confirmButtonText: "Update",
             denyButtonText: `Don't update`
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
+        });
+
+        if (result.isConfirmed) {
+            try{
+                const response = await $.ajax({
                     url: `http://localhost:5050/api/v1/logs/${logCode}`,
                     type: "PUT",
                     data: formData,
                     processData: false,
                     contentType: false,
-                    success: function (response) {
-                        // Reset the form
-                        $('#logForm')[0].reset();
-                        $('#updatePreviewCropLogImg').addClass('d-none');
-                        $('#updateMonitoringLogModal').modal('hide');
-                        let loadLogCard = new LoadAllLogs();
-                        loadLogCard.loadAllLogsDetails();
-                        Swal.fire("Saved!", "", "success");
-                    },
-                    error: function (xhr, status, error) {
-                        alert("Faild crop");
-                    }
                 });
-            } else if (result.isDenied) {
-                Swal.fire("Changes are not saved", "", "info");
+
+                $('#updateLogForm')[0].reset();
+                $('#updatePreviewCropLogImg').addClass('d-none');
+                $('#additionalFieldInLogUpdate').empty();
+                $('#additionalLogsCropUpdate').empty();
+                $('#additionalLogStaffUpdate').empty();
+                $('#updateMonitoringLogModal').modal('hide');
+
+                Swal.fire("Updated!", "Log information has been successfully updated.", "success");
+                const loadAllLogs = new LoadAllLogs();
+                await loadAllLogs.loadAllLogsDetails();
+            }catch (error) {
+                console.error("Error updating log:", error);
+                Swal.fire("Error", "Failed to update the log. Please try again.", "error");
             }
-        });
-
-        $('#updateLogForm')[0].reset();
-        $('#updatePreviewCropLogImg').addClass('d-none');
-        $('#additionalFieldInLogUpdate').empty();
-        $('#additionalLogsCropUpdate').empty();
-        $('#additionalLogStaffUpdate').empty();
-
-        $('#updateMonitoringLogModal').modal('hide');
+        } else if (result.isDenied) {
+            Swal.fire("Changes are not saved", "", "info");
+        }
     });
+
+function collectSelectedValues(...selectors) {
+    let values = [];
+    selectors.forEach(selector => {
+        $(selector).each(function () {
+            const selectedValue = $(this).val();
+            if (selectedValue) values.push(selectedValue);
+        });
+    });
+    return values;
+}
+
+async function handleLogImage() {
+    let logImage = $('#updateLogCropImageInput')[0].files[0];
+    if (!logImage) {
+        const previewImageSrc = $('#updatePreviewCropLogImg').attr('src');
+        if (previewImageSrc) {
+            try {
+                const response = await fetch(previewImageSrc);
+                const blob = await response.blob();
+                return blob;
+            } catch (error) {
+                throw new Error('Failed to process the image. Please try again.');
+            }
+        } else {
+            throw new Error('No image provided!');
+        }
+    }
+    return logImage;
+}
 
     // SHOW LOG CARD FOR DELETE
     $('#logCard').on('click', '.delete-button', function () {
@@ -252,31 +283,28 @@ import {CurrentDate} from "./indexController.js";
     });
 
     // DELETE LOG CARD
-    $('#confirmLogDeleteButton').on('click', function () {
+    $('#confirmLogDeleteButton').on('click', async function () {
         const cardId = $(this).data('card-id');
-
-        $.ajax({
-            url: `http://localhost:5050/api/v1/logs/${cardId}`,
-            type: 'DELETE',
-            success: function () {
-                Swal.fire('Deleted!', 'The Logs card has been deleted.', 'success');
-                const loadLogCard = new LoadAllLogs();
-                loadLogCard.loadAllLogsDetails();
-            },
-            error: function (xhr, status, error) {
-                console.error("Error deleting logs:", error);
-                if (xhr.status === 404) {
-                    Swal.fire('Error', 'Log not found!', 'error');
-                } else if (xhr.status === 400) {
-                    Swal.fire('Error', 'Invalid log code!', 'error');
-                } else {
-                    Swal.fire('Error', 'Failed to delete logs. Please try again.', 'error');
-                }
+        try {
+            const response = await $.ajax({
+                url: `http://localhost:5050/api/v1/logs/${cardId}`,
+                type: 'DELETE',
+            });
+            Swal.fire('Deleted!', 'The Logs card has been deleted.', 'success');
+            const loadLogCard = new LoadAllLogs();
+            loadLogCard.loadAllLogsDetails();
+        } catch (xhr) {
+            console.error("Error deleting logs:", error);
+            if (xhr.status === 404) {
+                Swal.fire('Error', 'Log not found!', 'error');
+            } else if (xhr.status === 400) {
+                Swal.fire('Error', 'Invalid log code!', 'error');
+            } else {
+                Swal.fire('Error', 'Failed to delete logs. Please try again.', 'error');
             }
-        });
-
-        // Hide the modal after deleting
-        $('#confirmLogDeleteModal').modal('hide');
+        }finally{
+            $('#confirmLogDeleteModal').modal('hide');
+        }
     });
 
     // Ensure the modal and backdrop are fully removed when hidden (overlay)
