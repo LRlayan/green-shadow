@@ -80,13 +80,13 @@ $(document).ready(function () {
     $('#vehicleDetailsTable').on('click', 'tr', function () {
         clickNewComboBoxBtn = 1;
         $('#additionalVehicleStaffUpdate').empty();
-        let vehicleCode = $(this).find(".code").text()
-        let licensePlateNumber = $(this).find(".licensePlateNumber").text()
-        let vehicleName = $(this).find(".vehicleName").text()
-        let category = $(this).find(".category").text()
-        let fuelType = $(this).find(".fuelType").text()
-        let status = $(this).find(".status").text()
-        let remark = $(this).find(".remark").text()
+        let vehicleCode = $(this).find(".code").text();
+        let licensePlateNumber = $(this).find(".licensePlateNumber").text();
+        let vehicleName = $(this).find(".vehicleName").text();
+        let category = $(this).find(".category").text().trim();
+        let fuelType = $(this).find(".fuelType").text().trim();
+        let status = $(this).find(".status").text().trim();
+        let remark = $(this).find(".remark").text();
 
         clickTableRow = $(this).index();
 
@@ -94,8 +94,8 @@ $(document).ready(function () {
         $('#updateLicensePlateNumber').val(licensePlateNumber);
         $('#updateVehicleName').val(vehicleName);
         $('#updateCategoryVehicle').val(category);
-        $('#updateFuelType').val(fuelType);
-        $('#updateStatus').val(status);
+        $('#fuelTypeUpdate').val(fuelType);
+        $('#statusUpdate').val(status);
         $('#updateRemark').val(remark);
 
         let staffMemberArray = $(this).find(".staffMember").text().split(", ");
@@ -108,14 +108,14 @@ $(document).ready(function () {
         })
     });
 
-    // Show delete confirmation modal
+    // SHOW DELETE CONFIRMATION MODAL
     $('#vehicleDetailsTable').on('click', '.delete-button', function () {
         const index = $(this).data('index');
         $('#confirmVehicleDeleteYes').data('index', index);
         $('#confirmVehicleDeleteModal').modal('show');
     });
 
-    // Handle the confirmation of deletion - yes button
+    // DELETE VEHICLE
     $('#confirmVehicleDeleteYes').on('click', function () {
         const index = $(this).data('index'); // Get the stored index
 
@@ -154,7 +154,7 @@ $(document).ready(function () {
         $('#additionalVehicleStaffUpdate').empty();
     });
 
-    // Handle the form submission for updating vehicle details
+    // UPDATE VEHICLE DETAILS
     $('#modalSubmitButtonUpdate').on('click', ()=> {
 
         // Collect form data
@@ -162,8 +162,8 @@ $(document).ready(function () {
         let licensePlateNumber = $("#updateLicensePlateNumber").val();
         let vehicleName = $("#updateVehicleName").val();
         let category = $("#updateCategoryVehicle").val();
-        let fuelType = $("#updateFuelType").val();
-        let status = $("#updateStatus").val();
+        let fuelType = $("#fuelTypeUpdate").val();
+        let status = $("#statusUpdate").val();
         let remark = $("#updateRemark").val();
 
         // Collect updated staff values
