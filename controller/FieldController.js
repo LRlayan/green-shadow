@@ -2,7 +2,7 @@ import { LoadCards } from './CropController.js';
 import { LoadAllStaffMember } from './StaffController.js';
 
 // SAVE MODAL
-$('#fieldForm').on('submit', function (e) {
+$('#fieldForm').on('submit', async function (e) {
     e.preventDefault();
 
     let fieldName = $('#fieldName').val();
@@ -41,43 +41,45 @@ $('#fieldForm').on('submit', function (e) {
     formData.append("staffList", new Blob([JSON.stringify(staffIds)], { type: "application/json" }));
     formData.append("cropList", new Blob([JSON.stringify(cropIds)], { type: "application/json" }));
 
-    Swal.fire({
+    const swalResult = await Swal.fire({
         title: "Do you want to save the changes?",
         showDenyButton: true,
         showCancelButton: true,
         confirmButtonText: "Save",
         denyButtonText: `Don't save`
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
+    });
+
+    if (swalResult.isConfirmed) {
+        try {
+            const response = await $.ajax({
                 url: "http://localhost:5050/api/v1/fields",
                 type: "POST",
                 data: formData,
                 processData: false,
                 contentType: false,
-                success: function (response) {
-                    let loadFieldCard = new LoadFieldCard();
-                    let loadCropList = new LoadSelectedFieldWithCrop();
-                    $('#fieldForm')[0].reset();
-                    $('#preview1').addClass('d-none');
-                    $('#preview2').addClass('d-none');
-                    $('#newFieldModal').modal('hide');
-                    clearFieldForm();
-                    Swal.fire("Saved!", "", "success");
-                    loadFieldCard.loadAllFieldCard().then(fieldCodes => {
-
-                    }).catch(error => {
-                        console.error("Error loading field cards:", error);
-                    });
-                },
-                error: function (xhr, status, error) {
-                    alert("Faild field");
-                }
             });
-        } else if (result.isDenied) {
-            Swal.fire("Changes are not saved", "", "info");
+
+            let loadFieldCard = new LoadFieldCard();
+            $('#fieldForm')[0].reset();
+            $('#preview1').addClass('d-none');
+            $('#preview2').addClass('d-none');
+            $('#newFieldModal').modal('hide');
+            clearFieldForm();
+
+            Swal.fire("Saved!", "", "success");
+
+            try {
+                await loadFieldCard.loadAllFieldCard();
+            } catch (error) {
+                console.error("Error loading field cards:", error);
+            }
+        } catch (error) {
+            console.error("AJAX error:", error);
+            Swal.fire("Failed to save the field", "", "error");
         }
-    });
+    } else if (swalResult.isDenied) {
+        Swal.fire("Changes are not saved", "", "info");
+    }
 });
 
 $('#fieldImage1Input').on('click',function (){
