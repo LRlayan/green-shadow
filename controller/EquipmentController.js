@@ -1,5 +1,5 @@
 import Equipment from "../model/Equipment.js";
-import {equipmentDetails, staffEquipmentCount} from "../db/db.js"
+import {equipmentDetails} from "../db/db.js"
 import {LoadAllStaffMember} from "./StaffController.js";
 import {LoadFieldCard} from './FieldController.js';
 
@@ -28,7 +28,6 @@ $('#addStaffButton').on('click', function() {
 //SAVE EQUIPMENT
 $('#addEquipmentButton').on('click',(e)=>{
     e.preventDefault();
-
     let equipmentName = $("#equipmentName").val();
     let equipmentType = $("#equipmentType").val();
     let equipmentStatus = $("#equipmentStatus").val();
@@ -69,7 +68,6 @@ $('#addEquipmentButton').on('click',(e)=>{
         denyButtonText: `Don't save`
     }).then((result) => {
         if (result.isConfirmed) {
-
             $.ajax({
                 url: "http://localhost:5050/api/v1/equipment",
                 type: "POST",
@@ -126,7 +124,6 @@ $('#equipmentDetailsTable').on('click', 'tr', function () {
     }).catch(error => {
         console.log("Not loading field codes ",error)
     });
-
     const loadAllMembers = new LoadAllStaffMember();
     loadAllMembers.loadAllMembers().then(memberCode => {
         populateDropdownEquipment("#updateStaffEquipment",staffMemberArray,memberCode);
@@ -369,7 +366,6 @@ export class LoadAllEquipment{
                             equ.staffCodeList || "N/A"
                         );
                         equipmentCodes.push(equ.equipmentCode);
-
                         const row = `
                             <tr>
                                 <td class="code">${equ.equipmentCode}</td>
