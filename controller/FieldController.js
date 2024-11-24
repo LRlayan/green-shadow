@@ -318,46 +318,50 @@ function addDropdown(containerId, selectClass, options) {
 }
 
 //DELETE FIELD CARD
-$(document).ready(function() {
-    $('#fieldCard').on('click', '.delete-button', function () {
-        // Get the card ID from the delete button and set it on the confirm delete button
-        const cardId = $(this).data('field-code');
-        $('#confirmDeleteButton').data('field-code', cardId);
-        $('#confirmDeleteModal').modal('show');
-    });
+$('#fieldCard').on('click', '.delete-button', function () {
+    // Get the card ID from the delete button and set it on the confirm delete button
+    const cardId = $(this).data('field-code');
+    $('#confirmDeleteButton').data('field-code', cardId);
+    $('#confirmDeleteModal').modal('show');
+});
 
-    // Handle the confirmation of the delete action
-    $('#confirmDeleteButton').on('click', function () {
-        const cardId = $(this).data('field-code');
+// Handle the confirmation of the delete action
+$('#confirmDeleteButton').on('click', async function () {
+    const cardId = $(this).data('field-code');
 
-        $.ajax({
+    try {
+        const response = await $.ajax({
             url: `http://localhost:5050/api/v1/fields/${cardId}`,
             type: 'DELETE',
-            success: function () {
-                const loadFieldCard = new LoadFieldCard();
-                loadFieldCard.loadAllFieldCard();
-                Swal.fire('Deleted!', 'The field has been deleted.', 'success');
-            },
-            error: function (xhr, status, error) {
-                console.error("Error deleting field:", error);
-                if (xhr.status === 404) {
-                    Swal.fire('Error', 'Field not found!', 'error');
-                } else if (xhr.status === 400) {
-                    Swal.fire('Error', 'Invalid field ID!', 'error');
-                } else {
-                    Swal.fire('Error', 'Failed to delete field. Please try again.', 'error');
-                }
-            }
         });
-        $('#confirmDeleteModal').modal('hide');
-    });
 
-    // Ensure the modal and backdrop are fully removed when hidden (overlay)
-    $('#confirmDeleteModal').on('hidden.bs.modal', function () {
-        $('body').removeClass('modal-open'); // Removes the modal-open class from body
-        $('.modal-backdrop').remove();       // Removes the leftover backdrop element
-    });
+        // Reload field cards
+        const loadFieldCard = new LoadFieldCard();
+        await loadFieldCard.loadAllFieldCard();
+
+        Swal.fire('Deleted!', 'The field has been deleted successfully.', 'success');
+    } catch (error) {
+        console.error("Error deleting field:", error);
+        const status = error.status;
+
+        if (status === 404) {
+            Swal.fire('Error', 'Field not found!', 'error');
+        } else if (status === 400) {
+            Swal.fire('Error', 'Invalid field ID!', 'error');
+        } else {
+            Swal.fire('Error', 'Failed to delete the field. Please try again.', 'error');
+        }
+    } finally {
+        $('#confirmDeleteModal').modal('hide');
+    }
 });
+
+// Ensure the modal and backdrop are fully removed when hidden (overlay)
+$('#confirmDeleteModal').on('hidden.bs.modal', function () {
+    $('body').removeClass('modal-open');
+    $('.modal-backdrop').remove();
+});
+
 
 // Preview image in modal when file input changes
 function previewFieldImage(imageInputId,imgPreviewId){
