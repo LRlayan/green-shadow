@@ -14,39 +14,25 @@ import {CurrentDate} from "./indexController.js";
         e.preventDefault();
         let logDate = $('#logDate').val();
         let logDetails = $('#log-details').val();
-        let fieldIds = [];
-        let cropIds = [];
-        let staffIds = [];
 
-        $('#log-filedId').val() && fieldIds.push($('#log-filedId').val());
-        $('#additionalLogField select').each(function () {
-            fieldIds.push($(this).val());
-        });
-
-        $('#log-cropId').val() && cropIds.push($('#log-cropId').val());
-        $('#additionalLogCrop select').each(function () {
-            cropIds.push($(this).val());
-        });
-
-        $('#log-staffId').val() && staffIds.push($('#log-staffId').val());
-        $('#additionalLogStaff select').each(function () {
-            staffIds.push($(this).val());
-        });
+        let updatedLogField = collectSelectedValues('#log-filedId select', '#additionalLogField select');
+        let updatedCropLogs = collectSelectedValues('#log-cropId select', '#additionalLogCrop select');
+        let updatedStaffLogs = collectSelectedValues('#log-staffId select', '#additionalLogStaff select');
 
         // Clean up arrays to remove any empty values
-        fieldIds = fieldIds.filter(fieldCode => ({fieldCode:fieldCode}));
-        cropIds = cropIds.filter(cropId => ({cropCode:cropId}));
-        staffIds = staffIds.filter(staffId => ({memberCode:staffId}));
+        updatedLogField = updatedLogField.filter(fieldCode => ({fieldCode:fieldCode}));
+        updatedCropLogs = updatedCropLogs.filter(cropId => ({cropCode:cropId}));
+        updatedStaffLogs = updatedStaffLogs.filter(staffId => ({memberCode:staffId}));
 
-        let observedImage = $('#logCropImageInput')[0].files[0];
+        let observedImage = await handleLogImage("#logCropImageInput","#previewCropLogImg");
 
         const formData = new FormData();
         formData.append("date",logDate);
         formData.append("logDetails",logDetails);
         formData.append("observedImage",observedImage);
-        formData.append("staffList",new Blob([JSON.stringify(staffIds)], { type: "application/json" }));
-        formData.append("cropList",new Blob([JSON.stringify(cropIds)], { type: "application/json" }));
-        formData.append("fieldList",new Blob([JSON.stringify(fieldIds)], { type: "application/json" }));
+        formData.append("staffList",new Blob([JSON.stringify(updatedStaffLogs)], { type: "application/json" }));
+        formData.append("cropList",new Blob([JSON.stringify(updatedCropLogs)], { type: "application/json" }));
+        formData.append("fieldList",new Blob([JSON.stringify(updatedLogField)], { type: "application/json" }));
 
         try {
             const result = await Swal.fire({
@@ -126,50 +112,6 @@ import {CurrentDate} from "./indexController.js";
         let logDate = $('#updateLogDate').val();
         let logDetails = $('#updateLog-details').val();
 
-        // //field
-        // let updatedLogField = [];
-        // $('#updateLogFieldId select').each(function() {
-        //     let fieldValue = $(this).val();
-        //     if (fieldValue) {
-        //         updatedLogField.push(fieldValue);
-        //     }
-        // });
-        //
-        // // Collect values from all Field dropdowns
-        // $('#additionalFieldInLogUpdate select').each(function () {
-        //     const selectedValue = $(this).val();
-        //     if (selectedValue) updatedLogField.push(selectedValue);
-        // });
-        //
-        // //crop
-        // let updatedCropLogs = [];
-        // $('#updateLogInCropId select').each(function() {
-        //     let fieldValue = $(this).val();
-        //     if (fieldValue) {
-        //         updatedCropLogs.push(fieldValue);
-        //     }
-        // });
-        //
-        // // Collect values from all Field dropdowns
-        // $('#additionalLogsCropUpdate select').each(function () {
-        //     const selectedValue = $(this).val();
-        //     if (selectedValue) updatedCropLogs.push(selectedValue);
-        // });
-        //
-        // //staff
-        // let updatedStaffLogs = [];
-        // $('#updateLogInStaffId select').each(function() {
-        //     let fieldValue = $(this).val();
-        //     if (fieldValue) {
-        //         updatedStaffLogs.push(fieldValue);
-        //     }
-        // });
-        //
-        // // Collect values from all Field dropdowns
-        // $('#additionalLogStaffUpdate select').each(function () {
-        //     const selectedValue = $(this).val();
-        //     if (selectedValue) updatedStaffLogs.push(selectedValue);
-        // });
         let updatedLogField = collectSelectedValues('#updateLogFieldId select', '#additionalFieldInLogUpdate select');
         let updatedCropLogs = collectSelectedValues('#updateLogInCropId select', '#additionalLogsCropUpdate select');
         let updatedStaffLogs = collectSelectedValues('#updateLogInStaffId select', '#additionalLogStaffUpdate select');
@@ -179,8 +121,7 @@ import {CurrentDate} from "./indexController.js";
         updatedCropLogs = updatedCropLogs.filter(id => ({ cropCode: id }));
         updatedStaffLogs = updatedStaffLogs.filter(id => ({ memberCode: id }));
 
-        // let logImage = $('#updateLogCropImageInput')[0].files[0];
-        let logImage = await handleLogImage();
+        let logImage = await handleLogImage('#updateLogCropImageInput','#updatePreviewCropLogImg');
 
         const formData = new FormData();
         formData.append("date", logDate);
@@ -226,6 +167,7 @@ import {CurrentDate} from "./indexController.js";
                     contentType: false,
                 });
 
+                Swal.fire("Updated!", "Log information has been successfully updated.", "success");
                 $('#updateLogForm')[0].reset();
                 $('#updatePreviewCropLogImg').addClass('d-none');
                 $('#additionalFieldInLogUpdate').empty();
@@ -233,7 +175,6 @@ import {CurrentDate} from "./indexController.js";
                 $('#additionalLogStaffUpdate').empty();
                 $('#updateMonitoringLogModal').modal('hide');
 
-                Swal.fire("Updated!", "Log information has been successfully updated.", "success");
                 const loadAllLogs = new LoadAllLogs();
                 await loadAllLogs.loadAllLogsDetails();
             }catch (error) {
@@ -256,10 +197,10 @@ function collectSelectedValues(...selectors) {
     return values;
 }
 
-async function handleLogImage() {
-    let logImage = $('#updateLogCropImageInput')[0].files[0];
+async function handleLogImage(input,preview) {
+    let logImage = $(input)[0].files[0];
     if (!logImage) {
-        const previewImageSrc = $('#updatePreviewCropLogImg').attr('src');
+        const previewImageSrc = $(preview).attr('src');
         if (previewImageSrc) {
             try {
                 const response = await fetch(previewImageSrc);
@@ -292,7 +233,7 @@ async function handleLogImage() {
             });
             Swal.fire('Deleted!', 'The Logs card has been deleted.', 'success');
             const loadLogCard = new LoadAllLogs();
-            loadLogCard.loadAllLogsDetails();
+            await loadLogCard.loadAllLogsDetails();
         } catch (xhr) {
             console.error("Error deleting logs:", error);
             if (xhr.status === 404) {
@@ -309,8 +250,8 @@ async function handleLogImage() {
 
     // Ensure the modal and backdrop are fully removed when hidden (overlay)
     $('#confirmLogDeleteModal').on('hidden.bs.modal', function () {
-        $('body').removeClass('modal-open'); // Removes the modal-open class from body
-        $('.modal-backdrop').remove();       // Removes the leftover backdrop element
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
     });
 
     function populateDropdownLog(container, selectedValues, options) {
