@@ -1259,6 +1259,13 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="mb-3">
+                                            <!-- Remark -->
+                                            <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                <input type="text" id="remark" class="form-control">
+                                                <label for="remark" class="form-label" style="margin-left: 0;">Remark</label>
+                                            </div>
+                                        </div>
                                         <div class="row mb-3">
                                             <!-- Category -->
                                             <div class="col-md-6">
@@ -1307,13 +1314,6 @@
                                                 </div>
                                                 <!-- Container for additional dynamic dropdowns -->
                                                 <div id="additionalVehicleStaff" class="mt-2"></div>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <!-- Remark -->
-                                            <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                <input type="text" id="remark" class="form-control">
-                                                <label for="remark" class="form-label" style="margin-left: 0;">Remark</label>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -1386,13 +1386,11 @@
                                         <div class="row mb-3">
                                             <!-- Status -->
                                             <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <label for="statusUpdate" class="form-label text-white">Status</label>
-                                                    <select class="form-control text-white" id="statusUpdate" style="background-color:#2B2B2B">
-                                                        <option class="text-white" value="Available">Available</option>
-                                                        <option class="text-white" value="NotAvailable">Not Available</option>
-                                                    </select>
-                                                </div>
+                                                <label for="statusUpdate" class="form-label text-white">Status</label>
+                                                <select class="form-control text-white" id="statusUpdate" style="background-color:#2B2B2B">
+                                                    <option class="text-white" value="Available">Available</option>
+                                                    <option class="text-white" value="NotAvailable">Not Available</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="mb-3">
@@ -1501,33 +1499,38 @@
                                                     <label for="equipmentName" class="form-label" style="margin-left: 0;">Equipment Name</label>
                                                 </div>
                                             </div>
-                                            <!--  Equipment Type  -->
-                                            <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="equipmentType" class="form-control text-white">
-                                                    <label for="equipmentType" class="form-label" style="margin-left: 0;">Equipment Type</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <!-- Status -->
-                                            <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="equipmentStatus" class="form-control text-white" >
-                                                    <label for="equipmentStatus" class="form-label" style="margin-left: 0;">Status</label>
-                                                    <div class="form-notch">
-                                                        <div class="form-notch-leading" style="width: 9px;"></div>
-                                                        <div class="form-notch-middle" style="width: 68.8px;"></div>
-                                                        <div class="form-notch-trailing"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                             <!-- Count -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
                                                     <input type="text" id="count" class="form-control text-white">
                                                     <label for="count" class="form-label" style="margin-left: 0;">Count</label>
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <!-- Status -->
+                                            <div class="col-md-6">
+                                                <label for="equipmentStatus" class="form-label text-white">Status</label>
+                                                <select class="form-control text-white" id="equipmentStatus" style="background-color:#2B2B2B">
+                                                    <option class="text-white" value="Available" selected>Available</option>
+                                                    <option class="text-white" value="NotAvailable">Not Available</option>
+                                                </select>
+                                            </div>
+                                            <!--  Equipment Type  -->
+                                            <div class="col-md-6">
+                                                <label for="equipmentType" class="form-label" style="margin-left: 0;">Equipment Type</label>
+                                                <select class="form-control text-white" id="equipmentType" style="background-color:#2B2B2B">
+                                                    <option class="text-white" value="" disabled selected>Select Type</option>
+                                                    <option class="text-white" value="Hand Tools">Hand Tools</option>
+                                                    <option class="text-white" value="Irrigation Equipment">Irrigation Equipment</option>
+                                                    <option class="text-white" value="Power Tools and Machinery">Power Tools and Machinery</option>
+                                                    <option class="text-white" value="Ploughing Equipment">Ploughing Equipment</option>
+                                                    <option class="text-white" value="Weeding and Pest Control Equipment">Weeding and Pest Control Equipment</option>
+                                                    <option class="text-white" value="Harvesting Equipment">Harvesting Equipment</option>
+                                                    <option class="text-white" value="Post-Harvest Equipment">Post-Harvest Equipment</option>
+                                                    <option class="text-white" value="Monitoring and Measuring Tools">Monitoring and Measuring Tools</option>
+                                                    <option class="text-white" value="Protective Equipment">Protective Equipment</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
@@ -1589,33 +1592,38 @@
                                                     <label for="equipmentNameUpdate" class="form-label" style="margin-left: 0;">Equipment Name</label>
                                                 </div>
                                             </div>
-                                            <!--  Equipment Type  -->
+                                            <!--  count  -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="equipmentTypeUpdate" class="form-control text-white">
-                                                    <label for="equipmentTypeUpdate" class="form-label" style="margin-left: 0;">Equipment Type</label>
+                                                    <input type="text" id="countUpdate" class="form-control text-white">
+                                                    <label for="countUpdate" class="form-label" style="margin-left: 0;">Count</label>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <!-- Status -->
                                             <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="equipmentStatusUpdate" class="form-control text-white" >
-                                                    <label for="equipmentStatusUpdate" class="form-label" style="margin-left: 0;">Status</label>
-                                                    <div class="form-notch">
-                                                        <div class="form-notch-leading" style="width: 9px;"></div>
-                                                        <div class="form-notch-middle" style="width: 68.8px;"></div>
-                                                        <div class="form-notch-trailing"></div>
-                                                    </div>
-                                                </div>
+                                                <label for="equipmentStatusUpdate" class="form-label text-white">Status</label>
+                                                <select class="form-control text-white" id="equipmentStatusUpdate" style="background-color:#2B2B2B">
+                                                    <option class="text-white" value="Available" selected>Available</option>
+                                                    <option class="text-white" value="NotAvailable">Not Available</option>
+                                                </select>
                                             </div>
-                                            <!-- Count -->
+                                            <!-- Equipment Type -->
                                             <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" id="countUpdate" class="form-control text-white">
-                                                    <label for="countUpdate" class="form-label" style="margin-left: 0;">Count</label>
-                                                </div>
+                                                <label for="equipmentTypeUpdate" class="form-label" style="margin-left: 0;">Equipment Type</label>
+                                                <select class="form-control text-white" id="equipmentTypeUpdate" style="background-color:#2B2B2B">
+                                                    <option class="text-white" value="" disabled selected>Select Type</option>
+                                                    <option class="text-white" value="Hand Tools">Hand Tools</option>
+                                                    <option class="text-white" value="Irrigation Equipment">Irrigation Equipment</option>
+                                                    <option class="text-white" value="Power Tools and Machinery">Power Tools and Machinery</option>
+                                                    <option class="text-white" value="Ploughing Equipment">Ploughing Equipment</option>
+                                                    <option class="text-white" value="Weeding and Pest Control Equipment">Weeding and Pest Control Equipment</option>
+                                                    <option class="text-white" value="Harvesting Equipment">Harvesting Equipment</option>
+                                                    <option class="text-white" value="Post-Harvest Equipment">Post-Harvest Equipment</option>
+                                                    <option class="text-white" value="Monitoring and Measuring Tools">Monitoring and Measuring Tools</option>
+                                                    <option class="text-white" value="Protective Equipment">Protective Equipment</option>
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="row mb-3" id="updateFieldEquipmentContainer">
