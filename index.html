@@ -167,6 +167,7 @@
                                                 <input type="text" class="form-control text-white" id="fieldName">
                                                 <label for="fieldName" class="form-label" style="margin-left: 0;">Field Name</label>
                                             </div>
+                                            <div class="error-message text-danger mt-1" style="display: none;"></div>
                                         </div>
                                         <div class="row mb-3">
                                             <!-- Field Location -->
@@ -175,6 +176,7 @@
                                                     <input type="text" class="form-control text-white" id="fieldLocation">
                                                     <label for="fieldLocation" class="form-label" style="margin-left: 0;">Location</label>
                                                 </div>
+                                                <div class="error-message text-danger mt-1" style="display: none;"></div>
                                             </div>
                                             <!-- Extent Size -->
                                             <div class="col-md-6">
@@ -182,6 +184,7 @@
                                                     <input type="text" class="form-control text-white" id="extentSize">
                                                     <label for="extentSize" class="form-label" style="margin-left: 0;">Extent Size</label>
                                                 </div>
+                                                <div class="error-message text-danger mt-1" style="display: none;"></div>
                                             </div>
                                         </div>
 
@@ -221,12 +224,14 @@
                                                 <label for="fieldImage1Input" class="form-label text-white">Field Image 1</label>
                                                 <input type="file" class="form-control" id="fieldImage1Input" name="fieldImage1Input" accept="image/*" style="background-color: #2B2B2B;">
                                                 <img id="preview1" src="#" alt="Image Preview 1" class="img-fluid mt-2 d-none" style="max-height: 150px;">
+                                                <div class="error-message text-danger mt-1" style="display: none;"></div>
                                             </div>
                                             <!-- Field Image 2 -->
                                             <div class="col-md-6">
                                                 <label for="fieldImage2Input" class="form-label text-white">Field Image 2</label>
                                                 <input type="file" class="form-control" id="fieldImage2Input" name="fieldImage2Input" accept="image/*" style="background-color: #2B2B2B;">
                                                 <img id="preview2" src="#" alt="Image Preview 2" class="img-fluid mt-2 d-none" style="max-height: 150px;">
+                                                <div class="error-message text-danger mt-1" style="display: none;"></div>
                                             </div>
                                         </div>
                                     </form>
@@ -391,7 +396,7 @@
                                             <!-- Crop Name -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" class="form-control text-white" id="cropName" data-error="Crop Name is required and must contain only letters.">
+                                                    <input type="text" class="form-control text-white" id="cropName">
                                                     <label for="cropName" class="form-label" style="margin-left: 0;">Crop Name</label>
                                                 </div>
                                                 <div class="error-message text-danger mt-1" style="display: none;"></div>
@@ -399,7 +404,7 @@
                                             <!-- Crop Scientific Name -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" class="form-control text-white" id="crop-scientificName" data-error="Scientific Name is required and must contain only letters.">
+                                                    <input type="text" class="form-control text-white" id="crop-scientificName">
                                                     <label for="crop-scientificName" class="form-label" style="margin-left: 0;">Scientific Name</label>
                                                 </div>
                                                 <div class="error-message text-danger mt-1" style="display: none;"></div>
@@ -410,7 +415,7 @@
                                             <!-- Category -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" class="form-control text-white" id="crop-Category" data-error="Category is required and must contain only letters.">
+                                                    <input type="text" class="form-control text-white" id="crop-Category">
                                                     <label for="crop-Category" class="form-label" style="margin-left: 0;">Category</label>
                                                 </div>
                                                 <div class="error-message text-danger mt-1" style="display: none;"></div>
@@ -418,7 +423,7 @@
                                             <!-- Crop Season -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" class="form-control text-white" id="crop-season" data-error="Crop Season is required and must contain only letters.">
+                                                    <input type="text" class="form-control text-white" id="crop-season">
                                                     <label for="crop-season" class="form-label" style="margin-left: 0;">Crop Season</label>
                                                 </div>
                                                 <div class="error-message text-danger mt-1" style="display: none;"></div>
@@ -442,7 +447,7 @@
                                             <!-- Crop Image -->
                                             <div class="col-md-6">
                                                 <label for="cropImageInput" class="form-label">Crop Image</label>
-                                                <input type="file" class="form-control" id="cropImageInput" name="cropImageInput" accept="image/*" style="background-color:#2B2B2B" data-error="A valid crop image is required.">
+                                                <input type="file" class="form-control" id="cropImageInput" name="cropImageInput" accept="image/*" style="background-color:#2B2B2B">
                                                 <img id="previewCropImg" alt="crop Image Preview" class="img-fluid mt-2 d-none image-preview" style="max-height: 150px;">
                                                 <div class="error-message text-danger mt-1" style="display: none;"></div>
                                             </div>
