@@ -8,29 +8,16 @@ $('#fieldForm').on('submit', async function (e) {
     let fieldName = $('#fieldName').val();
     let location = $('#fieldLocation').val();
     let extentSize = $('#extentSize').val();
-    let cropIds = [];
-    let staffIds = [];
 
-    // Collect all crop IDs from the main select and additional fields
-    $('#filed-cropId').val() && cropIds.push($('#filed-cropId').val()); // Add main select value if not empty
-    $('#additionalCrop select').each(function () {
-        let crops = $(this).val();
-        cropIds.push(crops);
-    });
-
-    // Collect all staff IDs from the main select and additional fields
-    $('#filed-staffId').val() && staffIds.push($('#filed-staffId').val());
-    $('#additionalStaff select').each(function () {
-        let ids = $(this).val();
-        staffIds.push(ids);
-    });
+    let updatedFieldCrop = collectSelectedValues('#filed-cropId select', '#additionalCrop select');
+    let updatedFieldStaff = collectSelectedValues('#filed-staffId select', '#additionalStaff select');
 
     // Remove empty values (if any)
-    cropIds = cropIds.filter(crop => ({ cropCode: crop }));
-    staffIds = staffIds.filter(id => ({ memberCode: id }));
+    updatedFieldCrop = updatedFieldCrop.filter(crop => ({ cropCode: crop }));
+    updatedFieldStaff = updatedFieldStaff.filter(id => ({ memberCode: id }));
 
-    let fieldImageFile1 = $('#fieldImage1Input')[0].files[0];
-    let fieldImageFile2 = $('#fieldImage2Input')[0].files[0];
+    let fieldImageFile1 = await handleLogImage('#fieldImage1Input','#preview1');
+    let fieldImageFile2 = await handleLogImage('#fieldImage2Input','#preview2');
 
     const formData = new FormData();
     formData.append("name", fieldName);
@@ -38,8 +25,8 @@ $('#fieldForm').on('submit', async function (e) {
     formData.append("extentSize", extentSize);
     formData.append("fieldImage1", fieldImageFile1);
     formData.append("fieldImage2", fieldImageFile2);
-    formData.append("staffList", new Blob([JSON.stringify(staffIds)], { type: "application/json" }));
-    formData.append("cropList", new Blob([JSON.stringify(cropIds)], { type: "application/json" }));
+    formData.append("staffList", new Blob([JSON.stringify(updatedFieldStaff)], { type: "application/json" }));
+    formData.append("cropList", new Blob([JSON.stringify(updatedFieldCrop)], { type: "application/json" }));
 
     const swalResult = await Swal.fire({
         title: "Do you want to save the changes?",
@@ -135,51 +122,6 @@ $('#fieldCard').on('click', '.update-button', function () {
     $('#updateFieldModal').modal('show');
 });
 
-// Function to add dynamic Crop dropdown in the update modal
-$('#addFieldCropButtonUpdate').on('click', function() {
-    const loadAllCrop = new LoadCards();
-    loadAllCrop.loadAllCropCard().then(cropCode => {
-        addDropdown('#additionalFieldCropUpdate', 'fieldCropUpdate', cropCode);
-    });
-});
-
-// Function to add dynamic Staff dropdown in the update modal
-$('#addFieldStaffButtonUpdate').on('click', function() {
-    const loadAllStaff = new LoadAllStaffMember();
-    loadAllStaff.loadAllMembers().then(memberCode => {
-        addDropdown('#additionalStaffCropUpdate', 'staffCropUpdate', memberCode);
-    });
-});
-
-function populateDropdown(container, selectedValues, options) {
-    $(container).empty();
-    selectedValues.forEach(value => {
-        // Create a wrapper div for each dropdown and the remove button
-        const dropdownWrapper = $('<div class="dropdown-wrapper mb-3" style="display: flex; align-items: center;"></div>');
-
-        // Create the dropdown
-        const dropdown = $('<select class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>');
-        options.forEach(option => {
-            dropdown.append(`<option value="${option}" ${option.trim() === value ? 'selected' : ''}>${option}</option>`);
-        });
-
-        // Create the remove button
-        const removeButton = $('<button type="button" class="btn btn-danger ml-2">Remove</button>');
-
-        // Add click event to remove the dropdown when the button is clicked
-        removeButton.click(function() {
-            dropdownWrapper.remove();
-        });
-
-        // Append dropdown and remove button to the wrapper
-        dropdownWrapper.append(dropdown);
-        dropdownWrapper.append(removeButton);
-
-        // Append the wrapper to the container
-        $(container).append(dropdownWrapper);
-    });
-}
-
 //UPDATE FIELD CARD
 $("#updateFieldButton").on("click", async function() {
     let fieldCode = $('#selectedFieldCode').val();
@@ -187,35 +129,14 @@ $("#updateFieldButton").on("click", async function() {
     let updatedLocation = $("#updateFieldLocation").val();
     let updatedExtentSize = $("#updateExtentSize").val();
 
-    let updatedFieldCrop = [];
-    $("#updateFieldCropId select").each(function() {
-        let cropValue = $(this).val();
-        if (cropValue) {
-            updatedFieldCrop.push(cropValue);
-        }
-    });
-    $('#additionalFieldCropUpdate select').each(function () {
-        const selectedValue = $(this).val();
-        if (selectedValue) updatedFieldCrop.push(selectedValue);
-    });
-
-    let updatedFieldStaff = [];
-    $("#updateStaffCrop select").each(function() {
-        let staffValue = $(this).val();
-        if (staffValue) {
-            updatedFieldStaff.push(staffValue);
-        }
-    });
-    $('#additionalStaffCropUpdate select').each(function () {
-        const selectedValue = $(this).val();
-        if (selectedValue) updatedFieldStaff.push(selectedValue);
-    });
+    let updatedFieldCrop = collectSelectedValues('#updateFieldCropId select', '#additionalFieldCropUpdate select');
+    let updatedFieldStaff = collectSelectedValues('#updateStaffCrop select', '#additionalStaffCropUpdate select');
 
     updatedFieldCrop = updatedFieldCrop.filter(id => ({cropCode:id}));
     updatedFieldStaff = updatedFieldStaff.filter(id => ({memberCode:id}));
 
-    let fieldImage1 = $('#updateFieldImage1Input')[0].files[0];
-    let fieldImage2 = $('#updateFieldImage2Input')[0].files[0];
+    let fieldImage1 = await handleLogImage('#updateFieldImage1Input','#updatePreview1');
+    let fieldImage2 = await handleLogImage('#updateFieldImage2Input','#updatePreview2');
 
     const formData = new FormData();
     formData.append("name", updatedFieldName);
@@ -284,6 +205,51 @@ $("#updateFieldButton").on("click", async function() {
         Swal.fire("Changes are not saved", "", "info");
     }
 });
+
+// Function to add dynamic Crop dropdown in the update modal
+$('#addFieldCropButtonUpdate').on('click', function() {
+    const loadAllCrop = new LoadCards();
+    loadAllCrop.loadAllCropCard().then(cropCode => {
+        addDropdown('#additionalFieldCropUpdate', 'fieldCropUpdate', cropCode);
+    });
+});
+
+// Function to add dynamic Staff dropdown in the update modal
+$('#addFieldStaffButtonUpdate').on('click', function() {
+    const loadAllStaff = new LoadAllStaffMember();
+    loadAllStaff.loadAllMembers().then(memberCode => {
+        addDropdown('#additionalStaffCropUpdate', 'staffCropUpdate', memberCode);
+    });
+});
+
+function populateDropdown(container, selectedValues, options) {
+    $(container).empty();
+    selectedValues.forEach(value => {
+        // Create a wrapper div for each dropdown and the remove button
+        const dropdownWrapper = $('<div class="dropdown-wrapper mb-3" style="display: flex; align-items: center;"></div>');
+
+        // Create the dropdown
+        const dropdown = $('<select class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>');
+        options.forEach(option => {
+            dropdown.append(`<option value="${option}" ${option.trim() === value ? 'selected' : ''}>${option}</option>`);
+        });
+
+        // Create the remove button
+        const removeButton = $('<button type="button" class="btn btn-danger ml-2">Remove</button>');
+
+        // Add click event to remove the dropdown when the button is clicked
+        removeButton.click(function() {
+            dropdownWrapper.remove();
+        });
+
+        // Append dropdown and remove button to the wrapper
+        dropdownWrapper.append(dropdown);
+        dropdownWrapper.append(removeButton);
+
+        // Append the wrapper to the container
+        $(container).append(dropdownWrapper);
+    });
+}
 
 $('#updateFieldImage1Input').on('click',function (){
     previewFieldImage("#updateFieldImage1Input","#updatePreview1");
@@ -356,6 +322,35 @@ $('#confirmDeleteModal').on('hidden.bs.modal', function () {
     $('.modal-backdrop').remove();
 });
 
+function collectSelectedValues(...selectors) {
+    let values = [];
+    selectors.forEach(selector => {
+        $(selector).each(function () {
+            const selectedValue = $(this).val();
+            if (selectedValue) values.push(selectedValue);
+        });
+    });
+    return values;
+}
+
+async function handleLogImage(input,preview) {
+    let logImage = $(input)[0].files[0];
+    if (!logImage) {
+        const previewImageSrc = $(preview).attr('src');
+        if (previewImageSrc) {
+            try {
+                const response = await fetch(previewImageSrc);
+                const blob = await response.blob();
+                return blob;
+            } catch (error) {
+                throw new Error('Failed to process the image. Please try again.');
+            }
+        } else {
+            throw new Error('No image provided!');
+        }
+    }
+    return logImage;
+}
 
 // Preview image in modal when file input changes
 function previewFieldImage(imageInputId,imgPreviewId){
