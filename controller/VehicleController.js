@@ -9,8 +9,9 @@ $(document).ready(function () {
     const loadAllVehicle = new LoadAllVehicleDetails();
 
     //SAVE VEHICLE
-    $("#modalSubmitButton").on("click", (e)=> {
+    $("#modalSubmitButton").on("click", async function (e) {
         e.preventDefault();
+        clickNewComboBoxBtn = 0;
 
         // Collect form data
         let licensePlateNumber = $("#licensePlateNumber").val();
@@ -32,41 +33,38 @@ $(document).ready(function () {
             memberCode: staffEquipment
         };
 
-        Swal.fire({
+        const result = await Swal.fire({
             title: "Do you want to save the changes?",
             showDenyButton: true,
             showCancelButton: true,
             confirmButtonText: "Save",
             denyButtonText: `Don't save`
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
+        });
+
+        if (result.isConfirmed) {
+            try {
+                await $.ajax({
                     url: "http://localhost:5050/api/v1/vehicles",
                     type: "POST",
                     contentType: "application/json",
                     data: JSON.stringify(vehicleDTO),
-                    success: function () {
-                        clickNewComboBoxBtn = 0;
-                        loadAllVehicle.loadVehicleTable().then(vehicleCode => {
-                            Swal.fire("Saved!", "", "success");
-                        }).catch(error =>{
-                            console.error("Error loading field cards:", error);
-                        });
-                        $('#additionalVehicleStaff').empty();
-                        $('#vehicle-modal').modal("hide");
-                    },
-                    error: function (xhr, status, error) {
-                        if (xhr.status === 400) {
-                            alert("Failed to save vehicle: Bad request");
-                        } else {
-                            alert("Failed to save vehicle: Server error");
-                        }
-                    }
                 });
-            } else if (result.isDenied) {
-                Swal.fire("Changes are not saved", "", "info");
+                await loadAllVehicle.loadVehicleTable();
+                Swal.fire("Saved!", "", "success");
+
+                $('#additionalVehicleStaff').empty();
+                $('#vehicle-modal').modal("hide");
+            } catch (xhr) {
+                console.error("Failed to save vehicle:", xhr);
+                if (xhr.status === 400) {
+                    Swal.fire("Error", "Failed to save vehicle: Bad request", "error");
+                } else {
+                    Swal.fire("Error", "Failed to save vehicle: Server error", "error");
+                }
             }
-        });
+        } else if (result.isDenied) {
+            Swal.fire("Changes are not saved", "", "info");
+        }
     });
 
     // SET DATA VEHICLE UPDATE MODAL
@@ -109,29 +107,29 @@ $(document).ready(function () {
     });
 
     // DELETE VEHICLE
-    $('#confirmVehicleDeleteYes').on('click', function () {
+    $('#confirmVehicleDeleteYes').on('click', async function () {
         const index = $(this).data('index'); // Get the stored index
+        try {
+            await $.ajax({
+                url: `http://localhost:5050/api/v1/vehicles/${index}`,
+                type: 'DELETE',
+            });
+            await loadAllVehicle.loadVehicleTable();
 
-        $.ajax({
-            url: `http://localhost:5050/api/v1/vehicles/${index}`,
-            type: 'DELETE',
-            success: function () {
-                loadAllVehicle.loadVehicleTable();
-                Swal.fire('Deleted!', 'The vehicle has been deleted.', 'success');
-            },
-            error: function (xhr, status, error) {
-                console.error("Error deleting vehicle:", error);
-                if (xhr.status === 404) {
-                    Swal.fire('Error', 'Vehicle not found!', 'error');
-                } else if (xhr.status === 400) {
-                    Swal.fire('Error', 'Invalid vehicle ID!', 'error');
-                } else {
-                    Swal.fire('Error', 'Failed to delete vehicle. Please try again.', 'error');
-                }
+            Swal.fire('Deleted!', 'The vehicle has been deleted.', 'success');
+        } catch (xhr) {
+            console.error("Error deleting vehicle:", xhr);
+            if (xhr.status === 404) {
+                Swal.fire('Error', 'Vehicle not found!', 'error');
+            } else if (xhr.status === 400) {
+                Swal.fire('Error', 'Invalid vehicle ID!', 'error');
+            } else {
+                Swal.fire('Error', 'Failed to delete vehicle. Please try again.', 'error');
             }
-        });
-        $('#confirmVehicleDeleteModal').modal('hide');
-        clearOverlayOfModal();
+        } finally {
+            $('#confirmVehicleDeleteModal').modal('hide');
+            clearOverlayOfModal();
+        }
     });
 
     //Delete modal No button
@@ -148,9 +146,7 @@ $(document).ready(function () {
     });
 
     // UPDATE VEHICLE DETAILS
-    $('#modalSubmitButtonUpdate').on('click', ()=> {
-
-        // Collect form data
+    $('#modalSubmitButtonUpdate').on('click', async function (){
         let vehicleCode = $("#selectedVehicleCode").val();
         let licensePlateNumber = $("#updateLicensePlateNumber").val();
         let vehicleName = $("#updateVehicleName").val();
@@ -172,38 +168,36 @@ $(document).ready(function () {
             remark: remark
         };
 
-        Swal.fire({
-            title: "Do you want to update the changes?",
-            showDenyButton: true,
-            showCancelButton: true,
-            confirmButtonText: "Update",
-            denyButtonText: `Don't update`
-        }).then((result) => {
+        try {
+            const result = await Swal.fire({
+                title: "Do you want to update the changes?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Update",
+                denyButtonText: `Don't update`
+            });
+
             if (result.isConfirmed) {
-                $.ajax({
+                await $.ajax({
                     url: `http://localhost:5050/api/v1/vehicles/${vehicleCode}`,
                     type: 'PUT',
                     contentType: 'application/json',
-                    data: JSON.stringify(vehicleDTO),
-                    success: function(response) {
-                        clickNewComboBoxBtn = 0;
-                        loadAllVehicle.loadVehicleTable().then(vehicleCode =>{
-                            Swal.fire("Saved!", "", "success");
-                            resetForm('#additionalVehicleStaffUpdate');
-                        }).catch(error =>{
-                            console.error("vehicle code not found:", error);
-                        });
-                        $('#updateVehicle-modal').modal("hide");
-                    },
-                    error: function(xhr, status, error) {
-                        console.error("Error updating vehicle:", error);
-                        alert("Failed to update vehicle. Please try again.");
-                    }
+                    data: JSON.stringify(vehicleDTO)
                 });
+                await loadAllVehicle.loadVehicleTable();
+
+                clickNewComboBoxBtn = 0;
+                resetForm('#additionalVehicleStaffUpdate');
+                $('#updateVehicle-modal').modal("hide");
+
+                Swal.fire("Updated!", "The vehicle details have been updated.", "success");
             } else if (result.isDenied) {
                 Swal.fire("Changes are not updated", "", "info");
             }
-        });
+        } catch (error) {
+            console.error("Error updating vehicle:", error);
+            Swal.fire("Error", "Failed to update vehicle. Please try again.", "error");
+        }
     });
 
     function resetForm(additionalField) {
@@ -322,6 +316,7 @@ export class LoadAllVehicleDetails{
                 url: "http://localhost:5050/api/v1/vehicles",
                 type: "GET",
                 success: function (vehicles) {
+                    $("#vehicleDetailsTable").empty();
                     vehicles.forEach(vehicle => {
                         const vehicleDetail = new Vehicle(
                             vehicle.vehicleCode,

@@ -433,72 +433,84 @@ function collectSelectedValues(...selectors) {
 }
 
 export class LoadAllStaffMember {
-    loadAllMembers() {
-        $('#staffDetailsTable').empty();  // Clear existing rows
+    async loadAllMembers() {
+         // Clear existing rows
         const tableBody = $("#staffDetailsTable");
         const memberCodes = [];
 
-        return new Promise((resolve, reject) => {
-            $.ajax({
+        try {
+            // Perform the GET request using await
+            const staffMembers = await $.ajax({
                 url: "http://localhost:5050/api/v1/staff",
                 type: "GET",
-                success: function (staffMembers) {
-                    staffMembers.forEach(staffMember => {
-                        const staffDetail = new Staff(
-                            staffMembers.memberCode,
-                            staffMember.firstName,
-                            staffMember.lastName,
-                            staffMember.joinedDate,
-                            staffMember.designation,
-                            staffMember.gender,
-                            staffMember.dateOfBirth,
-                            staffMember.addressLine1,
-                            staffMember.addressLine2,
-                            staffMember.addressLine3,
-                            staffMember.addressLine4,
-                            staffMember.addressLine5,
-                            staffMember.contactNo,
-                            staffMember.email,
-                            staffMember.role,
-                            staffMember.fieldCodeList || "No Fields",
-                            staffMember.vehicleList || "No Vehicle",
-                            staffMember.logList || "No logs",
-                            staffMember.equipmentList || "No Member"
-                        );
-                        memberCodes.push(staffMember.memberCode);
-                        const row = `
-                                <tr>
-                                    <td class="code">${staffMember.memberCode}</td>
-                                    <td class="fName">${staffDetail.firstName}</td>
-                                    <td class="lName">${staffDetail.lastName}</td>
-                                    <td class="designation">${staffDetail.designation}</td>
-                                    <td class="gender">${staffDetail.gender}</td>
-                                    <td class="joinedDate">${staffDetail.joinedDate}</td>
-                                    <td class="dob">${staffDetail.dob}</td>
-                                    <td class="buildingNo">${staffDetail.addressLine01}</td>
-                                    <td class="lane">${staffDetail.addressLine02}</td>
-                                    <td class="city">${staffDetail.addressLine03}</td>
-                                    <td class="state">${staffDetail.addressLine04}</td>
-                                    <td class="postalCode">${staffDetail.addressLine05}</td>
-                                    <td class="contactNo">${staffDetail.contactNo}</td>
-                                    <td class="email">${staffDetail.email}</td>
-                                    <td class="role">${staffDetail.role}</td>
-                                    <td class="fields">${staffDetail.fieldList}</td>
-                                    <td class="logs">${staffDetail.logList}</td>
-                                    <td class="vehicle">${staffDetail.vehicle}</td>
-                                    <td class="equipment">${staffDetail.equipmentList}</td>
-                                    <td><button class="btn btn-danger delete-button" data-index="${staffMember.memberCode}" data-bs-target="#confirmStaffDeleteModal">Delete</button></td>
-                                </tr>
-                            `;
-                        tableBody.append(row);
-                    });
-                    resolve(memberCodes);
-                },
-                error: function (xhr, status, error) {
-                    alert("Failed to retrieve staff data");
-                    reject(error);
-                }
             });
-        });
+            $('#staffDetailsTable').empty();
+            // Process the staff members
+            staffMembers.forEach(staffMember => {
+                const staffDetail = new Staff(
+                    staffMember.memberCode,
+                    staffMember.firstName,
+                    staffMember.lastName,
+                    staffMember.joinedDate,
+                    staffMember.designation,
+                    staffMember.gender,
+                    staffMember.dateOfBirth,
+                    staffMember.addressLine1,
+                    staffMember.addressLine2,
+                    staffMember.addressLine3,
+                    staffMember.addressLine4,
+                    staffMember.addressLine5,
+                    staffMember.contactNo,
+                    staffMember.email,
+                    staffMember.role,
+                    staffMember.fieldCodeList || "No Fields",
+                    staffMember.vehicleList || "No Vehicle",
+                    staffMember.logList || "No logs",
+                    staffMember.equipmentList || "No Member"
+                );
+
+                memberCodes.push(staffMember.memberCode);
+
+                const row = `
+                    <tr>
+                        <td class="code">${staffMember.memberCode}</td>
+                        <td class="fName">${staffDetail.firstName}</td>
+                        <td class="lName">${staffDetail.lastName}</td>
+                        <td class="designation">${staffDetail.designation}</td>
+                        <td class="gender">${staffDetail.gender}</td>
+                        <td class="joinedDate">${staffDetail.joinedDate}</td>
+                        <td class="dob">${staffDetail.dob}</td>
+                        <td class="buildingNo">${staffDetail.addressLine01}</td>
+                        <td class="lane">${staffDetail.addressLine02}</td>
+                        <td class="city">${staffDetail.addressLine03}</td>
+                        <td class="state">${staffDetail.addressLine04}</td>
+                        <td class="postalCode">${staffDetail.addressLine05}</td>
+                        <td class="contactNo">${staffDetail.contactNo}</td>
+                        <td class="email">${staffDetail.email}</td>
+                        <td class="role">${staffDetail.role}</td>
+                        <td class="fields">${staffDetail.fieldList}</td>
+                        <td class="logs">${staffDetail.logList}</td>
+                        <td class="vehicle">${staffDetail.vehicle}</td>
+                        <td class="equipment">${staffDetail.equipmentList}</td>
+                        <td>
+                            <button class="btn btn-danger delete-button" 
+                                data-index="${staffMember.memberCode}" 
+                                data-bs-target="#confirmStaffDeleteModal">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                tableBody.append(row);
+            });
+
+            // Return the member codes as the result
+            return memberCodes;
+        } catch (error) {
+            // Handle errors and alert the user
+            console.error("Failed to retrieve staff data:", error);
+            alert("Failed to retrieve staff data");
+            throw error;
+        }
     }
 }

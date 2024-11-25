@@ -26,7 +26,7 @@ $('#addStaffButton').on('click', function() {
 });
 
 //SAVE EQUIPMENT
-$('#addEquipmentButton').on('click',(e)=>{
+$('#addEquipmentButton').on('click',async function (e){
     e.preventDefault();
     let equipmentName = $("#equipmentName").val();
     let equipmentType = $("#equipmentType").val();
@@ -45,39 +45,49 @@ $('#addEquipmentButton').on('click',(e)=>{
         fieldList:fieldEquipment
     }
 
-    Swal.fire({
-        title: "Do you want to save the changes?",
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: "Save",
-        denyButtonText: `Don't save`
-    }).then((result) => {
+    try {
+        const result = await Swal.fire({
+            title: "Do you want to save the changes?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Save",
+            denyButtonText: `Don't save`
+        });
+
         if (result.isConfirmed) {
-            $.ajax({
+            await $.ajax({
                 url: "http://localhost:5050/api/v1/equipment",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify(equipmentDTO),
-                success: function () {
-                    const loadAllEquipment = new LoadAllEquipment();
-                    loadAllEquipment.loadAllEquDetails().then(equ =>{
-                        Swal.fire("Saved!", "", "success");
-                    });
-                    clearEquipmentModalFields("#equipmentName","#equipmentType","#equipmentStatus","#count","#initialStaff select","#initialEquipment select","#additionalEquipmentStaff","#additionalEquipmentField");
-                    $("#equipment-modal").modal('hide');
-                },
-                error: function (xhr, status, error) {
-                    if (xhr.status === 400) {
-                        Swal.fire('Error', 'Failed to save equipment. Please try again.', 'error');
-                    } else {
-                        Swal.fire('Failed to save equipment: Server error.', 'error');
-                    }
-                }
             });
+
+            const loadAllEquipment = new LoadAllEquipment();
+            await loadAllEquipment.loadAllEquDetails();
+
+            clearEquipmentModalFields(
+                "#equipmentName",
+                "#equipmentType",
+                "#equipmentStatus",
+                "#count",
+                "#initialStaff select",
+                "#initialEquipment select",
+                "#additionalEquipmentStaff",
+                "#additionalEquipmentField"
+            );
+            $("#equipment-modal").modal("hide");
+            Swal.fire("Saved!", "The equipment has been added successfully.", "success");
         } else if (result.isDenied) {
             Swal.fire("Changes are not saved", "", "info");
         }
-    });
+    } catch (error) {
+        console.error("Error saving equipment:", error);
+        const errorMessage =
+            error.status === 400
+                ? "Failed to save equipment. Please check your input."
+                : "Failed to save equipment: Server error.";
+        Swal.fire("Error", errorMessage, "error");
+    }
 });
 
 // SET VALUES FOR UPDATE MODAL
@@ -118,7 +128,7 @@ $('#equipmentDetailsTable').on('click', 'tr', function () {
 });
 
 // UPDATE EQUIPMENT
-$('#EquipmentButtonUpdate').on('click', () => {
+$('#EquipmentButtonUpdate').on('click', async function () {
     let equCode = $("#selectedEquipmentCode").val();
     let equipmentName = $("#equipmentNameUpdate").val();
     let equipmentType = $("#equipmentTypeUpdate").val();
@@ -138,38 +148,53 @@ $('#EquipmentButtonUpdate').on('click', () => {
         fieldList:updatedFieldEquipment
     }
 
-    Swal.fire({
-        title: "Do you want to update the changes?",
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: "Update",
-        denyButtonText: `Don't update`
-    }).then((result) => {
+    try {
+        const result = await Swal.fire({
+            title: "Do you want to update the changes?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Update",
+            denyButtonText: `Don't update`
+        });
+
         if (result.isConfirmed) {
-            $.ajax({
+            // Make PUT request
+            await $.ajax({
                 url: `http://localhost:5050/api/v1/equipment/${equCode}`,
                 type: 'PUT',
                 contentType: 'application/json',
                 data: JSON.stringify(equipmentDTO),
-                success: function(response) {
-                    $('#updateEquipment-modal').modal('hide');
-                    const loadAllEquipment = new LoadAllEquipment();
-                    loadAllEquipment.loadAllEquDetails().then(equCodes =>{
-                        clearEquipmentModalFields("#equipmentNameUpdate","#equipmentTypeUpdate","#equipmentStatusUpdate","#countUpdate","#initialFieldEquipmentUpdate select","#initialStaffEquUpdate select","#additionalStaffEquUpdate","#additionalFieldEquipmentUpdate");
-                        Swal.fire("Updated!", "", "success");
-                    }).catch(error =>{
-                        console.error("equipment code not found:", error);
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error updating equipment:", error);
-                    alert("Failed to update equipment. Please try again.");
-                }
             });
+
+            // Close modal and reload equipment data
+            $('#updateEquipment-modal').modal('hide');
+            const loadAllEquipment = new LoadAllEquipment();
+            await loadAllEquipment.loadAllEquDetails();
+
+            // Clear modal fields and show success alert
+            clearEquipmentModalFields(
+                "#equipmentNameUpdate",
+                "#equipmentTypeUpdate",
+                "#equipmentStatusUpdate",
+                "#countUpdate",
+                "#initialFieldEquipmentUpdate select",
+                "#initialStaffEquUpdate select",
+                "#additionalStaffEquUpdate",
+                "#additionalFieldEquipmentUpdate"
+            );
+            Swal.fire("Updated!", "Equipment details have been updated successfully.", "success");
         } else if (result.isDenied) {
             Swal.fire("Changes are not updated", "", "info");
         }
-    });
+    } catch (error) {
+        console.error("Error updating equipment:", error);
+
+        const errorMessage =
+            error.status === 400
+                ? "Invalid input. Please check your data."
+                : "Failed to update equipment: Server error.";
+        Swal.fire("Error", errorMessage, "error");
+    }
 });
 
 //Add additional Field Update Modal
@@ -200,29 +225,32 @@ $('#equipmentDetailsTable').on('click', '.delete-button', function () {
 });
 
 // DELETE EQUIPMENT
-$('#confirmEquDeleteYes').on('click', function () {
+$('#confirmEquDeleteYes').on('click', async function () {
     const index = $(this).data('index');
-    $.ajax({
-        url: `http://localhost:5050/api/v1/equipment/${index}`,
-        type: 'DELETE',
-        success: function () {
-            const loadAllEquipment = new LoadAllEquipment();
-            loadAllEquipment.loadAllEquDetails();
-            Swal.fire('Deleted!', 'The equipment has been deleted.', 'success');
-        },
-        error: function (xhr, status, error) {
-            console.error("Error deleting equipment:", error);
-            if (xhr.status === 404) {
-                Swal.fire('Error', 'Equipment not found!', 'error');
-            } else if (xhr.status === 400) {
-                Swal.fire('Error', 'Invalid equipment ID!', 'error');
-            } else {
-                Swal.fire('Error', 'Failed to delete equipment. Please try again.', 'error');
-            }
+    try {
+        await $.ajax({
+            url: `http://localhost:5050/api/v1/equipment/${index}`,
+            type: 'DELETE',
+        });
+
+        const loadAllEquipment = new LoadAllEquipment();
+        await loadAllEquipment.loadAllEquDetails();
+
+        Swal.fire('Deleted!', 'The equipment has been deleted.', 'success');
+    } catch (xhr) {
+        console.error("Error deleting equipment:", xhr);
+        let errorMessage = 'Failed to delete equipment. Please try again.';
+        if (xhr.status === 404) {
+            errorMessage = 'Equipment not found!';
+        } else if (xhr.status === 400) {
+            errorMessage = 'Invalid equipment ID!';
         }
-    });
-    $('#confirmEquipmentDeleteModal').modal('hide');
-    clearOverlayOfModal();
+
+        Swal.fire('Error', errorMessage, 'error');
+    } finally {
+        $('#confirmEquipmentDeleteModal').modal('hide');
+        clearOverlayOfModal();
+    }
 });
 
 //No button
@@ -314,7 +342,6 @@ function clearEquipmentModalFields(equipmentName,equipmentType,equipmentStatus,c
 
 export class LoadAllEquipment{
     loadAllEquDetails(){
-        $('#equipmentDetailsTable').empty();
         const tableBody = $("#equipmentDetailsTable");
 
         const equipmentCodes = [];
@@ -324,6 +351,7 @@ export class LoadAllEquipment{
                 url: "http://localhost:5050/api/v1/equipment",
                 type: "GET",
                 success: function (equipment) {
+                    $('#equipmentDetailsTable').empty();
                     equipment.forEach(equ => {
                         const equDetail = new Equipment(
                             equ.equipmentCode,
