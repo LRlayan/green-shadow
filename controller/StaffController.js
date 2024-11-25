@@ -12,86 +12,80 @@ $('#staffNewBtn').on('click',function (){
     const currentDate = new CurrentDate();
     $('#joinedDate').val(currentDate.getCurrentFormattedDate());
 });
-$('#addFieldButtonInStaff').on('click',(e)=>{
+$('#addFieldButtonInStaff').on('click',async function (e){
     e.preventDefault();
-    let firstName = $("#firstName").val();
-    let lastName = $("#lastName").val();
-    let joinedDate = $("#joinedDate").val();
-    let designation = $("#designation").val();
-    let gender = $("#gender").val();
-    let dob = $("#dob").val();
-    let addressLine01 = $("#addressLine01").val();
-    let addressLine02 = $("#addressLine02").val();
-    let addressLine03 = $("#addressLine03").val();
-    let addressLine04 = $("#addressLine04").val();
-    let addressLine05 = $("#addressLine05").val();
-    let contactNo = $("#ContactNo").val();
-    let emailStaff = $("#emailStaff").val();
-    let roleStaff = $("#roleStaff").val();
+    try {
+        let firstName = $("#firstName").val();
+        let lastName = $("#lastName").val();
+        let joinedDate = $("#joinedDate").val();
+        let designation = $("#designation").val();
+        let gender = $("#gender").val();
+        let dob = $("#dob").val();
+        let addressLine01 = $("#addressLine01").val();
+        let addressLine02 = $("#addressLine02").val();
+        let addressLine03 = $("#addressLine03").val();
+        let addressLine04 = $("#addressLine04").val();
+        let addressLine05 = $("#addressLine05").val();
+        let contactNo = $("#ContactNo").val();
+        let emailStaff = $("#emailStaff").val();
+        let roleStaff = $("#roleStaff").val();
+        let fieldStaff = collectSelectedValues('#additionalStaffField select');
+        let staffVehicle = collectSelectedValues('#additionalStaffVehicle select');
+        let staffEquipment = collectSelectedValues('#additionalStaffEquipment select');
 
-    let fieldStaff = collectSelectedValues('#additionalStaffField select');
-    let staffVehicle = collectSelectedValues('#additionalStaffVehicle select');
-    let staffEquipment = collectSelectedValues('#additionalStaffEquipment select');
+        let staffDTO = {
+            firstName: firstName,
+            lastName: lastName,
+            joinedDate: joinedDate,
+            dateOfBirth: dob,
+            gender: gender,
+            designation: designation,
+            addressLine1: addressLine01,
+            addressLine2: addressLine02,
+            addressLine3: addressLine03,
+            addressLine4: addressLine04,
+            addressLine5: addressLine05,
+            contactNo: contactNo,
+            email: emailStaff,
+            role: roleStaff,
+            vehicleList: staffVehicle,
+            fieldCodeList: fieldStaff,
+            equipmentList: staffEquipment,
+        };
 
-    let staffDTO = {
-        firstName: firstName,
-        lastName: lastName,
-        joinedDate: joinedDate,
-        dateOfBirth: dob,
-        gender: gender,
-        designation: designation,
-        addressLine1: addressLine01,
-        addressLine2: addressLine02,
-        addressLine3: addressLine03,
-        addressLine4: addressLine04,
-        addressLine5: addressLine05,
-        contactNo: contactNo,
-        email: emailStaff,
-        role: roleStaff,
-        vehicleList: staffVehicle,
-        fieldCodeList: fieldStaff,
-        equipmentList: staffEquipment,
-    };
+        // Confirming save action with Swal
+        const result = await Swal.fire({
+            title: "Do you want to save the changes?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Save",
+            denyButtonText: `Don't save`
+        });
 
-    Swal.fire({
-        title: "Do you want to save the changes?",
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: "Save",
-        denyButtonText: `Don't save`
-    }).then((result) => {
         if (result.isConfirmed) {
-            $.ajax({
+            await $.ajax({
                 url: "http://localhost:5050/api/v1/staff",
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify(staffDTO),
-                success: function () {
-                    const allMember = new LoadAllStaffMember();
-                    allMember.loadAllMembers().then(staff =>{
-                        Swal.fire("Saved!", "", "success");
-                        console.log(staff)
-                    }).catch(error =>{
-                        console.error("Error loading staff member:", error);
-                    });
-                    $('#staffForm')[0].reset()
-                    $('#additionalStaffField').empty();
-                    $('#additionalStaffVehicle').empty();
-                    $('#additionalStaffEquipment').empty();
-                    $('#newStaffModal').modal('hide');
-                },
-                error: function (xhr, status, error) {
-                    if (xhr.status === 400) {
-                        alert("Failed to save staff: Bad request");
-                    } else {
-                        alert("Failed to save staff: Server error");
-                    }
-                }
             });
+
+            Swal.fire("Saved!", "", "success");
+            const allMember = new LoadAllStaffMember();
+            await allMember.loadAllMembers();
+
+            $('#staffForm')[0].reset();
+            $('#additionalStaffField').empty();
+            $('#additionalStaffVehicle').empty();
+            $('#additionalStaffEquipment').empty();
+            $('#newStaffModal').modal('hide');
         } else if (result.isDenied) {
             Swal.fire("Changes are not saved", "", "info");
         }
-    });
+    } catch (error) {
+        console.error("Error during staff creation:", error);
+        Swal.fire("Error", "Failed to save staff. Please try again.", "error");
+    }
 });
 
 //SET DATA UPDATE MODAL
@@ -158,73 +152,71 @@ $('#staffDetailsTable').on('click','tr', function (){
 });
 
 //UPDATE STAFF MEMBER
-$('#updateMemberButton').on('click',function (){
-    let memberCode = $('#selectedMemberCode').val();
-    let memberFirstName = $('#firstNameUpdate').val();
-    let memberLastName = $('#lastNameUpdate').val();
-    let joinedDate = $('#joinedDateUpdate').val();
-    let dob = $('#dobUpdate').val();
-    let addressLine01 = $('#addressLine01Update').val();
-    let addressLine02 = $('#addressLine02Update').val();
-    let addressLine03 = $('#addressLine03Update').val();
-    let addressLine04 = $('#addressLine04Update').val();
-    let addressLine05 = $('#addressLine05Update').val();
-    let contactNo = $('#ContactNoUpdate').val();
-    let email = $('#emailStaffUpdate').val();
-    let role = $('#roleStaffUpdate').val();
-    let designation = $('#designationUpdate').val();
-    let gender = $('#genderUpdate').val();
+$('#updateMemberButton').on('click',async function (){
+    try {
+        let memberCode = $('#selectedMemberCode').val();
+        let memberFirstName = $('#firstNameUpdate').val();
+        let memberLastName = $('#lastNameUpdate').val();
+        let joinedDate = $('#joinedDateUpdate').val();
+        let dob = $('#dobUpdate').val();
+        let addressLine01 = $('#addressLine01Update').val();
+        let addressLine02 = $('#addressLine02Update').val();
+        let addressLine03 = $('#addressLine03Update').val();
+        let addressLine04 = $('#addressLine04Update').val();
+        let addressLine05 = $('#addressLine05Update').val();
+        let contactNo = $('#ContactNoUpdate').val();
+        let email = $('#emailStaffUpdate').val();
+        let role = $('#roleStaffUpdate').val();
+        let designation = $('#designationUpdate').val();
+        let gender = $('#genderUpdate').val();
 
-    const staffDTO = {
-        memberCode:memberCode,
-        firstName:memberFirstName,
-        lastName:memberLastName,
-        joinedDate:joinedDate,
-        dateOfBirth:dob,
-        gender:gender,
-        designation:designation,
-        addressLine1:addressLine01,
-        addressLine2:addressLine02,
-        addressLine3:addressLine03,
-        addressLine4:addressLine04,
-        addressLine5:addressLine05,
-        contactNo:contactNo,
-        email:email,
-        role:role,
-    }
+        const staffDTO = {
+            memberCode:memberCode,
+            firstName:memberFirstName,
+            lastName:memberLastName,
+            joinedDate:joinedDate,
+            dateOfBirth:dob,
+            gender:gender,
+            designation:designation,
+            addressLine1:addressLine01,
+            addressLine2:addressLine02,
+            addressLine3:addressLine03,
+            addressLine4:addressLine04,
+            addressLine5:addressLine05,
+            contactNo:contactNo,
+            email:email,
+            role:role,
+        }
 
-    Swal.fire({
-        title: "Do you want to update the changes?",
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: "Update",
-        denyButtonText: `Don't update`
-    }).then((result) => {
+        // Confirm update action
+        const result = await Swal.fire({
+            title: "Do you want to update the changes?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Update",
+            denyButtonText: `Don't update`
+        });
+
         if (result.isConfirmed) {
-            $.ajax({
-                url: `http://localhost:5050/api/v1/staff/${memberCode}`, // Use the vehicleId from the clicked row
+            await $.ajax({
+                url: `http://localhost:5050/api/v1/staff/${memberCode}`,
                 type: 'PUT',
                 contentType: 'application/json',
                 data: JSON.stringify(staffDTO),
-                success: function(response) {
-                    resetForm("#updateStaffForm","#updateField","#updateVehicle","#updateEquipment","#additionalStaffEquipmentUpdate","#additionalStaffVehicleUpdate","#additionalStaffFieldUpdate");
-                    const loadAllStaff = new LoadAllStaffMember();
-                    loadAllStaff.loadAllMembers().then(memberCode =>{
-                        Swal.fire("Updated!", "", "success");
-                    }).catch(error =>{
-                        console.error("staff code not found:", error);
-                    });
-                    $('#updateStaffModal').modal('hide');
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error updating staff:", error);
-                    Swal.fire("Failed to update staff. Please try again.", "", "Error");
-                }
             });
+            Swal.fire("Updated!", "", "success");
+            const loadAllStaff = new LoadAllStaffMember();
+            await loadAllStaff.loadAllMembers();
+
+            resetForm("#updateStaffForm", "#updateField", "#updateVehicle", "#updateEquipment", "#additionalStaffEquipmentUpdate", "#additionalStaffVehicleUpdate", "#additionalStaffFieldUpdate");
+            $('#updateStaffModal').modal('hide');
         } else if (result.isDenied) {
             Swal.fire("Changes are not updated", "", "info");
         }
-    });
+    } catch (error) {
+        console.error("Error updating staff:", error);
+        Swal.fire("Error", "Failed to update staff. Please try again.", "error");
+    }
 });
 
 function resetForm(){
@@ -268,30 +260,33 @@ $('#staffDetailsTable').on('click', '.delete-button', function () {
 });
 
 //DELETE STAFF MEMBER
-$('#confirmDeleteYes').on('click', function () {
-    const index = $(this).data('index');
+$('#confirmDeleteYes').on('click', async function () {
+    try {
+        const index = $(this).data('index'); // Get the staff index to delete
 
-    $.ajax({
-        url: `http://localhost:5050/api/v1/staff/${index}`,
-        type: 'DELETE',
-        success: function () {
-            const loadAllStaffMember = new LoadAllStaffMember();
-            loadAllStaffMember.loadAllMembers();
-            Swal.fire('Deleted!', 'The staff has been deleted.', 'success');
-        },
-        error: function (xhr, status, error) {
-            console.error("Error deleting staff:", error);
-            if (xhr.status === 404) {
-                Swal.fire('Error', 'Staff not found!', 'error');
-            } else if (xhr.status === 400) {
-                Swal.fire('Error', 'Invalid staff ID!', 'error');
-            } else {
-                Swal.fire('Error', 'Failed to delete staff. Please try again.', 'error');
-            }
+        await $.ajax({
+            url: `http://localhost:5050/api/v1/staff/${index}`,
+            type: 'DELETE',
+        });
+        const loadAllStaffMember = new LoadAllStaffMember();
+        await loadAllStaffMember.loadAllMembers();
+
+        // Notify user of success
+        Swal.fire('Deleted!', 'The staff has been deleted.', 'success');
+
+    } catch (error) {
+        console.error("Error deleting staff:", error);
+        if (xhr.status === 404) {
+            Swal.fire('Error', 'Staff not found!', 'error');
+        } else if (xhr.status === 400) {
+            Swal.fire('Error', 'Invalid staff ID!', 'error');
+        } else {
+            Swal.fire('Error', 'Failed to delete staff. Please try again.', 'error');
         }
-    });
-    $('#confirmStaffDeleteModal').modal('hide');
-    clearOverlayOfModal();
+    } finally {
+        $('#confirmStaffDeleteModal').modal('hide');
+        clearOverlayOfModal();
+    }
 });
 
 //No button
