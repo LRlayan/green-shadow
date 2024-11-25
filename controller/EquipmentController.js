@@ -33,23 +33,8 @@ $('#addEquipmentButton').on('click',(e)=>{
     let equipmentStatus = $("#equipmentStatus").val();
     let count = $("#count").val();
 
-    // Collect multiple staff values
-    let staffEquipment = [];
-    $("#additionalEquipmentStaff select").each(function() {
-        let staff = $(this).val();
-        if (staff) {
-            staffEquipment.push(staff);
-        }
-    });
-
-    // Collect multiple field values
-    let fieldEquipment = [];
-    $("#additionalEquipmentField select").each(function() {
-        let field = $(this).val();
-        if (field) {
-            fieldEquipment.push(field);
-        }
-    });
+    let staffEquipment = collectSelectedValues('#additionalEquipmentStaff select');
+    let fieldEquipment = collectSelectedValues('#additionalEquipmentField select');
 
     let equipmentDTO = {
         name:equipmentName,
@@ -140,35 +125,8 @@ $('#EquipmentButtonUpdate').on('click', () => {
     let equipmentStatus = $("#equipmentStatusUpdate").val();
     let count = $("#countUpdate").val();
 
-    // Collect updated staff values
-    let updatedStaffEquipment = [];
-    $("#updateStaffEquipment select").each(function() {
-        let staffValue = $(this).val();
-        if (staffValue) {
-            updatedStaffEquipment.push(staffValue);
-        }
-    });
-
-    // Collect updated field values
-    let updatedFieldEquipment = [];
-    $("#updateEquipmentFieldId select").each(function() {
-        let fieldValue = $(this).val();
-        if (fieldValue) {
-            updatedFieldEquipment.push(fieldValue);
-        }
-    });
-
-    // Collect values from all Field dropdowns
-    $('#additionalFieldEquipmentUpdate select').each(function () {
-        const selectedValue = $(this).val();
-        if (selectedValue) updatedFieldEquipment.push(selectedValue);
-    });
-
-    // Collect values from all Staff Member dropdowns
-    $('#additionalStaffEquUpdate select').each(function () {
-        const selectedValue = $(this).val();
-        if (selectedValue) updatedStaffEquipment.push(selectedValue);
-    });
+    let updatedStaffEquipment = collectSelectedValues('#updateStaffEquipment select','#additionalStaffEquUpdate select');
+    let updatedFieldEquipment = collectSelectedValues('#updateEquipmentFieldId select','#additionalFieldEquipmentUpdate select');
 
     const equipmentDTO = {
         equipmentCode:equCode,
@@ -282,6 +240,17 @@ $('#equipment-modal').on('show.bs.modal', function (event) {
     }
 });
 
+function collectSelectedValues(...selectors) {
+    let values = [];
+    selectors.forEach(selector => {
+        $(selector).each(function () {
+            const selectedValue = $(this).val();
+            if (selectedValue) values.push(selectedValue);
+        });
+    });
+    return values;
+}
+
 function clearOverlayOfModal(){
     // Ensure the modal and backdrop are fully removed when hidden (overlay)
     $('#confirmEquipmentDeleteModal').on('hidden.bs.modal', function () {
@@ -289,6 +258,7 @@ function clearOverlayOfModal(){
         $('.modal-backdrop').remove();
     });
 }
+
 function resetForm(additionalInput1,additionalInput2){
     $('#equipmentForm')[0].reset();
     $(`${additionalInput1}`).empty();

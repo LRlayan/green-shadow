@@ -20,14 +20,7 @@ $(document).ready(function () {
         let status = $("#status").val();
         let remark = $("#remark").val();
 
-        // Collect multiple staff values
-        let staffEquipment = null;
-        $("#additionalVehicleStaff select").each(function() {
-            let staffValue = $(this).val();
-            if (staffValue) {
-                staffEquipment = staffValue;
-            }
-        });
+        let staffEquipment = collectSelectedValues('#additionalVehicleStaff select');
 
         let vehicleDTO = {
             licensePlateNumber: licensePlateNumber,
@@ -166,20 +159,7 @@ $(document).ready(function () {
         let status = $("#statusUpdate").val();
         let remark = $("#updateRemark").val();
 
-        // Collect updated staff values
-        let updatedStaffVehicle = [];
-        $("#updateStaffVehicle select").each(function() {
-            let staffValue = $(this).val();
-            if (staffValue) {
-                updatedStaffVehicle = staffValue;
-            }
-        });
-        $('#additionalVehicleStaffUpdate select').each(function () {
-            const selectedValue = $(this).val();
-            if (selectedValue) {
-                updatedStaffVehicle = selectedValue;
-            }
-        });
+        let updatedStaffVehicle = collectSelectedValues('#updateStaffVehicle select','#additionalVehicleStaffUpdate select');
 
         const vehicleDTO = {
             vehicleCode:vehicleCode,
@@ -319,6 +299,17 @@ $(document).ready(function () {
         });
     }
 });
+
+function collectSelectedValues(...selectors) {
+    let values = [];
+    selectors.forEach(selector => {
+        $(selector).each(function () {
+            const selectedValue = $(this).val();
+            if (selectedValue) values.push(selectedValue);
+        });
+    });
+    return values;
+}
 
 export class LoadAllVehicleDetails{
     loadVehicleTable() {

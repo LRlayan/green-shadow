@@ -29,31 +29,9 @@ $('#addFieldButtonInStaff').on('click',(e)=>{
     let emailStaff = $("#emailStaff").val();
     let roleStaff = $("#roleStaff").val();
 
-    // Collect multiple field values
-    let fieldStaff = [];
-    $("#additionalStaffField select").each(function() {
-        let fieldValue = $(this).val();
-        if (fieldValue) {
-            fieldStaff.push(fieldValue);
-        }
-    });
-    // Collect multiple staff values
-    let staffVehicle = [];
-    $("#additionalStaffVehicle select").each(function() {
-        let vehicle = $(this).val();
-        if (vehicle) {
-            staffVehicle.push(vehicle);
-        }
-    });
-
-    // Collect multiple staff values
-    let staffEquipment = [];
-    $("#additionalStaffEquipment select").each(function() {
-        let equValue = $(this).val();
-        if (equValue) {
-            staffEquipment.push(equValue);
-        }
-    });
+    let fieldStaff = collectSelectedValues('#additionalStaffField select');
+    let staffVehicle = collectSelectedValues('#additionalStaffVehicle select');
+    let staffEquipment = collectSelectedValues('#additionalStaffEquipment select');
 
     let staffDTO = {
         firstName: firstName,
@@ -196,19 +174,6 @@ $('#updateMemberButton').on('click',function (){
     let role = $('#roleStaffUpdate').val();
     let designation = $('#designationUpdate').val();
     let gender = $('#genderUpdate').val();
-
-    // Collect updated equipment values
-    let updatedEquipmentStaff = [];
-    $("#updateEquipment select").each(function() {
-        let equipmentValue = $(this).val();
-        if (equipmentValue) {
-            updatedEquipmentStaff.push(equipmentValue);
-        }
-    });
-    $('#additionalStaffEquipmentUpdate select').each(function () {
-        const selectedValue = $(this).val();
-        if (selectedValue) updatedEquipmentStaff.push(selectedValue);
-    });
 
     const staffDTO = {
         memberCode:memberCode,
@@ -435,7 +400,7 @@ function addDropdownStaff(containerId, selectClass, options, type, equipmentCoun
 // function updatePairsArray(comboBox, inputField) {
 //     const selectedValue = comboBox.val();
 //     const inputCount = inputField.val();
-
+//
     // Check if both combo box and input field have values
     // if (selectedValue && inputCount) {
     //     const existingPairIndex = pairsValues.findIndex(
@@ -459,6 +424,17 @@ function clearOverlayOfModal(){
         $('body').removeClass('modal-open'); // Removes the modal-open class from body
         $('.modal-backdrop').remove();       // Removes the leftover backdrop element
     });
+}
+
+function collectSelectedValues(...selectors) {
+    let values = [];
+    selectors.forEach(selector => {
+        $(selector).each(function () {
+            const selectedValue = $(this).val();
+            if (selectedValue) values.push(selectedValue);
+        });
+    });
+    return values;
 }
 
 export class LoadAllStaffMember {
