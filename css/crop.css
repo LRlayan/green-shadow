@@ -9,3 +9,7 @@
     height: 100%;
     object-fit: cover; /* Scales the image to cover the area while cropping excess */
 }
+.error-message {
+    font-size: 0.875rem; /* Slightly smaller text */
+    margin-top: 4px; /* Space above the error message */
+}

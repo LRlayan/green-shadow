@@ -391,16 +391,18 @@
                                             <!-- Crop Name -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" class="form-control text-white" id="cropName">
+                                                    <input type="text" class="form-control text-white" id="cropName" data-error="Crop Name is required and must contain only letters.">
                                                     <label for="cropName" class="form-label" style="margin-left: 0;">Crop Name</label>
                                                 </div>
+                                                <div class="error-message text-danger mt-1" style="display: none;"></div>
                                             </div>
                                             <!-- Crop Scientific Name -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" class="form-control text-white" id="crop-scientificName">
+                                                    <input type="text" class="form-control text-white" id="crop-scientificName" data-error="Scientific Name is required and must contain only letters.">
                                                     <label for="crop-scientificName" class="form-label" style="margin-left: 0;">Scientific Name</label>
                                                 </div>
+                                                <div class="error-message text-danger mt-1" style="display: none;"></div>
                                             </div>
                                         </div>
 
@@ -408,16 +410,18 @@
                                             <!-- Category -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" class="form-control text-white" id="crop-Category">
+                                                    <input type="text" class="form-control text-white" id="crop-Category" data-error="Category is required and must contain only letters.">
                                                     <label for="crop-Category" class="form-label" style="margin-left: 0;">Category</label>
                                                 </div>
+                                                <div class="error-message text-danger mt-1" style="display: none;"></div>
                                             </div>
                                             <!-- Crop Season -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" class="form-control text-white" id="crop-season">
+                                                    <input type="text" class="form-control text-white" id="crop-season" data-error="Crop Season is required and must contain only letters.">
                                                     <label for="crop-season" class="form-label" style="margin-left: 0;">Crop Season</label>
                                                 </div>
+                                                <div class="error-message text-danger mt-1" style="display: none;"></div>
                                             </div>
                                         </div>
 
@@ -438,15 +442,16 @@
                                             <!-- Crop Image -->
                                             <div class="col-md-6">
                                                 <label for="cropImageInput" class="form-label">Crop Image</label>
-                                                <input type="file" class="form-control" id="cropImageInput" name="cropImageInput" accept="image/*" style="background-color:#2B2B2B">
+                                                <input type="file" class="form-control" id="cropImageInput" name="cropImageInput" accept="image/*" style="background-color:#2B2B2B" data-error="A valid crop image is required.">
                                                 <img id="previewCropImg" alt="crop Image Preview" class="img-fluid mt-2 d-none image-preview" style="max-height: 150px;">
+                                                <div class="error-message text-danger mt-1" style="display: none;"></div>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-success" form="cropForm">Add Crop</button>
+                                    <button id="addCropBtn" type="submit" class="btn btn-success" form="cropForm" disabled>Add Crop</button>
                                 </div>
                             </div>
                         </div>
@@ -465,40 +470,45 @@
                                             <!-- Crop Name -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" class="form-control text-white" id="updateCropName">
+                                                    <input type="text" class="form-control text-white" id="updateCropName" data-error="Crop Name is required and must contain only letters.">
                                                     <label for="updateCropName" class="form-label" style="margin-left: 0;">Crop Name</label>
                                                 </div>
+                                                <div class="error-message text-danger mt-1" style="display: none;"></div>
                                             </div>
                                             <!-- Crop Scientific Name -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" class="form-control text-white" id="updateScientificName">
+                                                    <input type="text" class="form-control text-white" id="updateScientificName" data-error="Scientific Name is required and must contain only letters.">
                                                     <label for="updateScientificName" class="form-label" style="margin-left: 0;">Scientific Name</label>
                                                 </div>
+                                                <div class="error-message text-danger mt-1" style="display: none;"></div>
                                             </div>
                                         </div>
                                         <div class="row mb-3">
                                             <!-- Category -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" class="form-control text-white" id="updateCategory">
+                                                    <input type="text" class="form-control text-white" id="updateCategory" data-error="Category is required and must contain only letters." >
                                                     <label for="updateCategory" class="form-label" style="margin-left: 0;">Category</label>
                                                 </div>
+                                                <div class="error-message text-danger mt-1" style="display: none;"></div>
                                             </div>
                                             <!-- Crop Season -->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="text" class="form-control text-white" id="updateCropSeason">
+                                                    <input type="text" class="form-control text-white" id="updateCropSeason" data-error="Crop Season is required and must contain only letters.">
                                                     <label for="updateCropSeason" class="form-label" style="margin-left: 0;">Crop Season</label>
                                                 </div>
+                                                <div class="error-message text-danger mt-1" style="display: none;"></div>
                                             </div>
                                         </div>
                                         <!-- Crop Images -->
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <label for="updateCropImage" class="form-label">Crop Image</label>
-                                                <input type="file" class="form-control" id="updateCropImage" accept="image/*" style="background-color:#2B2B2B">
+                                                <input type="file" class="form-control" id="updateCropImage" accept="image/*" style="background-color:#2B2B2B" data-error="A valid crop image is required.">
                                                 <img id="updatePreview" alt="Preview Image 1" class="img-fluid mt-2 d-none" style="max-height: 150px;">
+                                                <div class="error-message text-danger mt-1" style="display: none;"></div>
                                             </div>
                                         </div>
                                         <input type="hidden" id="selectedCropCode" value="">

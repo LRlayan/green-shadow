@@ -2,6 +2,9 @@ import {LoadFieldCard} from './FieldController.js';
 
 $('#newCropButton').on('click',function (){
     clearAddModal();
+    $('#cropForm')[0].reset();
+    $('#cropForm input').removeClass('is-valid is-invalid');
+    $('#cropForm .error-message').hide();
 });
 
 // SAVE CROP
@@ -347,3 +350,59 @@ function clearAddModal(){
     $('#additionalField').empty();
 }
 
+// Validate text fields (Crop Name, Scientific Name, Category, Season)
+function validateTextField($field, errorMessage) {
+    const value = $field.val().trim();
+    const regex = /^[A-Za-z\s]+$/; // Allow only English letters and white spaces
+    const errorDiv = $field.closest('.col-md-6').find('.error-message');
+
+    if (!regex.test(value) || value === "") {
+        $field.addClass("is-invalid").removeClass("is-valid");
+        errorDiv.text(errorMessage).show(); // Show error message
+        return false;
+    } else {
+        $field.addClass("is-valid").removeClass("is-invalid");
+        errorDiv.hide(); // Hide error message
+        return true;
+    }
+}
+
+// Validate image field (Crop Image)
+function validateImageField($field, errorMessage) {
+    const file = $field[0].files[0];
+    const errorDiv = $field.siblings('.error-message');
+
+    if (!file || !file.type.startsWith("image/")) {
+        $field.addClass("is-invalid").removeClass("is-valid");
+        errorDiv.text(errorMessage).show(); // Show error message
+        return false;
+    } else {
+        $field.addClass("is-valid").removeClass("is-invalid");
+        errorDiv.hide(); // Hide error message
+        return true;
+    }
+}
+
+// Enable or disable Add Crop button
+function toggleAddCropButton(name,scientificName,category,season,imageInput,formId) {
+    const cropNameValid = validateTextField($(`${name}`), "Crop Name is required and must contain only letters.");
+    const cropScientificNameValid = validateTextField($(`${scientificName}`), "Scientific Name is required and must contain only letters.");
+    const cropCategoryValid = validateTextField($(`${category}`), "Category is required and must contain only letters.");
+    const cropSeasonValid = validateTextField($(`${season}`), "Crop Season is required and must contain only letters.");
+    const cropImageValid = validateImageField($(`${imageInput}`), "A valid crop image is required.");
+
+    // Enable button only if all fields are valid
+    const isFormValid = cropNameValid && cropScientificNameValid && cropCategoryValid && cropSeasonValid && cropImageValid;
+    $(`button[form=${formId}]`).prop("disabled", !isFormValid);
+}
+
+// Add modal
+$("#cropName, #crop-scientificName, #crop-Category, #crop-season").on("input", function () {
+    validateTextField($(this), $(this).data('error'));
+    toggleAddCropButton('#cropName','#crop-scientificName','#crop-Category','#crop-season','#cropImageInput','cropForm');
+});
+
+$("#cropImageInput").on("change", function () {
+    validateImageField($(this), $(this).data('error'));
+    toggleAddCropButton('#cropName','#crop-scientificName','#crop-Category','#crop-season','#cropImageInput','cropForm');
+});
