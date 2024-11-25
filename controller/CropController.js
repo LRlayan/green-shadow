@@ -13,19 +13,13 @@ $('#cropForm').on('submit', async function (e) {
     let scientificName = $('#crop-scientificName').val();
     let category = $('#crop-Category').val();
     let season = $('#crop-season').val();
-    let fieldIds = [];
 
-    // Collect all field IDs from the main select and additional fields
-    $('#crop-FieldId').val() && fieldIds.push($('#crop-FieldId').val()); // Add main select value if not empty
-    $('#additionalField select').each(function () {
-        let fields = $(this).val();
-        fieldIds.push(fields);
-    });
+    let updatedCropField = collectSelectedValues('#crop-FieldId select', '#additionalField select');
 
     // Remove empty values (if any)
-    fieldIds = fieldIds.filter(id => ({ fieldCode: id }));
+    updatedCropField = updatedCropField.filter(id => ({ fieldCode: id }));
 
-    let cropImageFile = $('#cropImageInput')[0].files[0];
+    let cropImageFile = await handleLogImage('#cropImageInput','#previewCropImg');
 
     const formData = new FormData();
     formData.append("cropName", cropName);
@@ -33,7 +27,7 @@ $('#cropForm').on('submit', async function (e) {
     formData.append("category", category);
     formData.append("season", season);
     formData.append("cropImage", cropImageFile);
-    formData.append("fieldList", new Blob([JSON.stringify(fieldIds)], { type: "application/json" }));
+    formData.append("fieldList", new Blob([JSON.stringify(updatedCropField)], { type: "application/json" }));
 
     const result = await Swal.fire({
         title: "Do you want to save the crop?",
@@ -53,7 +47,7 @@ $('#cropForm').on('submit', async function (e) {
                 contentType: false,
             });
             $('#cropForm')[0].reset();
-            $('#previewCrop').addClass('d-none');
+            $('#previewCropImg').addClass('d-none');
             $('#newCropModal').modal('hide');
 
             Swal.fire("Saved!", "The crop has been successfully saved.", "success");
@@ -267,6 +261,36 @@ $(document).ready(function() {
         $('.modal-backdrop').remove();
     });
 });
+
+function collectSelectedValues(...selectors) {
+    let values = [];
+    selectors.forEach(selector => {
+        $(selector).each(function () {
+            const selectedValue = $(this).val();
+            if (selectedValue) values.push(selectedValue);
+        });
+    });
+    return values;
+}
+
+async function handleLogImage(input,preview) {
+    let logImage = $(input)[0].files[0];
+    if (!logImage) {
+        const previewImageSrc = $(preview).attr('src');
+        if (previewImageSrc) {
+            try {
+                const response = await fetch(previewImageSrc);
+                const blob = await response.blob();
+                return blob;
+            } catch (error) {
+                throw new Error('Failed to process the image. Please try again.');
+            }
+        } else {
+            throw new Error('No image provided!');
+        }
+    }
+    return logImage;
+}
 
 export class LoadCards {
     loadAllCropCard() {
