@@ -135,7 +135,7 @@ $('#updateFieldModalButton').on('click',async function (){
     let scientificName = $('#updateScientificName').val();
     let category = $('#updateCategory').val();
     let season = $('#updateCropSeason').val();
-    let cropImage = $('#updateCropImage')[0].files[0];
+    let cropImage = await handleLogImage('#updateCropImage','#updatePreview');
 
     const formData = new FormData();
     formData.append("cropName", cropName);
