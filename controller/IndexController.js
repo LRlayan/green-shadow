@@ -16,30 +16,42 @@ $('#vehicle-sec').css({display:'none'});
 $('#equipment-sec').css({display:'none'});
 $('#sections-wrapper').css({display:'none'});
 
-$('#btn-signIn').on('click',function (){
-    $('#sections-wrapper').css({display:'block'});
-    $('#header-sec').css({display: 'block'});
-    $('#dashboard-sec').css({display:'block'});
-    $('#signInAndSignUp-sec').css({display: 'none'});
-    $('#field-sec').css({display:'none'});
-    $('#crops-sec').css({display:'none'});
-    $('#staff-sec').css({display:'none'});
-    $('#monitoring-log-sec').css({display:'none'});
-    $('#vehicle-sec').css({display:'none'});
-    $('#equipment-sec').css({display:'none'});
-});
+// $('#btn-signIn').on('click',function (){
+//     $('#sections-wrapper').css({display:'block'});
+//     $('#header-sec').css({display: 'block'});
+//     $('#dashboard-sec').css({display:'block'});
+//     $('#signInAndSignUp-sec').css({display: 'none'});
+//     $('#field-sec').css({display:'none'});
+//     $('#crops-sec').css({display:'none'});
+//     $('#staff-sec').css({display:'none'});
+//     $('#monitoring-log-sec').css({display:'none'});
+//     $('#vehicle-sec').css({display:'none'});
+//     $('#equipment-sec').css({display:'none'});
+// });
 
 $('#btn-logout').on('click',function (){
-    $('#signInAndSignUp-sec').css({display:'block'})
-    $('#sections-wrapper').css({display:'none'});
-    $('#header-sec').css({display:'none'});
-    $('#dashboard-sec').css({display:'none'});
-    $('#field-sec').css({display:'none'});
-    $('#crops-sec').css({display:'none'});
-    $('#staff-sec').css({display:'none'});
-    $('#monitoring-log-sec').css({display:'none'});
-    $('#vehicle-sec').css({display:'none'});
-    $('#equipment-sec').css({display:'none'});
+    const result = Swal.fire({
+        title: "Do you want to save the changes?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Save",
+        denyButtonText: `Don't save`
+    });
+
+    if (result.isConfirmed) {
+        $('#signInAndSignUp-sec').css({display:'block'})
+        $('#sections-wrapper').css({display:'none'});
+        $('#header-sec').css({display:'none'});
+        $('#dashboard-sec').css({display:'none'});
+        $('#field-sec').css({display:'none'});
+        $('#crops-sec').css({display:'none'});
+        $('#staff-sec').css({display:'none'});
+        $('#monitoring-log-sec').css({display:'none'});
+        $('#vehicle-sec').css({display:'none'});
+        $('#equipment-sec').css({display:'none'});
+    } else if (result.isDenied) {
+        Swal.fire("Not be Logout", "", "info");
+    }
 });
 
 $('#dashboard').on('click',function (){
