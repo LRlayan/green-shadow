@@ -20,6 +20,7 @@
     <link href="css/vehicle.css" rel="stylesheet">
     <link href="css/crop.css" rel="stylesheet">
     <link href="css/monitoring.css" rel="stylesheet">
+    <link href="css/forgetPassword.css" rel="stylesheet">
     <style>
         .image-side {
             background-image: url('assets/image/farmImg.jpg');
@@ -63,8 +64,8 @@
                     </div>
 
                     <!-- Right Login Form Section -->
-                    <div class="col-md-6 d-flex align-items-center justify-content-center login-panel">
-                        <div class="login-form w-75 p-0">
+                    <div class="col-md-6 d-flex align-items-center justify-content-center login-panel position-relative">
+                        <div id="loginForm" class="login-form w-75 p-0">
                             <!-- Tab Navigation for Sign Up and Sign In -->
                             <ul class="nav nav-tabs" id="loginTab" role="tablist">
                                 <li class="nav-item w-50" role="presentation">
@@ -86,7 +87,7 @@
                                         </div>
                                         <div class="mb-4 position-relative">
                                             <label for="password" class="form-label font-size-md">Password</label>
-                                            <a href="#" class="text-success forgot-password font-size-md text-success">Forgot Password?</a>
+                                            <a href="#" class="text-success forgot-password font-size-md">Forgot Password?</a>
                                             <div class="input-group">
                                                 <input type="password" class="form-control" id="password" placeholder="Enter your password">
                                                 <button class="btn btn-outline-secondary bg-white" type="button" id="togglePassword">
@@ -94,39 +95,7 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <button id="btn-signIn" type="button" class="btn btn-success btn-success w-100">Sign In</button>
-                                    </form>
-                                </div>
-
-                                <!-- Sign Up Tab -->
-                                <div class="tab-pane fade p-5" id="signUp" role="tabpanel" aria-labelledby="signUp-tab">
-                                    <form>
-                                        <div class="mb-3">
-                                            <label for="signupEmail" class="form-label font-size-md">Email</label>
-                                            <input type="email" class="form-control font-size-md" id="signupEmail" placeholder="example@gmail.com">
-                                        </div>
-
-                                        <!-- Role Dropdown -->
-                                        <div class="mb-3">
-                                            <label for="role" class="form-label font-size-md">Role</label>
-                                            <select class="form-select font-size-md" id="role">
-                                                <option value="" selected disabled>Select your role</option>
-                                                <option value="manager">MANAGER</option>
-                                                <option value="admin">ADMINISTRATIVE</option>
-                                                <option value="scientist">SCIENTIST</option>
-                                                <option value="other">OTHER</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <label for="signupPassword" class="form-label font-size-md">Password</label>
-                                            <input type="password" class="form-control" id="signupPassword">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="confirmPassword" class="form-label font-size-md">Confirm Password</label>
-                                            <input type="password" class="form-control" id="confirmPassword">
-                                        </div>
-                                        <button id="btn-signUp" type="submit" class="btn btn-success w-100">Sign Up</button>
+                                        <button id="btn-signIn" type="button" class="btn btn-success w-100">Sign In</button>
                                     </form>
                                 </div>
                             </div>
@@ -1729,4 +1698,5 @@
 <script type="module" src="controller/VehicleController.js"></script>
 <script type="module" src="controller/EquipmentController.js"></script>
 <script type="module" src="controller/SignInController.js"></script>
+<script type="module" src="controller/ForgetPasswordController.js"></script>
 </html>
