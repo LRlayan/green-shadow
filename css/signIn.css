@@ -68,3 +68,22 @@
 .text-success:hover{
     color: #0A6847 !important;
 }
+
+#togglePassword {
+    border: none;
+    background: none;
+    outline: none;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
+#togglePassword:hover i {
+    animation: blink 0.5s linear infinite;
+}
