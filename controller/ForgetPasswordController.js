@@ -27,7 +27,58 @@ $(document).ready(function () {
     $(document).on('click', '#dot1', function () {
         btnBackToForgetPassword();
     });
+    $(document).on('click', '#dot3', function () {
+        moveToChangePasswordPage();
+    });
+    $(document).on('click', '#btn-verifyOtp', function (e) {
+        e.preventDefault();
+        moveToChangePasswordPage();
+    });
 });
+
+function moveToChangePasswordPage() {
+    // Slide out the OTP page to the left
+    $('#otpWrapper').animate({ left: '-100%' }, 400, 'linear', function () {
+        $(this).remove(); // Remove the OTP page after animation
+
+        // Add the "Change Password" page content inside the #wrapper
+        const changePasswordHTML = `
+            <div id="changePasswordWrapper" class="mt-3 mx-2 m-5">
+                <form>
+                    <div class="text-center mb-3">
+                        <label class="fw-bold fs-4 text-white">Change Password</label>
+                        <hr class="mt-2 mb-4" style="width: 100%; margin: 0 auto; border: 1px solid #ccc;">
+                    </div>
+                    <div class="mb-3">
+                        <label for="newPassword" class="form-label font-size-md text-white">New Password</label>
+                        <input type="password" class="form-control font-size-md" id="newPassword" placeholder="Enter new password">
+                    </div>
+                    <div class="mb-3">
+                        <label for="retypePassword" class="form-label font-size-md text-white">Re-type Password</label>
+                        <input type="password" class="form-control font-size-md" id="retypePassword" placeholder="Re-enter new password">
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button id="btn-changePassword" type="submit" class="btn btn-success w-50">Change</button>
+                    </div>
+                </form>
+            </div>
+        `;
+
+        // Hide the children of #wrapper and append the "Change Password" content
+        $('#wrapper').children().hide();
+        $('#wrapper').append(changePasswordHTML);
+
+        // Initially position the "Change Password" page outside to the right
+        $('#changePasswordWrapper').css({ position: 'relative', left: '100%' });
+
+        // Animate "Change Password" page into view
+        $('#changePasswordWrapper').animate({ left: '0%' }, 400, 'linear', function () {
+            // Change the active dot (if using step indicators)
+            $('#dot3').addClass('active');
+            $('#dot1, #dot2').removeClass('active');
+        });
+    });
+}
 
 function backToSignIn() {
     // Slide out the forgot password form
@@ -41,15 +92,14 @@ function backToSignIn() {
 
 function btnBackToForgetPassword() {
     // Slide out the OTP page to the left
-    $('#otpWrapper').animate({ right: '100%' }, 400, function () {
+    $('#otpWrapper,#changePasswordWrapper').animate({ right: '100%' }, 400, function () {
         $(this).remove(); // Remove OTP page after animation
 
         // Show and slide in the Forgot Password form
         $('#wrapper').children().show(); // Show the original forgot password content
         $('#wrapper').animate({ right: '0%' }, 400, 'linear', function() {
             // Once forgot password form is fully in, change the active dot (second dot becomes active)
-            $('#dot3').removeClass('active');
-            $('#dot2').removeClass('active');
+            $('#dot3,#dot2').removeClass('active');
             $('#dot1').addClass('active');
         });
     });
@@ -60,21 +110,20 @@ function moveToOTPPage() {
     $('#wrapper').animate({ left: '-100%' }, 400, 'linear', function () {
         // Add OTP content inside the #wrapper div
         const otpPageHTML = `
-            <div id="otpWrapper" class="mt-3 m-5">
+            <div id="otpWrapper" class="mt-3 m-2">
                 <form>
                     <div class="text-center mb-3">
                         <label class="fw-bold fs-4 text-white">Enter OTP</label>
                         <hr class="mt-2 mb-4" style="width: 100%; margin: 0 auto; border: 1px solid #ccc;">
                     </div>
-                    <div class="mb-3 d-flex justify-content-center">
+                    <div class="mb-4 d-flex justify-content-center">
                         <input type="text" class="form-control otp-input mx-2" maxlength="1" id="otp1" />
                         <input type="text" class="form-control otp-input mx-2" maxlength="1" id="otp2" />
                         <input type="text" class="form-control otp-input mx-2" maxlength="1" id="otp3" />
                         <input type="text" class="form-control otp-input mx-2" maxlength="1" id="otp4" />
                     </div>
                     <div class="d-flex justify-content-center">
-                        <button id="btn-verifyOtp" type="submit" class="btn btn-success w-50">Verify OTP</button>
-<!--                        <button id="btn-backToForgotPassword" type="submit" class="btn btn-success w-50">Back</button>-->
+                        <button id="btn-verifyOtp" type="button" class="btn btn-success w-50 mb-3">Verify OTP</button>
                     </div>
                 </form>
             </div>
@@ -92,8 +141,7 @@ function moveToOTPPage() {
         $('#otpWrapper').animate({ left: '0%' }, 400, 'linear', function() {
             // Once OTP page is fully in, change the active dot (third dot becomes active)
             $('#dot2').addClass('active');
-            $('#dot3').removeClass('active');
-            $('#dot1').removeClass('active');
+            $('#dot3,#dot1').removeClass('active');
         });
     });
 }
@@ -107,7 +155,7 @@ function moveToForgetPasswordPage() {
         // Add and slide in the forgot password form inside the wrapper
         const forgotPasswordHTML = `
                 <div id="forgotPassword" class="position-absolute" style="background-color: #1e1e1e; width: 80%; top: 25%; left: 100%;">
-                    <div id="wrapper" class="mt-3 m-5">
+                    <div id="wrapper" class="mt-3 m-5 mb-2">
                         <form>
                             <div class="text-center mb-3">
                                 <label class="fw-bold fs-4 text-white">Forget Password</label>
