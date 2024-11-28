@@ -87,7 +87,12 @@
                                         <div class="mb-4 position-relative">
                                             <label for="password" class="form-label font-size-md">Password</label>
                                             <a href="#" class="text-success forgot-password font-size-md text-success">Forgot Password?</a>
-                                            <input type="password" class="form-control" id="password">
+                                            <div class="input-group">
+                                                <input type="password" class="form-control" id="password" placeholder="Enter your password">
+                                                <button class="btn btn-outline-secondary bg-white" type="button" id="togglePassword">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                         <button id="btn-signIn" type="button" class="btn btn-success btn-success w-100">Sign In</button>
                                     </form>
@@ -1723,4 +1728,5 @@
 <script type="module" src="controller/StaffController.js"></script>
 <script type="module" src="controller/VehicleController.js"></script>
 <script type="module" src="controller/EquipmentController.js"></script>
+<script type="module" src="controller/SignInController.js"></script>
 </html>
