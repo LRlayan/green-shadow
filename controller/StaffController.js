@@ -69,6 +69,9 @@ $('#addFieldButtonInStaff').on('click',async function (e){
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify(staffDTO),
+                headers:{
+                    "Authorization": "Bearer " + token
+                }
             });
 
             Swal.fire("Saved!", "", "success");

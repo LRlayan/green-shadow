@@ -61,6 +61,9 @@ $('#addEquipmentButton').on('click',async function (e){
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify(equipmentDTO),
+                headers:{
+                    "Authorization": "Bearer " + token
+                },
             });
 
             const loadAllEquipment = new LoadAllEquipment();

@@ -49,6 +49,9 @@ $('#cropForm').on('submit', async function (e) {
                 data: formData,
                 processData: false,
                 contentType: false,
+                headers:{
+                    "Authorization": "Bearer " + token
+                },
             });
             $('#cropForm')[0].reset();
             $('#previewCropImg').addClass('d-none');

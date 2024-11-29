@@ -50,7 +50,10 @@ const token = localStorage.getItem('jwtKey');
                     type: "POST",
                     data: formData,
                     processData: false,
-                    contentType: false
+                    contentType: false,
+                    headers:{
+                        "Authorization": "Bearer " + token
+                    }
                 });
 
                 Swal.fire("Saved!", "", "success");

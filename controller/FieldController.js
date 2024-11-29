@@ -46,6 +46,9 @@ $('#fieldForm').on('submit', async function (e) {
                 data: formData,
                 processData: false,
                 contentType: false,
+                headers:{
+                    "Authorization": "Bearer " + token
+                }
             });
 
             let loadFieldCard = new LoadFieldCard();

@@ -25,14 +25,17 @@ $(document).ready(function () {
         let staffEquipment = collectSelectedValues('#additionalVehicleStaff select');
 
         let vehicleDTO = {
+            vehicleCode:"1",
             licensePlateNumber: licensePlateNumber,
             name: vehicleName,
             category: category,
             fuelType: fuelType,
             status: status,
             remark: remark,
-            memberCode: staffEquipment
+            memberCode: staffEquipment[0]
         };
+
+        console.log("VEICLE DTO OBJ ON FRONT END  :  "+ vehicleDTO.vehicleCode , vehicleDTO.memberCode)
 
         const result = await Swal.fire({
             title: "Do you want to save the changes?",
@@ -49,6 +52,9 @@ $(document).ready(function () {
                     type: "POST",
                     contentType: "application/json",
                     data: JSON.stringify(vehicleDTO),
+                    headers:{
+                        "Authorization": "Bearer " + token
+                    }
                 });
                 await loadAllVehicle.loadVehicleTable();
                 Swal.fire("Saved!", "", "success");
