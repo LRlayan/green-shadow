@@ -1,6 +1,8 @@
 import { LoadCards } from './CropController.js';
 import { LoadAllStaffMember } from './StaffController.js';
 
+const token = localStorage.getItem('jwtKey');
+
 // SAVE MODAL
 $('#fieldForm').on('submit', async function (e) {
     e.preventDefault();
@@ -372,8 +374,11 @@ export class LoadFieldCard {
     loadAllFieldCard() {
         return new Promise((resolve, reject) => {
             $.ajax({
-                url: "http://localhost:5050/api/v1/fields",
+                url: "http://localhost:5050/api/v1/fields/getAllFields",
                 type: "GET",
+                headers:{
+                  "Authorization": "Bearer "+ token
+                },
                 success: function (fields) {
                     $("#fieldCard").empty();
                     const fieldCodes = fields.map(field => field.fieldCode);
