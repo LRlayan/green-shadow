@@ -185,6 +185,9 @@ $('#updateFieldModalButton').on('click',async function (){
                 data: formData,
                 processData: false,
                 contentType: false,
+                headers:{
+                    "Authorization": "Bearer " + token
+                }
             });
             $('#updateCropForm')[0].reset();
             $('#previewCrop').addClass('d-none');
@@ -246,6 +249,9 @@ $(document).ready(function() {
             const response = await $.ajax({
                 url: `http://localhost:5050/api/v1/crops/${cardId}`,
                 type: 'DELETE',
+                headers:{
+                    "Authorization": "Bearer " + token
+                }
             });
             Swal.fire('Deleted!', 'The crop has been deleted.', 'success');
             const loadCropCard = new LoadCards();

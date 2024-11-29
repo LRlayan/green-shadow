@@ -168,6 +168,9 @@ $('#EquipmentButtonUpdate').on('click', async function () {
                 type: 'PUT',
                 contentType: 'application/json',
                 data: JSON.stringify(equipmentDTO),
+                headers:{
+                    "Authorization": "Bearer " + token
+                }
             });
 
             // Close modal and reload equipment data
@@ -235,6 +238,9 @@ $('#confirmEquDeleteYes').on('click', async function () {
         await $.ajax({
             url: `http://localhost:5050/api/v1/equipment/${index}`,
             type: 'DELETE',
+            headers:{
+                "Authorization": "Bearer " + token
+            }
         });
 
         const loadAllEquipment = new LoadAllEquipment();

@@ -207,6 +207,9 @@ $('#updateMemberButton').on('click',async function (){
                 type: 'PUT',
                 contentType: 'application/json',
                 data: JSON.stringify(staffDTO),
+                headers:{
+                    "Authorization": "Bearer " + token
+                }
             });
             Swal.fire("Updated!", "", "success");
             const loadAllStaff = new LoadAllStaffMember();
@@ -271,6 +274,9 @@ $('#confirmDeleteYes').on('click', async function () {
         await $.ajax({
             url: `http://localhost:5050/api/v1/staff/${index}`,
             type: 'DELETE',
+            headers:{
+                "Authorization": "Bearer " + token
+            }
         });
         const loadAllStaffMember = new LoadAllStaffMember();
         await loadAllStaffMember.loadAllMembers();

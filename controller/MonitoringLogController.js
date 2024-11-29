@@ -169,6 +169,9 @@ const token = localStorage.getItem('jwtKey');
                     data: formData,
                     processData: false,
                     contentType: false,
+                    headers:{
+                        "Authorization": "Bearer " + token
+                    }
                 });
 
                 Swal.fire("Updated!", "Log information has been successfully updated.", "success");
@@ -234,6 +237,9 @@ async function handleLogImage(input,preview) {
             const response = await $.ajax({
                 url: `http://localhost:5050/api/v1/logs/${cardId}`,
                 type: 'DELETE',
+                headers:{
+                    "Authorization": "Bearer " + token
+                }
             });
             Swal.fire('Deleted!', 'The Logs card has been deleted.', 'success');
             const loadLogCard = new LoadAllLogs();

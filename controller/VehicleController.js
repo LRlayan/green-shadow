@@ -25,7 +25,7 @@ $(document).ready(function () {
         let staffEquipment = collectSelectedValues('#additionalVehicleStaff select');
 
         let vehicleDTO = {
-            vehicleCode:"1",
+            vehicleCode:"",
             licensePlateNumber: licensePlateNumber,
             name: vehicleName,
             category: category,
@@ -34,9 +34,6 @@ $(document).ready(function () {
             remark: remark,
             memberCode: staffEquipment[0]
         };
-
-        console.log("VEICLE DTO OBJ ON FRONT END  :  "+ vehicleDTO.vehicleCode , vehicleDTO.memberCode)
-
         const result = await Swal.fire({
             title: "Do you want to save the changes?",
             showDenyButton: true,
@@ -120,6 +117,9 @@ $(document).ready(function () {
             await $.ajax({
                 url: `http://localhost:5050/api/v1/vehicles/${index}`,
                 type: 'DELETE',
+                headers:{
+                    "Authorization": "Bearer " + token
+                }
             });
             await loadAllVehicle.loadVehicleTable();
 
@@ -171,7 +171,7 @@ $(document).ready(function () {
             category: category,
             fuelType: fuelType,
             status: status,
-            memberCode: updatedStaffVehicle,
+            memberCode: updatedStaffVehicle[0],
             remark: remark
         };
 
@@ -189,7 +189,10 @@ $(document).ready(function () {
                     url: `http://localhost:5050/api/v1/vehicles/${vehicleCode}`,
                     type: 'PUT',
                     contentType: 'application/json',
-                    data: JSON.stringify(vehicleDTO)
+                    data: JSON.stringify(vehicleDTO),
+                    headers:{
+                        "Authorization": "Bearer " + token
+                    }
                 });
                 await loadAllVehicle.loadVehicleTable();
 

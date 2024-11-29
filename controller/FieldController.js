@@ -189,7 +189,10 @@ $("#updateFieldButton").on("click", async function() {
                 type: "PUT",
                 data: formData,
                 processData: false,
-                contentType: false
+                contentType: false,
+                headers:{
+                    "Authorization": "Bearer " + token
+                }
             });
             $('#updateCropForm')[0].reset();
             $('#previewCrop').addClass('d-none');
@@ -290,7 +293,7 @@ $('#fieldCard').on('click', '.delete-button', function () {
     $('#confirmDeleteModal').modal('show');
 });
 
-// Handle the confirmation of the delete action
+// DELETE FIELD CARD
 $('#confirmDeleteButton').on('click', async function () {
     const cardId = $(this).data('field-code');
 
@@ -298,6 +301,9 @@ $('#confirmDeleteButton').on('click', async function () {
         const response = await $.ajax({
             url: `http://localhost:5050/api/v1/fields/${cardId}`,
             type: 'DELETE',
+            headers:{
+                "Authorization": "Bearer " + token
+            }
         });
 
         // Reload field cards
