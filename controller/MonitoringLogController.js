@@ -3,6 +3,7 @@ import {LoadAllStaffMember} from "./StaffController.js";
 import {LoadCards} from "./CropController.js";
 import {CurrentDate} from "./indexController.js";
 
+const token = localStorage.getItem('jwtKey');
     $('#newButton').on('click',function (){
         clearModel('#logDate','#log-details','previewCropLogImg','#logCropImageInput','#additionalLogStaff','#additionalLogCrop','#additionalLogField');
         const currentDate = new CurrentDate();
@@ -383,6 +384,9 @@ async function handleLogImage(input,preview) {
                 $.ajax({
                     url: "http://localhost:5050/api/v1/logs",
                     type: "GET",
+                    headers:{
+                        "Authorization": "Bearer " +token
+                    },
                     success: function (logs) {
                         $("#logCard").empty();
                         const logCodes = logs.map(log => log.logCode);

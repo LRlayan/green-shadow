@@ -1,6 +1,7 @@
 import Vehicle from "../model/Vehicle.js";
 import {LoadAllStaffMember} from './StaffController.js';
 
+const token = localStorage.getItem('jwtKey');
 $(document).ready(function () {
     let clickTableRow = 0;
     let clickNewComboBoxBtn = 0;
@@ -315,6 +316,9 @@ export class LoadAllVehicleDetails{
             $.ajax({
                 url: "http://localhost:5050/api/v1/vehicles",
                 type: "GET",
+                headers:{
+                    "Authorization": "Bearer " + token
+                },
                 success: function (vehicles) {
                     $("#vehicleDetailsTable").empty();
                     vehicles.forEach(vehicle => {

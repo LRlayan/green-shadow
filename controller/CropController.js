@@ -1,5 +1,6 @@
 import {LoadFieldCard} from './FieldController.js';
 
+const token = localStorage.getItem('jwtKey');
 $('#newCropButton').on('click',function (){
     clearAddModal();
     $('#cropForm')[0].reset();
@@ -301,6 +302,9 @@ export class LoadCards {
             $.ajax({
                 url: "http://localhost:5050/api/v1/crops",
                 type: "GET",
+                headers:{
+                    "Authorization": "Bearer " + token
+                },
                 success: function (crops) {
                     $("#cropCard").empty();
                     const cropCodes = crops.map(crop => crop.cropCode);

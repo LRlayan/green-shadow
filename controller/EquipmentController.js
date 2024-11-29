@@ -3,6 +3,7 @@ import {equipmentDetails} from "../db/db.js"
 import {LoadAllStaffMember} from "./StaffController.js";
 import {LoadFieldCard} from './FieldController.js';
 
+const token = localStorage.getItem('jwtKey');
 let clickTableRow = 0;
 
 //Add Field Modal
@@ -350,6 +351,9 @@ export class LoadAllEquipment{
             $.ajax({
                 url: "http://localhost:5050/api/v1/equipment",
                 type: "GET",
+                headers:{
+                    "Authorization": "Bearer " + token
+                },
                 success: function (equipment) {
                     $('#equipmentDetailsTable').empty();
                     equipment.forEach(equ => {

@@ -5,6 +5,7 @@ import {LoadFieldCard} from './FieldController.js';
 import {LoadAllVehicleDetails} from "./VehicleController.js";
 import {CurrentDate} from "./indexController.js";
 
+const token = localStorage.getItem('jwtKey')
 let clickTableRow = 0;
 
 //SAVE STAFF MEMBER
@@ -443,6 +444,9 @@ export class LoadAllStaffMember {
             const staffMembers = await $.ajax({
                 url: "http://localhost:5050/api/v1/staff",
                 type: "GET",
+                headers:{
+                    "Authorization": "Bearer " + token
+                },
             });
             $('#staffDetailsTable').empty();
             // Process the staff members
