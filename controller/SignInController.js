@@ -6,25 +6,22 @@ $('#btn-signIn').on('click',async function (e) {
         email : $('#email').val(),
         password : $('#password').val()
     }
-    console.log(signInUserDTO.email)
-    console.log(signInUserDTO.password)
-    try{
-        await $.ajax({
-           url: "http://localhost:5050//api/v1/auth/signIn",
-           type: "POST",
-           contentType: "application/json",
-           data: JSON.stringify(signInUserDTO),
-        });
-        loadComponent();
-        Swal.fire("Login", "", "success");
-    }catch (xhr){
-        console.error("Failed to SignIn:", xhr);
-        if (xhr.status === 400) {
-            Swal.fire("Error", "Failed to SignIn: Bad request", "error");
-        } else {
-            Swal.fire("Error", "Failed to SignIn: Server error", "error");
+    const data = JSON.stringify(signInUserDTO)
+    console.log(typeof data)
+    $.ajax({
+        url: "http://localhost:5050/api/v1/auth/signIn",
+        type: "POST",
+        contentType:"application/json",
+        data: data,
+        success: function(response) {
+            loadComponent();
+        },
+        error: function(xhr, status, error) {
+            console.error("Error: " + error);
+            Swal.fire("Data Fetch Error");
+            console.error("Response:", xhr.responseText);
         }
-    }
+    });
 });
 
 $("#togglePassword").on("click", function () {
