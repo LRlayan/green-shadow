@@ -1,3 +1,5 @@
+const token = localStorage.getItem('jwtKey');
+
 $(document).ready(function () {
     // Forgot Password click event
     $('.forgot-password').on('click', function (e) {
@@ -6,8 +8,39 @@ $(document).ready(function () {
     });
 
     // Reset Password click event (transition to OTP page)
-    $(document).on('click', '#btn-resetPassword', function (e) {
+    $(document).on('click', '#btn-resetPassword', async function (e) {
         e.preventDefault();
+        const otp = await getOTP();
+        if (otp!=null){
+            const userWithKeyDTO = {
+                email : $('#forgotEmail').val(),
+                code : otp
+            }
+            const response = sendEmailWithOTP(userWithKeyDTO);
+            if (response){
+                await Swal.fire({
+                    position: "bottom-start",
+                    icon: "success",
+                    title: "Please check your email.",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }else {
+                await Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Please Try Again!",
+                    footer: '<a href="#">Why do I have this issue?</a>'
+                });
+            }
+        }else {
+            await Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "resend OTP Code!",
+                // footer: '<a href="#">Why do I have this issue?</a>'
+            });
+        }
         moveToOTPPage();
     });
 
@@ -17,24 +50,79 @@ $(document).ready(function () {
     });
 
     // Back to Sign In click event
-    $(document).on('click', '#btn-backToSignIn', function () {
+    $(document).on('click', '#btn-backToSignIn', async function () {
         backToSignIn();
     });
 
     $(document).on('click', '#dot2', function () {
         moveToOTPPage();
     });
+
     $(document).on('click', '#dot1', function () {
         btnBackToForgetPassword();
     });
     $(document).on('click', '#dot3', function () {
         moveToChangePasswordPage();
     });
+
     $(document).on('click', '#btn-verifyOtp', function (e) {
         e.preventDefault();
         moveToChangePasswordPage();
     });
 });
+
+async function sendEmailWithOTP(userWithKeyDTO){
+    return new Promise(async (resolve, reject) => {
+        try {
+            await $.ajax({
+                url: "http://localhost:5050/api/v1/auth/sendCode",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(userWithKeyDTO),
+                success: function (OTPCode) {
+                    console.log("Success Send OTP",OTPCode)
+                },
+                error: function (xhr, status, error) {
+                    alert("Failed to retrieve OTP Code");
+                    reject(error);
+                }
+            });
+
+        } catch (xhr) {
+            console.error("Failed to save vehicle:", xhr);
+            if (xhr.status === 400) {
+                Swal.fire("Error", "Failed to send email: Bad request", "error");
+            } else {
+                Swal.fire("Error", "Failed to send email: Server error", "error");
+            }
+        }
+    });
+}
+async function getOTP() {
+    try {
+        return new Promise(async (resolve, reject) => {
+            await $.ajax({
+                url: "http://localhost:5050/api/v1/auth/getOTP",
+                type: "GET",
+                contentType: "application/json",
+                success: function (OTPCode) {
+                    resolve(OTPCode);
+                },
+                error: function (xhr, status, error) {
+                    alert("Failed to retrieve OTP Code");
+                    reject(error);
+                }
+            });
+        });
+    } catch (xhr) {
+        console.error("Failed to save vehicle:", xhr);
+        if (xhr.status === 400) {
+            Swal.fire("Error", "Failed to save vehicle: Bad request", "error");
+        } else {
+            Swal.fire("Error", "Failed to save vehicle: Server error", "error");
+        }
+    }
+}
 
 function moveToChangePasswordPage() {
     // Slide out the OTP page to the left
@@ -166,7 +254,7 @@ function moveToForgetPasswordPage() {
                                 <input type="email" class="form-control font-size-md" id="forgotEmail" placeholder="example@gmail.com">
                             </div>
                             <div class="d-flex justify-content-between gap-2">
-                                <button id="btn-resetPassword" type="submit" class="btn btn-success w-50">Reset Password</button>
+                                <button id="btn-resetPassword" type="button" class="btn btn-success w-50">Reset Password</button>
                                 <button id="btn-backToSignIn" type="button" class="btn btn-secondary w-50">Back to Sign In</button>
                             </div>
                         </form>
