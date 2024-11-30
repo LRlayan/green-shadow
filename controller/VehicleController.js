@@ -9,6 +9,13 @@ $(document).ready(function () {
     const loadAllMember = new LoadAllStaffMember();
     const loadAllVehicle = new LoadAllVehicleDetails();
 
+    $("#vehicleTableFilter").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#vehicleDetailsTable tr").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+    });
+
     //SAVE VEHICLE
     $("#modalSubmitButton").on("click", async function (e) {
         e.preventDefault();

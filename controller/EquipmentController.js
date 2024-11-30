@@ -6,6 +6,13 @@ import {LoadFieldCard} from './FieldController.js';
 const token = localStorage.getItem('jwtKey');
 let clickTableRow = 0;
 
+$("#equipmentTableFilter").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#equipmentDetailsTable tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+});
+
 //Add Field Modal
 $('#addFieldButtonEquipment').on('click', function() {
     const loadAllField = new LoadFieldCard();
