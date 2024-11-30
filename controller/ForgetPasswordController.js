@@ -1,6 +1,5 @@
-const token = localStorage.getItem('jwtKey');
-
 $(document).ready(function () {
+    let otp = null;
     // Forgot Password click event
     $('.forgot-password').on('click', function (e) {
         e.preventDefault();
@@ -10,7 +9,7 @@ $(document).ready(function () {
     // Reset Password click event (transition to OTP page)
     $(document).on('click', '#btn-resetPassword', async function (e) {
         e.preventDefault();
-        const otp = await getOTP();
+        otp = await getOTP();
         if (otp!=null){
             const userWithKeyDTO = {
                 email : $('#forgotEmail').val(),
@@ -65,9 +64,15 @@ $(document).ready(function () {
         moveToChangePasswordPage();
     });
 
-    $(document).on('click', '#btn-verifyOtp', function (e) {
+    $(document).on('click', '#btn-verifyOtp', async function (e) {
         e.preventDefault();
-        moveToChangePasswordPage();
+        let otpInput = await $('#otp1').val()+$('#otp2').val()+$('#otp3').val()+$('#otp4').val()
+        if (otpInput === otp){
+            $('#OTP-error').remove();
+            moveToChangePasswordPage();
+        }else {
+            $('#OTP-error').append(`<label style="color: red">Please Valid OTP-Code</label>`)
+        }
     });
 });
 
@@ -98,6 +103,7 @@ async function sendEmailWithOTP(userWithKeyDTO){
         }
     });
 }
+
 async function getOTP() {
     try {
         return new Promise(async (resolve, reject) => {
@@ -209,6 +215,8 @@ function moveToOTPPage() {
                         <input type="text" class="form-control otp-input mx-2" maxlength="1" id="otp2" />
                         <input type="text" class="form-control otp-input mx-2" maxlength="1" id="otp3" />
                         <input type="text" class="form-control otp-input mx-2" maxlength="1" id="otp4" />
+                    </div>
+                    <div id="OTP-error" class="mb-4 d-flex justify-content-center">
                     </div>
                     <div class="d-flex justify-content-center">
                         <button id="btn-verifyOtp" type="button" class="btn btn-success w-50 mb-3">Verify OTP</button>
