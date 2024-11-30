@@ -30,28 +30,29 @@ $('#sections-wrapper').css({display:'none'});
 // });
 
 $('#btn-logout').on('click',function (){
-    const result = Swal.fire({
-        title: "Do you want to save the changes?",
+    Swal.fire({
+        title: "Do you want to logout?",
         showDenyButton: true,
         showCancelButton: true,
-        confirmButtonText: "Save",
-        denyButtonText: `Don't save`
+        confirmButtonText: "Yes",
+        denyButtonText: `No`
+    }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+            $('#signInAndSignUp-sec').css({display:'block'})
+            $('#sections-wrapper').css({display:'none'});
+            $('#header-sec').css({display:'none'});
+            $('#dashboard-sec').css({display:'none'});
+            $('#field-sec').css({display:'none'});
+            $('#crops-sec').css({display:'none'});
+            $('#staff-sec').css({display:'none'});
+            $('#monitoring-log-sec').css({display:'none'});
+            $('#vehicle-sec').css({display:'none'});
+            $('#equipment-sec').css({display:'none'});
+        } else if (result.isDenied) {
+            Swal.fire("Changes are not saved", "", "info");
+        }
     });
-
-    if (result.isConfirmed) {
-        $('#signInAndSignUp-sec').css({display:'block'})
-        $('#sections-wrapper').css({display:'none'});
-        $('#header-sec').css({display:'none'});
-        $('#dashboard-sec').css({display:'none'});
-        $('#field-sec').css({display:'none'});
-        $('#crops-sec').css({display:'none'});
-        $('#staff-sec').css({display:'none'});
-        $('#monitoring-log-sec').css({display:'none'});
-        $('#vehicle-sec').css({display:'none'});
-        $('#equipment-sec').css({display:'none'});
-    } else if (result.isDenied) {
-        Swal.fire("Not be Logout", "", "info");
-    }
 });
 
 $('#dashboard').on('click',function (){
