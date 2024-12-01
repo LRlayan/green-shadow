@@ -4,6 +4,7 @@ import {LoadAllEquipment} from './EquipmentController.js';
 import {LoadFieldCard} from './FieldController.js';
 import {LoadAllVehicleDetails} from "./VehicleController.js";
 import {CurrentDate, HandlingErrors} from "./indexController.js";
+import {SignUp} from "./SignUpController.js";
 
 let clickTableRow = 0;
 
@@ -80,6 +81,16 @@ $('#addFieldButtonInStaff').on('click',async function (e){
                     "Authorization": "Bearer " + token
                 }
             });
+            if (roleStaff === "MANAGER" || roleStaff === "ADMINISTRATOR" || roleStaff === "SCIENTIST"){
+                const userDTO = {
+                    user_id:"",
+                    email:emailStaff,
+                    password:"1234",
+                    role:roleStaff
+                }
+                const signUpUser = new SignUp();
+                await signUpUser.saveUser(userDTO);
+            }
 
             Swal.fire("Saved!", "", "success");
             const allMember = new LoadAllStaffMember();
