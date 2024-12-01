@@ -1,5 +1,7 @@
 $(document).ready(function () {
     let otp = null;
+    let email = null;
+
     // Forgot Password click event
     $('.forgot-password').on('click', function (e) {
         e.preventDefault();
@@ -10,9 +12,10 @@ $(document).ready(function () {
     $(document).on('click', '#btn-resetPassword', async function (e) {
         e.preventDefault();
         otp = await getOTP();
+        email = $('#forgotEmail').val();
         if (otp!=null){
             const userWithKeyDTO = {
-                email : $('#forgotEmail').val(),
+                email : email,
                 code : otp
             }
             const response = sendEmailWithOTP(userWithKeyDTO);
@@ -29,7 +32,7 @@ $(document).ready(function () {
                     icon: "error",
                     title: "Oops...",
                     text: "Please Try Again!",
-                    footer: '<a href="#">Why do I have this issue?</a>'
+                    // footer: '<a href="#">Why do I have this issue?</a>'
                 });
             }
         }else {
@@ -60,6 +63,7 @@ $(document).ready(function () {
     $(document).on('click', '#dot1', function () {
         btnBackToForgetPassword();
     });
+
     $(document).on('click', '#dot3', function () {
         moveToChangePasswordPage();
     });
@@ -71,10 +75,61 @@ $(document).ready(function () {
             $('#OTP-error').remove();
             moveToChangePasswordPage();
         }else {
-            $('#OTP-error').append(`<label style="color: red">Please Valid OTP-Code</label>`)
+            $('#OTP-error').append(`<label style="color: red">Please Valid OTP-Code</label>`);
+        }
+    });
+
+    $(document).on('click','#btn-changePassword' , async function(e){
+        e.preventDefault();
+        if ($('#newPassword').val()===$('#retypePassword').val()){
+            await passwordChange(email);
+        }else {
+            $('#changePassword-error').append(`<label style="color: red">Please re-enter your new password</label>`)
         }
     });
 });
+
+async function passwordChange(email){
+    const passwordChangeDTO = {
+        email: email,
+        newPassword: $('#retypePassword').val()
+    }
+    return new Promise(async (resolve, reject) => {
+        try {
+            await $.ajax({
+                url: "http://localhost:5050/api/v1/auth/changePassword",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(passwordChangeDTO),
+                success: async function (response) {
+                    await Swal.fire({
+                        position: "bottom-start",
+                        icon: "success",
+                        title: "success change password",
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                },
+                error: async function (xhr, status, error) {
+                    await Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Please Try Again!",
+                        // footer: '<a href="#">Why do I have this issue?</a>'
+                    });
+                    reject(error);
+                }
+            });
+        } catch (xhr) {
+            console.error("Failed to save vehicle:", xhr);
+            if (xhr.status === 400) {
+                Swal.fire("Error", "Failed to send email: Bad request", "error");
+            } else {
+                Swal.fire("Error", "Failed to send email: Server error", "error");
+            }
+        }
+    });
+}
 
 async function sendEmailWithOTP(userWithKeyDTO){
     return new Promise(async (resolve, reject) => {
@@ -92,7 +147,6 @@ async function sendEmailWithOTP(userWithKeyDTO){
                     reject(error);
                 }
             });
-
         } catch (xhr) {
             console.error("Failed to save vehicle:", xhr);
             if (xhr.status === 400) {
@@ -150,6 +204,7 @@ function moveToChangePasswordPage() {
                     <div class="mb-3">
                         <label for="retypePassword" class="form-label font-size-md text-white">Re-type Password</label>
                         <input type="password" class="form-control font-size-md" id="retypePassword" placeholder="Re-enter new password">
+                        <div id="changePassword-error" class="mb-4 d-flex justify-content-center"></div>
                     </div>
                     <div class="d-flex justify-content-center">
                         <button id="btn-changePassword" type="submit" class="btn btn-success w-50">Change</button>
@@ -216,8 +271,7 @@ function moveToOTPPage() {
                         <input type="text" class="form-control otp-input mx-2" maxlength="1" id="otp3" />
                         <input type="text" class="form-control otp-input mx-2" maxlength="1" id="otp4" />
                     </div>
-                    <div id="OTP-error" class="mb-4 d-flex justify-content-center">
-                    </div>
+                    <div id="OTP-error" class="mb-4 d-flex justify-content-center"></div>
                     <div class="d-flex justify-content-center">
                         <button id="btn-verifyOtp" type="button" class="btn btn-success w-50 mb-3">Verify OTP</button>
                     </div>
