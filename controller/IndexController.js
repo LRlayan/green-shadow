@@ -147,3 +147,30 @@ export class LogOut {
         $('#equipment-sec').css({display:'none'});
     }
 }
+
+export class SessionExpired{
+    logOut() {
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "btn btn-success",
+                cancelButton: "btn btn-danger"
+            },
+            buttonsStyling: false
+        });
+        swalWithBootstrapButtons.fire({
+            title: "The Session expired?",
+            text: "You will have to log in to the system again.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Yes, SignIn!",
+            cancelButtonText: "No, cancel!",
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.removeItem("jwtToken");
+                const logOut1 = new LogOut();
+                logOut1.logOutTheSystem();
+            }
+        });
+    }
+}
