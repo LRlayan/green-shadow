@@ -1,7 +1,7 @@
 import Vehicle from "../model/Vehicle.js";
 import {LoadAllStaffMember} from './StaffController.js';
+import {HandlingErrors} from "./IndexController.js";
 
-const token = localStorage.getItem('jwtKey');
 $(document).ready(function () {
     let clickTableRow = 0;
     let clickNewComboBoxBtn = 0;
@@ -50,6 +50,7 @@ $(document).ready(function () {
         });
 
         if (result.isConfirmed) {
+            const token = localStorage.getItem('jwtKey');
             try {
                 await $.ajax({
                     url: "http://localhost:5050/api/v1/vehicles",
@@ -66,12 +67,8 @@ $(document).ready(function () {
                 $('#additionalVehicleStaff').empty();
                 $('#vehicle-modal').modal("hide");
             } catch (xhr) {
-                console.error("Failed to save vehicle:", xhr);
-                if (xhr.status === 400) {
-                    Swal.fire("Error", "Failed to save vehicle: Bad request", "error");
-                } else {
-                    Swal.fire("Error", "Failed to save vehicle: Server error", "error");
-                }
+                const errorHandling = new HandlingErrors();
+                errorHandling.handleError(xhr.status);
             }
         } else if (result.isDenied) {
             Swal.fire("Changes are not saved", "", "info");
@@ -120,6 +117,7 @@ $(document).ready(function () {
     // DELETE VEHICLE
     $('#confirmVehicleDeleteYes').on('click', async function () {
         const index = $(this).data('index'); // Get the stored index
+        const token = localStorage.getItem('jwtKey');
         try {
             await $.ajax({
                 url: `http://localhost:5050/api/v1/vehicles/${index}`,
@@ -132,14 +130,8 @@ $(document).ready(function () {
 
             Swal.fire('Deleted!', 'The vehicle has been deleted.', 'success');
         } catch (xhr) {
-            console.error("Error deleting vehicle:", xhr);
-            if (xhr.status === 404) {
-                Swal.fire('Error', 'Vehicle not found!', 'error');
-            } else if (xhr.status === 400) {
-                Swal.fire('Error', 'Invalid vehicle ID!', 'error');
-            } else {
-                Swal.fire('Error', 'Failed to delete vehicle. Please try again.', 'error');
-            }
+            const errorHandling = new HandlingErrors();
+            errorHandling.handleError(xhr.status);
         } finally {
             $('#confirmVehicleDeleteModal').modal('hide');
             clearOverlayOfModal();
@@ -192,6 +184,7 @@ $(document).ready(function () {
             });
 
             if (result.isConfirmed) {
+                const token = localStorage.getItem('jwtKey');
                 await $.ajax({
                     url: `http://localhost:5050/api/v1/vehicles/${vehicleCode}`,
                     type: 'PUT',
@@ -212,8 +205,8 @@ $(document).ready(function () {
                 Swal.fire("Changes are not updated", "", "info");
             }
         } catch (error) {
-            console.error("Error updating vehicle:", error);
-            Swal.fire("Error", "Failed to update vehicle. Please try again.", "error");
+            const errorHandling = new HandlingErrors();
+            errorHandling.handleError(error.status);
         }
     });
 
@@ -329,6 +322,7 @@ export class LoadAllVehicleDetails{
         const vehicleCodes = [];
 
         return new Promise((resolve, reject) => {
+            const token = localStorage.getItem('jwtKey');
             $.ajax({
                 url: "http://localhost:5050/api/v1/vehicles",
                 type: "GET",
@@ -367,7 +361,8 @@ export class LoadAllVehicleDetails{
                     resolve(vehicleCodes);
                 },
                 error: function (xhr, status, error) {
-                    alert("Failed to retrieve vehicle data");
+                    const errorHandling = new HandlingErrors();
+                    errorHandling.handleError(xhr.status);
                     reject(error);
                 }
             });
