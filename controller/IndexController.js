@@ -16,19 +16,6 @@ $('#vehicle-sec').css({display:'none'});
 $('#equipment-sec').css({display:'none'});
 $('#sections-wrapper').css({display:'none'});
 
-// $('#btn-signIn').on('click',function (){
-//     $('#sections-wrapper').css({display:'block'});
-//     $('#header-sec').css({display: 'block'});
-//     $('#dashboard-sec').css({display:'block'});
-//     $('#signInAndSignUp-sec').css({display: 'none'});
-//     $('#field-sec').css({display:'none'});
-//     $('#crops-sec').css({display:'none'});
-//     $('#staff-sec').css({display:'none'});
-//     $('#monitoring-log-sec').css({display:'none'});
-//     $('#vehicle-sec').css({display:'none'});
-//     $('#equipment-sec').css({display:'none'});
-// });
-
 $('#btn-logout').on('click',function (){
     Swal.fire({
         title: "Do you want to logout?",
