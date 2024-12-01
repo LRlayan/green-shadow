@@ -1,4 +1,5 @@
 import {LoadFieldCard} from './FieldController.js';
+import {HandlingErrors} from "./IndexController.js";
 
 $('#newCropButton').on('click',function (){
     clearAddModal();
@@ -61,8 +62,8 @@ $('#cropForm').on('submit', async function (e) {
             const loadCard = new LoadCards();
             await loadCard.loadAllCropCard();
         } catch (error) {
-            console.error("Error saving crop:", error);
-            Swal.fire("Error", "Failed to save the crop. Please try again.", "error");
+            const errorHandling = new HandlingErrors();
+            errorHandling.handleError(error.status);
         }
     } else if (result.isDenied) {
         Swal.fire("Changes are not saved", "No data was submitted.", "info");
@@ -200,8 +201,8 @@ $('#updateFieldModalButton').on('click',async function (){
             Swal.fire("Updated!", "Crop information has been successfully updated.", "success");
             await loadAllCrops.loadAllCropCard();
         } catch (error) {
-            console.error("Error updating crop:", error);
-            Swal.fire("Error", "Failed to update the crop. Please try again.", "error");
+            const errorHandling = new HandlingErrors();
+            errorHandling.handleError(error.status);
         }
     } else if (result.isDenied) {
         Swal.fire("Changes are not saved", "The crop update was canceled.", "info");
@@ -259,14 +260,8 @@ $(document).ready(function() {
             const loadCropCard = new LoadCards();
             loadCropCard.loadAllCropCard();
         } catch (xhr) {
-            console.error("Error deleting crop:", xhr.statusText);
-            if (xhr.status === 404) {
-                Swal.fire('Error', 'Crop not found!', 'error');
-            } else if (xhr.status === 400) {
-                Swal.fire('Error', 'Invalid crop ID!', 'error');
-            } else {
-                Swal.fire('Error', 'Failed to delete crop. Please try again.', 'error');
-            }
+            const errorHandling = new HandlingErrors();
+            errorHandling.handleError(xhr.status);
         }finally{
             $('#confirmCropDeleteModal').modal('hide');
         }
@@ -351,7 +346,8 @@ export class LoadCards {
                     resolve(cropCodes);
                 },
                 error: function (xhr, status, error) {
-                    alert("Failed to retrieve crops");
+                    const errorHandling = new HandlingErrors();
+                    errorHandling.handleError(xhr.status);
                     reject(error);
                 }
             });
