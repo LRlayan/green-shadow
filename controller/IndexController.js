@@ -26,16 +26,8 @@ $('#btn-logout').on('click',function (){
     }).then((result) => {
         /* Read more about isConfirmed, isDenied below */
         if (result.isConfirmed) {
-            $('#signInAndSignUp-sec').css({display:'block'})
-            $('#sections-wrapper').css({display:'none'});
-            $('#header-sec').css({display:'none'});
-            $('#dashboard-sec').css({display:'none'});
-            $('#field-sec').css({display:'none'});
-            $('#crops-sec').css({display:'none'});
-            $('#staff-sec').css({display:'none'});
-            $('#monitoring-log-sec').css({display:'none'});
-            $('#vehicle-sec').css({display:'none'});
-            $('#equipment-sec').css({display:'none'});
+            const logOut = new LogOut();
+            logOut.logOutTheSystem();
         } else if (result.isDenied) {
             Swal.fire("Changes are not saved", "", "info");
         }
@@ -138,5 +130,20 @@ export class CurrentDate {
         const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are zero-based
         const day = String(today.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}`;
+    }
+}
+
+export class LogOut {
+    logOutTheSystem(){
+        $('#signInAndSignUp-sec').css({display:'block'})
+        $('#sections-wrapper').css({display:'none'});
+        $('#header-sec').css({display:'none'});
+        $('#dashboard-sec').css({display:'none'});
+        $('#field-sec').css({display:'none'});
+        $('#crops-sec').css({display:'none'});
+        $('#staff-sec').css({display:'none'});
+        $('#monitoring-log-sec').css({display:'none'});
+        $('#vehicle-sec').css({display:'none'});
+        $('#equipment-sec').css({display:'none'});
     }
 }
