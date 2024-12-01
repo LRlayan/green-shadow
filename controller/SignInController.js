@@ -1,19 +1,18 @@
-
 $('#btn-signIn').on('click',async function (e) {
     e.preventDefault();
-
     const signInUserDTO = {
         email : $('#email').val(),
         password : $('#password').val()
     }
-    const data = JSON.stringify(signInUserDTO)
-    console.log(typeof data)
+    const data = JSON.stringify(signInUserDTO);
     $.ajax({
         url: "http://localhost:5050/api/v1/auth/signIn",
         type: "POST",
         contentType:"application/json",
         data: data,
-        success: function(response) {
+        success: async function(response) {
+            await localStorage.removeItem('jwtKey')
+            await localStorage.setItem('jwtKey', response.token)
             loadComponent();
         },
         error: function(xhr, status, error) {
