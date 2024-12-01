@@ -1,6 +1,5 @@
 import {LoadFieldCard} from './FieldController.js';
 
-const token = localStorage.getItem('jwtKey');
 $('#newCropButton').on('click',function (){
     clearAddModal();
     $('#cropForm')[0].reset();
@@ -42,6 +41,7 @@ $('#cropForm').on('submit', async function (e) {
     });
 
     if (result.isConfirmed) {
+        let token = localStorage.getItem('jwtKey');
         try {
             const response = await $.ajax({
                 url: "http://localhost:5050/api/v1/crops",
@@ -178,6 +178,7 @@ $('#updateFieldModalButton').on('click',async function (){
     });
 
     if (result.isConfirmed) {
+        let token = localStorage.getItem('jwtKey');
         try {
             const response = await $.ajax({
                 url: `http://localhost:5050/api/v1/crops/${cropCode}`,
@@ -245,6 +246,7 @@ $(document).ready(function() {
     });
     $('#confirmCropDeleteButton').on('click', async function () {
         const cardId = $(this).data('card-id');
+        let token = localStorage.getItem('jwtKey');
         try {
             const response = await $.ajax({
                 url: `http://localhost:5050/api/v1/crops/${cardId}`,
@@ -307,6 +309,7 @@ async function handleLogImage(input,preview) {
 
 export class LoadCards {
     loadAllCropCard() {
+        let token = localStorage.getItem('jwtKey');
         return new Promise((resolve, reject) => {
             $.ajax({
                 url: "http://localhost:5050/api/v1/crops",
