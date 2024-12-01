@@ -20,6 +20,9 @@ $(document).ready(function () {
             }
             const response = sendEmailWithOTP(userWithKeyDTO);
             if (response){
+                $(document).on('click', '#dot2', function () {
+                    moveToOTPPage();
+                });
                 await Swal.fire({
                     position: "bottom-start",
                     icon: "success",
@@ -56,16 +59,8 @@ $(document).ready(function () {
         backToSignIn();
     });
 
-    $(document).on('click', '#dot2', function () {
-        moveToOTPPage();
-    });
-
     $(document).on('click', '#dot1', function () {
         btnBackToForgetPassword();
-    });
-
-    $(document).on('click', '#dot3', function () {
-        moveToChangePasswordPage();
     });
 
     $(document).on('click', '#btn-verifyOtp', async function (e) {
@@ -74,6 +69,9 @@ $(document).ready(function () {
         if (otpInput === otp){
             $('#OTP-error').remove();
             moveToChangePasswordPage();
+            $(document).on('click', '#dot3', function () {
+                moveToChangePasswordPage();
+            });
         }else {
             errorMessages('#OTP-error','Please Valid OTP-Code');
         }
@@ -202,11 +200,21 @@ function moveToChangePasswordPage() {
                     </div>
                     <div class="mb-3">
                         <label for="newPassword" class="form-label font-size-md text-white">New Password</label>
-                        <input type="password" class="form-control font-size-md" id="newPassword" placeholder="Enter new password">
+                        <div class="input-group">
+                            <input type="password" class="form-control font-size-md" id="newPassword" placeholder="Enter your password">
+                            <button class="btn btn-outline-secondary bg-white" type="button" id="togglePasswordChange">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="retypePassword" class="form-label font-size-md text-white">Re-type Password</label>
-                        <input type="password" class="form-control font-size-md" id="retypePassword" placeholder="Re-enter new password">
+                        <div class="input-group">
+                            <input type="password" class="form-control font-size-md" id="retypePassword" placeholder="Re-enter new password">
+                            <button class="btn btn-outline-secondary bg-white" type="button" id="toggleReTypePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
                         <div id="changePassword-error" class="mb-4 d-flex justify-content-center"></div>
                     </div>
                     <div class="d-flex justify-content-center">
@@ -348,5 +356,26 @@ function errorMessages(appendErrorDiv,message) {
     const $errorDiv = $(appendErrorDiv);
     if ($errorDiv.find('label').length === 0){
         $('<label>' , {text: `${message}`}).css('color','#f01e2c').appendTo($errorDiv)
+    }
+}
+
+$(document).on('click','#togglePasswordChange',function (e) {
+    passwordVisibleOrDisable("#newPassword",$(this));
+});
+
+$(document).on('click','#toggleReTypePassword',function (e) {
+    passwordVisibleOrDisable("#retypePassword",$(this));
+});
+
+function passwordVisibleOrDisable(passwordInputId, buttonElement) {
+    const passwordField = $(passwordInputId);
+    const icon = buttonElement.find("i");
+
+    if (passwordField.attr("type") === "password") {
+        passwordField.attr("type", "text"); // Password view
+        icon.removeClass("fa-eye").addClass("fa-eye-slash");
+    } else {
+        passwordField.attr("type", "password"); // Password hidden
+        icon.removeClass("fa-eye-slash").addClass("fa-eye");
     }
 }
