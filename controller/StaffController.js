@@ -3,9 +3,8 @@ import {equipmentDetails} from "../db/db.js"
 import {LoadAllEquipment} from './EquipmentController.js';
 import {LoadFieldCard} from './FieldController.js';
 import {LoadAllVehicleDetails} from "./VehicleController.js";
-import {CurrentDate} from "./indexController.js";
+import {CurrentDate, HandlingErrors} from "./indexController.js";
 
-const token = localStorage.getItem('jwtKey')
 let clickTableRow = 0;
 
 $("#staffTableFilter").on("keyup", function() {
@@ -71,6 +70,7 @@ $('#addFieldButtonInStaff').on('click',async function (e){
         });
 
         if (result.isConfirmed) {
+            const token = localStorage.getItem('jwtKey')
             await $.ajax({
                 url: "http://localhost:5050/api/v1/staff",
                 type: "POST",
@@ -94,8 +94,8 @@ $('#addFieldButtonInStaff').on('click',async function (e){
             Swal.fire("Changes are not saved", "", "info");
         }
     } catch (error) {
-        console.error("Error during staff creation:", error);
-        Swal.fire("Error", "Failed to save staff. Please try again.", "error");
+        const errorHandling = new HandlingErrors();
+        errorHandling.handleError(error.status);
     }
 });
 
@@ -209,6 +209,7 @@ $('#updateMemberButton').on('click',async function (){
         });
 
         if (result.isConfirmed) {
+            const token = localStorage.getItem('jwtKey')
             await $.ajax({
                 url: `http://localhost:5050/api/v1/staff/${memberCode}`,
                 type: 'PUT',
@@ -228,8 +229,8 @@ $('#updateMemberButton').on('click',async function (){
             Swal.fire("Changes are not updated", "", "info");
         }
     } catch (error) {
-        console.error("Error updating staff:", error);
-        Swal.fire("Error", "Failed to update staff. Please try again.", "error");
+        const errorHandling = new HandlingErrors();
+        errorHandling.handleError(error.status);
     }
 });
 
@@ -266,7 +267,7 @@ function populateDropdownStaff(container, selectedValues, options, type) {
     });
 }
 
-//DELETE STAFF MEMBER
+//SHOW MODAL DELETE STAFF MEMBER
 $('#staffDetailsTable').on('click', '.delete-button', function () {
     const index = $(this).data('index');
     $('#confirmDeleteYes').data('index', index);
@@ -275,9 +276,9 @@ $('#staffDetailsTable').on('click', '.delete-button', function () {
 
 //DELETE STAFF MEMBER
 $('#confirmDeleteYes').on('click', async function () {
+    const index = $(this).data('index');
+    const token = localStorage.getItem('jwtKey')
     try {
-        const index = $(this).data('index'); // Get the staff index to delete
-
         await $.ajax({
             url: `http://localhost:5050/api/v1/staff/${index}`,
             type: 'DELETE',
@@ -292,14 +293,8 @@ $('#confirmDeleteYes').on('click', async function () {
         Swal.fire('Deleted!', 'The staff has been deleted.', 'success');
 
     } catch (error) {
-        console.error("Error deleting staff:", error);
-        if (xhr.status === 404) {
-            Swal.fire('Error', 'Staff not found!', 'error');
-        } else if (xhr.status === 400) {
-            Swal.fire('Error', 'Invalid staff ID!', 'error');
-        } else {
-            Swal.fire('Error', 'Failed to delete staff. Please try again.', 'error');
-        }
+        const errorHandling = new HandlingErrors();
+        errorHandling.handleError(error.status);
     } finally {
         $('#confirmStaffDeleteModal').modal('hide');
         clearOverlayOfModal();
@@ -451,6 +446,7 @@ function collectSelectedValues(...selectors) {
 
 export class LoadAllStaffMember {
     async loadAllMembers() {
+        const token = localStorage.getItem('jwtKey')
          // Clear existing rows
         const tableBody = $("#staffDetailsTable");
         const memberCodes = [];
@@ -523,14 +519,10 @@ export class LoadAllStaffMember {
                 `;
                 tableBody.append(row);
             });
-
-            // Return the member codes as the result
             return memberCodes;
         } catch (error) {
-            // Handle errors and alert the user
-            console.error("Failed to retrieve staff data:", error);
-            alert("Failed to retrieve staff data");
-            throw error;
+            const errorHandling = new HandlingErrors();
+            errorHandling.handleError(error.status);
         }
     }
 }
