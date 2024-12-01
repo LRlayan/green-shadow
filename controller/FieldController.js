@@ -1,5 +1,6 @@
 import { LoadCards } from './CropController.js';
 import { LoadAllStaffMember } from './StaffController.js';
+import { SessionExpired } from './IndexController.js';
 
 const token = localStorage.getItem('jwtKey');
 
@@ -449,16 +450,8 @@ function handleError(status) {
             Swal.fire("Unauthorized", "You are not authorized to perform this action.", "warning");
             break;
         case 403:
-            Swal.fire("Forbidden", "You do not have permission to access this resource.", "error");
-            Swal.fire({
-                title: "The Session expired?",
-                text: "You have to log again to system?",
-                icon: "question"
-            }).then(() => {
-                window.location.replace('index.html');
-                localStorage.removeItem("securityKey")
-                localStorage.removeItem("jwtToken")
-            });
+            const sessionExpired = new SessionExpired();
+            sessionExpired.logOut();
             break;
         case 404:
             Swal.fire("Not Found", "The requested resource could not be found.", "info");
