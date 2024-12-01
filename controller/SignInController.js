@@ -13,6 +13,7 @@ $('#btn-signIn').on('click',async function (e) {
         success: async function(response) {
             await localStorage.removeItem('jwtKey')
             await localStorage.setItem('jwtKey', response.token)
+            $('#signIn-form')[0].reset();
             loadComponent();
         },
         error: function(xhr, status, error) {
