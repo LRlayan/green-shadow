@@ -174,3 +174,29 @@ export class SessionExpired{
         });
     }
 }
+
+export class HandlingErrors {
+    handleError(status) {
+        switch (status) {
+            case 400:
+                Swal.fire("Bad Request", "The request was invalid. Please check your input and try again.", "error");
+                break;
+            case 401:
+                Swal.fire("Unauthorized", "You are not authorized to perform this action.", "warning");
+                break;
+            case 403:
+                const sessionExpired = new SessionExpired();
+                sessionExpired.logOut();
+                break;
+            case 404:
+                Swal.fire("Not Found", "The requested resource could not be found.", "info");
+                break;
+            case 500:
+                Swal.fire("Server Error", "An error occurred on the server. Please try again later.", "error");
+                break;
+            default:
+                Swal.fire("Error", "An unexpected error occurred. Please try again.", "error");
+                break;
+        }
+    }
+}
