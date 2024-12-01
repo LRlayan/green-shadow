@@ -62,7 +62,8 @@ $('#fieldForm').on('submit', async function (e) {
             clearFieldForm();
             await loadFieldCard.loadAllFieldCard();
         } catch (error) {
-            handleError(error.status)
+            const errorHandling = new HandlingErrors();
+            errorHandling.handleError(error.status);
         }
     } else if (swalResult.isDenied) {
         Swal.fire("Changes are not saved", "", "info");
@@ -208,7 +209,8 @@ $("#updateFieldButton").on("click", async function() {
 
             Swal.fire("Updated!", "", "success");
         } catch (error) {
-            handleError(error.status);
+            const errorHandling = new HandlingErrors();
+            errorHandling.handleError(error.status);
         }
     } else if (swalResult.isDenied) {
         Swal.fire("Changes are not saved", "", "info");
@@ -313,7 +315,8 @@ $('#confirmDeleteButton').on('click', async function () {
 
         Swal.fire('Deleted!', 'The field has been deleted successfully.', 'success');
     } catch (error) {
-        handleError(error.status)
+        const errorHandling = new HandlingErrors();
+        errorHandling.handleError(error.status);
     } finally {
         $('#confirmDeleteModal').modal('hide');
     }
