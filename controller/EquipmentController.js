@@ -2,8 +2,8 @@ import Equipment from "../model/Equipment.js";
 import {equipmentDetails} from "../db/db.js"
 import {LoadAllStaffMember} from "./StaffController.js";
 import {LoadFieldCard} from './FieldController.js';
+import {HandlingErrors} from "./indexController.js";
 
-const token = localStorage.getItem('jwtKey');
 let clickTableRow = 0;
 
 $("#equipmentTableFilter").on("keyup", function() {
@@ -63,6 +63,7 @@ $('#addEquipmentButton').on('click',async function (e){
         });
 
         if (result.isConfirmed) {
+            const token = localStorage.getItem('jwtKey');
             await $.ajax({
                 url: "http://localhost:5050/api/v1/equipment",
                 type: "POST",
@@ -92,12 +93,8 @@ $('#addEquipmentButton').on('click',async function (e){
             Swal.fire("Changes are not saved", "", "info");
         }
     } catch (error) {
-        console.error("Error saving equipment:", error);
-        const errorMessage =
-            error.status === 400
-                ? "Failed to save equipment. Please check your input."
-                : "Failed to save equipment: Server error.";
-        Swal.fire("Error", errorMessage, "error");
+        const errorHandling = new HandlingErrors();
+        errorHandling.handleError(error.status);
     }
 });
 
@@ -169,7 +166,7 @@ $('#EquipmentButtonUpdate').on('click', async function () {
         });
 
         if (result.isConfirmed) {
-            // Make PUT request
+            const token = localStorage.getItem('jwtKey');
             await $.ajax({
                 url: `http://localhost:5050/api/v1/equipment/${equCode}`,
                 type: 'PUT',
@@ -201,13 +198,8 @@ $('#EquipmentButtonUpdate').on('click', async function () {
             Swal.fire("Changes are not updated", "", "info");
         }
     } catch (error) {
-        console.error("Error updating equipment:", error);
-
-        const errorMessage =
-            error.status === 400
-                ? "Invalid input. Please check your data."
-                : "Failed to update equipment: Server error.";
-        Swal.fire("Error", errorMessage, "error");
+        const errorHandling = new HandlingErrors();
+        errorHandling.handleError(error.status);
     }
 });
 
@@ -241,6 +233,7 @@ $('#equipmentDetailsTable').on('click', '.delete-button', function () {
 // DELETE EQUIPMENT
 $('#confirmEquDeleteYes').on('click', async function () {
     const index = $(this).data('index');
+    const token = localStorage.getItem('jwtKey');
     try {
         await $.ajax({
             url: `http://localhost:5050/api/v1/equipment/${index}`,
@@ -255,15 +248,8 @@ $('#confirmEquDeleteYes').on('click', async function () {
 
         Swal.fire('Deleted!', 'The equipment has been deleted.', 'success');
     } catch (xhr) {
-        console.error("Error deleting equipment:", xhr);
-        let errorMessage = 'Failed to delete equipment. Please try again.';
-        if (xhr.status === 404) {
-            errorMessage = 'Equipment not found!';
-        } else if (xhr.status === 400) {
-            errorMessage = 'Invalid equipment ID!';
-        }
-
-        Swal.fire('Error', errorMessage, 'error');
+        const errorHandling = new HandlingErrors();
+        errorHandling.handleError(xhr.status);
     } finally {
         $('#confirmEquipmentDeleteModal').modal('hide');
         clearOverlayOfModal();
@@ -360,10 +346,10 @@ function clearEquipmentModalFields(equipmentName,equipmentType,equipmentStatus,c
 export class LoadAllEquipment{
     loadAllEquDetails(){
         const tableBody = $("#equipmentDetailsTable");
-
         const equipmentCodes = [];
 
         return new Promise((resolve, reject) => {
+            const token = localStorage.getItem('jwtKey');
             $.ajax({
                 url: "http://localhost:5050/api/v1/equipment",
                 type: "GET",
@@ -409,8 +395,8 @@ export class LoadAllEquipment{
                     resolve(equipmentCodes);
                 },
                 error: function (xhr, status, error) {
-                    alert("Failed to retrieve vehicle data");
-                    reject(error);
+                    const errorHandling = new HandlingErrors();
+                    errorHandling.handleError(xhr.status);
                 }
             });
         });
