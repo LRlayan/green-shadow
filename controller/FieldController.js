@@ -39,6 +39,7 @@ $('#fieldForm').on('submit', async function (e) {
     });
 
     if (swalResult.isConfirmed) {
+        let token = localStorage.getItem('jwtKey');
         try {
             const response = await $.ajax({
                 url: "http://localhost:5050/api/v1/fields",
@@ -60,8 +61,7 @@ $('#fieldForm').on('submit', async function (e) {
             clearFieldForm();
             await loadFieldCard.loadAllFieldCard();
         } catch (error) {
-            console.error("AJAX error:", error);
-            Swal.fire("Failed to save the field", "", "error");
+            handleError(error.status)
         }
     } else if (swalResult.isDenied) {
         Swal.fire("Changes are not saved", "", "info");
@@ -183,6 +183,7 @@ $("#updateFieldButton").on("click", async function() {
     });
 
     if (swalResult.isConfirmed) {
+        let token = localStorage.getItem('jwtKey');
         try {
             const response = await $.ajax({
                 url: `http://localhost:5050/api/v1/fields/${fieldCode}`,
@@ -206,8 +207,7 @@ $("#updateFieldButton").on("click", async function() {
 
             Swal.fire("Updated!", "", "success");
         } catch (error) {
-            console.error("Update failed:", error);
-            Swal.fire("Failed to update field", "", "error");
+            handleError(error.status);
         }
     } else if (swalResult.isDenied) {
         Swal.fire("Changes are not saved", "", "info");
@@ -285,7 +285,7 @@ function addDropdown(containerId, selectClass, options) {
     $(containerId).append($container);
 }
 
-//DELETE FIELD CARD
+//DELETE FIELD CARD SHOW
 $('#fieldCard').on('click', '.delete-button', function () {
     // Get the card ID from the delete button and set it on the confirm delete button
     const cardId = $(this).data('field-code');
@@ -296,7 +296,7 @@ $('#fieldCard').on('click', '.delete-button', function () {
 // DELETE FIELD CARD
 $('#confirmDeleteButton').on('click', async function () {
     const cardId = $(this).data('field-code');
-
+    let token = localStorage.getItem('jwtKey');
     try {
         const response = await $.ajax({
             url: `http://localhost:5050/api/v1/fields/${cardId}`,
@@ -312,16 +312,7 @@ $('#confirmDeleteButton').on('click', async function () {
 
         Swal.fire('Deleted!', 'The field has been deleted successfully.', 'success');
     } catch (error) {
-        console.error("Error deleting field:", error);
-        const status = error.status;
-
-        if (status === 404) {
-            Swal.fire('Error', 'Field not found!', 'error');
-        } else if (status === 400) {
-            Swal.fire('Error', 'Invalid field ID!', 'error');
-        } else {
-            Swal.fire('Error', 'Failed to delete the field. Please try again.', 'error');
-        }
+        handleError(error.status)
     } finally {
         $('#confirmDeleteModal').modal('hide');
     }
@@ -381,6 +372,7 @@ function previewFieldImage(imageInputId,imgPreviewId){
 
 export class LoadFieldCard {
     loadAllFieldCard() {
+        let token = localStorage.getItem('jwtKey');
         return new Promise((resolve, reject) => {
             $.ajax({
                 url: "http://localhost:5050/api/v1/fields/getAllFields",
@@ -440,7 +432,7 @@ export class LoadFieldCard {
                     resolve(fieldCodes);
                 },
                 error: function (xhr, status, error) {
-                    handleError(xhr);
+                    handleError(xhr.status);
                     reject(error);
                 }
             });
@@ -448,8 +440,8 @@ export class LoadFieldCard {
     }
 }
 
-function handleError(xhr) {
-    switch (xhr.status) {
+function handleError(status) {
+    switch (status) {
         case 400:
             Swal.fire("Bad Request", "The request was invalid. Please check your input and try again.", "error");
             break;
