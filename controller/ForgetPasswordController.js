@@ -75,16 +75,17 @@ $(document).ready(function () {
             $('#OTP-error').remove();
             moveToChangePasswordPage();
         }else {
-            $('#OTP-error').append(`<label style="color: red">Please Valid OTP-Code</label>`);
+            $('#OTP-error').append(`<label style="color: #f01e2c;">Please Valid OTP-Code</label>`);
         }
     });
 
     $(document).on('click','#btn-changePassword' , async function(e){
         e.preventDefault();
         if ($('#newPassword').val()===$('#retypePassword').val()){
+            $('#changePassword-error').remove();
             await passwordChange(email);
         }else {
-            $('#changePassword-error').append(`<label style="color: red">Please re-enter your new password</label>`)
+            $('#changePassword-error').append(`<label style="color: #f01e2c;">Please re-enter your new password</label>`)
         }
     });
 });
@@ -109,6 +110,8 @@ async function passwordChange(email){
                         showConfirmButton: false,
                         timer: 1500
                     });
+                    backToSignIn();
+                    reset();
                 },
                 error: async function (xhr, status, error) {
                     await Swal.fire({
@@ -192,7 +195,7 @@ function moveToChangePasswordPage() {
         // Add the "Change Password" page content inside the #wrapper
         const changePasswordHTML = `
             <div id="changePasswordWrapper" class="mt-3 mx-2 m-5">
-                <form>
+                <form id="changePassword">
                     <div class="text-center mb-3">
                         <label class="fw-bold fs-4 text-white">Change Password</label>
                         <hr class="mt-2 mb-4" style="width: 100%; margin: 0 auto; border: 1px solid #ccc;">
@@ -306,7 +309,7 @@ function moveToForgetPasswordPage() {
         const forgotPasswordHTML = `
                 <div id="forgotPassword" class="position-absolute" style="background-color: #1e1e1e; width: 80%; top: 25%; left: 100%;">
                     <div id="wrapper" class="mt-3 m-5 mb-2">
-                        <form>
+                        <form id="forgotPasswordForm">
                             <div class="text-center mb-3">
                                 <label class="fw-bold fs-4 text-white">Forget Password</label>
                                 <hr class="mt-2 mb-4" style="width: 100%; margin: 0 auto; border: 1px solid #ccc;">
@@ -334,4 +337,9 @@ function moveToForgetPasswordPage() {
         $('.login-panel').append(forgotPasswordHTML);
         $('#forgotPassword').css({ left: '100%' }).animate({ left: '12%' }, 400, 'linear');
     });
+}
+
+function reset() {
+    $('#changePassword')[0].reset();
+    $('#forgotPasswordForm')[0].reset();
 }
