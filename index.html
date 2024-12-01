@@ -21,6 +21,7 @@
     <link href="css/crop.css" rel="stylesheet">
     <link href="css/monitoring.css" rel="stylesheet">
     <link href="css/forgetPassword.css" rel="stylesheet">
+    <link href="css/signUp.css" rel="stylesheet">
     <style>
         .image-side {
             background-image: url('assets/image/farmImg.jpg');
@@ -96,6 +97,36 @@
                                             </div>
                                         </div>
                                         <button id="btn-signIn" type="button" class="btn btn-success w-100">Sign In</button>
+                                    </form>
+                                </div>
+
+                                <!-- Sign Up Tab -->
+                                <div class="tab-pane fade p-5" id="signUp" role="tabpanel" aria-labelledby="signUp-tab">
+                                    <form>
+                                        <div class="mb-2">
+                                            <label for="signupEmail" class="form-label font-size-md">Email</label>
+                                            <input type="email" class="form-control font-size-md" id="signupEmail" placeholder="example@gmail.com" required>
+                                        </div>
+                                        <!-- Role Dropdown -->
+                                        <div class="mb-2">
+                                            <label for="role" class="form-label font-size-md">Role</label>
+                                            <select class="form-select font-size-md" id="role" required>
+                                                <option value="" selected disabled>Select your role</option>
+                                                <option value="manager">MANAGER</option>
+                                                <option value="admin">ADMINISTRATIVE</option>
+                                                <option value="scientist">SCIENTIST</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-2">
+                                            <label for="signupPassword" class="form-label font-size-md">Password</label>
+                                            <input type="password" class="form-control" id="signupPassword" required>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label for="confirmPassword" class="form-label font-size-md">Confirm Password</label>
+                                            <input type="password" class="form-control" id="confirmPassword" required>
+                                        </div>
+                                        <button id="btn-signUp" type="button" class="btn btn-success w-100">Sign Up</button>
                                     </form>
                                 </div>
                             </div>
@@ -1699,4 +1730,5 @@
 <script type="module" src="controller/EquipmentController.js"></script>
 <script type="module" src="controller/SignInController.js"></script>
 <script type="module" src="controller/ForgetPasswordController.js"></script>
+<script type="module" src="controller/SignUpController.js"></script>
 </html>
