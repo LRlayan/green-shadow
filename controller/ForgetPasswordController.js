@@ -75,7 +75,7 @@ $(document).ready(function () {
             $('#OTP-error').remove();
             moveToChangePasswordPage();
         }else {
-            $('#OTP-error').append(`<label style="color: #f01e2c;">Please Valid OTP-Code</label>`);
+            errorMessages('#OTP-error','Please Valid OTP-Code');
         }
     });
 
@@ -85,7 +85,7 @@ $(document).ready(function () {
             $('#changePassword-error').remove();
             await passwordChange(email);
         }else {
-            $('#changePassword-error').append(`<label style="color: #f01e2c;">Please re-enter your new password</label>`)
+            errorMessages('#changePassword-error','Please re-enter your new password');
         }
     });
 });
@@ -342,4 +342,11 @@ function moveToForgetPasswordPage() {
 function reset() {
     $('#changePassword')[0].reset();
     $('#forgotPasswordForm')[0].reset();
+}
+
+function errorMessages(appendErrorDiv,message) {
+    const $errorDiv = $(appendErrorDiv);
+    if ($errorDiv.find('label').length === 0){
+        $('<label>' , {text: `${message}`}).css('color','#f01e2c').appendTo($errorDiv)
+    }
 }
