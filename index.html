@@ -136,7 +136,93 @@
             </div>
         </section>
         <section id="sections-wrapper" class="section-container m-3 p-3">
-            <section id="dashboard-sec"><p>welcome dashboard</p></section>
+            <section id="dashboard-sec">
+                <div class="container-fluid p-4 dashboard-container">
+                    <!-- Header Section -->
+                    <div class="row text-white align-items-center mb-4">
+                        <div class="col">
+                            <h3 class="fw-bold">Green Shadow PVT (Ltd)</h3>
+                        </div>
+                        <div class="col text-end">
+                            <p class="mb-0">Date: <span id="current-date"></span></p>
+                            <p class="mb-0">Time: <span id="current-time"></span></p>
+                        </div>
+                    </div>
+
+                    <!-- Available Counts Section -->
+                    <div class="row text-center mb-4">
+                        <div class="col-md-4">
+                            <div class="card stat-card">
+                                <h5>Available Employees</h5>
+                                <h2 class="stat-value">76</h2>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card stat-card">
+                                <h5>Available Equipment</h5>
+                                <h2 class="stat-value">90</h2>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card stat-card">
+                                <h5>Available Vehicles</h5>
+                                <h2 class="stat-value">63</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status Section -->
+                    <div class="row text-white">
+                        <div class="col-md-4">
+                            <div class="card status-card">
+                                <h5>Employee Status</h5>
+                                <ul class="status-list">
+                                    <li>Manager <span>1</span></li>
+                                    <li>Senior Assistant Manager <span>5</span></li>
+                                    <li>Assistant Manager <span>8</span></li>
+                                    <li>Admin and HR Staff <span>5</span></li>
+                                    <li>Office Assistant <span>15</span></li>
+                                    <li>Senior Agronomist <span>10</span></li>
+                                    <li>Agronomist <span>12</span></li>
+                                    <li>Soil Scientist <span>20</span></li>
+                                    <li class="text-danger">Senior Technician <span>0</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card status-card">
+                                <h5>Equipment Status</h5>
+                                <ul class="status-list">
+                                    <li>Hand Tools <span>20</span></li>
+                                    <li>Irrigation Equipment <span>5</span></li>
+                                    <li>Power Tools and Machinery <span>8</span></li>
+                                    <li class="text-danger">Ploughing <span>0</span></li>
+                                    <li>Weeding and Pest <span>15</span></li>
+                                    <li>Harvesting <span>10</span></li>
+                                    <li>Post-Harvest <span>12</span></li>
+                                    <li>Monitoring and Measuring Tools <span>20</span></li>
+                                    <li class="text-danger">Protective <span>0</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card status-card">
+                                <h5>Vehicle Status</h5>
+                                <ul class="status-list">
+                                    <li>Car <span>8</span></li>
+                                    <li>Van <span>5</span></li>
+                                    <li>Motorbikes <span>8</span></li>
+                                    <li class="text-danger">Tractors – Land Masters <span>0</span></li>
+                                    <li>Tractors – 4WD <span>15</span></li>
+                                    <li>Tankers Truck <span>10</span></li>
+                                    <li>Land Vehicles <span>12</span></li>
+                                    <li>Lorry <span>5</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
             <section id="field-sec">
                 <div class="container mt-4">
                     <!-- Search bar -->
@@ -1731,4 +1817,5 @@
 <script type="module" src="controller/SignInController.js"></script>
 <script type="module" src="controller/ForgetPasswordController.js"></script>
 <script type="module" src="controller/SignUpController.js"></script>
+<script type="module" src="controller/DashboardController.js"></script>
 </html>
