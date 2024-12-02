@@ -297,8 +297,9 @@ $('#staffDetailsTable').on('click', '.delete-button', function () {
 //DELETE STAFF MEMBER
 $('#confirmDeleteYes').on('click', async function () {
     const index = $(this).data('index');
-    const token = localStorage.getItem('jwtKey')
+    const token = localStorage.getItem('jwtKey');
     try {
+        await deleteUser(index);
         await $.ajax({
             url: `http://localhost:5050/api/v1/staff/${index}`,
             type: 'DELETE',
@@ -309,7 +310,6 @@ $('#confirmDeleteYes').on('click', async function () {
         const loadAllStaffMember = new LoadAllStaffMember();
         await loadAllStaffMember.loadAllMembers();
 
-        // Notify user of success
         Swal.fire('Deleted!', 'The staff has been deleted.', 'success');
 
     } catch (error) {
@@ -464,6 +464,17 @@ function collectSelectedValues(...selectors) {
     return values;
 }
 
+async function deleteUser(memberId){
+    const token = localStorage.getItem('jwtKey')
+    await $.ajax({
+        url: `http://localhost:5050/api/v1/user/${memberId}`,
+        type: 'DELETE',
+        headers:{
+            "Authorization": "Bearer " + token
+        }
+    });
+}
+
 export class LoadAllStaffMember {
     async loadAllMembers() {
         const token = localStorage.getItem('jwtKey')
@@ -577,8 +588,6 @@ async function validation(firstName, lastName, joinedDate, designation, gender, 
         $('#roleStaff').after('<div class="error-message" style="color: red;">Role is required.</div>');
         isValid = false;
     }
-
-
 
     // Validate lastName
     if (!lastName){
