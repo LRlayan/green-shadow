@@ -481,6 +481,7 @@ export class LoadAllStaffMember {
          // Clear existing rows
         const tableBody = $("#staffDetailsTable");
         const memberCodes = [];
+        const allEmail = [];
 
         try {
             // Perform the GET request using await
@@ -517,6 +518,7 @@ export class LoadAllStaffMember {
                 );
 
                 memberCodes.push(staffMember.memberCode);
+                allEmail.push(staffMember.email);
 
                 const row = `
                     <tr>
@@ -550,7 +552,7 @@ export class LoadAllStaffMember {
                 `;
                 tableBody.append(row);
             });
-            return memberCodes;
+            return {memberCodes , allEmail};
         } catch (error) {
             const errorHandling = new HandlingErrors();
             errorHandling.handleError(error.status);
@@ -581,6 +583,14 @@ async function validation(firstName, lastName, joinedDate, designation, gender, 
     } else if (!emailRegex.test(emailStaff)) {
         $('#emailParent').after('<div class="error-message" style="color: red;">Please enter a valid email address.</div>');
         isValid = false;
+    } else {
+        const loadEmail = new LoadAllStaffMember();
+        await loadEmail.loadAllMembers().then(({ memberCodes, allEmail }) => {
+            if (allEmail.includes(emailStaff)) {
+                $('#emailParent').after('<div class="error-message" style="color: red;">Not allowed duplicate email address.</div>');
+                isValid = false;
+            }
+        })
     }
 
     // Validate role
