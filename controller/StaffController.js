@@ -22,26 +22,29 @@ $('#staffNewBtn').on('click',function (){
 });
 $('#addFieldButtonInStaff').on('click',async function (e){
     e.preventDefault();
-    try {
-        let firstName = $("#firstName").val();
-        let lastName = $("#lastName").val();
+    $('.error-message').remove();
+
+        let firstName = $("#firstName").val().trim();
+        let lastName = $("#lastName").val().trim();
         let joinedDate = $("#joinedDate").val();
         let designation = $("#designation").val();
         let gender = $("#gender").val();
         let dob = $("#dob").val();
-        let addressLine01 = $("#addressLine01").val();
-        let addressLine02 = $("#addressLine02").val();
-        let addressLine03 = $("#addressLine03").val();
-        let addressLine04 = $("#addressLine04").val();
-        let addressLine05 = $("#addressLine05").val();
-        let contactNo = $("#ContactNo").val();
-        let emailStaff = $("#emailStaff").val();
+        let addressLine01 = $("#addressLine01").val().trim();
+        let addressLine02 = $("#addressLine02").val().trim();
+        let addressLine03 = $("#addressLine03").val().trim();
+        let addressLine04 = $("#addressLine04").val().trim();
+        let addressLine05 = $("#addressLine05").val().trim();
+        let contactNo = $("#ContactNo").val().trim();
+        let emailStaff = $("#emailStaff").val().trim();
         let roleStaff = $("#roleStaff").val();
         let fieldStaff = collectSelectedValues('#additionalStaffField select');
         let staffVehicle = collectSelectedValues('#additionalStaffVehicle select');
         let staffEquipment = collectSelectedValues('#additionalStaffEquipment select');
 
-        let staffDTO = {
+        let isValid = await validation(firstName, lastName, joinedDate, designation, gender, dob, addressLine01, addressLine02, addressLine03, addressLine04, addressLine05, contactNo, emailStaff, roleStaff);
+    try {
+        const staffDTO = {
             firstName: firstName,
             lastName: lastName,
             joinedDate: joinedDate,
@@ -61,48 +64,54 @@ $('#addFieldButtonInStaff').on('click',async function (e){
             equipmentList: staffEquipment,
         };
 
-        // Confirming save action with Swal
-        const result = await Swal.fire({
-            title: "Do you want to save the changes?",
-            showDenyButton: true,
-            showCancelButton: true,
-            confirmButtonText: "Save",
-            denyButtonText: `Don't save`
-        });
-
-        if (result.isConfirmed) {
-            const token = localStorage.getItem('jwtKey')
-            await $.ajax({
-                url: "http://localhost:5050/api/v1/staff",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(staffDTO),
-                headers:{
-                    "Authorization": "Bearer " + token
-                }
+        if (isValid) {
+            $('#addFieldButtonInStaff').prop('disabled', !isValid);
+            // Confirming save action with Swal
+            const result = await Swal.fire({
+                title: "Do you want to save the changes?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Save",
+                denyButtonText: `Don't save`
             });
-            if (roleStaff === "MANAGER" || roleStaff === "ADMINISTRATOR" || roleStaff === "SCIENTIST"){
-                const userDTO = {
-                    user_id:"",
-                    email:emailStaff,
-                    password:"1234",
-                    role:roleStaff
+
+            if (result.isConfirmed) {
+                const token = localStorage.getItem('jwtKey')
+                await $.ajax({
+                    url: "http://localhost:5050/api/v1/staff",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(staffDTO),
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                });
+                if (roleStaff === "MANAGER" || roleStaff === "ADMINISTRATOR" || roleStaff === "SCIENTIST") {
+                    const userDTO = {
+                        user_id: "",
+                        email: emailStaff,
+                        password: "1234",
+                        role: roleStaff
+                    }
+                    const signUpUser = new SignUp();
+                    await signUpUser.saveUser(userDTO);
                 }
-                const signUpUser = new SignUp();
-                await signUpUser.saveUser(userDTO);
+
+                Swal.fire("Saved!", "", "success");
+                $('.error-message').remove();
+                const allMember = new LoadAllStaffMember();
+                await allMember.loadAllMembers();
+
+                $('#staffForm')[0].reset();
+                $('#additionalStaffField').empty();
+                $('#additionalStaffVehicle').empty();
+                $('#additionalStaffEquipment').empty();
+                $('#newStaffModal').modal('hide');
+            } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
             }
-
-            Swal.fire("Saved!", "", "success");
-            const allMember = new LoadAllStaffMember();
-            await allMember.loadAllMembers();
-
-            $('#staffForm')[0].reset();
-            $('#additionalStaffField').empty();
-            $('#additionalStaffVehicle').empty();
-            $('#additionalStaffEquipment').empty();
-            $('#newStaffModal').modal('hide');
-        } else if (result.isDenied) {
-            Swal.fire("Changes are not saved", "", "info");
+        } else {
+            $('#addFieldButtonInStaff').prop('disabled', isValid);
         }
     } catch (error) {
         const errorHandling = new HandlingErrors();
@@ -537,3 +546,126 @@ export class LoadAllStaffMember {
         }
     }
 }
+
+async function validation(firstName, lastName, joinedDate, designation, gender, dob, buildingNo01, lane02, city03, state04, postalCode05, contactNo, emailStaff, roleStaff){
+    let isValid = true;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const nameRegex = /^[a-zA-Z]+$/;
+    const contactNoRegex = /^(?:0?(77|76|78|34|75|72|74)[0-9]{7}|(77|76|78|34|75|72|74)[0-9]{8})$/;
+    const numberRegex = /^\d+$/;
+
+    // Validate firstName
+    if (!firstName) {
+        $('#firstNameParent').after('<div class="error-message" style="color: red;">Please enter valid name.</div>');
+        isValid = false;
+    } else if (!nameRegex.test(firstName)){
+        $('#firstNameParent').after('<div class="error-message" style="color: red;">Please enter valid name.</div>');
+        isValid = false;
+    }
+
+    // Validate email
+    if (!emailStaff) {
+        $('#emailParent').after('<div class="error-message" style="color: red;">Email is required.</div>');
+        isValid = false;
+    } else if (!emailRegex.test(emailStaff)) {
+        $('#emailParent').after('<div class="error-message" style="color: red;">Please enter a valid email address.</div>');
+        isValid = false;
+    }
+
+    // Validate role
+    if (!roleStaff) {
+        $('#roleStaff').after('<div class="error-message" style="color: red;">Role is required.</div>');
+        isValid = false;
+    }
+
+
+
+    // Validate lastName
+    if (!lastName){
+        $('#lastNameParent').after('<div class="error-message" style="color: red;">Please enter valid name.</div>');
+        isValid = false;
+    }else if (!nameRegex.test(lastName)){
+        $('#lastNameParent').after('<div class="error-message" style="color: red;">Please enter valid name.</div>');
+        isValid = false;
+    }
+
+    // Validate designation
+    if (!designation) {
+        $('#designation').after('<div class="error-message" style="color: red;">Designation is required.</div>');
+        isValid = false;
+    }
+
+    // Validate gender
+    if (!gender) {
+        $('#gender').after('<div class="error-message" style="color: red;">Gender is required.</div>');
+        isValid = false;
+    }
+
+    // Validate Contact no
+    if (!contactNo) {
+        $('#contactNoParent').after('<div class="error-message" style="color: red;">Please enter valid mobile number.</div>');
+        isValid = false;
+    }else if (!contactNoRegex.test(contactNo)){
+        $('#contactNoParent').after('<div class="error-message" style="color: red;">Please enter valid mobile number.</div>');
+        isValid = false;
+    }
+
+    // Validate building no
+    if (!buildingNo01) {
+        $('#buildingNoParent').after('<div class="error-message" style="color: red;">Building no is required.</div>');
+        isValid = false;
+    }
+
+    // Validate lane
+    if (!lane02) {
+        $('#laneParent').after('<div class="error-message" style="color: red;">Lane is required.</div>');
+        isValid = false;
+    }
+
+    // Validate lane
+    if (!city03) {
+        $('#cityParent').after('<div class="error-message" style="color: red;">Please enter valid city.</div>');
+        isValid = false;
+    } else if (!nameRegex.test(city03)){
+        $('#cityParent').after('<div class="error-message" style="color: red;">Please enter valid city.</div>');
+        isValid = false;
+    }
+
+    // Validate state
+    if (!state04) {
+        $('#stateParent').after('<div class="error-message" style="color: red;">State is required.</div>');
+        isValid = false;
+    }
+
+    // Validate postal code
+    if (!postalCode05) {
+        $('#postalCodeParent').after('<div class="error-message" style="color: red;">Please enter valid postal code.</div>');
+        isValid = false;
+    }else if (!numberRegex.test(postalCode05)){
+        $('#postalCodeParent').after('<div class="error-message" style="color: red;">Please enter valid postal code.</div>');
+        isValid = false;
+    }
+
+    $('#dob').change(function (){
+        var dob = $('#dob').val();
+        var currentDate = new Date();
+
+        var year = currentDate.getFullYear();
+        var month = ("0" + (currentDate.getMonth() + 1)).slice(-2);
+        var day = ("0" + currentDate.getDate()).slice(-2);
+        var today = year+"-"+ month + "-" + day;
+        if (dob <= today){
+            $('.dob-error-ms').remove();
+            isValid = true;
+        }else {
+            $('#dobParent').after('<div class="error-message dob-error-ms" style="color: red;">Please enter valid date of birth.</div>');
+            isValid = false;
+        }
+    });
+
+    return isValid;
+}
+
+$('#btnAddStaffModalClose , .btn-close').on('click' , function (){
+    $('.error-message').remove();
+});
