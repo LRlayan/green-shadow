@@ -17,9 +17,29 @@ $('#btn-signIn').on('click',async function (e) {
             loadComponent();
         },
         error: function(xhr, status, error) {
-            console.error("Error: " + error);
-            Swal.fire("Data Fetch Error");
-            console.error("Response:", xhr.responseText);
+           if (xhr.status === 500){
+               Swal.fire({
+                   icon: "error",
+                   title: "Oops...",
+                   text: "Server Error!",
+                   // footer: '<a href="#">Why do I have this issue?</a>'
+               });
+           }else if (xhr.status === 201 || xhr.status === 200){
+               Swal.fire({
+                   position: "start-bottom",
+                   icon: "success",
+                   title: "success signIn",
+                   showConfirmButton: false,
+                   timer: 1500
+               });
+           }else if (xhr.status === 403){
+               Swal.fire({
+                   icon: "error",
+                   title: "Oops...",
+                   text: "Bag Request.Check your email and password!",
+                   // footer: '<a href="#">Why do I have this issue?</a>'
+               });
+           }
         }
     });
 });
