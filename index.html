@@ -614,14 +614,14 @@
                                         <div class="row mb-3">
                                             <!-- First Name -->
                                             <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                <div id="firstNameParent" class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
                                                     <input type="text" class="form-control text-white" id="firstName">
                                                     <label for="firstName" class="form-label" style="margin-left: 0;">First Name</label>
                                                 </div>
                                             </div>
                                             <!-- Last Name -->
                                             <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                <div id="lastNameParent" class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
                                                     <input type="text" class="form-control text-white" id="lastName">
                                                     <label for="lastName" class="form-label" style="margin-left: 0;">Last Name</label>
                                                 </div>
@@ -632,13 +632,13 @@
                                             <!-- Joined Date-->
                                             <div class="col-md-6">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="date" class="form-control text-white" id="joinedDate">
+                                                    <input type="date" class="form-control text-white" id="joinedDate" disabled>
                                                     <label for="joinedDate" class="form-label" style="margin-left: 0;">Joined Date</label>
                                                 </div>
                                             </div>
                                             <!-- DOB -->
                                             <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                <div id="dobParent" class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
                                                     <input type="date" class="form-control text-white" id="dob">
                                                     <label for="dob" class="form-label" style="margin-left: 0;">Date Of Birth</label>
                                                 </div>
@@ -678,14 +678,14 @@
                                         <div class="row mb-3">
                                             <!-- Address Line01 -->
                                             <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                <div id="buildingNoParent" class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
                                                     <input type="text" class="form-control text-white" id="addressLine01">
                                                     <label for="addressLine01" class="form-label" style="margin-left: 0;">Building No</label>
                                                 </div>
                                             </div>
                                             <!-- Address Line02 -->
                                             <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                <div id="laneParent" class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
                                                     <input type="text" class="form-control text-white" id="addressLine02">
                                                     <label for="addressLine02" class="form-label" style="margin-left: 0;">Lane</label>
                                                 </div>
@@ -694,14 +694,14 @@
                                         <div class="row mb-3">
                                             <!-- Address Line03 -->
                                             <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                <div id="cityParent" class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
                                                     <input type="text" class="form-control text-white" id="addressLine03">
                                                     <label for="addressLine03" class="form-label" style="margin-left: 0;">City</label>
                                                 </div>
                                             </div>
                                             <!-- Address Line04 -->
                                             <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                <div id="stateParent" class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
                                                     <input type="text" class="form-control text-white" id="addressLine04">
                                                     <label for="addressLine04" class="form-label" style="margin-left: 0;">State</label>
                                                 </div>
@@ -710,14 +710,14 @@
                                         <div class="row mb-3">
                                             <!-- Address Line05 -->
                                             <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                <div id="postalCodeParent" class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
                                                     <input type="text" class="form-control text-white" id="addressLine05">
                                                     <label for="addressLine05" class="form-label" style="margin-left: 0;">Postal Code</label>
                                                 </div>
                                             </div>
                                             <!-- Contact NO -->
                                             <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                <div id="contactNoParent" class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
                                                     <input type="text" class="form-control text-white" id="ContactNo">
                                                     <label for="ContactNo" class="form-label" style="margin-left: 0;">Contact No</label>
                                                 </div>
@@ -726,7 +726,7 @@
                                         <div class="row mb-3">
                                             <!-- Email -->
                                             <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                <div id="emailParent" class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
                                                     <input type="text" class="form-control text-white" id="emailStaff">
                                                     <label for="emailStaff" class="form-label" style="margin-left: 0;">Email</label>
                                                 </div>
@@ -795,8 +795,8 @@
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-success" id="addFieldButtonInStaff" form="staffForm">Add Staff Member</button>
+                                    <button id="btnAddStaffModalClose" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-success" id="addFieldButtonInStaff" form="staffForm">Add Staff Member</button>
                                 </div>
                             </div>
                         </div>
