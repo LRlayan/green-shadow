@@ -86,7 +86,7 @@ $('#addFieldButtonInStaff').on('click',async function (e){
                         "Authorization": "Bearer " + token
                     }
                 });
-                if (roleStaff === "MANAGER" || roleStaff === "ADMINISTRATOR" || roleStaff === "SCIENTIST") {
+                if (roleStaff === "MANAGER" || roleStaff === "ADMINISTRATIVE" || roleStaff === "SCIENTIST") {
                     const userDTO = {
                         user_id: "",
                         email: emailStaff,
