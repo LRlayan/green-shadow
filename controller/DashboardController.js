@@ -49,9 +49,19 @@ $(document).ready(async function () {
                 }
             });
 
-            // Update the spans dynamically
+            // Update the spans and <li> elements dynamically
             for (const [key, count] of Object.entries(categoryCounts)) {
-                $(`#${key}`).text(count); // Set the count to the respective span
+                const spanElement = $(`#${key}`);
+                const listItem = spanElement.closest('li');
+
+                // Set the count to the respective span and style <li> if count is 0
+                if (count != 0) {
+                    spanElement.text(count);
+                    listItem.removeClass('text-danger');
+                } else {
+                    spanElement.text(0);
+                    listItem.addClass('text-danger');
+                }
             }
         } else {
             console.error("Unexpected response format:", allEquipment);
@@ -74,7 +84,6 @@ function mapCategoryToId(category) {
         "Monitoring and Measuring Tools": "measuring",
         "Protective Equipment": "protective",
     };
-
     return categoryMap[category] || null;
 }
 
