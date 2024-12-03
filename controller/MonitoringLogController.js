@@ -105,8 +105,10 @@ $('#logCard').on('click','.update-button',function (){
     });
 
     const loadAllStaffMember = new LoadAllStaffMember();
-    loadAllStaffMember.loadAllMembers().then(memberCode => {
-        populateDropdownLog('#updateLogInStaffId', staff, memberCode);
+    loadAllStaffMember.loadAllMembers().then(({ memberCodes }) => {
+        populateDropdownLog('#updateLogInStaffId', staff, memberCodes);
+    }).catch(error => {
+        console.error("Error loading staff member details:", error);
     });
 });
 
@@ -305,8 +307,10 @@ $('#addLogCropButtonUpdate').on('click',function (){
 
 $('#addLogStaffButtonUpdate').on('click',function (){
     const allMemberCard = new LoadAllStaffMember();
-    allMemberCard.loadAllMembers().then(staffCode => {
-        addDropdownLogs("#additionalLogStaffUpdate", "#log-staffIdUpdate", staffCode);
+    allMemberCard.loadAllMembers().then(({ memberCodes }) => {
+        addDropdownLogs("#additionalLogStaffUpdate", "#log-staffIdUpdate", memberCodes);
+    }).catch(error => {
+        console.error("Error loading staff member details:", error);
     });
 });
 
@@ -337,9 +341,11 @@ function previewLogImage(imageInputId,imgPreviewId){
 // Function to add dynamic staff field dropdown in the add modal
 $('#addLogStaffButton').on('click', function() {
     const loadAllStaffMember = new LoadAllStaffMember();
-    loadAllStaffMember.loadAllMembers().then(staffCode => {
-        addDropdownLogs('#additionalLogStaff', '#log-staffId', staffCode);
-    })
+    loadAllStaffMember.loadAllMembers().then(({ memberCodes }) => {
+        addDropdownLogs('#additionalLogStaff', '#log-staffId', memberCodes);
+    }).catch(error => {
+        console.error("Error loading staff member details:", error);
+    });
 });
 
 // Function to add dynamic field dropdown in the add modal

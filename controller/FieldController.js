@@ -91,9 +91,12 @@ $('#addFieldCropButton').on('click', function() {
 // Add Additional Staff Combo box
 $('#addFieldStaffButton').on('click', function() {
     const loadAllStaffMember = new LoadAllStaffMember();
-    loadAllStaffMember.loadAllMembers().then(memberCode => {
-        addDropdown('#additionalStaff', 'filed-staffId', memberCode);
-    })
+    loadAllStaffMember.loadAllMembers().then(({ memberCodes }) => {
+        // Pass only the memberCodes array to addDropdownVehicle
+        addDropdown('#additionalStaff', 'filed-staffId', memberCodes);
+    }).catch(error => {
+        console.error("Error loading staff member details:", error);
+    });
 });
 
 // SET DATA FOR UPDATE MODAL
@@ -120,8 +123,10 @@ $('#fieldCard').on('click', '.update-button', function () {
         populateDropdown('#updateFieldCropId', crop, cropCode);
     });
     const loadAllStaff = new LoadAllStaffMember();
-    loadAllStaff.loadAllMembers().then(memberCode => {
-        populateDropdown('#updateStaffCrop', staff, memberCode);
+    loadAllStaff.loadAllMembers().then(({ memberCodes }) => {
+        populateDropdown('#updateStaffCrop', staff, memberCodes);
+    }).catch(error => {
+        console.error("Error loading staff member details:", error);
     });
 
     $('#updateFieldImage1Input').val('');
@@ -228,8 +233,11 @@ $('#addFieldCropButtonUpdate').on('click', function() {
 // Function to add dynamic Staff dropdown in the update modal
 $('#addFieldStaffButtonUpdate').on('click', function() {
     const loadAllStaff = new LoadAllStaffMember();
-    loadAllStaff.loadAllMembers().then(memberCode => {
-        addDropdown('#additionalStaffCropUpdate', 'staffCropUpdate', memberCode);
+    loadAllStaff.loadAllMembers().then(({ memberCodes }) => {
+        // Pass only the memberCodes array to addDropdownVehicle
+        addDropdown("#additionalStaffCropUpdate", "#staffCropUpdate", memberCodes);
+    }).catch(error => {
+        console.error("Error loading staff member details:", error);
     });
 });
 

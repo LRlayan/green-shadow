@@ -26,10 +26,10 @@ $('#addFieldButtonEquipment').on('click', function() {
 //Add Staff Modal
 $('#addStaffButton').on('click', function() {
     const loadAllMembers = new LoadAllStaffMember();
-    loadAllMembers.loadAllMembers().then(memberCode => {
-        addDropdownEquipment("#additionalEquipmentStaff","#staff-equipment",memberCode)
+    loadAllMembers.loadAllMembers().then(({ memberCodes }) => {
+        addDropdownEquipment("#additionalEquipmentStaff","#staff-equipment",memberCodes);
     }).catch(error => {
-        console.log("Not loading member ",error)
+        console.error("Error loading staff member details:", error);
     });
 });
 
@@ -127,11 +127,12 @@ $('#equipmentDetailsTable').on('click', 'tr', function () {
     }).catch(error => {
         console.log("Not loading field codes ",error)
     });
+
     const loadAllMembers = new LoadAllStaffMember();
-    loadAllMembers.loadAllMembers().then(memberCode => {
-        populateDropdownEquipment("#updateStaffEquipment",staffMemberArray,memberCode);
+    loadAllMembers.loadAllMembers().then(({ memberCodes }) => {
+        populateDropdownEquipment("#updateStaffEquipment",staffMemberArray,memberCodes);
     }).catch(error => {
-        console.log("Not loading member codes ",error)
+        console.error("Error loading staff member details:", error);
     });
 });
 
@@ -216,10 +217,10 @@ $('#addFieldButtonUpdate').on('click', function() {
 //Add additional Staff field Update Modal
 $('#addStaffButtonUpdate').on('click', function() {
     const loadAllMembers = new LoadAllStaffMember();
-    loadAllMembers.loadAllMembers().then(memberCode => {
-       addDropdownEquipment("#additionalStaffEquUpdate", "#equ-staffUpdate", memberCode);
+    loadAllMembers.loadAllMembers().then(({ memberCodes }) => {
+        addDropdownEquipment("#additionalStaffEquUpdate", "#equ-staffUpdate", memberCodes);
     }).catch(error => {
-        console.log("Not loading member codes ",error)
+        console.error("Error loading staff member details:", error);
     });
 });
 
