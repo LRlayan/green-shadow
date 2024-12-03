@@ -48,6 +48,26 @@ $(document).ready(async function () {
             "Labors": 0
         };
 
+        const categoryMapping = {
+            "Car": 0,
+            "Motor Bike": 0,
+            "Van": 0,
+            "Land Masters": 0,
+            "Tractor–4WD": 0,
+            "Tankers Truck": 0,
+            "Land Vehicles": 0,
+            "Lorry": 0,
+        };
+
+        // Helper map to normalize category names
+        // Match the HTML exactly or normalize IDs.
+        const normalizationMap = {
+            "Motorbike": "Motor Bike",
+            "Tractor – Landmasters": "Land Masters",
+            "Tractor - 4WD": "Tractor–4WD",
+            "Tankers truck": "Tankers Truck",
+            "Land vehicles": "Land Vehicles",
+        };
 
         // Iterate through allEquipment and update counts by category
         if (Array.isArray(allEquipment)) {
@@ -70,7 +90,6 @@ $(document).ready(async function () {
                 const spanElement = $(`#${key}`);
                 const listItem = spanElement.closest('li');
 
-                // Set the count to the respective span and style <li> if count is 0
                 if (count != 0) {
                     spanElement.text(count);
                     listItem.removeClass('text-danger');
@@ -87,8 +106,6 @@ $(document).ready(async function () {
             allStaff.forEach(staff => {
                 if (staff.designation) {
                     const normalizedDesignation = staff.designation.trim();
-
-                    console.log("Normalized Designation:", normalizedDesignation);
 
                     if (designationCounts[normalizedDesignation] !== undefined) {
                         designationCounts[normalizedDesignation]++;
@@ -110,8 +127,6 @@ $(document).ready(async function () {
                     continue;
                 }
 
-                console.log(`Setting count for ${designation}:`, count);
-
                 if (count !== 0) {
                     spanElement.text(count);
                     listItem.removeClass('text-danger');
@@ -124,6 +139,46 @@ $(document).ready(async function () {
             console.error("Unexpected response format for allStaff:", allStaff);
         }
 
+        if (Array.isArray(allVehicles)) {
+            allVehicles.forEach(vehicle => {
+                if (vehicle.category) {
+                    let normalizedCategory = vehicle.category.trim();
+                    // Use normalization map if applicable
+                    if (normalizationMap[normalizedCategory]) {
+                        normalizedCategory = normalizationMap[normalizedCategory];
+                    }
+
+                    if (categoryMapping[normalizedCategory] !== undefined) {
+                        categoryMapping[normalizedCategory]++;
+                    } else {
+                        console.warn("Unknown designation:", vehicle.category);
+                    }
+                } else {
+                    console.warn("Vehicle has no category defined:", vehicle);
+                }
+            });
+
+            // Update the spans dynamically
+            for (const [category, count] of Object.entries(categoryMapping)) {
+                const spanElementVehicle = $(`#${category.replace(/\s+/g, '')}`);
+                const listItemVehicle = spanElementVehicle.closest('li');
+
+                if (spanElementVehicle.length === 0) {
+                    console.error(`Span with ID '${category.replace(/\s+/g, '')}' not found in HTML.`);
+                    continue;
+                }
+
+                if (count !== 0) {
+                    spanElementVehicle.text(count);
+                    listItemVehicle.removeClass('text-danger');
+                } else {
+                    spanElementVehicle.text(0);
+                    listItemVehicle.addClass('text-danger');
+                }
+            }
+        } else {
+            console.error("Unexpected response format for allVehicles:", allVehicles);
+        }
         $('#equipmentCount').text(equipmentCount);
     } catch (error) {
         console.error("Error fetching values:", error);
