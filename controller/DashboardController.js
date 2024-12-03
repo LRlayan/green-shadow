@@ -33,6 +33,22 @@ $(document).ready(async function () {
             protective: 0,
         };
 
+        const designationCounts = {
+            "Manager": 0,
+            "Senior Assistant Manager": 0,
+            "Assistant Manager": 0,
+            "Admin and HR Staff": 0,
+            "Office Assistant": 0,
+            "Senior Agronomist": 0,
+            "Agronomist": 0,
+            "Soil Scientist": 0,
+            "Senior Technician": 0,
+            "Technician": 0,
+            "Supervisors": 0,
+            "Labors": 0
+        };
+
+
         // Iterate through allEquipment and update counts by category
         if (Array.isArray(allEquipment)) {
             allEquipment.forEach(item => {
@@ -66,6 +82,48 @@ $(document).ready(async function () {
         } else {
             console.error("Unexpected response format:", allEquipment);
         }
+
+        if (Array.isArray(allStaff)) {
+            allStaff.forEach(staff => {
+                if (staff.designation) {
+                    const normalizedDesignation = staff.designation.trim();
+
+                    console.log("Normalized Designation:", normalizedDesignation);
+
+                    if (designationCounts[normalizedDesignation] !== undefined) {
+                        designationCounts[normalizedDesignation]++;
+                    } else {
+                        console.warn("Unknown designation:", staff.designation);
+                    }
+                } else {
+                    console.warn("Staff member has no designation defined:", staff);
+                }
+            });
+
+            // Update the HTML with counts
+            for (const [designation, count] of Object.entries(designationCounts)) {
+                const spanElement = $(`#${designation.replace(/\s+/g, '')}`); // Use ID-safe version
+                const listItem = spanElement.closest('li');
+
+                if (spanElement.length === 0) {
+                    console.error(`Span with ID '${designation.replace(/\s+/g, '')}' not found in HTML.`);
+                    continue;
+                }
+
+                console.log(`Setting count for ${designation}:`, count);
+
+                if (count !== 0) {
+                    spanElement.text(count);
+                    listItem.removeClass('text-danger');
+                } else {
+                    spanElement.text(0);
+                    listItem.addClass('text-danger');
+                }
+            }
+        } else {
+            console.error("Unexpected response format for allStaff:", allStaff);
+        }
+
         $('#equipmentCount').text(equipmentCount);
     } catch (error) {
         console.error("Error fetching values:", error);
