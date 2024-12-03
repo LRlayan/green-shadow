@@ -100,11 +100,12 @@ $(document).ready(function () {
         let staffMemberArray = $(this).find(".staffMember").text().split(", ");
 
         const vehicle = new Vehicle(vehicleCode,licensePlateNumber,vehicleName,category,fuelType,status,staffMemberArray,remark);
-        loadAllMember.loadAllMembers().then(memberCode => {
-            populateDropdownVehicle("#updateStaffVehicle",staffMemberArray,memberCode);
+        loadAllMember.loadAllMembers().then(({ memberCodes }) => {
+            // Pass only the memberCodes array to addDropdownVehicle
+            addDropdownVehicle("#additionalVehicleStaffUpdate", "#staff-vehicleUpdate", memberCodes);
         }).catch(error => {
-            console.error("Error loading vehicle :", error);
-        })
+            console.error("Error loading staff member details:", error);
+        });
     });
 
     // SHOW DELETE CONFIRMATION MODAL
@@ -216,11 +217,12 @@ $(document).ready(function () {
     }
 
     //Add additional Staff Modal
-    $('#addVehicleStaffButton').on('click', function() {
+    $('#addVehicleStaffButton').on('click', function () {
         clickNewComboBoxBtn++;
         if (clickNewComboBoxBtn == 1) {
-            loadAllMember.loadAllMembers().then(memberCode => {
-                addDropdownVehicle("#additionalVehicleStaff", "#staff-vehicle", memberCode)
+            loadAllMember.loadAllMembers().then(({ memberCodes }) => {
+                // Pass only the memberCodes array to addDropdownVehicle
+                addDropdownVehicle("#additionalVehicleStaff", "#staff-vehicle", memberCodes);
             }).catch(error => {
                 console.error("Error loading staff member details:", error);
             });
@@ -231,8 +233,9 @@ $(document).ready(function () {
     $('#addVehicleStaffButtonUpdate').on('click', function() {
         clickNewComboBoxBtn++;
         if (clickNewComboBoxBtn == 1){
-            loadAllMember.loadAllMembers().then(memberCode => {
-                addDropdownVehicle("#additionalVehicleStaffUpdate", "#staff-vehicleUpdate", memberCode)
+            loadAllMember.loadAllMembers().then(({ memberCodes }) => {
+                // Pass only the memberCodes array to addDropdownVehicle
+                addDropdownVehicle("#additionalVehicleStaffUpdate", "#staff-vehicleUpdate", memberCodes);
             }).catch(error => {
                 console.error("Error loading staff member details:", error);
             });
