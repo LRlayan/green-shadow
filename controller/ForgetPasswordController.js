@@ -280,7 +280,7 @@ $(document).ready(function () {
             // Add OTP content inside the #wrapper div
             const otpPageHTML = `
                 <div id="otpWrapper" class="mt-3 m-2">
-                    <form id="otpForm">
+                    <form>
                         <div class="text-center mb-3">
                             <label class="fw-bold fs-4 text-white">Enter OTP</label>
                             <hr class="mt-2 mb-4" style="width: 100%; margin: 0 auto; border: 1px solid #ccc;">
@@ -412,17 +412,17 @@ $(document).ready(function () {
 
                     // Handle Resend Code button click
                     $("#resendCode").on("click", async function () {
+                        $('#OTP-error').remove();
+                        $('.otp-input').val('');
                         setTimer().then((result) => {
                             otp = result
                         });
                         otp = await getOTP();
-                        console.log("otp : ",otp)
                         const userWithKeyDTO = {
                             email : email,
                             code : otp
                         }
-                        sendEmailWithOTP(userWithKeyDTO)
-                        $('#otpForm')[0].reset();
+                        sendEmailWithOTP(userWithKeyDTO);
                     });
                     resolve(0);
                 }
