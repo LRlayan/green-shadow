@@ -8,12 +8,29 @@ import {SignUp} from "./SignUpController.js";
 
 let clickTableRow = 0;
 
+// SEARCHING MEMBER
 $("#staffTableFilter").on("keyup", function() {
     var value = $(this).val().toLowerCase();
     $("#staffDetailsTable tr").filter(function() {
-        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        var designation = $(this).find(".designation").text().toLowerCase();
+        var firstName = $(this).find(".fName").text().toLowerCase();
+        var lastName = $(this).find(".lName").text().toLowerCase();
+        var gender = $(this).find(".gender").text().toLowerCase().trim();
+
+        var isGenderMatch = (gender === value);
+
+        var isMatch = designation.indexOf(value) > -1 ||
+            firstName.indexOf(value) > -1 ||
+            lastName.indexOf(value) > -1 ||
+            isGenderMatch;
+
+        $(this).toggle(isMatch);
     });
 });
+
+
+
+
 
 //SAVE STAFF MEMBER
 $('#staffNewBtn').on('click',function (){

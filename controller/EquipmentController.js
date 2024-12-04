@@ -6,10 +6,17 @@ import {HandlingErrors} from "./indexController.js";
 
 let clickTableRow = 0;
 
-$("#equipmentTableFilter").on("keyup", function() {
-    var value = $(this).val().toLowerCase();
-    $("#equipmentDetailsTable tr").filter(function() {
-        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+$("#equipmentTableFilter").on("keyup", function () {
+    const value = $(this).val().toLowerCase();
+    $("#equipmentDetailsTable tr").filter(function () {
+        const type = $(this).find(".equipmentType").text().toLowerCase();
+        const status = $(this).find(".status").text().toLowerCase();
+
+        const isStatusMatch = (status === value)
+
+        const isMatch = type.indexOf(value) > -1 || isStatusMatch;
+
+        $(this).toggle(isMatch);
     });
 });
 
@@ -105,7 +112,7 @@ $('#equipmentDetailsTable').on('click', 'tr', function () {
 
     let code = $(this).find(".code").text();
     let name = $(this).find(".name").text();
-    let type = $(this).find(".vehicleType").text();
+    let type = $(this).find(".equipmentType").text();
     let status = $(this).find(".status").text();
     let count = $(this).find(".count").text();
 
@@ -375,7 +382,7 @@ export class LoadAllEquipment{
                             <tr>
                                 <td class="code">${equ.equipmentCode}</td>
                                 <td class="name">${equDetail.name}</td>
-                                <td class="vehicleType">${equDetail.type}</td>
+                                <td class="equipmentType">${equDetail.type}</td>
                                 <td class="status">${equDetail.status}</td>
                                 <td class="count">${equDetail.count}</td>
                                 <td class="staffMember">${equ.staffCodeList.join(', ') || "No Member"}</td>

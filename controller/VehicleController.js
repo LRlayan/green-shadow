@@ -9,10 +9,13 @@ $(document).ready(function () {
     const loadAllMember = new LoadAllStaffMember();
     const loadAllVehicle = new LoadAllVehicleDetails();
 
-    $("#vehicleTableFilter").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("#vehicleDetailsTable tr").filter(function() {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    // SEARCH VEHICLE
+    $("#vehicleTableFilter").on("keyup", function () {
+        const value = $(this).val().toLowerCase();
+        $("#vehicleDetailsTable tr").filter(function () {
+            const type = $(this).find(".category").text().toLowerCase();
+            const isMatch = type.indexOf(value) > -1;
+            $(this).toggle(isMatch);
         });
     });
 
