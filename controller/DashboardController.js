@@ -17,7 +17,6 @@ $(document).ready(async function () {
         const allVehicles = await getAllVal.getValues("vehicles");
         const allStaff = await getAllVal.getValues("staff");
 
-        // Set total counts
         $('#vehicleCount').text(allVehicles.length);
         $('#employees').text(allStaff.length);
 
@@ -59,8 +58,6 @@ $(document).ready(async function () {
             "Lorry": 0,
         };
 
-        // Helper map to normalize category names
-        // Match the HTML exactly or normalize IDs.
         const normalizationMap = {
             "Motorbike": "Motor Bike",
             "Tractor – Landmasters": "Land Masters",
@@ -69,13 +66,11 @@ $(document).ready(async function () {
             "Land vehicles": "Land Vehicles",
         };
 
-        // Iterate through allEquipment and update counts by category
         if (Array.isArray(allEquipment)) {
             allEquipment.forEach(item => {
                 if (item.type && item.availableCount !== undefined) {
                     equipmentCount += parseInt(item.availableCount); // Total count
 
-                    // Map equipment category to span ids
                     const categoryKey = mapCategoryToId(item.type);
                     if (categoryCounts[categoryKey] !== undefined) {
                         categoryCounts[categoryKey] += parseInt(item.availableCount);
@@ -85,7 +80,6 @@ $(document).ready(async function () {
                 }
             });
 
-            // Update the spans and <li> elements dynamically
             for (const [key, count] of Object.entries(categoryCounts)) {
                 const spanElement = $(`#${key}`);
                 const listItem = spanElement.closest('li');
@@ -117,9 +111,8 @@ $(document).ready(async function () {
                 }
             });
 
-            // Update the HTML with counts
             for (const [designation, count] of Object.entries(designationCounts)) {
-                const spanElement = $(`#${designation.replace(/\s+/g, '')}`); // Use ID-safe version
+                const spanElement = $(`#${designation.replace(/\s+/g, '')}`);
                 const listItem = spanElement.closest('li');
 
                 if (spanElement.length === 0) {
@@ -143,7 +136,6 @@ $(document).ready(async function () {
             allVehicles.forEach(vehicle => {
                 if (vehicle.category) {
                     let normalizedCategory = vehicle.category.trim();
-                    // Use normalization map if applicable
                     if (normalizationMap[normalizedCategory]) {
                         normalizedCategory = normalizationMap[normalizedCategory];
                     }
@@ -158,7 +150,6 @@ $(document).ready(async function () {
                 }
             });
 
-            // Update the spans dynamically
             for (const [category, count] of Object.entries(categoryMapping)) {
                 const spanElementVehicle = $(`#${category.replace(/\s+/g, '')}`);
                 const listItemVehicle = spanElementVehicle.closest('li');
