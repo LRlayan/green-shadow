@@ -1,6 +1,6 @@
 import { LoadCards } from './CropController.js';
 import { LoadAllStaffMember } from './StaffController.js';
-import { HandlingErrors} from './IndexController.js';
+import { HandlingErrors , Search} from './IndexController.js';
 
 const token = localStorage.getItem('jwtKey');
 
@@ -334,6 +334,13 @@ $('#confirmDeleteButton').on('click', async function () {
 $('#confirmDeleteModal').on('hidden.bs.modal', function () {
     $('body').removeClass('modal-open');
     $('.modal-backdrop').remove();
+});
+
+// FILTERING CARDS
+$('#fieldTableFilter').on('input', function () {
+    const query = $(this).val().toLowerCase().trim();
+    const search = new Search();
+    search.filterCards(query,'#fieldCard');
 });
 
 function collectSelectedValues(...selectors) {

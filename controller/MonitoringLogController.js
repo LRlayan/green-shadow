@@ -1,7 +1,7 @@
 import {LoadFieldCard} from "./FieldController.js";
 import {LoadAllStaffMember} from "./StaffController.js";
 import {LoadCards} from "./CropController.js";
-import {CurrentDate, HandlingErrors} from "./indexController.js";
+import {CurrentDate, HandlingErrors, Search} from "./indexController.js";
 
 $('#newButton').on('click',function (){
     clearModel('#logDate','#log-details','previewCropLogImg','#logCropImageInput','#additionalLogStaff','#additionalLogCrop','#additionalLogField');
@@ -441,3 +441,10 @@ export class LoadAllLogs{
         });
     }
 }
+
+// FILTERING CARDS
+$('#filterLogCard').on('input', function () {
+    const query = $(this).val().toLowerCase().trim();
+    const search = new Search();
+    search.filterCards(query,'#logCard');
+});

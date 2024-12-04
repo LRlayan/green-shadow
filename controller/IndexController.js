@@ -200,3 +200,23 @@ export class HandlingErrors {
         }
     }
 }
+
+export class Search {
+    filterCards(query,id) {
+        $(`${id} .card`).each(function () {
+            const card = $(this);
+
+            const fieldName = card.find('.card-name').text().toLowerCase();
+            const extentSizeText = card.find('.card-extent-size').text();
+            const logDate = card.find(".card-log-date").text();
+            const extentSize = parseFloat(extentSizeText.replace(/[^0-9.]/g, ''));
+
+            const isNumericQuery = !isNaN(query) && query !== '';
+            const isNameMatch = fieldName.includes(query);
+            const isDateMatch = logDate.includes(query);
+            const isExtentMatch = isNumericQuery && extentSize === parseFloat(query);
+
+            card.toggle(isNameMatch || isExtentMatch || isDateMatch);
+        });
+    }
+}

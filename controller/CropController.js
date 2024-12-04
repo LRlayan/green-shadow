@@ -1,5 +1,5 @@
 import {LoadFieldCard} from './FieldController.js';
-import {HandlingErrors} from "./IndexController.js";
+import {HandlingErrors, Search} from "./IndexController.js";
 
 $('#newCropButton').on('click',function (){
     clearAddModal();
@@ -417,4 +417,11 @@ $("#cropName, #crop-scientificName, #crop-Category, #crop-season").on("input", f
 $("#cropImageInput").on("change", function () {
     validateImageField($(this), $(this).data('error'));
     toggleAddCropButton('#cropName','#crop-scientificName','#crop-Category','#crop-season','#cropImageInput','cropForm');
+});
+
+// FILTERING CARDS
+$('#filterCropCard').on('input', function () {
+    const query = $(this).val().toLowerCase().trim();
+    const search = new Search();
+    search.filterCards(query,'#cropCard');
 });
