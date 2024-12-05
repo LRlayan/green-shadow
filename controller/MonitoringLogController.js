@@ -7,6 +7,7 @@ $('#newButton').on('click',function (){
     clearModel('#logDate','#log-details','previewCropLogImg','#logCropImageInput','#additionalLogStaff','#additionalLogCrop','#additionalLogField');
     const currentDate = new CurrentDate();
     $('#logDate').val(currentDate.getCurrentFormattedDate());
+    $('.error-message').remove();
 });
 
 // SAVE LOGS
@@ -24,53 +25,59 @@ $('#addLogButton').on('click', async function (e) {
     updatedCropLogs = updatedCropLogs.filter(cropId => ({cropCode:cropId}));
     updatedStaffLogs = updatedStaffLogs.filter(staffId => ({memberCode:staffId}));
 
-    let observedImage = await handleLogImage("#logCropImageInput","#previewCropLogImg");
-
     const formData = new FormData();
     formData.append("date",logDate);
     formData.append("logDetails",logDetails);
-    formData.append("observedImage",observedImage);
     formData.append("staffList",new Blob([JSON.stringify(updatedStaffLogs)], { type: "application/json" }));
     formData.append("cropList",new Blob([JSON.stringify(updatedCropLogs)], { type: "application/json" }));
     formData.append("fieldList",new Blob([JSON.stringify(updatedLogField)], { type: "application/json" }));
 
     try {
-        const result = await Swal.fire({
-            title: "Do you want to save the changes?",
-            showDenyButton: true,
-            showCancelButton: true,
-            confirmButtonText: "Save",
-            denyButtonText: `Don't save`
-        });
+        const isValid = await validation(logDetails,'#logCropImageInput');
+        if (isValid) {
+            $('#addLogButton').prop('disabled', false);
 
-        if (result.isConfirmed) {
-            const token = localStorage.getItem('jwtKey');
-            await $.ajax({
-                url: "http://localhost:5050/api/v1/logs",
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                headers:{
-                    "Authorization": "Bearer " + token
-                }
+            let observedImage = await handleLogImage("#logCropImageInput","#previewCropLogImg");
+            formData.append("observedImage",observedImage);
+            const result = await Swal.fire({
+                title: "Do you want to save the changes?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Save",
+                denyButtonText: `Don't save`
             });
 
-            Swal.fire("Saved!", "", "success");
-            $('#logForm')[0].reset();
-            $('#additionalLogField').empty();
-            $('#additionalLogCrop').empty();
-            $('#additionalLogStaff').empty();
+            if (result.isConfirmed) {
+                const token = localStorage.getItem('jwtKey');
+                await $.ajax({
+                    url: "http://localhost:5050/api/v1/logs",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                });
 
-            const loadAllLogs = new LoadAllLogs();
-            await loadAllLogs.loadAllLogsDetails().catch(error => {
-                console.error("Error loading log cards:", error);
-            });
+                Swal.fire("Saved!", "", "success");
+                $('#logForm')[0].reset();
+                $('#additionalLogField').empty();
+                $('#additionalLogCrop').empty();
+                $('#additionalLogStaff').empty();
 
-            $('#previewCropLogImg').addClass('d-none');
-            $('#newMonitoringLogModal').modal('hide');
-        } else if (result.isDenied) {
-            Swal.fire("Changes are not saved", "", "info");
+                const loadAllLogs = new LoadAllLogs();
+                await loadAllLogs.loadAllLogsDetails().catch(error => {
+                    console.error("Error loading log cards:", error);
+                });
+
+                $('#previewCropLogImg').addClass('d-none');
+                $('#newMonitoringLogModal').modal('hide');
+            } else if (result.isDenied) {
+                Swal.fire("Changes are not saved", "", "info");
+            }
+        }else {
+            $('#addLogButton').prop('disabled', isValid);
         }
     } catch (error) {
         const errorHandling = new HandlingErrors();
@@ -447,4 +454,26 @@ $('#filterLogCard').on('input', function () {
     const query = $(this).val().toLowerCase().trim();
     const search = new Search();
     search.filterCards(query,'#logCard');
+});
+
+async function validation(logDetails,image1){
+    let isValid = true;
+
+    // Validate fieldName
+    if (!logDetails) {
+        $('#logDetailWrapper').after('<div class="error-message" style="color: red;">Log details Required.</div>');
+        isValid = false;
+    }
+
+    const fieldImage1Input = $(`${image1}`);
+
+    if (fieldImage1Input.prop("files").length === 0) {
+        $('#imageError').after('<div class="error-message" style="color: red;">Please select an image for Log Image.</div>');
+        isValid = false;
+    }
+    return isValid;
+}
+
+$('#addCloseBtn , .btn-close').on('click' , function (){
+    $('.error-message').remove();
 });
