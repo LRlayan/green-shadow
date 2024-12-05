@@ -12,7 +12,6 @@ $('#newCropButton').on('click',function (){
 $('#cropForm').on('submit', async function (e) {
     e.preventDefault();
 
-    // Retrieve form values
     let cropName = $('#cropName').val();
     let scientificName = $('#crop-scientificName').val();
     let category = $('#crop-Category').val();
@@ -20,7 +19,7 @@ $('#cropForm').on('submit', async function (e) {
 
     let updatedCropField = collectSelectedValues('#crop-FieldId select', '#additionalField select');
 
-    // Remove empty values (if any)
+    // Remove empty values
     updatedCropField = updatedCropField.filter(id => ({ fieldCode: id }));
 
     let cropImageFile = await handleLogImage('#cropImageInput','#previewCropImg');
@@ -209,35 +208,6 @@ $('#updateFieldModalButton').on('click',async function (){
     }
 });
 
-function populateDropdownCrop(container, selectedValues, options) {
-    $(container).empty();
-    selectedValues.forEach(value => {
-        // Create a wrapper div for each dropdown and the remove button
-        const dropdownWrapper = $('<div class="dropdown-wrapper mb-3" style="display: flex; align-items: center;"></div>');
-
-        // Create the dropdown
-        const dropdown = $('<select class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>');
-        options.forEach(option => {
-            dropdown.append(`<option value="${option}" ${option.trim() === value ? 'selected' : ''}>${option}</option>`);
-        });
-
-        // Create the remove button
-        const removeButton = $('<button type="button" class="btn btn-danger ml-2">Remove</button>');
-
-        // Add click event to remove the dropdown when the button is clicked
-        removeButton.click(function() {
-            dropdownWrapper.remove();
-        });
-
-        // Append dropdown and remove button to the wrapper
-        dropdownWrapper.append(dropdown);
-        dropdownWrapper.append(removeButton);
-
-        // Append the wrapper to the container
-        $(container).append(dropdownWrapper);
-    });
-}
-
 // DELETE CROP CARD
 $(document).ready(function() {
     $('#cropCard').on('click', '.delete-button', function () {
@@ -315,7 +285,6 @@ export class LoadCards {
                 success: function (crops) {
                     $("#cropCard").empty();
                     const cropCodes = crops.map(crop => crop.cropCode);
-                    // Loop through each crop and create a card
                     crops.forEach((crop, index) => {
                         let imageData = `data:image/jpeg;base64,${crop.cropImage}`;
                         let newCard = `
@@ -362,7 +331,7 @@ function clearAddModal(){
     $('#additionalField').empty();
 }
 
-// Validate text fields (Crop Name, Scientific Name, Category, Season)
+// Validate text fields
 function validateTextField($field, errorMessage) {
     const value = $field.val().trim();
     const regex = /^[A-Za-z\s]+$/; // Allow only English letters and white spaces
@@ -379,18 +348,18 @@ function validateTextField($field, errorMessage) {
     }
 }
 
-// Validate image field (Crop Image)
+// Validate image field
 function validateImageField($field, errorMessage) {
     const file = $field[0].files[0];
     const errorDiv = $field.siblings('.error-message');
 
     if (!file || !file.type.startsWith("image/")) {
         $field.addClass("is-invalid").removeClass("is-valid");
-        errorDiv.text(errorMessage).show(); // Show error message
+        errorDiv.text(errorMessage).show();
         return false;
     } else {
         $field.addClass("is-valid").removeClass("is-invalid");
-        errorDiv.hide(); // Hide error message
+        errorDiv.hide();
         return true;
     }
 }
