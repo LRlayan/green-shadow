@@ -17,6 +17,8 @@ $('#btn-signIn').on('click',async function (e) {
             await localStorage.setItem('jwtKey', response.token)
             $('#signIn-form')[0].reset();
             loadComponent();
+            const loadAllData = new LoadAllSectionData();
+            loadAllData.loadAllSectionData();
         },
         error: function(xhr, status, error) {
            if (xhr.status === 500){
@@ -44,8 +46,6 @@ $('#btn-signIn').on('click',async function (e) {
            }
         }
     });
-    const loadAllData = new LoadAllSectionData();
-    loadAllData.loadAllSectionData();
 });
 
 $("#togglePassword").on("click", function () {
