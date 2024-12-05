@@ -477,8 +477,8 @@ export class LoadSelectedFieldWithCrop{
 }
 
 async function validation(name,location,extentSize,image1,image2){
-    const nameRegex = /^[a-zA-Z]+$/;
-    const locationRegex = /^\d{1,3}(?:,\d{3})*(?:\.\d+)?$/;
+    const nameRegex = /^[a-zA-Z\s]+$/;
+    const locationRegex = /^\d+(\.\d+)?$/;
     const extentSizeRegex = /^\d+(\.\d+)?$/;
 
     let isValid = true;
@@ -487,25 +487,16 @@ async function validation(name,location,extentSize,image1,image2){
     if (!name) {
         $('#nameWrapper').after('<div class="error-message" style="color: red;">Please enter valid name.</div>');
         isValid = false;
-    } else if (!nameRegex.test(name)){
-        $('#nameWrapper').after('<div class="error-message" style="color: red;">Please enter valid name.</div>');
-        isValid = false;
     }
 
     // Validate location
     if (!location) {
         $('#locationWrapper').after('<div class="error-message" style="color: red;">Please enter valid location.</div>');
         isValid = false;
-    } else if (!locationRegex.test(location)){
-        $('#locationWrapper').after('<div class="error-message" style="color: red;">Please enter valid location.</div>');
-        isValid = false;
     }
 
     // Validate extentSize
     if (!extentSize) {
-        $('#extentSizeWrapper').after('<div class="error-message" style="color: red;">Please enter valid extentSize.</div>');
-        isValid = false;
-    } else if (!extentSize.test(extentSize)){
         $('#extentSizeWrapper').after('<div class="error-message" style="color: red;">Please enter valid extentSize.</div>');
         isValid = false;
     }
@@ -522,6 +513,7 @@ async function validation(name,location,extentSize,image1,image2){
         $('#image2Wrapper').after('<div class="error-message" style="color: red;">Please select an image for Field Image 2.</div>');
         isValid = false;
     }
+    return isValid;
 }
 
 function clearUpdateFieldForm() {
