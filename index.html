@@ -257,28 +257,25 @@
                                     <form id="fieldForm">
                                         <div class="mb-3">
                                             <!-- Field Name -->
-                                            <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                            <div id="nameWrapper" class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
                                                 <input type="text" class="form-control text-white" id="fieldName">
                                                 <label for="fieldName" class="form-label" style="margin-left: 0;">Field Name</label>
                                             </div>
-                                            <div class="error-message text-danger mt-1" style="display: none;"></div>
                                         </div>
                                         <div class="row mb-3">
                                             <!-- Field Location -->
                                             <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                <div id="locationWrapper" class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
                                                     <input type="text" class="form-control text-white" id="fieldLocation">
                                                     <label for="fieldLocation" class="form-label" style="margin-left: 0;">Location</label>
                                                 </div>
-                                                <div class="error-message text-danger mt-1" style="display: none;"></div>
                                             </div>
                                             <!-- Extent Size -->
                                             <div class="col-md-6">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                <div id="extentSizeWrapper" class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
                                                     <input type="text" class="form-control text-white" id="extentSize">
                                                     <label for="extentSize" class="form-label" style="margin-left: 0;">Extent Size</label>
                                                 </div>
-                                                <div class="error-message text-danger mt-1" style="display: none;"></div>
                                             </div>
                                         </div>
 
@@ -318,21 +315,21 @@
                                                 <label for="fieldImage1Input" class="form-label text-white">Field Image 1</label>
                                                 <input type="file" class="form-control" id="fieldImage1Input" name="fieldImage1Input" accept="image/*" style="background-color: #2B2B2B;">
                                                 <img id="preview1" src="#" alt="Image Preview 1" class="img-fluid mt-2 d-none" style="max-height: 150px;">
-                                                <div class="error-message text-danger mt-1" style="display: none;"></div>
+                                                <div id="image1Wrapper" class="error-message text-danger mt-1" style="display: none;"></div>
                                             </div>
                                             <!-- Field Image 2 -->
                                             <div class="col-md-6">
                                                 <label for="fieldImage2Input" class="form-label text-white">Field Image 2</label>
                                                 <input type="file" class="form-control" id="fieldImage2Input" name="fieldImage2Input" accept="image/*" style="background-color: #2B2B2B;">
                                                 <img id="preview2" src="#" alt="Image Preview 2" class="img-fluid mt-2 d-none" style="max-height: 150px;">
-                                                <div class="error-message text-danger mt-1" style="display: none;"></div>
+                                                <div id="image2Wrapper" class="error-message text-danger mt-1" style="display: none;"></div>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-success" form="fieldForm">Add Field</button>
+                                    <button id="addCloseBtn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button id="addFieldBtn" type="submit" class="btn btn-success" form="fieldForm">Add Field</button>
                                 </div>
                             </div>
                         </div>
@@ -431,7 +428,7 @@
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button id="closeBtn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="button" id="updateFieldButton" class="btn btn-success" form="updateFieldForm">Update Field</button>
                                 </div>
                             </div>
