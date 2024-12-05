@@ -1,3 +1,5 @@
+import {LoadAllSectionData} from "./IndexController.js"
+
 $('#btn-signIn').on('click',async function (e) {
     e.preventDefault();
     const signInUserDTO = {
@@ -42,6 +44,8 @@ $('#btn-signIn').on('click',async function (e) {
            }
         }
     });
+    const loadAllData = new LoadAllSectionData();
+    loadAllData.loadAllSectionData();
 });
 
 $("#togglePassword").on("click", function () {
