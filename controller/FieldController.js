@@ -2,8 +2,6 @@ import { LoadCards } from './CropController.js';
 import { LoadAllStaffMember } from './StaffController.js';
 import { HandlingErrors , Search} from './IndexController.js';
 
-const token = localStorage.getItem('jwtKey');
-
 // SAVE MODAL
 $('#fieldForm').on('submit', async function (e) {
     e.preventDefault();
@@ -15,7 +13,7 @@ $('#fieldForm').on('submit', async function (e) {
     let updatedFieldCrop = collectSelectedValues('#filed-cropId select', '#additionalCrop select');
     let updatedFieldStaff = collectSelectedValues('#filed-staffId select', '#additionalStaff select');
 
-    // Remove empty values (if any)
+    // Remove empty values
     updatedFieldCrop = updatedFieldCrop.filter(crop => ({ cropCode: crop }));
     updatedFieldStaff = updatedFieldStaff.filter(id => ({ memberCode: id }));
 
@@ -31,42 +29,49 @@ $('#fieldForm').on('submit', async function (e) {
     formData.append("staffList", new Blob([JSON.stringify(updatedFieldStaff)], { type: "application/json" }));
     formData.append("cropList", new Blob([JSON.stringify(updatedFieldCrop)], { type: "application/json" }));
 
-    const swalResult = await Swal.fire({
-        title: "Do you want to save the changes?",
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: "Save",
-        denyButtonText: `Don't save`
-    });
+    let isValid = await validation(fieldName,location,extentSize,"#fieldImage1Input","#fieldImage2Input");
 
-    if (swalResult.isConfirmed) {
-        let token = localStorage.getItem('jwtKey');
-        try {
-            const response = await $.ajax({
-                url: "http://localhost:5050/api/v1/fields",
-                type: "POST",
-                data: formData,
-                processData: false,
-                contentType: false,
-                headers:{
-                    "Authorization": "Bearer " + token
-                }
-            });
+    if (isValid) {
+        $('#addFieldBtn').prop('disabled', !isValid);
+        const swalResult = await Swal.fire({
+            title: "Do you want to save the changes?",
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Save",
+            denyButtonText: `Don't save`
+        });
 
-            let loadFieldCard = new LoadFieldCard();
-            $('#fieldForm')[0].reset();
-            $('#preview1').addClass('d-none');
-            $('#preview2').addClass('d-none');
-            $('#newFieldModal').modal('hide');
-            Swal.fire("Saved!", "", "success");
-            clearFieldForm();
-            await loadFieldCard.loadAllFieldCard();
-        } catch (error) {
-            const errorHandling = new HandlingErrors();
-            errorHandling.handleError(error.status);
+        if (swalResult.isConfirmed) {
+            let token = localStorage.getItem('jwtKey');
+            try {
+                const response = await $.ajax({
+                    url: "http://localhost:5050/api/v1/fields",
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                });
+
+                let loadFieldCard = new LoadFieldCard();
+                $('#fieldForm')[0].reset();
+                $('#preview1').addClass('d-none');
+                $('#preview2').addClass('d-none');
+                $('#newFieldModal').modal('hide');
+                Swal.fire("Saved!", "", "success");
+                clearFieldForm();
+                await loadFieldCard.loadAllFieldCard();
+            } catch (error) {
+                const errorHandling = new HandlingErrors();
+                errorHandling.handleError(error.status);
+            }
+        } else if (swalResult.isDenied) {
+            Swal.fire("Changes are not saved", "", "info");
         }
-    } else if (swalResult.isDenied) {
-        Swal.fire("Changes are not saved", "", "info");
+    }else {
+        $('#addFieldBtn').prop('disabled', isValid);
     }
 });
 
@@ -92,7 +97,6 @@ $('#addFieldCropButton').on('click', function() {
 $('#addFieldStaffButton').on('click', function() {
     const loadAllStaffMember = new LoadAllStaffMember();
     loadAllStaffMember.loadAllMembers().then(({ memberCodes }) => {
-        // Pass only the memberCodes array to addDropdownVehicle
         addDropdown('#additionalStaff', 'filed-staffId', memberCodes);
     }).catch(error => {
         console.error("Error loading staff member details:", error);
@@ -117,7 +121,6 @@ $('#fieldCard').on('click', '.update-button', function () {
         $('#updateFieldLocation').val(formattedCoordinates);
     }
 
-    // Populate dropdowns with multiple selections
     const loadAllCrop = new LoadCards();
     loadAllCrop.loadAllCropCard().then(cropCode => {
         populateDropdown('#updateFieldCropId', crop, cropCode);
@@ -234,7 +237,6 @@ $('#addFieldCropButtonUpdate').on('click', function() {
 $('#addFieldStaffButtonUpdate').on('click', function() {
     const loadAllStaff = new LoadAllStaffMember();
     loadAllStaff.loadAllMembers().then(({ memberCodes }) => {
-        // Pass only the memberCodes array to addDropdownVehicle
         addDropdown("#additionalStaffCropUpdate", "#staffCropUpdate", memberCodes);
     }).catch(error => {
         console.error("Error loading staff member details:", error);
@@ -244,7 +246,6 @@ $('#addFieldStaffButtonUpdate').on('click', function() {
 function populateDropdown(container, selectedValues, options) {
     $(container).empty();
     selectedValues.forEach(value => {
-        // Create a wrapper div for each dropdown and the remove button
         const dropdownWrapper = $('<div class="dropdown-wrapper mb-3" style="display: flex; align-items: center;"></div>');
 
         // Create the dropdown
@@ -256,16 +257,13 @@ function populateDropdown(container, selectedValues, options) {
         // Create the remove button
         const removeButton = $('<button type="button" class="btn btn-danger ml-2">Remove</button>');
 
-        // Add click event to remove the dropdown when the button is clicked
         removeButton.click(function() {
             dropdownWrapper.remove();
         });
 
-        // Append dropdown and remove button to the wrapper
         dropdownWrapper.append(dropdown);
         dropdownWrapper.append(removeButton);
 
-        // Append the wrapper to the container
         $(container).append(dropdownWrapper);
     });
 }
@@ -283,7 +281,6 @@ function addDropdown(containerId, selectClass, options) {
     const $container = $('<div class="d-flex align-items-center mt-2"></div>');
     const $select = $('<select id="optionSelect" class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>').addClass(selectClass);
 
-    // Populate select options
     options.forEach(option => $select.append(`<option value="${option}">${option}</option>`));
 
     // Remove button
@@ -298,7 +295,6 @@ function addDropdown(containerId, selectClass, options) {
 
 //DELETE FIELD CARD SHOW
 $('#fieldCard').on('click', '.delete-button', function () {
-    // Get the card ID from the delete button and set it on the confirm delete button
     const cardId = $(this).data('field-code');
     $('#confirmDeleteButton').data('field-code', cardId);
     $('#confirmDeleteModal').modal('show');
@@ -317,7 +313,6 @@ $('#confirmDeleteButton').on('click', async function () {
             }
         });
 
-        // Reload field cards
         const loadFieldCard = new LoadFieldCard();
         await loadFieldCard.loadAllFieldCard();
 
@@ -481,6 +476,54 @@ export class LoadSelectedFieldWithCrop{
     }
 }
 
+async function validation(name,location,extentSize,image1,image2){
+    const nameRegex = /^[a-zA-Z]+$/;
+    const locationRegex = /^\d{1,3}(?:,\d{3})*(?:\.\d+)?$/;
+    const extentSizeRegex = /^\d+(\.\d+)?$/;
+
+    let isValid = true;
+
+    // Validate fieldName
+    if (!name) {
+        $('#nameWrapper').after('<div class="error-message" style="color: red;">Please enter valid name.</div>');
+        isValid = false;
+    } else if (!nameRegex.test(name)){
+        $('#nameWrapper').after('<div class="error-message" style="color: red;">Please enter valid name.</div>');
+        isValid = false;
+    }
+
+    // Validate location
+    if (!location) {
+        $('#locationWrapper').after('<div class="error-message" style="color: red;">Please enter valid location.</div>');
+        isValid = false;
+    } else if (!locationRegex.test(location)){
+        $('#locationWrapper').after('<div class="error-message" style="color: red;">Please enter valid location.</div>');
+        isValid = false;
+    }
+
+    // Validate extentSize
+    if (!extentSize) {
+        $('#extentSizeWrapper').after('<div class="error-message" style="color: red;">Please enter valid extentSize.</div>');
+        isValid = false;
+    } else if (!extentSize.test(extentSize)){
+        $('#extentSizeWrapper').after('<div class="error-message" style="color: red;">Please enter valid extentSize.</div>');
+        isValid = false;
+    }
+
+    const fieldImage1Input = $(`${image1}`);
+    const fieldImage2Input = $(`${image2}`);
+
+    if (fieldImage1Input.prop("files").length === 0) {
+        $('#image1Wrapper').after('<div class="error-message" style="color: red;">Please select an image for Field Image 1.</div>');
+        isValid = false;
+    }
+
+    if (fieldImage2Input.prop("files").length === 0) {
+        $('#image2Wrapper').after('<div class="error-message" style="color: red;">Please select an image for Field Image 2.</div>');
+        isValid = false;
+    }
+}
+
 function clearUpdateFieldForm() {
     // Clear text inputs
     $('#updateFieldName').val('');
@@ -511,3 +554,7 @@ function clearFieldForm() {
     $('#preview1').addClass('d-none').attr('src', '');
     $('#preview2').addClass('d-none').attr('src', '');
 }
+
+$('#addCloseBtn , .btn-close').on('click' , function (){
+    $('.error-message').remove();
+});
