@@ -392,7 +392,7 @@ $(document).ready(function () {
 
     function setTimer() {
         return new Promise((resolve) => {
-            let time = 25;
+            let time = 59;
 
             let countdown = setInterval(function () {
                 let minutes = Math.floor(time / 60);
