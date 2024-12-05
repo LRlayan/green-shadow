@@ -1110,7 +1110,7 @@
                                             <!-- Log Date -->
                                             <div class="mb-3">
                                                 <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                    <input type="date" class="form-control text-white" id="logDate">
+                                                    <input type="date" class="form-control text-white" id="logDate" disabled>
                                                     <label for="logDate" class="form-label" style="margin-left: 0;">Log Date</label>
                                                 </div>
                                             </div>
@@ -1118,7 +1118,7 @@
                                         <div class="row mb-3">
                                             <!-- Log Details -->
                                             <div class="mb-3">
-                                                <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
+                                                <div id="logDetailWrapper" class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
                                                     <input type="text" class="form-control text-white" id="log-details">
                                                     <label for="log-details" class="form-label" style="margin-left: 0;">Log Details</label>
                                                 </div>
@@ -1171,12 +1171,13 @@
                                                 <label for="logCropImageInput" class="form-label">Log Crop Image</label>
                                                 <input type="file" class="form-control text-white" id="logCropImageInput" accept="image/*" style="background-color:#2B2B2B">
                                                 <img id="previewCropLogImg" alt="crop log Image Preview" class="img-fluid mt-2 d-none" style="max-height: 150px;">
+                                                <div id="imageError"></div>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button id="logCloseBtn" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="submit" id="addLogButton" class="btn btn-success" form="cropForm">Add Log</button>
                                 </div>
                             </div>
@@ -1195,7 +1196,7 @@
                                         <div class="mb-3">
                                             <!-- Log Date -->
                                             <div class="form-outline" data-mdb-input-init="" data-mdb-input-initialized="true">
-                                                <input type="date" class="form-control text-white" id="updateLogDate">
+                                                <input type="date" class="form-control text-white" id="updateLogDate" disabled>
                                                 <label for="updateLogDate" class="form-label" style="margin-left: 0;">Log Date</label>
                                             </div>
                                         </div>
