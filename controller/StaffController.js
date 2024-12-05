@@ -28,10 +28,6 @@ $("#staffTableFilter").on("keyup", function() {
     });
 });
 
-
-
-
-
 //SAVE STAFF MEMBER
 $('#staffNewBtn').on('click',function (){
     const currentDate = new CurrentDate();
@@ -41,25 +37,25 @@ $('#addFieldButtonInStaff').on('click',async function (e){
     e.preventDefault();
     $('.error-message').remove();
 
-        let firstName = $("#firstName").val().trim();
-        let lastName = $("#lastName").val().trim();
-        let joinedDate = $("#joinedDate").val();
-        let designation = $("#designation").val();
-        let gender = $("#gender").val();
-        let dob = $("#dob").val();
-        let addressLine01 = $("#addressLine01").val().trim();
-        let addressLine02 = $("#addressLine02").val().trim();
-        let addressLine03 = $("#addressLine03").val().trim();
-        let addressLine04 = $("#addressLine04").val().trim();
-        let addressLine05 = $("#addressLine05").val().trim();
-        let contactNo = $("#ContactNo").val().trim();
-        let emailStaff = $("#emailStaff").val().trim();
-        let roleStaff = $("#roleStaff").val();
-        let fieldStaff = collectSelectedValues('#additionalStaffField select');
-        let staffVehicle = collectSelectedValues('#additionalStaffVehicle select');
-        let staffEquipment = collectSelectedValues('#additionalStaffEquipment select');
+    let firstName = $("#firstName").val().trim();
+    let lastName = $("#lastName").val().trim();
+    let joinedDate = $("#joinedDate").val();
+    let designation = $("#designation").val();
+    let gender = $("#gender").val();
+    let dob = $("#dob").val();
+    let addressLine01 = $("#addressLine01").val().trim();
+    let addressLine02 = $("#addressLine02").val().trim();
+    let addressLine03 = $("#addressLine03").val().trim();
+    let addressLine04 = $("#addressLine04").val().trim();
+    let addressLine05 = $("#addressLine05").val().trim();
+    let contactNo = $("#ContactNo").val().trim();
+    let emailStaff = $("#emailStaff").val().trim();
+    let roleStaff = $("#roleStaff").val();
+    let fieldStaff = collectSelectedValues('#additionalStaffField select');
+    let staffVehicle = collectSelectedValues('#additionalStaffVehicle select');
+    let staffEquipment = collectSelectedValues('#additionalStaffEquipment select');
 
-        let isValid = await validation(firstName, lastName, joinedDate, designation, gender, dob, addressLine01, addressLine02, addressLine03, addressLine04, addressLine05, contactNo, emailStaff, roleStaff);
+    let isValid = await validation(firstName, lastName, joinedDate, designation, gender, dob, addressLine01, addressLine02, addressLine03, addressLine04, addressLine05, contactNo, emailStaff, roleStaff);
     try {
         const staffDTO = {
             firstName: firstName,
@@ -175,21 +171,21 @@ $('#staffDetailsTable').on('click','tr', function (){
     $('#roleStaffUpdate option').each(function() {
         if ($(this).val() === role) {
             $('#roleStaffUpdate').val(role);
-            return false; // Stop loop once a match is found
+            return false;
         }
     });
 
     $('#designationUpdate option').each(function() {
         if ($(this).val() === designation) {
             $('#designationUpdate').val(designation);
-            return false; // Stop loop once a match is found
+            return false;
         }
     });
 
     $('#genderUpdate option').each(function() {
         if ($(this).val() === gender) {
             $('#genderUpdate').val(gender);
-            return false; // Stop loop once a match is found
+            return false;
         }
     });
 
@@ -292,7 +288,7 @@ function populateDropdownStaff(container, selectedValues, options, type) {
         dropdownWrapper.append(dropdown);
         if (type === "equipment") {
             const quantityInput = $('<input type="number" class="form-control me-2 text-white" placeholder="Count" min="1" value="1" style="background-color:#2B2B2B">');
-            dropdownWrapper.append(quantityInput); // Add the quantity input to the wrapper
+            dropdownWrapper.append(quantityInput);
         }
 
         const removeButton = $('<button type="button" class="btn btn-danger ml-2">Remove</button>');
@@ -340,7 +336,7 @@ $('#confirmDeleteYes').on('click', async function () {
 
 //No button
 $('#confirmDeleteNo,#btn-close-staff').on('click',()=>{
-    $('#confirmStaffDeleteModal').modal('hide'); // Hide the modal
+    $('#confirmStaffDeleteModal').modal('hide');
     clearOverlayOfModal();
 });
 
@@ -391,7 +387,6 @@ function addDropdownStaff(containerId, selectClass, options, type, equipmentCoun
     const $container = $('<div class="d-flex align-items-center mt-2"></div>');
     const $select = $('<select id="optionSelect" class="form-control me-2 text-white" style="background-color:#2B2B2B"></select>').addClass(selectClass);
 
-    // Populate select options
     options.forEach(option => $select.append(`<option class="text-white" style="background-color:#2B2B2B" value="${option}">${option}</option>`));
 
     // Remove button
@@ -404,17 +399,15 @@ function addDropdownStaff(containerId, selectClass, options, type, equipmentCoun
     $(containerId).append($container);
 
     if (type === "equipment"){
-        // Create a quantity input field
         const $quantityInput = $('<input type="number" id="equipmentInput" class="form-control me-2 text-white" placeholder="Count" min="1" value="1" style="background-color:#2B2B2B">');
 
-        // Update count input based on selected equipment
         $select.on('change', function() {
             const selectedEquipment = $(this).val();
             if (selectedEquipment &&  equipmentCountsList.some(e => e.equipmentCode === selectedEquipment)) {
                 const equipment = equipmentCountsList.find(e => e.equipmentCode === selectedEquipment);
                 $quantityInput.val(equipment.count);
             } else {
-                $quantityInput.val(1); // Default value if none selected
+                $quantityInput.val(1);
             }
         });
 
@@ -423,13 +416,13 @@ function addDropdownStaff(containerId, selectClass, options, type, equipmentCoun
             const selectedEquipment = $select.val();
             const equipment = equipmentCountsList.find(e => e.equipmentCode === selectedEquipment);
             if (equipment) {
-                $quantityInput.val(equipment.count); // Set the count based on the selected equipment
+                $quantityInput.val(equipment.count);
             } else {
-                $quantityInput.val(1); // Default value if no matching equipment is found
+                $quantityInput.val(1);
             }
         };
         updateInputField();
-        // Append the select, quantity input, and remove button to the container
+
         $container.append($select).append($quantityInput).append($removeBtn);
 
         // $select.change(function () {
@@ -465,8 +458,8 @@ function addDropdownStaff(containerId, selectClass, options, type, equipmentCoun
 function clearOverlayOfModal(){
     // Ensure the modal and backdrop are fully removed when hidden (overlay)
     $('#confirmStaffDeleteModal').on('hidden.bs.modal', function () {
-        $('body').removeClass('modal-open'); // Removes the modal-open class from body
-        $('.modal-backdrop').remove();       // Removes the leftover backdrop element
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
     });
 }
 
@@ -495,13 +488,12 @@ async function deleteUser(memberId){
 export class LoadAllStaffMember {
     async loadAllMembers() {
         const token = localStorage.getItem('jwtKey')
-         // Clear existing rows
+
         const tableBody = $("#staffDetailsTable");
         const memberCodes = [];
         const allEmail = [];
 
         try {
-            // Perform the GET request using await
             const staffMembers = await $.ajax({
                 url: "http://localhost:5050/api/v1/staff",
                 type: "GET",
@@ -510,7 +502,6 @@ export class LoadAllStaffMember {
                 },
             });
             $('#staffDetailsTable').empty();
-            // Process the staff members
             staffMembers.forEach(staffMember => {
                 const staffDetail = new Staff(
                     staffMember.memberCode,
